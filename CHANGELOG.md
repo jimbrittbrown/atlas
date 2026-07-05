@@ -6,6 +6,14 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Performance Intelligence Service v1.0] - 2026-07-05
+
+### Added
+- Introduced the Performance Intelligence Service module to generate structured cross-service intelligence artifacts from Executive, Research, Memory, and Metrics outcomes.
+- Added explicit performance domain models, interface contracts, service components, and retrieval/snapshot capabilities.
+- Added Executive -> Research -> Memory -> Metrics -> Performance Intelligence integration bridge and adapter without redesigning existing services.
+- Added unit and integration tests validating intelligence generation, retrieval, failure-path handling, and end-to-end workflow integration.
+
 ## [Metrics Service v1.0] - 2026-07-05
 
 ### Added
