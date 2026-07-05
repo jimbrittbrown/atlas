@@ -42,7 +42,7 @@
 | --- | --- | --- |
 | OVP v1.0 | ACTIVE | Atlas Operational Validation Phase remains the evidence framework, but new unrelated validation workstreams are paused while ORP-R performs evidence-backed remediation followed by targeted re-validation only for the affected workstream. |
 | OVP-001 | COMPLETE | Recovery Validation executed. Restore mechanics and regression checks passed, but validation failed because the backup restored committed Git state only and omitted required uncommitted governance artifacts and credential-reference files. |
-| OVP-002 | COMPLETE | Credential Validation executed. Rotation, secret replacement, revocation, and repository evidence hygiene checks passed, but validation failed because only 2 of 6 credential classes were fully populated from current evidence and direct custody recovery was not fully exercised. |
+| OVP-002 | COMPLETE | Initial credential validation failed usefully on custody completeness; after ORP-R-003 remediation, targeted OVP-002-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS at metadata-reference scope. |
 | OVP-003 | COMPLETE | Operational Simulation executed across nine scenarios. Several containment paths were understandable from the runbooks, but the simulation failed overall because Atlas still lacks validated fallback paths, complete custody references, durable recovery-critical state handling, and executive visibility evidence across major incidents. |
 | OVP-004 | COMPLETE | Initial Mission Control MVP validation failed usefully against the pre-remediation surface; after ORP-R-001 remediation, targeted OVP-004-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS at MVP scope. |
 | OVP-005 | AUTHORIZED | Executive Simulation authorized to exercise the Go / No-Go governance process using realistic evidence without launching a business. |
@@ -55,7 +55,7 @@
 | ORP-R v1.0 | ACTIVE | Atlas Operational Remediation Phase authorized to implement only the evidence-backed operational improvements identified by OVP, in strict priority order, with targeted re-validation after each remediation. |
 | ORP-R-001 | COMPLETE | Mission Control MVP remediation implemented at minimum scope with evidence package captured and targeted OVP-004-only re-validation recorded as PASS WITH OPEN FOLLOW-ON RISKS. |
 | ORP-R-002 | COMPLETE | Recovery-critical artifact tracking remediation completed with manifest-driven HEAD durability validation; required artifact set is now tracked and restorable from HEAD. |
-| ORP-R-003 | PLANNED | Credential custody completion follows artifact tracking and must be followed by a targeted OVP-002 re-validation only. |
+| ORP-R-003 | COMPLETE | Credential custody completion remediation implemented with a repository-owned custody register and deterministic validator; targeted OVP-002-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
 | ORP-R-004 | PLANNED | Manual continuity path remediation follows credential custody completion and must be followed by a targeted OVP-003 re-validation only for the affected scenarios. |
 | ORP-R-005 | PLANNED | Operational visibility improvements follow manual continuity remediation and must be followed by targeted re-validation only for the affected visibility workstream evidence. |
 
@@ -65,3 +65,4 @@
 | --- | --- | --- |
 | OVP-004 (post ORP-R-001) | COMPLETE | Re-validation executed only for Mission Control MVP scope. Business/Executive/Learning panels, CEO brief, and OVP-003 replay usability are now present. Result: PASS WITH OPEN FOLLOW-ON RISKS. |
 | OVP-001 (post ORP-R-002) | COMPLETE | Re-validation executed only for artifact durability scope. Result: PASS WITH OPEN FOLLOW-ON RISKS after manifest-listed recovery-critical artifacts were moved into tracked HEAD state. |
+| OVP-002 (post ORP-R-003) | COMPLETE | Re-validation executed only for credential-custody completeness scope. Result: PASS WITH OPEN FOLLOW-ON RISKS after all six classes were mapped to concrete repository-owned custody references. |

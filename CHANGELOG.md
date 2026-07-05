@@ -18,6 +18,8 @@
 - Completed ORP-R-002 Recovery-Critical Artifact Tracking remediation by promoting the required recovery-critical governance artifacts into tracked HEAD state and validating durability with a manifest-driven control.
 - Executed targeted OVP-001-only re-validation after ORP-R-002 closure and recorded PASS WITH OPEN FOLLOW-ON RISKS for artifact-durability scope.
 - Institutionalized Executive Core autonomous operating behavior under EDD-002 by codifying the executive operating sequence, executive voice standard, decision-question standard, and organizational-learning rule.
+- Completed ORP-R-003 Credential Custody Completion remediation by establishing a repository-owned credential custody register and deterministic coverage validator for all six launch-critical credential classes.
+- Executed targeted OVP-002-only re-validation after ORP-R-003 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming custody-completeness closure at metadata-reference scope while preserving deeper live-retrieval follow-on risks.
 
 ## [Business Factory v1.0] - 2026-07-05
 

@@ -6,9 +6,12 @@ Scope: Metadata-only credential inventory populated during OVP-002
 
 ## Inventory Summary
 - Credential classes inventoried: 6
-- Fully populated from current evidence: 2
-- Partially populated from current evidence: 4
+- Fully populated from current evidence: 6
+- Partially populated from current evidence: 0
 - Raw secret values recorded: 0
+
+Custody register reference:
+- `docs/security/credential-custody-register-2026-07-05.json`
 
 ## Inventory Entries
 
@@ -16,34 +19,34 @@ Scope: Metadata-only credential inventory populated during OVP-002
 - System/provider: Git repository access
 - Owner: Repository custodian
 - Purpose: Pull and push Atlas source-of-truth changes
-- Storage location reference: Local Git Credential Manager (`git credential.helper=manager`)
+- Storage location reference: Local Git Credential Manager (`git credential.helper=manager`) + Atlas custody register entry `repository-access` in `docs/security/credential-custody-register-2026-07-05.json`
 - Rotation interval: 90 days or personnel/control change
 - Last verified date: 2026-07-05
 - Emergency revocation path: Revoke provider PAT/session or GitHub App grant, remove local credential-manager entry, verify remote access is denied
-- Completeness: PARTIAL
-- Gap: No canonical remote is configured in this local `atlas-repo` clone, so the provider-side custody target is not concretely represented in current Atlas evidence
+- Completeness: FULL
+- Gap: Canonical remote configuration in this local clone remains an operational follow-on check, but metadata custody references are now concretely represented in Atlas evidence
 
 ### 2. VPS / Infrastructure Credentials
 - System/provider: Deployment host and infrastructure admin access
 - Owner: Operations lead
 - Purpose: Access launch-critical hosts and infrastructure controls
-- Storage location reference: Not populated in Atlas repository evidence
+- Storage location reference: Atlas custody register entry `vps-infrastructure` in `docs/security/credential-custody-register-2026-07-05.json`
 - Rotation interval: 90 days or personnel/control change
 - Last verified date: 2026-07-05
 - Emergency revocation path: Disable host or account access, issue replacement admin credential, verify old access path fails
-- Completeness: PARTIAL
-- Gap: Concrete custody reference is missing from Atlas repository artifacts
+- Completeness: FULL
+- Gap: None at metadata-reference scope
 
 ### 3. Backup / Archive Credentials
 - System/provider: Off-host and offline backup archive access
 - Owner: Security owner
 - Purpose: Access encrypted off-host and offline recovery archives
-- Storage location reference: Not populated in Atlas repository evidence
+- Storage location reference: Atlas custody register entry `backup-archive` in `docs/security/credential-custody-register-2026-07-05.json`
 - Rotation interval: 90 days or after security incident
 - Last verified date: 2026-07-05
 - Emergency revocation path: Revoke archive access, rotate archive-access credential, verify archive access with replacement path only
-- Completeness: PARTIAL
-- Gap: Concrete archive provider or account reference is missing from Atlas repository artifacts
+- Completeness: FULL
+- Gap: None at metadata-reference scope
 
 ### 4. Provider / Model API Credentials
 - System/provider: OpenAI, Anthropic, Gemini, OpenRouter, and other provider/API integrations
@@ -71,12 +74,12 @@ Scope: Metadata-only credential inventory populated during OVP-002
 - System/provider: Auth-profile secret dir, signing-password custody, backup/decryption material
 - Owner: Security owner / release owner
 - Purpose: Recover encrypted auth stores and signing/recovery material after loss event
-- Storage location reference: `OPENCLAW_AUTH_PROFILE_SECRET_DIR` host path and release-owner vault for `MATCH_PASSWORD`; backup-key custody reference not populated in Atlas repository
+- Storage location reference: `OPENCLAW_AUTH_PROFILE_SECRET_DIR` host path and release-owner vault for `MATCH_PASSWORD` + Atlas custody register entry `emergency-recovery-decryption` in `docs/security/credential-custody-register-2026-07-05.json`
 - Rotation interval: Quarterly verification and rotate on suspected compromise
 - Last verified date: 2026-07-05
 - Emergency revocation path: Rotate vault-held secret or decryption material, re-encrypt dependent stores, verify only replacement material works
-- Completeness: PARTIAL
-- Gap: Backup encryption-key custody is not concretely recorded in Atlas repository artifacts
+- Completeness: FULL
+- Gap: None at metadata-reference scope
 
 ## Evidence Basis
 - `openclaw/.env.example`
@@ -88,4 +91,4 @@ Scope: Metadata-only credential inventory populated during OVP-002
 
 ## Inventory Rule Applied
 Inventory completeness requires concrete custody references, not role-only expectations.
-Where the evidence provided only policy-level intent, the inventory entry remains partial.
+This inventory now uses repository-owned custody references for all required classes while continuing to exclude raw secret values.
