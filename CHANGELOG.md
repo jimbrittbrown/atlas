@@ -6,6 +6,14 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Metrics Service v1.0] - 2026-07-05
+
+### Added
+- Introduced the Metrics Service module as the Atlas authoritative measurement system with metric recording, retrieval, history preservation, and descriptive aggregation.
+- Added explicit metric domain models, metrics service interface contracts, and modular components for recording, retrieval, logging, and aggregation.
+- Added Executive -> Research -> Memory -> Metrics integration bridge and adapter to record measurable outcomes while preserving service ownership boundaries.
+- Added unit and integration tests for metric recording, retrieval, aggregation, workflow metrics, integration metrics, logging, metadata, and error handling.
+
 ## [Memory Service v1.0] - 2026-07-05
 
 ### Added
