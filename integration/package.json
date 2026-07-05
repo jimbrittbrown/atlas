@@ -1,0 +1,8 @@
+{
+  "name": "atlas-integration-sprint-1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
