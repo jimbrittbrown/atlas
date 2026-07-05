@@ -15,6 +15,9 @@
 - Executed targeted OVP-004-only re-validation after ORP-R-001 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming Mission Control MVP minimum executive decision-support coverage while preserving observational boundary in the executive summary surface.
 - Started ORP-R-002 Recovery-Critical Artifact Tracking remediation by implementing a manifest-driven HEAD durability validator for recovery-critical governance artifacts.
 - Executed targeted OVP-001-only re-validation after ORP-R-002 phase 1 and recorded FAIL, preserving evidence that required recovery-critical artifacts still are not tracked and present in HEAD.
+- Completed ORP-R-002 Recovery-Critical Artifact Tracking remediation by promoting the required recovery-critical governance artifacts into tracked HEAD state and validating durability with a manifest-driven control.
+- Executed targeted OVP-001-only re-validation after ORP-R-002 closure and recorded PASS WITH OPEN FOLLOW-ON RISKS for artifact-durability scope.
+- Institutionalized Executive Core autonomous operating behavior under EDD-002 by codifying the executive operating sequence, executive voice standard, decision-question standard, and organizational-learning rule.
 
 ## [Business Factory v1.0] - 2026-07-05
 

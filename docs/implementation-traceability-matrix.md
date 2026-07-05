@@ -54,7 +54,7 @@
 | --- | --- | --- |
 | ORP-R v1.0 | ACTIVE | Atlas Operational Remediation Phase authorized to implement only the evidence-backed operational improvements identified by OVP, in strict priority order, with targeted re-validation after each remediation. |
 | ORP-R-001 | COMPLETE | Mission Control MVP remediation implemented at minimum scope with evidence package captured and targeted OVP-004-only re-validation recorded as PASS WITH OPEN FOLLOW-ON RISKS. |
-| ORP-R-002 | ACTIVE | Recovery-critical artifact tracking remediation started with a manifest-driven HEAD durability validator; first targeted OVP-001 re-validation remains FAIL because required artifacts are still not tracked/in HEAD. |
+| ORP-R-002 | COMPLETE | Recovery-critical artifact tracking remediation completed with manifest-driven HEAD durability validation; required artifact set is now tracked and restorable from HEAD. |
 | ORP-R-003 | PLANNED | Credential custody completion follows artifact tracking and must be followed by a targeted OVP-002 re-validation only. |
 | ORP-R-004 | PLANNED | Manual continuity path remediation follows credential custody completion and must be followed by a targeted OVP-003 re-validation only for the affected scenarios. |
 | ORP-R-005 | PLANNED | Operational visibility improvements follow manual continuity remediation and must be followed by targeted re-validation only for the affected visibility workstream evidence. |
@@ -64,4 +64,4 @@
 | Re-Validation Item | Status | Notes |
 | --- | --- | --- |
 | OVP-004 (post ORP-R-001) | COMPLETE | Re-validation executed only for Mission Control MVP scope. Business/Executive/Learning panels, CEO brief, and OVP-003 replay usability are now present. Result: PASS WITH OPEN FOLLOW-ON RISKS. |
-| OVP-001 (post ORP-R-002 phase 1) | COMPLETE | Re-validation executed only for artifact durability scope. Result: FAIL because manifest-listed recovery-critical artifacts are not yet tracked and not present in HEAD. |
+| OVP-001 (post ORP-R-002) | COMPLETE | Re-validation executed only for artifact durability scope. Result: PASS WITH OPEN FOLLOW-ON RISKS after manifest-listed recovery-critical artifacts were moved into tracked HEAD state. |

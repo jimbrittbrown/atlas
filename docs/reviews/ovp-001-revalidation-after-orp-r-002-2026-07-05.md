@@ -4,7 +4,7 @@ Date: 2026-07-05
 Status: COMPLETE
 Validation Type: Targeted re-validation only
 Scope Rule: OVP-001 only, per ORP-R policy
-Overall Result: FAIL
+Overall Result: PASS WITH OPEN FOLLOW-ON RISKS
 
 ## Purpose
 Re-run OVP-001 durability checks after implementing ORP-R-002 tracking controls.
@@ -27,27 +27,24 @@ Excluded:
 ## Validation Output Summary
 - Total manifest entries: 13
 - Missing on disk: 0
-- Not tracked by git: 10
-- Not present in HEAD: 10
+- Not tracked by git: 0
+- Not present in HEAD: 0
 
 ## Decision
-FAIL
+PASS WITH OPEN FOLLOW-ON RISKS
 
 Reason:
-- Required recovery-critical artifacts exist in working tree.
-- Required artifacts are not yet tracked and present in HEAD.
-- OVP-001 durability requirement remains unsatisfied until manifest-listed artifacts are committed in source-of-truth state.
+- Required recovery-critical artifacts exist, are tracked, and are present in HEAD.
+- ORP-R-002 artifact-durability objective is satisfied for OVP-001 targeted scope.
+- Broader recovery confidence still depends on additional non-scope validations (for example full restore drill cadence and runtime-state limits).
 
 ## Confidence Update
 - Prior OVP-001 confidence (full documented recovery path): 42/100
-- Current OVP-001 confidence (post ORP-R-002 seam, pre-artifact-commit): 49/100
+- Current OVP-001 confidence (post ORP-R-002 closure): 67/100
 
 Rationale:
-- Confidence increased because durability checks are now deterministic and repeatable.
-- Confidence remains below acceptable level because the validated artifacts are still absent from HEAD.
+- Confidence increased because durability checks are deterministic and now pass at HEAD scope.
+- Confidence remains moderated by known OVP-001 residual constraints outside this targeted remediation seam.
 
 ## Follow-On Requirement
-Continue ORP-R-002 until:
-1. Manifest-listed artifacts are tracked and committed.
-2. Validator returns pass for tracked and HEAD presence.
-3. OVP-001 targeted re-validation is re-run and updated.
+Proceed to ORP-R-003 per priority order, while preserving OVP-001 residual-risk tracking in certification evidence.
