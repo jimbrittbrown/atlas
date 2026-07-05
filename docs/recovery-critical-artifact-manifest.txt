@@ -1,0 +1,14 @@
+# Recovery-critical artifacts required in HEAD for OVP-001 durability checks
+constitution/atlas-constitution.md
+constitution/atlas-system-blueprint-v1.0.md
+constitution/atlas-engineering-principles.md
+docs/implementation-traceability-matrix.md
+docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md
+docs/reviews/orp-001-backup-recovery-2026-07-05.md
+docs/reviews/atlas-credential-inventory-2026-07-05.md
+docs/reviews/atlas-operational-validation-phase-v1.0-2026-07-05.md
+docs/reviews/atlas-operational-remediation-phase-v1.0-2026-07-05.md
+docs/reviews/ovp-001-recovery-validation-2026-07-05.md
+docs/reviews/ovp-001-recovery-validation-evidence-2026-07-05.md
+CHANGELOG.md
+README.md

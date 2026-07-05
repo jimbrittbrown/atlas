@@ -5,6 +5,16 @@
 ### Added
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
+- Authorized the Atlas Operational Validation Phase (OVP) v1.0 to convert documented operational controls into demonstrated organizational capability through evidence.
+- Added the engineering principle that operational confidence is earned through demonstrated behavior, not documented intent.
+- Executed OVP-002 Credential Validation and preserved a useful FAIL showing that credential rotation and revocation procedures are demonstrable while multiple live custody references remain incomplete.
+- Executed OVP-003 Operational Simulation and preserved a useful FAIL showing that Atlas can reason about containment, but still lacks several validated fallback paths, complete custody references, and operational visibility required for resilient incident handling.
+- Executed OVP-004 Mission Control MVP validation against the existing OpenClaw control surface and preserved a useful FAIL showing that operator visibility exists in fragments, but executive decision support, business status, learning status, CEO briefing, replay usability, and a purely observational Mission Control boundary are still insufficient.
+- Entered the Atlas Operational Remediation Phase (ORP-R) to implement only evidence-backed operational improvements in strict priority order, with targeted re-validation after each remediation and no unrelated new OVP workstreams.
+- Completed ORP-R-001 Mission Control MVP remediation by implementing only the five evidence-backed OVP-004 gaps: Business Status panel, Executive Status panel, Learning Status panel, CEO Executive Brief, and Incident Replay.
+- Executed targeted OVP-004-only re-validation after ORP-R-001 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming Mission Control MVP minimum executive decision-support coverage while preserving observational boundary in the executive summary surface.
+- Started ORP-R-002 Recovery-Critical Artifact Tracking remediation by implementing a manifest-driven HEAD durability validator for recovery-critical governance artifacts.
+- Executed targeted OVP-001-only re-validation after ORP-R-002 phase 1 and recorded FAIL, preserving evidence that required recovery-critical artifacts still are not tracked and present in HEAD.
 
 ## [Business Factory v1.0] - 2026-07-05
 

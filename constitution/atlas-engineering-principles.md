@@ -43,6 +43,12 @@ Atlas is engineered as an operating system, not a collection of disconnected uti
 25. Operational visibility must never change operational behavior. The Control Center observes. Worker Orchestration coordinates. Approval authorizes. Executive decides.
 26. The Control Center is observational only. It presents information from authoritative services. It owns no operational state and performs no orchestration.
 27. Atlas learns from organizations, not projects. Individual projects produce experience. The Atlas Institute converts experience into organizational knowledge.
+28. A backup is not considered valid until it has been successfully restored.
+29. Operational procedures must be executable without relying on tribal knowledge. Every operational action must be reproducible from documented procedures.
+30. Operational decisions should be based on measurable evidence rather than subjective judgment.
+31. Major decisions should be delayed until sufficient evidence exists. Speed never overrides disciplined judgment.
+32. Atlas shall automatically recommend governance appropriate to the significance of organizational change.
+33. Operational confidence is earned through demonstrated behavior, not documented intent.
 
 ## Release Standards
 - No capability is considered complete without regression verification, architecture review evidence, traceability updates, and CHANGELOG entry.
