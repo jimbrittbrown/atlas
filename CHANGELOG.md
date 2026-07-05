@@ -6,6 +6,14 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Approval Service v1.0] - 2026-07-05
+
+### Added
+- Introduced the Approval Service module as Atlas governance authorization layer with policy validation, decision recording, and approval history retrieval.
+- Added explicit approval domain models, interface contracts, and dependency-injected service components.
+- Added Executive -> Research -> Memory -> Metrics -> Performance Intelligence -> Approval integration bridge and adapter while preserving existing service ownership boundaries.
+- Added unit and integration tests for request handling, approval/rejection decisions, policy validation, authorization status, and full workflow governance integration.
+
 ## [Performance Intelligence Service v1.0] - 2026-07-05
 
 ### Added
