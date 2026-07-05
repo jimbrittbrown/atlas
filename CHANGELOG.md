@@ -6,6 +6,27 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Business Factory v1.0] - 2026-07-05
+
+### Added
+- Introduced Business Factory as Atlas production engine for transforming approved opportunities into operating businesses through standardized launch pipelines.
+- Added public interface methods: createBusiness, buildPipeline, assignPipeline, launchBusiness, getBusinessStatus, pauseBusiness, resumeBusiness, archiveBusiness, getFactoryMetrics, and getProductionHistory.
+- Implemented pipeline lifecycle coverage from Opportunity through Scale while preserving ownership boundaries.
+- Added integration adapter and bridge for Executive -> Research -> Memory -> Metrics -> Performance Intelligence -> Approval -> Registry -> Worker -> Control Center -> Atlas Institute -> Business Factory.
+- Added unit and integration tests validating pipeline creation, worker assignment coordination, launch execution, status controls, history reporting, and boundary compliance.
+- Finalized release under Capability Release 012 governance approval.
+
+## [ATLAS OS v1.0 COMPLETE] - 2026-07-05
+
+### Milestone
+- Declared ATLAS OS v1.0 COMPLETE.
+- Governance includes: Constitution, System Blueprint, Engineering Principles, Tier 1 Strategic Frameworks.
+- Executive Operating System includes: Executive, Research, Memory, Metrics, Performance Intelligence, Approval.
+- Operational Infrastructure includes: Capability Registry, Worker Orchestration, Control Center.
+- Learning Layer includes: Atlas Institute.
+- Production Layer includes: Business Factory.
+- Milestone officially marks completion of the foundational Atlas Operating System.
+
 ## [Atlas Institute v1.0] - 2026-07-05
 
 ### Added
