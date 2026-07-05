@@ -6,6 +6,14 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Capability Registry Service v1.0] - 2026-07-05
+
+### Added
+- Introduced the Capability Registry Service module as the authoritative metadata catalog for Atlas capabilities, dependencies, ownership, versions, interfaces, and release references.
+- Added required public interface operations for capability registration, updates, retrieval, dependency/dependent discovery, status/version queries, search, and registry validation.
+- Added Executive -> Research -> Memory -> Metrics -> Performance Intelligence -> Approval -> Registry integration bridge and adapter while preserving existing ownership boundaries.
+- Added unit and integration tests for metadata handling, dependency graph lookup, discovery behavior, validation checks, and full-chain registry synchronization.
+
 ## [Approval Service v1.0] - 2026-07-05
 
 ### Added
