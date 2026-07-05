@@ -6,6 +6,16 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Worker Orchestration Service v1.0] - 2026-07-05
+
+### Added
+- Introduced the Worker Orchestration Service module for worker discovery, selection, dispatch, coordination, retry handling, failure handling, execution-state tracking, and completion reporting.
+- Enforced registry-mediated discovery and replaceable worker model through orchestration contracts.
+- Enforced execution boundary that workers handle assigned responsibilities only while strategic intent remains in the Executive layer.
+- Added Executive -> Research -> Memory -> Metrics -> Performance Intelligence -> Approval -> Registry -> Worker Orchestration integration bridge and adapter.
+- Added unit and integration tests for discovery, assignment, staged coordination, retry/failure behavior, and governance-gated execution.
+- Finalized release under Capability Release 009 governance approval.
+
 ## [Capability Registry Service v1.0] - 2026-07-05
 
 ### Added

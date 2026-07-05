@@ -1,0 +1,8 @@
+{
+  "name": "atlas-worker-orchestration-v1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
