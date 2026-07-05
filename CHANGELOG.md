@@ -6,6 +6,14 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Memory Service v1.0] - 2026-07-05
+
+### Added
+- Introduced the Memory Service module as Atlas organizational memory with immutable record storage, category-based retrieval, and complete audit history.
+- Added explicit memory domain models, storage/retrieval collaborators, and service interface contracts for future integrations.
+- Added Executive -> Research -> Memory integration bridge and adapter to persist completed research and workflow history without changing service ownership.
+- Added unit and integration tests for recording, retrieval, category assignment, metadata handling, logging, and failure propagation.
+
 ## [Integration Sprint 1] - 2026-07-05
 
 ### Added
