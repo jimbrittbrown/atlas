@@ -6,6 +6,23 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Atlas Institute v1.0] - 2026-07-05
+
+### Added
+- Introduced Atlas Institute as the Organizational Learning System that captures, organizes, synthesizes, and improves reusable institutional knowledge.
+- Added public interface methods: recordLesson, recordExperiment, recordBestPractice, recordFailure, searchKnowledge, generatePlaybook, generateBestPractices, recommendImprovements, getStandards, and getKnowledgeSummary.
+- Implemented cross-service learning capture from Executive, Research, Memory, Metrics, Performance Intelligence, Approval, Capability Registry, Worker Orchestration, and Control Center outputs.
+- Added integration adapter and bridge for Executive -> Research -> Memory -> Metrics -> Performance Intelligence -> Approval -> Registry -> Worker -> Control Center -> Atlas Institute.
+- Added unit and integration tests validating knowledge capture, synthesis generation, and ownership-boundary compliance.
+- Finalized release under Capability Release 011 governance approval.
+
+## [Atlas Learning Layer v1.0 Complete] - 2026-07-05
+
+### Milestone
+- Declared Atlas Learning Layer v1.0 complete.
+- Included capabilities and outcomes: Atlas Institute, Organizational Learning, Knowledge Synthesis, Best Practice Generation, Playbook Generation, and Continuous Improvement Foundation.
+- Milestone confirms governance-accepted institutional learning foundation for Atlas.
+
 ## [Atlas Operational Infrastructure v1.0 Complete] - 2026-07-05
 
 ### Milestone

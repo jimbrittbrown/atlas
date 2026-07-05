@@ -42,6 +42,7 @@ Atlas is engineered as an operating system, not a collection of disconnected uti
 24. Workers execute assigned responsibilities only. Strategic intent remains exclusively within the Executive layer.
 25. Operational visibility must never change operational behavior. The Control Center observes. Worker Orchestration coordinates. Approval authorizes. Executive decides.
 26. The Control Center is observational only. It presents information from authoritative services. It owns no operational state and performs no orchestration.
+27. Atlas learns from organizations, not projects. Individual projects produce experience. The Atlas Institute converts experience into organizational knowledge.
 
 ## Release Standards
 - No capability is considered complete without regression verification, architecture review evidence, traceability updates, and CHANGELOG entry.
