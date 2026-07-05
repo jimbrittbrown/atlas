@@ -6,6 +6,23 @@
 - Implemented the Atlas Executive Service as an orchestration-only kernel.
 - Added explicit workflow models, collaborator interfaces, dedicated orchestration modules, and unit tests.
 
+## [Atlas Operational Infrastructure v1.0 Complete] - 2026-07-05
+
+### Milestone
+- Declared Atlas Operational Infrastructure v1.0 complete.
+- Included capabilities: Capability Registry Service v1.0, Worker Orchestration Service v1.0, and Control Center v1.0.
+- Milestone confirms governance-accepted operational foundation for discovery, coordination, and observational visibility.
+
+## [Control Center v1.0] - 2026-07-05
+
+### Added
+- Introduced the Control Center module as an observational-only interface that presents operational visibility from authoritative services.
+- Added Control Center public interface methods for system overview, capability health snapshots, workflow operations views, execution alerts, and release traceability visibility.
+- Enforced strict boundary rules: no operational state ownership, no orchestration responsibilities, and no operational action execution.
+- Added integration adapter and bridge for Executive -> Research -> Memory -> Metrics -> Performance Intelligence -> Approval -> Registry -> Worker -> Control Center visibility composition.
+- Added unit and integration tests validating observational behavior, alert synthesis, release visibility, and no-orchestration constraints.
+- Finalized release under Capability Release 010 governance approval.
+
 ## [Worker Orchestration Service v1.0] - 2026-07-05
 
 ### Added

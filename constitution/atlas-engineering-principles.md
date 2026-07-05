@@ -40,6 +40,8 @@ Atlas is engineered as an operating system, not a collection of disconnected uti
 22. Workers never coordinate other workers. Only Worker Orchestration coordinates workers.
 23. Workers are replaceable. Worker discovery occurs exclusively through the Capability Registry.
 24. Workers execute assigned responsibilities only. Strategic intent remains exclusively within the Executive layer.
+25. Operational visibility must never change operational behavior. The Control Center observes. Worker Orchestration coordinates. Approval authorizes. Executive decides.
+26. The Control Center is observational only. It presents information from authoritative services. It owns no operational state and performs no orchestration.
 
 ## Release Standards
 - No capability is considered complete without regression verification, architecture review evidence, traceability updates, and CHANGELOG entry.
