@@ -1,18 +1,9 @@
-import { ExecutiveService } from '../../executive/src/executive-service.js';
-import { WorkerOrchestrationAdapter } from '../../integration/src/worker-orchestration-adapter.js';
-import { CapabilityRegistryService } from '../../registry/src/capability-registry-service.js';
-
 export class AtlasApplication {
-    constructor() {
-        this.capabilityRegistry = new CapabilityRegistryService();
-
-        this.workerOrchestration = new WorkerOrchestrationAdapter(
-            this.capabilityRegistry
-        );
-
-        this.executive = new ExecutiveService({
-            requestRouter: this.workerOrchestration
-        });
+    constructor(services) {
+        this.services = services;
+        this.executive = services.executive;
+        this.workerOrchestration = services.workerOrchestration;
+        this.capabilityRegistry = services.capabilityRegistry;
     }
 
     start() {
