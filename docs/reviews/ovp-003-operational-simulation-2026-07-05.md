@@ -55,7 +55,7 @@ Run realistic tabletop exercises for Atlas abnormal operating conditions and cap
 - Execution state: EXECUTED AND TARGETED CONTINUITY RE-VALIDATED
 - Scenarios completed: 9 of 9
 - Verification decision: FAIL
-- Open issues: targeted continuity gaps for approval interruption, Atlas Institute outage, and metrics outage are now remediated at playbook scope, but broader OVP-003 visibility and cross-scenario resilience evidence remains open
+- Open issues: targeted continuity gaps and Mission Control visibility evidence for affected replay scenarios are now remediated at bounded scope, but broader OVP-003 cross-scenario resilience evidence remains open
 
 ## Validation Outcome Summary
 - Worker failure: PARTIAL PASS
@@ -75,4 +75,6 @@ OVP-003 is complete only when all required scenarios have recorded observations 
 ## Targeted Re-Validation Addendum
 - ORP-R-004 re-ran only the affected OVP-003 continuity scenarios: approval workflow interruption, Atlas Institute unavailable, and metrics unavailable.
 - Result: PASS WITH OPEN FOLLOW-ON RISKS at manual continuity playbook scope.
-- Remaining OVP-003 follow-on risks are primarily executive visibility and broader incident-support evidence that remain in ORP-R-005 scope.
+- ORP-R-005 re-ran only the affected OVP-003 visibility evidence and replay support scope.
+- Result: PASS WITH OPEN FOLLOW-ON RISKS at operational-visibility scope.
+- Remaining OVP-003 follow-on risks are broader cross-scenario resilience and full-scope operational simulation evidence beyond this targeted remediation seam.

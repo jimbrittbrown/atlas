@@ -43,8 +43,8 @@
 | OVP v1.0 | ACTIVE | Atlas Operational Validation Phase remains the evidence framework, but new unrelated validation workstreams are paused while ORP-R performs evidence-backed remediation followed by targeted re-validation only for the affected workstream. |
 | OVP-001 | COMPLETE | Recovery Validation executed. Restore mechanics and regression checks passed, but validation failed because the backup restored committed Git state only and omitted required uncommitted governance artifacts and credential-reference files. |
 | OVP-002 | COMPLETE | Initial credential validation failed usefully on custody completeness; after ORP-R-003 remediation, targeted OVP-002-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS at metadata-reference scope. |
-| OVP-003 | COMPLETE | Initial operational simulation failed usefully across nine scenarios; after ORP-R-004, targeted continuity-scenario re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS for approval interruption, Atlas Institute outage, and metrics outage at playbook scope, while broader visibility evidence remains open. |
-| OVP-004 | COMPLETE | Initial Mission Control MVP validation failed usefully against the pre-remediation surface; after ORP-R-001 remediation, targeted OVP-004-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS at MVP scope. |
+| OVP-003 | COMPLETE | Initial operational simulation failed usefully across nine scenarios; after ORP-R-004 and ORP-R-005, targeted continuity and visibility re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS for the affected scenarios and replay evidence, while broader cross-scenario resilience evidence remains open. |
+| OVP-004 | COMPLETE | Initial Mission Control MVP validation failed usefully against the pre-remediation surface; after ORP-R-001 and ORP-R-005, targeted OVP-004-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS with explicit worker/workflow and operational-status visibility in Mission Control. |
 | OVP-005 | AUTHORIZED | Executive Simulation authorized to exercise the Go / No-Go governance process using realistic evidence without launching a business. |
 | OVP-006 | AUTHORIZED | Institute Promotion Validation authorized to move at least one simulated knowledge item through the full Atlas Institute lifecycle with governance evidence. |
 
@@ -57,7 +57,7 @@
 | ORP-R-002 | COMPLETE | Recovery-critical artifact tracking remediation completed with manifest-driven HEAD durability validation; required artifact set is now tracked and restorable from HEAD. |
 | ORP-R-003 | COMPLETE | Credential custody completion remediation implemented with a repository-owned custody register and deterministic validator; targeted OVP-002-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
 | ORP-R-004 | COMPLETE | Manual continuity path remediation implemented with a dedicated continuity playbook and deterministic validator; targeted OVP-003-only continuity-scenario re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
-| ORP-R-005 | PLANNED | Operational visibility improvements follow manual continuity remediation and must be followed by targeted re-validation only for the affected visibility workstream evidence. |
+| ORP-R-005 | COMPLETE | Operational visibility improvements implemented in the Mission Control summary surface with explicit worker/workflow and operational-status visibility; targeted OVP-004 and affected OVP-003 replay evidence re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
 
 ## Targeted Re-Validation Record
 
@@ -67,3 +67,5 @@
 | OVP-001 (post ORP-R-002) | COMPLETE | Re-validation executed only for artifact durability scope. Result: PASS WITH OPEN FOLLOW-ON RISKS after manifest-listed recovery-critical artifacts were moved into tracked HEAD state. |
 | OVP-002 (post ORP-R-003) | COMPLETE | Re-validation executed only for credential-custody completeness scope. Result: PASS WITH OPEN FOLLOW-ON RISKS after all six classes were mapped to concrete repository-owned custody references. |
 | OVP-003 (post ORP-R-004) | COMPLETE | Re-validation executed only for manual continuity scenarios. Result: PASS WITH OPEN FOLLOW-ON RISKS after approval interruption, Institute outage, and metrics outage were each given explicit manual continuity procedures and resumption gates. |
+| OVP-004 (post ORP-R-005) | COMPLETE | Re-validation executed only for Mission Control visibility-improvement scope. Result: PASS WITH OPEN FOLLOW-ON RISKS after worker/workflow and operational-status visibility were added explicitly to the executive summary surface. |
+| OVP-003 visibility evidence (post ORP-R-005) | COMPLETE | Re-validation executed only for the affected OVP-003 replay and visibility evidence. Result: PASS WITH OPEN FOLLOW-ON RISKS after Mission Control exposed explicit visibility for worker/workflow pressure, operational alerts, snapshot freshness, and evidence mode. |

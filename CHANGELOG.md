@@ -22,6 +22,8 @@
 - Executed targeted OVP-002-only re-validation after ORP-R-003 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming custody-completeness closure at metadata-reference scope while preserving deeper live-retrieval follow-on risks.
 - Completed ORP-R-004 Manual Continuity Paths remediation by adding a dedicated manual continuity playbook and deterministic validator for approval interruption, Atlas Institute outage, and metrics outage.
 - Executed targeted OVP-003-only continuity-scenario re-validation after ORP-R-004 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming bounded fallback procedures now exist while broader executive-visibility follow-on risks remain in ORP-R-005 scope.
+- Completed ORP-R-005 Operational Visibility Improvements by extending OpenClaw Mission Control with explicit worker/workflow and operational-status visibility using existing overview signals while preserving the observational-only boundary.
+- Executed targeted OVP-004-only re-validation and affected OVP-003 replay/visibility re-validation after ORP-R-005 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming Mission Control now exposes explicit visibility for worker pressure, alert severity, snapshot freshness, and evidence mode.
 
 ## [Business Factory v1.0] - 2026-07-05
 
