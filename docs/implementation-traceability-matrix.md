@@ -64,7 +64,7 @@
 | Program Item | Status | Notes |
 | --- | --- | --- |
 | ECP v1.0 | ACTIVE | Atlas Evidence Closure Phase is authorized to close the remaining certification blockers identified in ECR-001 using evidence workstreams only, without architecture redesign or unrelated capability expansion. |
-| ECP-001 | PLANNED | Runtime-state restoration proof must close the CRITICAL certification blocker around launch-critical state recoverability. |
+| ECP-001 | COMPLETE | Runtime-state restoration proof executed through a deterministic state-class inventory and documentary cross-check; result clarified the blocker but did not close it because multiple launch-critical runtime state classes remain not durably restorable. |
 | ECP-002 | PLANNED | Restore drill execution must convert recovery intent into recorded restoration evidence. |
 | ECP-003 | PLANNED | Credential operations evidence must exercise live-like rotation, revocation, and direct custody recovery. |
 | ECP-004 | PLANNED | Full-scope OVP-003 cumulative rerun must test post-ORP-R resilience across all scenarios. |

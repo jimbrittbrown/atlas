@@ -5,7 +5,7 @@ Status: COMPLETE
 Assessment Type: Post-ORP-R executive confidence assessment
 
 ## Whole-System Confidence
-- Current operational confidence: **61/100**
+- Current operational confidence: **63/100**
 - Certification threshold recommendation: **80/100 minimum**
 
 ## Confidence Composition
@@ -24,6 +24,11 @@ Assessment Type: Post-ORP-R executive confidence assessment
 5. Learning-promotion workflow evidence remains absent because OVP-006 is still authorized only.
 6. The latest Mission Control visibility implementation is validated but not yet durably sealed in a clean OpenClaw commit or equivalent release artifact.
 
+### ECP-001 Update
+ECP-001 improved confidence modestly by replacing a generic runtime-state blocker with an explicit state-class inventory and recoverability classification.
+
+It did not close the blocker.
+
 ## Sub-Confidence View
 - OVP-001 targeted durability confidence: 67/100
 - OVP-002 targeted custody confidence: 70/100
@@ -35,7 +40,7 @@ Interpretation:
 - Atlas is weakest where certification requires exercised operational proof across recovery, security operations, and executive governance cycles.
 
 ## Executive Conclusion
-Operational confidence has moved from insufficient and fragmented to disciplined but still incomplete.
+Operational confidence has moved from insufficient and fragmented to disciplined, more explicitly classified, but still incomplete.
 
 Atlas is no longer evidence-poor.
 Atlas is still certification-poor in the most launch-critical exercise categories.

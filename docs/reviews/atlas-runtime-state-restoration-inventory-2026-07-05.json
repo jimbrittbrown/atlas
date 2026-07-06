@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "workstream": "ECP-001",
+  "generatedAt": "2026-07-05",
+  "classes": [
+    {
+      "id": "institutional-governance-artifacts",
+      "owner": "Atlas repository",
+      "criticality": "launch-critical",
+      "currentDurability": "repository-backed",
+      "restorationProcedure": "Restore repository source of truth and validate git lineage.",
+      "restartReconciliationEvidence": "documented-and-validated-at-head-scope",
+      "certificationStatus": "satisfied-at-artifact-scope",
+      "evidenceRefs": [
+        "docs/reviews/orp-001-backup-recovery-2026-07-05.md",
+        "docs/reviews/ovp-001-revalidation-after-orp-r-002-2026-07-05.md"
+      ]
+    },
+    {
+      "id": "workflow-orchestration-state",
+      "owner": "Executive",
+      "criticality": "launch-critical",
+      "currentDurability": "in-memory-service-state",
+      "restorationProcedure": "Restore repository and reconstruct operations from durable artifacts only.",
+      "restartReconciliationEvidence": "absent",
+      "certificationStatus": "not-satisfied",
+      "evidenceRefs": [
+        "docs/reviews/executive-core-review-package-2026-07-05.md",
+        "docs/reviews/orp-001-backup-recovery-2026-07-05.md",
+        "docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md"
+      ]
+    },
+    {
+      "id": "approval-decision-state",
+      "owner": "Approval",
+      "criticality": "launch-critical",
+      "currentDurability": "history-trace-documented-but-store-durability-unproven",
+      "restorationProcedure": "Restore repository and reconstruct approval context from durable artifacts and decision history where present.",
+      "restartReconciliationEvidence": "partial-documentation-only",
+      "certificationStatus": "not-satisfied",
+      "evidenceRefs": [
+        "docs/reviews/executive-core-review-package-2026-07-05.md",
+        "docs/reviews/executive-decision-flow-2026-07-05.md",
+        "docs/reviews/approval-service-v1-self-architecture-review.md"
+      ]
+    },
+    {
+      "id": "worker-execution-state",
+      "owner": "Worker Orchestration",
+      "criticality": "launch-critical",
+      "currentDurability": "execution-history-emitted-but-runtime-state-unproven",
+      "restorationProcedure": "Restore repository and use durable execution history where available to reconstruct assignment and completion context.",
+      "restartReconciliationEvidence": "partial-documentation-only",
+      "certificationStatus": "not-satisfied",
+      "evidenceRefs": [
+        "docs/reviews/work-order-009-worker-orchestration-responsibility-matrix-2026-07-05.md",
+        "docs/reviews/work-order-009-worker-orchestration-design-document-2026-07-05.md",
+        "docs/reviews/orp-001-backup-recovery-2026-07-05.md"
+      ]
+    },
+    {
+      "id": "metric-history-state",
+      "owner": "Metrics",
+      "criticality": "launch-critical",
+      "currentDurability": "metric-history-owned-but-persistence-guarantee-unproven",
+      "restorationProcedure": "Restore repository and resume metrics capture; rely on surviving durable records only where explicitly preserved.",
+      "restartReconciliationEvidence": "absent",
+      "certificationStatus": "not-satisfied",
+      "evidenceRefs": [
+        "docs/reviews/executive-core-review-package-2026-07-05.md",
+        "docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md"
+      ]
+    },
+    {
+      "id": "learning-governance-state",
+      "owner": "Atlas Institute and Memory",
+      "criticality": "launch-critical",
+      "currentDurability": "institutional-artifacts-recoverable-runtime-store-unproven",
+      "restorationProcedure": "Restore repository source of truth and reconstitute learning and governance state from institutional artifacts.",
+      "restartReconciliationEvidence": "documented-for-artifacts-only",
+      "certificationStatus": "partially-satisfied",
+      "evidenceRefs": [
+        "docs/reviews/orp-001-backup-recovery-2026-07-05.md",
+        "docs/reviews/work-order-011-atlas-institute-responsibility-matrix-2026-07-05.md",
+        "docs/reviews/memory-service-v1-design-review.md"
+      ]
+    },
+    {
+      "id": "business-lifecycle-state",
+      "owner": "Business Factory and Executive",
+      "criticality": "launch-critical",
+      "currentDurability": "runtime-execution-lifecycle-unproven",
+      "restorationProcedure": "Restore repository artifacts and reconstruct business-operational posture from durable guidance and executive records only.",
+      "restartReconciliationEvidence": "absent",
+      "certificationStatus": "not-satisfied",
+      "evidenceRefs": [
+        "docs/reviews/work-order-012-business-factory-responsibility-matrix-2026-07-05.md",
+        "docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md"
+      ]
+    }
+  ]
+}

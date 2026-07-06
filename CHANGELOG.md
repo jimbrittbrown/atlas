@@ -27,6 +27,7 @@
 - Completed ECR-001 Executive Certification Review and recorded a recommendation to withhold Operational Certification pending recovery-state proof, full-scope resilience rerun, live credential-operation evidence, executive decision-cycle exercise, and Institute promotion-lifecycle exercise.
 - Approved EDD-004 and transitioned Atlas from ORP-R into Evidence Closure Phase (ECP), with a priority-ordered blocker-closure plan focused only on missing certification evidence.
 - Completed EDD-005 Atlas Genesis Retrospective and recorded the permanent historical account of Atlas's mission, architectural evolution, organizational discoveries, and Genesis-era closing judgment before Evidence Closure execution begins.
+- Completed ECP-001 Runtime-State Restoration Proof by producing an explicit launch-critical state-class inventory and documentary restoration assessment, increasing clarity on recoverability while confirming that the CRITICAL runtime-state blocker remains open.
 
 ## [Business Factory v1.0] - 2026-07-05
 
