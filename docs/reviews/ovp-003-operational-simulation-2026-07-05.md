@@ -52,10 +52,10 @@ Run realistic tabletop exercises for Atlas abnormal operating conditions and cap
 - Open risks after simulation are recorded for certification review.
 
 ## Evidence Register
-- Execution state: EXECUTED AND TARGETED CONTINUITY RE-VALIDATED
+- Execution state: EXECUTED, TARGETED CONTINUITY/VISIBILITY RE-VALIDATED, AND FULL-SCOPE CUMULATIVE RERUN COMPLETE
 - Scenarios completed: 9 of 9
-- Verification decision: FAIL
-- Open issues: targeted continuity gaps and Mission Control visibility evidence for affected replay scenarios are now remediated at bounded scope, but broader OVP-003 cross-scenario resilience evidence remains open
+- Verification decision: INITIAL FAIL; ECP-004 CUMULATIVE RERUN PARTIAL PASS
+- Open issues: broader cross-scenario resilience evidence now exists, but AI provider outage and VPS outage remain FAIL states and business launch interruption remains only partially exercised pending OVP-005
 
 ## Validation Outcome Summary
 - Worker failure: PARTIAL PASS
@@ -78,3 +78,10 @@ OVP-003 is complete only when all required scenarios have recorded observations 
 - ORP-R-005 re-ran only the affected OVP-003 visibility evidence and replay support scope.
 - Result: PASS WITH OPEN FOLLOW-ON RISKS at operational-visibility scope.
 - Remaining OVP-003 follow-on risks are broader cross-scenario resilience and full-scope operational simulation evidence beyond this targeted remediation seam.
+
+## ECP-004 Cumulative Rerun Addendum
+- ECP-004 re-ran the full nine-scenario OVP-003 package using the post-ORP-R and post-ECP evidence set.
+- Result: PARTIAL PASS.
+- Improved scenarios: worker failure, repository corruption, approval workflow interruption, Atlas Institute unavailable, metrics unavailable, and partial infrastructure degradation.
+- Remaining FAIL scenarios: AI provider outage and VPS outage.
+- Business launch interruption remains PARTIAL PASS pending OVP-005 executive decision-cycle evidence.
