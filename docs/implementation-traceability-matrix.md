@@ -52,12 +52,25 @@
 
 | Program Item | Status | Notes |
 | --- | --- | --- |
-| ORP-R v1.0 | ACTIVE | Atlas Operational Remediation Phase authorized to implement only the evidence-backed operational improvements identified by OVP, in strict priority order, with targeted re-validation after each remediation. |
+| ORP-R v1.0 | COMPLETE | Atlas Operational Remediation Phase completed its planned remediation scope across ORP-R-001 through ORP-R-005 and transitioned into Evidence Closure Phase following ECR-001 and EDD-004. |
 | ORP-R-001 | COMPLETE | Mission Control MVP remediation implemented at minimum scope with evidence package captured and targeted OVP-004-only re-validation recorded as PASS WITH OPEN FOLLOW-ON RISKS. |
 | ORP-R-002 | COMPLETE | Recovery-critical artifact tracking remediation completed with manifest-driven HEAD durability validation; required artifact set is now tracked and restorable from HEAD. |
 | ORP-R-003 | COMPLETE | Credential custody completion remediation implemented with a repository-owned custody register and deterministic validator; targeted OVP-002-only re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
 | ORP-R-004 | COMPLETE | Manual continuity path remediation implemented with a dedicated continuity playbook and deterministic validator; targeted OVP-003-only continuity-scenario re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
 | ORP-R-005 | COMPLETE | Operational visibility improvements implemented in the Mission Control summary surface with explicit worker/workflow and operational-status visibility; targeted OVP-004 and affected OVP-003 replay evidence re-validation recorded PASS WITH OPEN FOLLOW-ON RISKS. |
+
+## Evidence Closure Phase
+
+| Program Item | Status | Notes |
+| --- | --- | --- |
+| ECP v1.0 | ACTIVE | Atlas Evidence Closure Phase is authorized to close the remaining certification blockers identified in ECR-001 using evidence workstreams only, without architecture redesign or unrelated capability expansion. |
+| ECP-001 | PLANNED | Runtime-state restoration proof must close the CRITICAL certification blocker around launch-critical state recoverability. |
+| ECP-002 | PLANNED | Restore drill execution must convert recovery intent into recorded restoration evidence. |
+| ECP-003 | PLANNED | Credential operations evidence must exercise live-like rotation, revocation, and direct custody recovery. |
+| ECP-004 | PLANNED | Full-scope OVP-003 cumulative rerun must test post-ORP-R resilience across all scenarios. |
+| ECP-005 | PLANNED | OVP-005 Executive Simulation must exercise the Go / No-Go governance path with realistic evidence. |
+| ECP-006 | PLANNED | OVP-006 Institute Promotion Validation must exercise the full governed learning-promotion lifecycle. |
+| ECP-007 | PLANNED | Mission Control implementation sealing must produce durable clean release evidence for the latest visibility slice. |
 
 ## Targeted Re-Validation Record
 
