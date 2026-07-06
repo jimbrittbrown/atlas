@@ -8,7 +8,6 @@ Purpose: Remaining-risk register for Executive Certification Review ECR-001
 | --- | --- | --- | --- | --- | --- |
 | ECR-R1 | Launch-critical runtime state remains insufficiently durable/restorable beyond governance artifact HEAD durability; ECP-001 classified unresolved classes as workflow, approval, worker execution, metric history, and business lifecycle state, and ECP-002 confirmed the drill still does not close those class-level gaps. | CRITICAL | Certification blocker | docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md; docs/reviews/ovp-001-revalidation-after-orp-r-002-2026-07-05.md; docs/reviews/ecp-001-runtime-state-restoration-proof-2026-07-05.md; docs/reviews/ecp-002-restore-drill-execution-2026-07-05.md | Demonstrate runtime-state restoration procedure and record restore evidence. |
 | ECR-R3 | Rotation and revocation now have drill evidence, and a narrow follow-on drill closed the local host-side service-environment/channel gap, but repository access remains partial and direct custody recovery is still unexercised for VPS, backup/archive, and emergency decryption custody. | HIGH | Certification blocker | docs/reviews/ovp-002-revalidation-after-orp-r-003-2026-07-05.md; docs/reviews/ecp-003-credential-operations-evidence-2026-07-05.md; docs/reviews/ecp-003-direct-custody-follow-on-evidence-2026-07-05.md | Execute direct operator-led recovery against authoritative custody systems for repository write access and the unresolved vault-backed classes. |
-| ECR-R5 | OVP-005 Executive Simulation has not been executed. | HIGH | Certification blocker | docs/reviews/ovp-005-executive-simulation-2026-07-05.md | Execute decision-cycle simulation and preserve permanent decision record. |
 | ECR-R6 | OVP-006 Institute Promotion Validation has not been executed. | HIGH | Certification blocker | docs/reviews/ovp-006-institute-promotion-validation-2026-07-05.md | Execute promotion lifecycle validation end to end. |
 | ECR-R7 | Latest Mission Control visibility implementation is not yet sealed in a clean OpenClaw commit or equivalent release artifact because unrelated working-tree drift remains. | HIGH | Certification blocker | ECR-001 repository-state inspection on 2026-07-05; docs/reviews/orp-r-005-operational-visibility-improvements-remediation-evidence-2026-07-05.md | Seal final implementation state in durable release evidence. |
 | ECR-R8 | Mission Control still depends on upstream signal trustworthiness and summary-level evidence. | MEDIUM | Acceptable residual risk after blockers close | docs/reviews/ovp-004-revalidation-after-orp-r-005-2026-07-05.md | Maintain upstream signal verification and monitoring. |
@@ -17,7 +16,7 @@ Purpose: Remaining-risk register for Executive Certification Review ECR-001
 
 ## Register Summary
 - CRITICAL blockers: 1
-- HIGH blockers: 4
+- HIGH blockers: 3
 - MEDIUM acceptable-after-closure risks: 2
 - LOW non-blocking risks: 1
 
