@@ -20,6 +20,8 @@
 - Institutionalized Executive Core autonomous operating behavior under EDD-002 by codifying the executive operating sequence, executive voice standard, decision-question standard, and organizational-learning rule.
 - Completed ORP-R-003 Credential Custody Completion remediation by establishing a repository-owned credential custody register and deterministic coverage validator for all six launch-critical credential classes.
 - Executed targeted OVP-002-only re-validation after ORP-R-003 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming custody-completeness closure at metadata-reference scope while preserving deeper live-retrieval follow-on risks.
+- Completed ORP-R-004 Manual Continuity Paths remediation by adding a dedicated manual continuity playbook and deterministic validator for approval interruption, Atlas Institute outage, and metrics outage.
+- Executed targeted OVP-003-only continuity-scenario re-validation after ORP-R-004 and recorded PASS WITH OPEN FOLLOW-ON RISKS, confirming bounded fallback procedures now exist while broader executive-visibility follow-on risks remain in ORP-R-005 scope.
 
 ## [Business Factory v1.0] - 2026-07-05
 
