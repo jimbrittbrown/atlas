@@ -29,6 +29,7 @@
 - Completed EDD-005 Atlas Genesis Retrospective and recorded the permanent historical account of Atlas's mission, architectural evolution, organizational discoveries, and Genesis-era closing judgment before Evidence Closure execution begins.
 - Completed ECP-001 Runtime-State Restoration Proof by producing an explicit launch-critical state-class inventory and documentary restoration assessment, increasing clarity on recoverability while confirming that the CRITICAL runtime-state blocker remains open.
 - Completed ECP-002 Restore Drill Execution by restoring a ref-complete atlas-repo backup into an isolated workspace and re-running the recovery validators successfully from the restored copy, closing the missing restore-drill evidence blocker while preserving the open runtime-state recoverability blocker.
+- Completed ECP-003 Credential Operations Evidence by executing a validator-backed credential-operations drill with live-like rotation and revocation exercises plus class-by-class direct recovery coverage, improving security-evidence quality while confirming that vault-backed direct custody recovery remains insufficient to close ECR-R3.
 
 ## [Business Factory v1.0] - 2026-07-05
 
