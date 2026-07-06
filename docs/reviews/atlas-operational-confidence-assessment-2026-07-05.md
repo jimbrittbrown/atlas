@@ -1,0 +1,41 @@
+# Atlas Operational Confidence Assessment
+
+Date: 2026-07-05
+Status: COMPLETE
+Assessment Type: Post-ORP-R executive confidence assessment
+
+## Whole-System Confidence
+- Current operational confidence: **61/100**
+- Certification threshold recommendation: **80/100 minimum**
+
+## Confidence Composition
+
+### Strengthening Factors
+1. Governance discipline is strong and traceable.
+2. ORP-R executed in priority order without architecture drift.
+3. Targeted re-validation now shows bounded PASS WITH OPEN FOLLOW-ON RISKS across OVP-001, OVP-002, OVP-003 continuity, OVP-003 visibility, and OVP-004.
+4. Deterministic validators now exist for artifact durability, credential custody, and manual continuity structure.
+
+### Confidence-Limiting Factors
+1. Runtime-state recovery assurance is still not demonstrated at launch-critical scope.
+2. Security operations are structurally defined but not fully exercised live.
+3. Cross-scenario resilience remains partially inferred because full OVP-003 has not been rerun after cumulative remediations.
+4. Governance decision-cycle evidence remains absent because OVP-005 is still authorized only.
+5. Learning-promotion workflow evidence remains absent because OVP-006 is still authorized only.
+6. The latest Mission Control visibility implementation is validated but not yet durably sealed in a clean OpenClaw commit or equivalent release artifact.
+
+## Sub-Confidence View
+- OVP-001 targeted durability confidence: 67/100
+- OVP-002 targeted custody confidence: 70/100
+- OVP-003 affected continuity/visibility confidence: 64/100
+- OVP-004 Mission Control confidence: 88/100
+
+Interpretation:
+- Atlas is strongest in governance structure and bounded remediation execution.
+- Atlas is weakest where certification requires exercised operational proof across recovery, security operations, and executive governance cycles.
+
+## Executive Conclusion
+Operational confidence has moved from insufficient and fragmented to disciplined but still incomplete.
+
+Atlas is no longer evidence-poor.
+Atlas is still certification-poor in the most launch-critical exercise categories.
