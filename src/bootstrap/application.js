@@ -27,6 +27,6 @@ export class AtlasApplication {
             new Date().toISOString()
         );
 
-        return this.executive.receiveRequest(request);
+        return this.executive.handleRequest(request);
     }
 }
