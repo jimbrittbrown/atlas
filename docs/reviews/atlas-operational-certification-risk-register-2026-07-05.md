@@ -6,8 +6,7 @@ Purpose: Remaining-risk register for Executive Certification Review ECR-001
 
 | Risk ID | Risk | Level | Certification Impact | Evidence | Required Closure |
 | --- | --- | --- | --- | --- | --- |
-| ECR-R1 | Launch-critical runtime state remains insufficiently durable/restorable beyond governance artifact HEAD durability; ECP-001 classified unresolved classes as workflow, approval, worker execution, metric history, and business lifecycle state. | CRITICAL | Certification blocker | docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md; docs/reviews/ovp-001-revalidation-after-orp-r-002-2026-07-05.md; docs/reviews/ecp-001-runtime-state-restoration-proof-2026-07-05.md | Demonstrate runtime-state restoration procedure and record restore evidence. |
-| ECR-R2 | No full restore drill evidence exists. | HIGH | Certification blocker | docs/reviews/atlas-executive-certification-review-v1.0-2026-07-05.md; docs/reviews/ovp-001-revalidation-after-orp-r-002-2026-07-05.md | Execute and record restore drill. |
+| ECR-R1 | Launch-critical runtime state remains insufficiently durable/restorable beyond governance artifact HEAD durability; ECP-001 classified unresolved classes as workflow, approval, worker execution, metric history, and business lifecycle state, and ECP-002 confirmed the drill still does not close those class-level gaps. | CRITICAL | Certification blocker | docs/reviews/atlas-production-readiness-review-prr-2026-07-05.md; docs/reviews/ovp-001-revalidation-after-orp-r-002-2026-07-05.md; docs/reviews/ecp-001-runtime-state-restoration-proof-2026-07-05.md; docs/reviews/ecp-002-restore-drill-execution-2026-07-05.md | Demonstrate runtime-state restoration procedure and record restore evidence. |
 | ECR-R3 | Live credential rotation/revocation and direct custody recovery remain unexercised. | HIGH | Certification blocker | docs/reviews/ovp-002-revalidation-after-orp-r-003-2026-07-05.md | Execute live-like credential-operation evidence path. |
 | ECR-R4 | Full-scope OVP-003 has not been rerun after cumulative ORP-R remediations. | HIGH | Certification blocker | docs/reviews/ovp-003-visibility-revalidation-after-orp-r-005-2026-07-05.md; docs/reviews/ovp-003-operational-simulation-evidence-2026-07-05.md | Re-run full operational simulation with cumulative evidence set. |
 | ECR-R5 | OVP-005 Executive Simulation has not been executed. | HIGH | Certification blocker | docs/reviews/ovp-005-executive-simulation-2026-07-05.md | Execute decision-cycle simulation and preserve permanent decision record. |
@@ -19,7 +18,7 @@ Purpose: Remaining-risk register for Executive Certification Review ECR-001
 
 ## Register Summary
 - CRITICAL blockers: 1
-- HIGH blockers: 6
+- HIGH blockers: 5
 - MEDIUM acceptable-after-closure risks: 2
 - LOW non-blocking risks: 1
 

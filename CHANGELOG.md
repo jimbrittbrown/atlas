@@ -28,6 +28,7 @@
 - Approved EDD-004 and transitioned Atlas from ORP-R into Evidence Closure Phase (ECP), with a priority-ordered blocker-closure plan focused only on missing certification evidence.
 - Completed EDD-005 Atlas Genesis Retrospective and recorded the permanent historical account of Atlas's mission, architectural evolution, organizational discoveries, and Genesis-era closing judgment before Evidence Closure execution begins.
 - Completed ECP-001 Runtime-State Restoration Proof by producing an explicit launch-critical state-class inventory and documentary restoration assessment, increasing clarity on recoverability while confirming that the CRITICAL runtime-state blocker remains open.
+- Completed ECP-002 Restore Drill Execution by restoring a ref-complete atlas-repo backup into an isolated workspace and re-running the recovery validators successfully from the restored copy, closing the missing restore-drill evidence blocker while preserving the open runtime-state recoverability blocker.
 
 ## [Business Factory v1.0] - 2026-07-05
 
