@@ -1,3 +1,5 @@
+import { ExecutiveRequest } from '../../executive/src/models.js';
+
 export class AtlasApplication {
     constructor(services) {
         this.services = services;
@@ -12,5 +14,19 @@ export class AtlasApplication {
         console.log('================================');
 
         return this;
+    }
+
+    async execute({ type, objective, payload = {} }) {
+        const request = new ExecutiveRequest(
+            `req-${Date.now()}`,
+            type,
+            {
+                objective,
+                ...payload
+            },
+            new Date().toISOString()
+        );
+
+        return this.executive.receiveRequest(request);
     }
 }
