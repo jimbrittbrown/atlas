@@ -69,7 +69,7 @@
 | ECP-003 | COMPLETE | Credential operations evidence executed with deterministic drill artifacts and validator; live-like rotation and revocation passed, and a CEO-authorized narrow follow-on drill closed the service-environment/channel host-side gap, but repository access remained partial and the unresolved vault-backed classes still failed direct recovery, so ECR-R3 stays open. |
 | ECP-004 | COMPLETE | Full-scope OVP-003 cumulative rerun executed with deterministic evidence packaging and validator; result was PARTIAL PASS with six scenario-level improvements, ECR-R4 closed, and remaining scenario limits explicitly mapped back to ECR-R1, ECR-R3, and ECR-R5. |
 | ECP-005 | COMPLETE | OVP-005 Executive Simulation executed with deterministic evidence packaging and validator; launch-readiness scorecard and permanent decision record were produced, final simulation decision was NO-GO, and ECR-R5 is now closed. |
-| ECP-006 | PLANNED | OVP-006 Institute Promotion Validation must exercise the full governed learning-promotion lifecycle. |
+| ECP-006 | COMPLETE | OVP-006 Institute Promotion Validation executed with deterministic evidence packaging and validator; one promotion item was advanced through Observation -> Experiment -> Validated -> Recommended -> Best Practice -> Atlas Standard with governance-trigger approval, and ECR-R6 is now closed. |
 | ECP-007 | PLANNED | Mission Control implementation sealing must produce durable clean release evidence for the latest visibility slice. |
 
 ## Targeted Re-Validation Record
