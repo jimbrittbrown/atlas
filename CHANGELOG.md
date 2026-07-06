@@ -30,6 +30,7 @@
 - Completed ECP-001 Runtime-State Restoration Proof by producing an explicit launch-critical state-class inventory and documentary restoration assessment, increasing clarity on recoverability while confirming that the CRITICAL runtime-state blocker remains open.
 - Completed ECP-002 Restore Drill Execution by restoring a ref-complete atlas-repo backup into an isolated workspace and re-running the recovery validators successfully from the restored copy, closing the missing restore-drill evidence blocker while preserving the open runtime-state recoverability blocker.
 - Completed ECP-003 Credential Operations Evidence by executing a validator-backed credential-operations drill with live-like rotation and revocation exercises plus class-by-class direct recovery coverage, improving security-evidence quality while confirming that vault-backed direct custody recovery remains insufficient to close ECR-R3.
+- Completed the CEO-authorized ECP-003 direct custody recovery follow-on drill, closing the local service-environment/channel host-side recovery gap while preserving evidence that repository write access and the remaining vault-backed classes still do not have sufficient authoritative direct-recovery proof to close ECR-R3.
 
 ## [Business Factory v1.0] - 2026-07-05
 

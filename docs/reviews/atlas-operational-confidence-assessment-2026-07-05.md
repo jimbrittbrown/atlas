@@ -5,7 +5,7 @@ Status: COMPLETE
 Assessment Type: Post-ORP-R executive confidence assessment
 
 ## Whole-System Confidence
-- Current operational confidence: **69/100**
+- Current operational confidence: **70/100**
 - Certification threshold recommendation: **80/100 minimum**
 
 ## Confidence Composition
@@ -18,7 +18,7 @@ Assessment Type: Post-ORP-R executive confidence assessment
 
 ### Confidence-Limiting Factors
 1. Runtime-state recovery assurance is still not demonstrated at launch-critical scope.
-2. Security operations now include rotation/revocation drill evidence, but direct custody recovery remains incomplete for the vault-backed credential classes.
+2. Security operations now include rotation/revocation drill evidence, and the service-environment/channel class now has direct host-side recovery evidence, but direct custody recovery remains incomplete for repository write access and the unresolved vault-backed credential classes.
 3. Cross-scenario resilience remains partially inferred because full OVP-003 has not been rerun after cumulative remediations.
 4. Governance decision-cycle evidence remains absent because OVP-005 is still authorized only.
 5. Learning-promotion workflow evidence remains absent because OVP-006 is still authorized only.
@@ -29,11 +29,13 @@ ECP-001 improved confidence modestly by replacing a generic runtime-state blocke
 
 ECP-002 improved confidence further by demonstrating a successful committed-state restore drill with matching HEAD and release tags, while confirming that runtime-state certification limits still remain.
 
-ECP-003 improved confidence modestly by demonstrating live-like credential rotation and revocation exercises plus host-observed direct recovery coverage for three credential classes, while confirming that vault-backed direct custody recovery remains unresolved.
+ECP-003 improved confidence modestly by demonstrating live-like credential rotation and revocation exercises plus host-observed direct recovery coverage for three credential classes, while confirming that vault-backed direct custody recovery remained unresolved.
+
+The ECP-003 follow-on drill improved confidence slightly by closing the local host-side service-environment/channel recovery gap, while still confirming that authoritative custody recovery remains unresolved for repository write access, VPS/infrastructure, backup/archive, provider secret stores, and emergency decryption custody.
 
 ## Sub-Confidence View
 - OVP-001 targeted durability confidence: 67/100
-- OVP-002 targeted custody confidence: 74/100
+- OVP-002 targeted custody confidence: 75/100
 - OVP-003 affected continuity/visibility confidence: 64/100
 - OVP-004 Mission Control confidence: 88/100
 
