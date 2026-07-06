@@ -1,18 +1,41 @@
-import { ResearchReport } from './models.js';
-
 export class ResearchReportGenerator {
-  generate(job, evidence, findings) {
-    return new ResearchReport(
-      job.id,
-      `Research completed for ${job.request.objective}`,
-      job.request.objective,
-      evidence,
-      findings,
-      evidence.map((item) => item.source),
-      ['No critical risks identified'],
-      ['Further validation may be required'],
-      0.75,
-      ['Review the evidence and prepare next actions'],
-    );
-  }
+
+    generate(plan) {
+
+        return {
+
+            title: "Executive Research Report",
+
+            objective: plan.objective,
+
+            summary:
+                "Research workflow initialized and ready for execution.",
+
+            findings: [
+
+                "Research objective identified.",
+
+                "Research tasks generated.",
+
+                "Execution sequence prepared."
+
+            ],
+
+            recommendations: [
+
+                "Begin information gathering.",
+
+                "Validate assumptions.",
+
+                "Prepare executive briefing update."
+
+            ],
+
+            status:
+                "READY_FOR_RESEARCH"
+
+        };
+
+    }
+
 }

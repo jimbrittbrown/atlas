@@ -7,6 +7,7 @@ import { AtlasHealthMonitor } from './health.js';
 
 import { WorkflowCoordinator } from '../workflow/workflow-coordinator.js';
 import { ResearchWorkflowBridge } from '../workflow/research-workflow-bridge.js';
+import { ExecutiveIntelligenceEngine } from '../../executive/src/intelligence/executive-intelligence-engine.js';
 
 export function startAtlas() {
 
@@ -71,6 +72,7 @@ export function startAtlas() {
     );
 
     services.workflowCoordinator = workflowCoordinator;
+    services.executiveIntelligenceEngine = new ExecutiveIntelligenceEngine();
 
     const healthMonitor = new AtlasHealthMonitor({
         configuration,

@@ -4,8 +4,7 @@ export class AtlasApplication {
     constructor(services) {
         this.services = services;
         this.executive = services.executive;
-        this.workerOrchestration = services.workerOrchestration;
-        this.capabilityRegistry = services.capabilityRegistry;
+        this.executiveIntelligenceEngine = services.executiveIntelligenceEngine;
     }
 
     start() {
@@ -16,16 +15,21 @@ export class AtlasApplication {
         return this;
     }
 
-    async execute({ type, objective, payload = {} }) {
+    async execute(command) {
         const request = new ExecutiveRequest(
             `req-${Date.now()}`,
-            type,
+            command.type ?? 'ATLAS_EXECUTIVE_REQUEST',
             {
-                objective,
-                ...payload
+                objective: command.objective,
+                ...command
             },
             new Date().toISOString()
         );
+
+        const intelligenceReport =
+            await this.executiveIntelligenceEngine.analyze(request);
+
+        request.payload.intelligenceReport = intelligenceReport;
 
         return this.executive.handleRequest(request);
     }

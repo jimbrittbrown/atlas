@@ -7,20 +7,28 @@ export class IntentAnalysisEngine {
 
         return {
             objective,
+
             businessGoal:
                 this.determineBusinessGoal(objective),
+
             departments:
                 this.identifyDepartments(objective),
+
             workers:
                 this.identifyWorkers(objective),
+
             assumptions:
                 this.identifyAssumptions(objective),
+
             risks:
                 this.identifyRisks(objective),
+
             openQuestions:
                 this.identifyOpenQuestions(objective),
+
             confidence:
                 this.estimateConfidence(objective),
+
             nextAction:
                 "WORKFLOW_PLANNING"
         };
@@ -45,6 +53,7 @@ export class IntentAnalysisEngine {
             return "Audience Growth";
 
         return "General Executive Objective";
+
     }
 
     identifyDepartments(objective) {
@@ -63,6 +72,7 @@ export class IntentAnalysisEngine {
             departments.push("Marketing");
 
         return departments;
+
     }
 
     identifyWorkers(objective) {
@@ -78,22 +88,41 @@ export class IntentAnalysisEngine {
             workers.push("Content Worker");
 
         return workers;
+
     }
 
     identifyAssumptions(objective) {
-        return [];
+
+        return [
+            "Objective description is complete.",
+            "Atlas has required capabilities."
+        ];
+
     }
 
     identifyRisks(objective) {
-        return [];
+
+        return [
+            "Insufficient information.",
+            "Incorrect department selection."
+        ];
+
     }
 
     identifyOpenQuestions(objective) {
-        return [];
+
+        return [
+            "What is the desired timeline?",
+            "What budget constraints exist?",
+            "How will success be measured?"
+        ];
+
     }
 
     estimateConfidence(objective) {
+
         return 0.75;
+
     }
 
 }
