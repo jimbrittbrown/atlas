@@ -70,7 +70,7 @@
 | ECP-004 | COMPLETE | Full-scope OVP-003 cumulative rerun executed with deterministic evidence packaging and validator; result was PARTIAL PASS with six scenario-level improvements, ECR-R4 closed, and remaining scenario limits explicitly mapped back to ECR-R1, ECR-R3, and ECR-R5. |
 | ECP-005 | COMPLETE | OVP-005 Executive Simulation executed with deterministic evidence packaging and validator; launch-readiness scorecard and permanent decision record were produced, final simulation decision was NO-GO, and ECR-R5 is now closed. |
 | ECP-006 | COMPLETE | OVP-006 Institute Promotion Validation executed with deterministic evidence packaging and validator; one promotion item was advanced through Observation -> Experiment -> Validated -> Recommended -> Best Practice -> Atlas Standard with governance-trigger approval, and ECR-R6 is now closed. |
-| ECP-007 | PLANNED | Mission Control implementation sealing must produce durable clean release evidence for the latest visibility slice. |
+| ECP-007 | COMPLETE | Mission Control implementation was sealed as a certified laboratory baseline using a durable scoped OpenClaw commit/tag pair plus deterministic validator-backed evidence packaging, and ECR-R7 is now closed. |
 
 ## Targeted Re-Validation Record
 

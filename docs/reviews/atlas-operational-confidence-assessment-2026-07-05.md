@@ -5,7 +5,7 @@ Status: COMPLETE
 Assessment Type: Post-ORP-R executive confidence assessment
 
 ## Whole-System Confidence
-- Current operational confidence: **79/100**
+- Current operational confidence: **80/100**
 - Certification threshold recommendation: **80/100 minimum**
 
 ## Confidence Composition
@@ -23,7 +23,6 @@ Assessment Type: Post-ORP-R executive confidence assessment
 1. Runtime-state recovery assurance is still not demonstrated at launch-critical scope.
 2. Security operations now include rotation/revocation drill evidence, and the service-environment/channel class now has direct host-side recovery evidence, but direct custody recovery remains incomplete for repository write access and the unresolved vault-backed credential classes.
 3. AI provider outage and VPS outage remain FAIL states even after the cumulative OVP-003 rerun.
-4. The latest Mission Control visibility implementation is validated but not yet durably sealed in a clean OpenClaw commit or equivalent release artifact.
 
 ### ECP Progress Update
 ECP-001 improved confidence modestly by replacing a generic runtime-state blocker with an explicit state-class inventory and recoverability classification.
@@ -40,6 +39,8 @@ ECP-005 improved confidence modestly by converting the previously unexecuted exe
 
 ECP-006 improved confidence modestly by exercising and validating one full governed knowledge-promotion lifecycle from Observation to Atlas Standard, including formal governance-trigger invocation and approval record.
 
+ECP-007 improved confidence slightly by sealing the latest Mission Control visibility implementation in a durable OpenClaw commit/tag baseline with validator-backed deterministic evidence.
+
 ## Sub-Confidence View
 - OVP-001 targeted durability confidence: 67/100
 - OVP-002 targeted custody confidence: 75/100
@@ -47,11 +48,13 @@ ECP-006 improved confidence modestly by exercising and validating one full gover
 - OVP-004 Mission Control confidence: 88/100
 - OVP-005 governance decision-cycle confidence: 78/100
 - OVP-006 learning-promotion confidence: 79/100
+- ECP-007 Mission Control sealing confidence: 85/100
 
 Interpretation:
 - Atlas is strongest in governance structure and bounded remediation execution.
 - Atlas is weakest where certification requires exercised operational proof across runtime recovery, vault-backed security recovery, and executive governance cycles.
 - Atlas is weakest where certification requires exercised operational proof across runtime recovery, vault-backed security recovery, and durable release sealing.
+- Atlas is weakest where certification requires exercised operational proof across runtime recovery and vault-backed security recovery.
 
 ## Executive Conclusion
 Operational confidence has moved from insufficient and fragmented to disciplined, partially drill-validated, but still incomplete.
