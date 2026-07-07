@@ -1,16 +1,29 @@
-import { ResearchEvidence, ResearchSource } from './models.js';
+import { EvidenceBroker } from './evidence-broker.js';
+import { ResearchQuestionGenerator } from './research-question-generator.js';
 
 export class EvidenceCollector {
-  constructor(provider) {
-    this.provider = provider;
-  }
-
-  async collect(job, request) {
-    if (!this.provider) {
-      return [];
+    constructor({
+        questionGenerator = new ResearchQuestionGenerator(),
+        evidenceBroker = new EvidenceBroker()
+    } = {}) {
+        this.questionGenerator = questionGenerator;
+        this.evidenceBroker = evidenceBroker;
     }
 
-    const evidence = await this.provider.provideEvidence(request);
-    return evidence.map((item) => new ResearchEvidence(new ResearchSource(item.sourceName ?? 'unknown', item.uri ?? ''), item.summary ?? 'No summary provided', item.confidence ?? 0.5));
-  }
+    async collect(job, request = {}) {
+        const questions = this.questionGenerator.generate(job, request);
+        const evidence = [];
+
+        for (const question of questions) {
+            const results = await this.evidenceBroker.collect(question);
+
+            if (Array.isArray(results)) {
+                evidence.push(...results);
+            } else if (results) {
+                evidence.push(results);
+            }
+        }
+
+        return evidence;
+    }
 }

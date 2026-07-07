@@ -1,4 +1,13 @@
+import { ResearchQuestionGenerator } from './research-question-generator.js';
+
 export class ResearchReportGenerator {
+
+    constructor() {
+
+        this.questionGenerator =
+            new ResearchQuestionGenerator();
+
+    }
 
     generate(plan) {
 
@@ -8,31 +17,26 @@ export class ResearchReportGenerator {
 
             objective: plan.objective,
 
+            researchQuestions:
+                this.questionGenerator.generate(plan),
+
             summary:
-                "Research workflow initialized and ready for execution.",
+                "Research planning complete. Ready to begin evidence collection.",
 
-            findings: [
-
-                "Research objective identified.",
-
-                "Research tasks generated.",
-
-                "Execution sequence prepared."
-
-            ],
+            findings: [],
 
             recommendations: [
 
-                "Begin information gathering.",
+                "Begin evidence collection.",
 
-                "Validate assumptions.",
+                "Evaluate competitors.",
 
-                "Prepare executive briefing update."
+                "Prepare Executive Briefing update."
 
             ],
 
             status:
-                "READY_FOR_RESEARCH"
+                "READY_FOR_EVIDENCE_COLLECTION"
 
         };
 
