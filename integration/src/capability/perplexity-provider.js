@@ -1,6 +1,7 @@
 import { CapabilityProvider } from './capability-provider.js';
 import { ProviderMetadata } from './provider-metadata.js';
 import { CapabilityHealth } from './capability-health.js';
+import { CapabilityClient } from './capability-client.js';
 
 export class PerplexityProvider extends CapabilityProvider {
     identity() {
@@ -13,6 +14,17 @@ export class PerplexityProvider extends CapabilityProvider {
             this.capabilities(),
             'unknown'
         );
+    }
+
+    buildConfiguration() {
+        return {
+            baseUrl: 'https://api.perplexity.ai',
+            timeout: 30000,
+            headers: {
+                Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        };
     }
 
     capabilities() {
@@ -28,8 +40,25 @@ export class PerplexityProvider extends CapabilityProvider {
     }
 
     async execute(request) {
-        void request;
-        throw new Error('PerplexityProvider not yet implemented.');
+        const configuration = this.buildConfiguration();
+        const client = new CapabilityClient(configuration);
+
+        return client.execute({
+            endpoint: '/v1/sonar',
+            body: JSON.stringify({
+                model: 'sonar',
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are Atlas Research. Provide concise, source-grounded research.'
+                    },
+                    {
+                        role: 'user',
+                        content: request.objective
+                    }
+                ]
+            })
+        });
     }
 
     normalize(response) {
