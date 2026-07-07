@@ -40,6 +40,8 @@ export class PerplexityProvider extends CapabilityProvider {
     }
 
     async execute(request) {
+        this.validate(request);
+
         const configuration = this.buildConfiguration();
         const client = new CapabilityClient(configuration);
 

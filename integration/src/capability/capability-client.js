@@ -5,17 +5,46 @@ export class CapabilityClient {
 
     async execute(request) {
         const prepared = this.prepareRequest(request);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort();
+        }, this.config.timeout);
 
         try {
             const response = await fetch(prepared.url, {
                 method: 'POST',
                 headers: prepared.headers,
-                body: prepared.body
+                body: prepared.body,
+                signal: controller.signal
             });
 
-            return await response.json();
-        } catch (error) {
+            if (response.ok) {
+                return await response.json();
+            }
+
+            let body = null;
+
+            try {
+                body = await response.json();
+            } catch {
+                body = null;
+            }
+
+            const error = new Error(`HTTP ${response.status} ${response.statusText}`);
+
+            if (body !== null) {
+                error.body = body;
+            }
+
             throw this.normalizeError(error);
+        } catch (error) {
+            if (controller.signal.aborted) {
+                throw this.normalizeError(new Error('CapabilityClient request timed out'));
+            }
+
+            throw this.normalizeError(error);
+        } finally {
+            clearTimeout(timeoutId);
         }
     }
 

@@ -40,6 +40,8 @@ export class OpenAIProvider extends CapabilityProvider {
     }
 
     async execute(request) {
+        this.validate(request);
+
         const client = new CapabilityClient(this.buildConfiguration());
 
         return client.execute({
