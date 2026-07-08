@@ -28,7 +28,7 @@ function createOkTokenResponse(accessToken = 'test-access-token') {
   };
 }
 
-function createOkImageResponse(predictions) {
+function createOkImagenResponse(predictions) {
   return {
     ok: true,
     status: 200,
@@ -39,6 +39,29 @@ function createOkImageResponse(predictions) {
     },
     async json() {
       return { predictions };
+    }
+  };
+}
+
+function createOkGeminiResponse(parts) {
+  return {
+    ok: true,
+    status: 200,
+    headers: {
+      get() {
+        return null;
+      }
+    },
+    async json() {
+      return {
+        candidates: [
+          {
+            content: {
+              parts
+            }
+          }
+        ]
+      };
     }
   };
 }
@@ -110,7 +133,7 @@ function createServiceAccountJson() {
   });
 }
 
-test('google imagen service authenticates against Vertex AI using production credentials', async () => {
+test('google image service uses Gemini generateContent by default', async () => {
   resetOutputDir();
   const fetchCalls = [];
   const { configurationService, secretManager } = createConfiguredServices({
@@ -131,8 +154,9 @@ test('google imagen service authenticates against Vertex AI using production cre
         return createOkTokenResponse('vertex-access-token');
       }
 
-      return createOkImageResponse([
-        { bytesBase64Encoded: Buffer.from('IMAGE-1').toString('base64') }
+      return createOkGeminiResponse([
+        { text: 'Generated image response' },
+        { inlineData: { mimeType: 'image/png', data: Buffer.from('IMAGE-1').toString('base64') } }
       ]);
     }
   });
@@ -146,8 +170,48 @@ test('google imagen service authenticates against Vertex AI using production cre
 
   assert.equal(fetchCalls.length, 2);
   assert.equal(fetchCalls[0].url, 'https://oauth2.googleapis.com/token');
-  assert.equal(fetchCalls[1].url, 'https://aiplatform.googleapis.com/v1/projects/atlas-test-project/locations/us-central1/publishers/google/models/imagen-3.0-generate-001:predict');
+  assert.equal(fetchCalls[1].url, 'https://aiplatform.googleapis.com/v1/projects/atlas-test-project/locations/us-central1/publishers/google/models/gemini-2.5-flash-image:generateContent');
   assert.equal(fetchCalls[1].options.headers.Authorization, 'Bearer vertex-access-token');
+  resetOutputDir();
+});
+
+test('google image service supports legacy Imagen mode through feature flag', async () => {
+  resetOutputDir();
+  const fetchCalls = [];
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      GOOGLE_CLOUD_PROJECT: 'atlas-test-project',
+      GOOGLE_CLOUD_LOCATION: 'us-central1',
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: createServiceAccountJson()
+    }
+  });
+  const service = new GoogleImagenService({
+    outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
+    imageProviderMode: 'imagen',
+    fetchImpl: async (url, options) => {
+      fetchCalls.push({ url, options });
+
+      if (fetchCalls.length === 1) {
+        return createOkTokenResponse('vertex-access-token');
+      }
+
+      return createOkImagenResponse([
+        { bytesBase64Encoded: Buffer.from('IMAGE-LEGACY').toString('base64') }
+      ]);
+    }
+  });
+
+  await service.generateImages({
+    prompt: 'Legacy mode prompt',
+    sceneDescription: 'Legacy mode scene',
+    artStyle: 'Editorial Illustration',
+    imageCount: 1
+  });
+
+  assert.equal(fetchCalls.length, 2);
+  assert.equal(fetchCalls[1].url, 'https://aiplatform.googleapis.com/v1/projects/atlas-test-project/locations/us-central1/publishers/google/models/imagen-3.0-generate-001:predict');
   resetOutputDir();
 });
 
@@ -171,9 +235,10 @@ test('google imagen service generates image assets and registers them', async ()
         return createOkTokenResponse('vertex-access-token');
       }
 
-      return createOkImageResponse([
-        { bytesBase64Encoded: Buffer.from('IMAGE-1').toString('base64') },
-        { bytesBase64Encoded: Buffer.from('IMAGE-2').toString('base64') }
+      return createOkGeminiResponse([
+        { text: 'Generated images' },
+        { inlineData: { mimeType: 'image/png', data: Buffer.from('IMAGE-1').toString('base64') } },
+        { inlineData: { mimeType: 'image/png', data: Buffer.from('IMAGE-2').toString('base64') } }
       ]);
     }
   });
@@ -235,8 +300,8 @@ test('google imagen service retries after rate limit and succeeds', async () => 
         return createErrorResponse(429, '0');
       }
 
-      return createOkImageResponse([
-        { bytesBase64Encoded: Buffer.from('RETRY-IMAGE').toString('base64') }
+      return createOkGeminiResponse([
+        { inlineData: { mimeType: 'image/png', data: Buffer.from('RETRY-IMAGE').toString('base64') } }
       ]);
     }
   });

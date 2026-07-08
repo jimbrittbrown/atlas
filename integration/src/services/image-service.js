@@ -77,6 +77,8 @@ export class GoogleImagenService extends ImageService {
     credentialsJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON ?? null,
     baseUrl = 'https://aiplatform.googleapis.com',
     model = 'imagen-3.0-generate-001',
+    geminiModel = 'gemini-2.5-flash-image',
+    imageProviderMode = process.env.GOOGLE_VERTEX_IMAGE_PROVIDER_MODE ?? 'gemini',
     outputDir = null,
     imageCount = 3,
     timeoutMs = 15000,
@@ -93,7 +95,10 @@ export class GoogleImagenService extends ImageService {
   } = {}) {
     super();
     this.workerId = workerId;
-    this.model = model;
+    this.imageProviderMode = this.normalizeImageProviderMode(imageProviderMode);
+    this.imagenModel = model;
+    this.geminiModel = geminiModel;
+    this.model = this.imageProviderMode === 'imagen' ? this.imagenModel : this.geminiModel;
     this.assetRegistry = assetRegistry ?? new AssetRegistry();
     this.configurationService = configurationService ?? new ConfigurationService();
     this.outputDir = outputDir ?? this.configurationService.getAssetPath('images') ?? '/var/lib/atlas/assets/images';
@@ -112,8 +117,20 @@ export class GoogleImagenService extends ImageService {
       logger,
       metricsAdapter,
       sleep: typeof sleep === 'function' ? sleep : undefined,
-      model: this.model
+      imagenModel: this.imagenModel,
+      geminiModel: this.geminiModel,
+      imageProviderMode: this.imageProviderMode
     });
+  }
+
+  normalizeImageProviderMode(mode) {
+    const normalizedMode = String(mode ?? 'gemini').trim().toLowerCase();
+
+    if (normalizedMode === 'imagen') {
+      return 'imagen';
+    }
+
+    return 'gemini';
   }
 
   async generateImages(metadata = {}) {
@@ -323,13 +340,21 @@ export class GoogleImagenService extends ImageService {
 }
 
 class GoogleVertexImagenProductionAdapter extends ProductionAdapter {
-  constructor({ fetchImpl = globalThis.fetch, model = 'imagen-3.0-generate-001', ...options } = {}) {
+  constructor({
+    fetchImpl = globalThis.fetch,
+    imagenModel = 'imagen-3.0-generate-001',
+    geminiModel = 'gemini-2.5-flash-image',
+    imageProviderMode = 'gemini',
+    ...options
+  } = {}) {
     super({
       providerId: 'google-vertex',
       ...options
     });
     this.fetchImpl = fetchImpl;
-    this.model = model;
+    this.imagenModel = imagenModel;
+    this.geminiModel = geminiModel;
+    this.imageProviderMode = imageProviderMode;
     this.accessToken = null;
     this.credentials = null;
   }
@@ -363,7 +388,62 @@ class GoogleVertexImagenProductionAdapter extends ProductionAdapter {
       throw new Error('Google Vertex AI authentication failed.');
     }
 
-    const endpoint = `${this.normalizeBaseUrl(configuration.endpoint)}/projects/${encodeURIComponent(projectId)}/locations/${encodeURIComponent(location)}/publishers/google/models/${encodeURIComponent(this.model)}:predict`;
+    if (this.imageProviderMode === 'imagen') {
+      return this.executeImagenPredict({ metadata, configuration, projectId, location, accessToken });
+    }
+
+    return this.executeGeminiGenerateContent({ metadata, configuration, projectId, location, accessToken });
+  }
+
+  async executeGeminiGenerateContent({ metadata, configuration, projectId, location, accessToken }) {
+    const endpoint = `${this.normalizeBaseUrl(configuration.endpoint)}/projects/${encodeURIComponent(projectId)}/locations/${encodeURIComponent(location)}/publishers/google/models/${encodeURIComponent(this.geminiModel)}:generateContent`;
+    const response = await this.fetchImpl(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                text: metadata.prompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ['TEXT', 'IMAGE'],
+          candidateCount: metadata.imageCount
+        }
+      })
+    });
+
+    if (!response?.ok) {
+      const failure = new Error(`Google Vertex AI request failed with status ${response?.status ?? 'UNKNOWN'}.`);
+      failure.status = Number.parseInt(String(response?.status ?? 500), 10);
+      failure.retryAfter = response?.headers?.get?.('retry-after') ?? null;
+      throw failure;
+    }
+
+    const payload = await response.json();
+    const imageBuffers = this.extractGeminiImageBuffers(payload);
+
+    if (imageBuffers.length === 0) {
+      const failure = new Error('Google Vertex AI returned no image bytes.');
+      failure.status = 502;
+      throw failure;
+    }
+
+    return {
+      imageBuffers
+    };
+  }
+
+  async executeImagenPredict({ metadata, configuration, projectId, location, accessToken }) {
+    const endpoint = `${this.normalizeBaseUrl(configuration.endpoint)}/projects/${encodeURIComponent(projectId)}/locations/${encodeURIComponent(location)}/publishers/google/models/${encodeURIComponent(this.imagenModel)}:predict`;
     const response = await this.fetchImpl(endpoint, {
       method: 'POST',
       headers: {
@@ -392,7 +472,7 @@ class GoogleVertexImagenProductionAdapter extends ProductionAdapter {
     }
 
     const payload = await response.json();
-    const imageBuffers = this.extractImageBuffers(payload);
+    const imageBuffers = this.extractImagenImageBuffers(payload);
 
     if (imageBuffers.length === 0) {
       const failure = new Error('Google Vertex AI returned no image bytes.');
@@ -486,6 +566,21 @@ class GoogleVertexImagenProductionAdapter extends ProductionAdapter {
     return predictions
       .map(prediction => this.extractImageBuffer(prediction))
       .filter(buffer => Buffer.isBuffer(buffer) && buffer.length > 0);
+  }
+
+  extractGeminiImageBuffers(payload) {
+    const candidates = Array.isArray(payload?.candidates) ? payload.candidates : [];
+    const imageParts = candidates
+      .flatMap(candidate => candidate?.content?.parts ?? [])
+      .filter(part => typeof part?.inlineData?.data === 'string' && part.inlineData.data.trim().length > 0);
+
+    return imageParts
+      .map(part => Buffer.from(part.inlineData.data, 'base64'))
+      .filter(buffer => Buffer.isBuffer(buffer) && buffer.length > 0);
+  }
+
+  extractImagenImageBuffers(payload) {
+    return this.extractImageBuffers(payload);
   }
 
   extractImageBuffer(prediction) {
