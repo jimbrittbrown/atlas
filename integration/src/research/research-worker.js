@@ -1,23 +1,37 @@
+import { WorkerAssignment } from '../worker-assignment.js';
+
 export class ResearchWorker {
   constructor(researchCoordinator) {
     this.researchCoordinator = researchCoordinator;
   }
 
-  async execute(task) {
+  async execute(assignment) {
+    if (!(assignment instanceof WorkerAssignment)) {
+      throw new Error('ResearchWorker requires a WorkerAssignment instance.');
+    }
+
+    assignment.start();
+
     const researchRequest = {
-      id: task.id,
-      objective: task.objective ?? task.name,
-      context: task.context ?? {},
+      id: assignment.taskId,
+      objective: assignment.result?.task?.objective
+        ?? assignment.result?.task?.name
+        ?? `Research task ${assignment.taskId}`,
+      context: assignment.result?.task?.context ?? {},
       capability: 'research'
     };
     const researchResult = await this.researchCoordinator.research(researchRequest);
 
-    return {
-      taskId: task.id,
+    const completion = {
+      taskId: assignment.taskId,
       status: 'COMPLETED',
       findings: researchResult?.report?.findings ?? [],
-      completedAt: task.completedAt ?? 'COMPLETED_AT_PLACEHOLDER',
+      completedAt: 'COMPLETED_AT_PLACEHOLDER',
       report: researchResult?.report ?? {}
     };
+
+    assignment.complete(completion, completion.completedAt);
+
+    return completion;
   }
 }

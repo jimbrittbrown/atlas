@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ProgramManager } from '../src/executive/program-manager.js';
+import { WorkerAssignment } from '../src/worker-assignment.js';
 
 test('progress is calculated from execution tasks', () => {
   const programManager = new ProgramManager();
@@ -55,4 +56,41 @@ test('executive report is generated with overdue detection placeholder logic', (
     blockedTasks: 0,
     executiveStatus: 'AT_RISK'
   });
+});
+
+test('program manager assigns worker assignments from execution plan tasks', () => {
+  const programManager = new ProgramManager();
+
+  const assignments = programManager.assignTasks({
+    tasks: [
+      { id: 'TASK-101', title: 'Task A' },
+      { id: 'TASK-102', title: 'Task B' }
+    ]
+  }, 'RESEARCH-WORKER-001');
+
+  assert.equal(assignments.length, 2);
+  assert.equal(assignments[0] instanceof WorkerAssignment, true);
+  assert.equal(assignments[0].assignmentId, 'ASG-001');
+  assert.equal(assignments[0].workerId, 'RESEARCH-WORKER-001');
+  assert.equal(assignments[0].taskId, 'TASK-101');
+  assert.equal(assignments[0].status, 'ASSIGNED');
+});
+
+test('program manager receives assignment completion and updates progress', () => {
+  const programManager = new ProgramManager();
+
+  const assignments = programManager.assignTasks({
+    tasks: [
+      { id: 'TASK-201', title: 'Task A' }
+    ]
+  });
+  const completedAssignment = assignments[0].start().complete({ taskId: 'TASK-201', status: 'COMPLETED' });
+
+  const report = programManager.receiveCompletion(completedAssignment);
+
+  assert.equal(report.completedTasks, 1);
+  assert.equal(report.activeTasks, 0);
+  assert.equal(report.blockedTasks, 0);
+  assert.equal(report.completionPercentage, 100);
+  assert.equal(report.executiveStatus, 'COMPLETE');
 });

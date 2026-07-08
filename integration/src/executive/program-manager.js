@@ -1,10 +1,47 @@
+import { WorkerAssignment } from '../worker-assignment.js';
+
 export class ProgramManager {
+  constructor() {
+    this.assignments = [];
+  }
+
   supervise(businessExecutionPlan = {}) {
     return this.generateExecutiveProgressReport(businessExecutionPlan);
   }
 
-  generateExecutiveProgressReport(businessExecutionPlan = {}) {
+  assignTasks(businessExecutionPlan = {}, workerId = 'RESEARCH-WORKER-001') {
     const tasks = Array.isArray(businessExecutionPlan.tasks) ? businessExecutionPlan.tasks : [];
+
+    this.assignments = tasks.map((task, index) => new WorkerAssignment({
+      assignmentId: `ASG-${String(index + 1).padStart(3, '0')}`,
+      workerId,
+      taskId: task.id ?? `TASK-${String(index + 1).padStart(3, '0')}`,
+      result: {
+        task
+      }
+    }));
+
+    return this.assignments;
+  }
+
+  receiveCompletion(completedAssignment) {
+    const assignmentIndex = this.assignments.findIndex(
+      assignment => assignment.assignmentId === completedAssignment.assignmentId
+    );
+
+    if (assignmentIndex >= 0) {
+      this.assignments[assignmentIndex] = completedAssignment;
+    } else {
+      this.assignments.push(completedAssignment);
+    }
+
+    return this.generateExecutiveProgressReport({ tasks: this.assignments });
+  }
+
+  generateExecutiveProgressReport(businessExecutionPlan = {}) {
+    const tasks = Array.isArray(businessExecutionPlan.tasks)
+      ? businessExecutionPlan.tasks
+      : this.assignments;
     const completedTasks = tasks.filter(task => String(task.status).toUpperCase() === 'COMPLETED').length;
     const blockedTasks = tasks.filter(task => String(task.status).toUpperCase() === 'BLOCKED').length;
     const overdueTasks = tasks.filter(task => this.isOverdue(task)).length;

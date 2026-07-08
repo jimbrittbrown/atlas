@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ResearchWorker } from '../src/research/research-worker.js';
+import { WorkerAssignment } from '../src/worker-assignment.js';
 
-test('worker accepts assigned task and maps it to research request', async () => {
+test('worker accepts assignment and maps it to research request', async () => {
   let receivedRequest = null;
   const worker = new ResearchWorker({
     research: async request => {
@@ -12,11 +13,20 @@ test('worker accepts assigned task and maps it to research request', async () =>
     }
   });
 
-  await worker.execute({
-    id: 'TASK-RESEARCH-001',
-    objective: 'Assess market demand',
-    context: { missionId: 'VM-001' }
+  const assignment = new WorkerAssignment({
+    assignmentId: 'ASG-001',
+    workerId: 'RESEARCH-WORKER-001',
+    taskId: 'TASK-RESEARCH-001',
+    result: {
+      task: {
+        id: 'TASK-RESEARCH-001',
+        objective: 'Assess market demand',
+        context: { missionId: 'VM-001' }
+      }
+    }
   });
+
+  await worker.execute(assignment);
 
   assert.deepEqual(receivedRequest, {
     id: 'TASK-RESEARCH-001',
@@ -36,10 +46,19 @@ test('worker executes research through coordinator', async () => {
     }
   });
 
-  await worker.execute({
-    id: 'TASK-RESEARCH-002',
-    objective: 'Assess competitive landscape'
+  const assignment = new WorkerAssignment({
+    assignmentId: 'ASG-002',
+    workerId: 'RESEARCH-WORKER-001',
+    taskId: 'TASK-RESEARCH-002',
+    result: {
+      task: {
+        id: 'TASK-RESEARCH-002',
+        objective: 'Assess competitive landscape'
+      }
+    }
   });
+
+  await worker.execute(assignment);
 
   assert.equal(executionCount, 1);
 });
@@ -55,10 +74,19 @@ test('worker reports structured completion', async () => {
     })
   });
 
-  const result = await worker.execute({
-    id: 'TASK-RESEARCH-003',
-    objective: 'Assess legal exposure'
+  const assignment = new WorkerAssignment({
+    assignmentId: 'ASG-003',
+    workerId: 'RESEARCH-WORKER-001',
+    taskId: 'TASK-RESEARCH-003',
+    result: {
+      task: {
+        id: 'TASK-RESEARCH-003',
+        objective: 'Assess legal exposure'
+      }
+    }
   });
+
+  const result = await worker.execute(assignment);
 
   assert.deepEqual(result, {
     taskId: 'TASK-RESEARCH-003',
@@ -71,4 +99,7 @@ test('worker reports structured completion', async () => {
       executiveSummary: 'Summary'
     }
   });
+  assert.equal(assignment.status, 'COMPLETED');
+  assert.equal(assignment.startedAt, 'STARTED_AT_PLACEHOLDER');
+  assert.equal(assignment.completedAt, 'COMPLETED_AT_PLACEHOLDER');
 });
