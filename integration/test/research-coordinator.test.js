@@ -201,3 +201,65 @@ test('research passes generated importance into synthesis engine', async () => {
     SynthesisEngine.prototype.synthesize = originalSynthesize;
   }
 });
+
+test('research generates decision readiness', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-007',
+    objective: 'Decision readiness check',
+    capability: 'research'
+  });
+
+  assert.equal(typeof result.report.decisionReadiness, 'object');
+  assert.equal(result.report.decisionReadiness.status, 'READY_WITH_CONDITIONS');
+  assert.equal(Array.isArray(result.report.decisionReadiness.missingEvidence), true);
+  assert.equal(Array.isArray(result.report.decisionReadiness.criticalUnknowns), true);
+});
+
+test('research passes decision readiness into synthesis engine', async () => {
+  const originalSynthesize = SynthesisEngine.prototype.synthesize;
+  let synthesisInput = null;
+
+  SynthesisEngine.prototype.synthesize = function synthesize(report) {
+    synthesisInput = report;
+
+    return {
+      capability: report.capability,
+      providerCount: report.providers.length,
+      confidence: report.confidence,
+      agreement: report.confidence.agreement,
+      executiveSummary: 'Synthesis not yet implemented.',
+      findings: report.findings,
+      conflicts: [],
+      recommendations: []
+    };
+  };
+
+  try {
+    const provider = {
+      identity: () => ({ vendor: 'TestProvider' }),
+      execute: async () => ({ payload: 'ok' })
+    };
+    const coordinator = new ResearchCoordinator({
+      route: () => ({ capability: 'research', providers: [provider] })
+    });
+
+    const result = await coordinator.research({
+      id: 'REQ-008',
+      objective: 'Synthesis decision readiness input check',
+      capability: 'research'
+    });
+
+    assert.equal(typeof synthesisInput.decisionReadiness, 'object');
+    assert.deepEqual(result.report.decisionReadiness, synthesisInput.decisionReadiness);
+  } finally {
+    SynthesisEngine.prototype.synthesize = originalSynthesize;
+  }
+});

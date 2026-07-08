@@ -1,5 +1,6 @@
 import { ConfidenceEngine } from './confidence-engine.js';
 import { BeliefEngine } from './belief-engine.js';
+import { DecisionReadinessEngine } from './decision-readiness-engine.js';
 import { FindingsEngine } from './findings-engine.js';
 import { ImportanceEngine } from './importance-engine.js';
 import { SynthesisEngine } from './synthesis-engine.js';
@@ -74,12 +75,15 @@ export class ResearchCoordinator {
         const beliefs = beliefEngine.build(findings);
         const importanceEngine = new ImportanceEngine();
         const importance = importanceEngine.prioritize(beliefs);
+        const decisionReadinessEngine = new DecisionReadinessEngine();
+        const decisionReadiness = decisionReadinessEngine.evaluate(findings, beliefs, importance);
         const synthesisEngine = new SynthesisEngine();
         const synthesis = synthesisEngine.synthesize({
             ...report,
             findings,
             beliefs,
-            importance
+            importance,
+            decisionReadiness
         });
 
         return {
@@ -95,6 +99,7 @@ export class ResearchCoordinator {
                 findings,
                 beliefs,
                 importance,
+                decisionReadiness,
                 executiveSummary: 'Pending synthesis',
                 synthesis
             }
