@@ -26,7 +26,7 @@ class MockIO {
 
 test('business evaluation selection builds a business opportunity request', async () => {
   let receivedRequest = null;
-  const io = new MockIO(['1', 'Horror Shorts Studio', 'AI-generated horror shorts for YouTube', '2']);
+  const io = new MockIO(['1', 'Horror Shorts Studio', 'AI-generated horror shorts for YouTube', 'EXIT', '2']);
   const consoleApp = new ExecutiveOfficeConsole({
     io,
     businessEvaluationApplication: {
@@ -66,7 +66,7 @@ test('business evaluation selection builds a business opportunity request', asyn
 
 test('business evaluation executes business evaluation application once', async () => {
   let executionCount = 0;
-  const io = new MockIO(['1', 'Kids Story Channel', 'Educational short-form storytelling', '2']);
+  const io = new MockIO(['1', 'Kids Story Channel', 'Educational short-form storytelling', 'EXIT', '2']);
   const consoleApp = new ExecutiveOfficeConsole({
     io,
     businessEvaluationApplication: {
@@ -90,7 +90,7 @@ test('business evaluation executes business evaluation application once', async 
 });
 
 test('business evaluation displays executive decision package fields', async () => {
-  const io = new MockIO(['1', 'Atlas Media Lab', 'Build AI-native storytelling pipeline', '2']);
+  const io = new MockIO(['1', 'Atlas Media Lab', 'Build AI-native storytelling pipeline', 'EXIT', '2']);
   const consoleApp = new ExecutiveOfficeConsole({
     io,
     businessEvaluationApplication: {
@@ -122,6 +122,66 @@ test('business evaluation displays executive decision package fields', async () 
     io.outputs.includes('Authority Required: CEO Strategic Approval Required Before Proceeding'),
     true
   );
+});
+
+test('executive conversation loop answers follow-up question and exits on EXIT', async () => {
+  const io = new MockIO([
+    '1',
+    'Atlas Opportunity Lab',
+    'Evaluate rapid AI content studio',
+    'What is the recommendation?',
+    'EXIT',
+    '2'
+  ]);
+  const consoleApp = new ExecutiveOfficeConsole({
+    io,
+    businessEvaluationApplication: {
+      evaluateBusinessOpportunity: async () => ({
+        executiveSummary: 'Summary.',
+        recommendation: 'READY_FOR_EXECUTIVE_REVIEW',
+        confidence: 85,
+        decisionReadiness: { status: 'READY' },
+        authorityRequired: 'CEO Strategic Approval'
+      })
+    }
+  });
+
+  await consoleApp.run();
+
+  assert.equal(io.outputs.includes('Ask a follow-up question or type EXIT. '), true);
+  assert.equal(io.outputs.includes('Follow-up Answer: READY_FOR_EXECUTIVE_REVIEW'), true);
+  assert.equal(io.outputs.includes('Investigation Requests: none'), true);
+  assert.equal(io.outputs.includes('Updated Recommendation: READY_FOR_EXECUTIVE_REVIEW'), true);
+});
+
+test('executive conversation loop displays investigation request and updated recommendation', async () => {
+  const io = new MockIO([
+    '1',
+    'Atlas Legal Risk Scan',
+    'Evaluate legal uncertainty for launch',
+    'What unresolved legal exposure remains?',
+    'EXIT',
+    '2'
+  ]);
+  const consoleApp = new ExecutiveOfficeConsole({
+    io,
+    businessEvaluationApplication: {
+      evaluateBusinessOpportunity: async () => ({
+        executiveSummary: 'Summary.',
+        recommendation: 'READY_FOR_EXECUTIVE_REVIEW',
+        confidence: 72,
+        decisionReadiness: { status: 'READY' },
+        authorityRequired: 'CEO Strategic Approval'
+      })
+    }
+  });
+
+  await consoleApp.run();
+
+  assert.equal(io.outputs.includes('Follow-up Answer: No direct answer available.'), true);
+  assert.equal(io.outputs.includes('Investigation Requests:'), true);
+  assert.equal(io.outputs.includes('- INVREQ-001: What unresolved legal exposure remains?'), true);
+  assert.equal(io.outputs.includes('Updated Recommendation: REQUIRES_ADDITIONAL_INVESTIGATION'), true);
 });
 
 test('home screen displays enterprise and executive status from workflow objects', async () => {

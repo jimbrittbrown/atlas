@@ -1,6 +1,7 @@
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { ExecutiveOfficeDashboard } from './executive-office-dashboard.js';
+import { ExecutiveReviewEngine } from './executive-review-engine.js';
 
 class NodeConsoleIO {
   constructor() {
@@ -25,6 +26,7 @@ export class ExecutiveOfficeConsole {
     businessEvaluationApplication,
     io,
     executiveOfficeDashboard,
+    reviewEngine,
     workflowResults = [],
     currentPassingTestCount = 0,
     latestCommit = 'LATEST_COMMIT_PLACEHOLDER'
@@ -32,6 +34,7 @@ export class ExecutiveOfficeConsole {
     this.businessEvaluationApplication = businessEvaluationApplication;
     this.io = io ?? new NodeConsoleIO();
     this.executiveOfficeDashboard = executiveOfficeDashboard ?? new ExecutiveOfficeDashboard();
+    this.reviewEngine = reviewEngine ?? new ExecutiveReviewEngine();
     this.workflowResults = [...workflowResults];
     this.currentPassingTestCount = currentPassingTestCount;
     this.latestCommit = latestCommit;
@@ -126,6 +129,7 @@ export class ExecutiveOfficeConsole {
     });
 
     this.renderDecisionPackage(decisionPackage);
+    await this.runExecutiveConversationLoop(decisionPackage);
   }
 
   buildBusinessOpportunityRequest({ businessName, description }) {
@@ -162,6 +166,61 @@ export class ExecutiveOfficeConsole {
     this.io.writeLine('Confidence: ' + (decisionPackage.confidence ?? 0));
     this.io.writeLine('Decision Readiness: ' + readiness);
     this.io.writeLine('Authority Required: ' + (decisionPackage.authorityRequired ?? 'CEO Review Required'));
+  }
+
+  async runExecutiveConversationLoop(decisionPackage) {
+    let continueConversation = true;
+
+    while (continueConversation) {
+      const question = (await this.io.prompt('Ask a follow-up question or type EXIT. ')).trim();
+
+      if (question.toUpperCase() === 'EXIT') {
+        continueConversation = false;
+        continue;
+      }
+
+      if (question.length === 0) {
+        this.io.writeLine('No question provided.');
+        continue;
+      }
+
+      const review = this.reviewEngine.review(decisionPackage, [question]);
+
+      this.renderFollowUpReview(review);
+      this.updateWorkflowReviewState(decisionPackage, review);
+    }
+  }
+
+  renderFollowUpReview(review) {
+    const primaryResponse = review.responses?.[0] ?? null;
+
+    this.io.writeLine('');
+    this.io.writeLine('Follow-up Answer: ' + (primaryResponse?.answer ?? 'No direct answer available.'));
+
+    if ((review.investigationRequests?.length ?? 0) > 0) {
+      this.io.writeLine('Investigation Requests:');
+      review.investigationRequests.forEach(request => {
+        this.io.writeLine('- ' + request.id + ': ' + request.objective);
+      });
+    } else {
+      this.io.writeLine('Investigation Requests: none');
+    }
+
+    this.io.writeLine('Updated Recommendation: ' + (review.updatedRecommendation ?? 'NO_RECOMMENDATION_AVAILABLE'));
+  }
+
+  updateWorkflowReviewState(decisionPackage, review) {
+    const missionEntry = this.workflowResults.find(result => result?.decisionPackage === decisionPackage);
+
+    if (!missionEntry) {
+      return;
+    }
+
+    missionEntry.review = {
+      additionalInvestigationRequired: review.additionalInvestigationRequired,
+      updatedRecommendation: review.updatedRecommendation,
+      investigationRequests: review.investigationRequests
+    };
   }
 
   calculateEnterpriseHealth(dashboard) {
