@@ -1,4 +1,5 @@
 import { ConfidenceEngine } from './confidence-engine.js';
+import { FindingsEngine } from './findings-engine.js';
 import { SynthesisEngine } from './synthesis-engine.js';
 
 export class ResearchCoordinator {
@@ -56,11 +57,19 @@ export class ResearchCoordinator {
         const report = {
             capability: routing.capability,
             providers,
+            providerCount: confidence.providerCount,
+            successfulProviders: confidence.successfulProviders,
+            failedProviders: confidence.failedProviders,
             confidence,
             executiveSummary: 'Pending synthesis'
         };
+        const findingsEngine = new FindingsEngine();
+        const findings = findingsEngine.extract(report);
         const synthesisEngine = new SynthesisEngine();
-        const synthesis = synthesisEngine.synthesize(report);
+        const synthesis = synthesisEngine.synthesize({
+            ...report,
+            findings
+        });
 
         return {
             request,
@@ -72,6 +81,7 @@ export class ResearchCoordinator {
                 confidence: confidence.confidence,
                 agreement: confidence.agreement,
                 providers,
+                findings,
                 executiveSummary: 'Pending synthesis',
                 synthesis
             }
