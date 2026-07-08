@@ -146,6 +146,30 @@ test('elevenlabs voice service generates audio and registers asset', async () =>
   resetOutputDir();
 });
 
+test('elevenlabs voice service defaults to the persistent Atlas audio directory', async () => {
+  resetOutputDir();
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      ELEVENLABS_API_KEY: 'test-elevenlabs-key'
+    }
+  });
+  const service = new ElevenLabsVoiceService({
+    configurationService,
+    secretManager,
+    fetchImpl: async () => createOkResponse([90, 91])
+  });
+
+  const output = await service.synthesizeVoice({
+    script: 'Persistent asset path test script.',
+    voiceId: 'voice-persistent',
+    language: 'en-US'
+  });
+
+  assert.equal(output.audioFile.startsWith('/var/lib/atlas/assets/audio/'), true);
+  assert.equal(existsSync(output.audioFile), true);
+  resetOutputDir();
+});
+
 test('elevenlabs voice service retries after rate limit and succeeds', async () => {
   resetOutputDir();
   let attempts = 0;

@@ -39,6 +39,36 @@ test('configuration service provides endpoint, retry, timeout, rate limit, and f
   assert.equal(configurationService.isFeatureEnabled('enableProviderShadowMode'), true);
 });
 
+test('configuration service resolves the Atlas asset root and subdirectories', () => {
+  const configurationService = new ConfigurationService({
+    environment: 'production',
+    assetRoot: '/var/lib/atlas/assets/'
+  });
+
+  assert.equal(configurationService.getAssetRoot(), '/var/lib/atlas/assets');
+  assert.equal(configurationService.getAssetPath('audio'), '/var/lib/atlas/assets/audio');
+  assert.equal(configurationService.getAssetPath('images'), '/var/lib/atlas/assets/images');
+  assert.equal(configurationService.getAssetPath('video'), '/var/lib/atlas/assets/video');
+  assert.equal(configurationService.getAssetPath('reports'), '/var/lib/atlas/assets/reports');
+  assert.equal(configurationService.getAssetPath('archive'), '/var/lib/atlas/assets/archive');
+});
+
+test('configuration service defaults the asset root deterministically for tests', () => {
+  const configurationService = new ConfigurationService({
+    environment: 'testing',
+    assetRoot: ''
+  });
+
+  assert.equal(configurationService.getAssetRoot(), '/var/lib/atlas/assets');
+  assert.deepEqual(configurationService.getAssetPaths(), {
+    archive: '/var/lib/atlas/assets/archive',
+    audio: '/var/lib/atlas/assets/audio',
+    images: '/var/lib/atlas/assets/images',
+    reports: '/var/lib/atlas/assets/reports',
+    video: '/var/lib/atlas/assets/video'
+  });
+});
+
 test('startup validation reports missing secrets, invalid configuration, and missing required providers', () => {
   const configurationService = new ConfigurationService({
     environment: 'production',

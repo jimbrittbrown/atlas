@@ -1,18 +1,28 @@
 import { SecretManager } from './secret-manager.js';
 
 const SUPPORTED_ENVIRONMENTS = ['development', 'testing', 'production'];
+const DEFAULT_ASSET_ROOT = '/var/lib/atlas/assets';
+const ASSET_PATHS = {
+  audio: 'audio',
+  images: 'images',
+  video: 'video',
+  reports: 'reports',
+  archive: 'archive'
+};
 
 export class ConfigurationService {
   constructor({
     environment = process.env.NODE_ENV ?? 'development',
     secretManager = null,
     providerConfigurations = null,
-    featureFlags = null
+    featureFlags = null,
+    assetRoot = process.env.ATLAS_ASSET_ROOT ?? DEFAULT_ASSET_ROOT
   } = {}) {
     this.environment = this.normalizeEnvironment(environment);
     this.secretManager = secretManager ?? new SecretManager({ environment: this.environment });
     this.featureFlags = featureFlags ?? this.buildDefaultFeatureFlags();
     this.providerConfigurations = providerConfigurations ?? this.buildDefaultProviderConfigurations();
+    this.assetRoot = this.normalizeAssetRoot(assetRoot);
   }
 
   normalizeEnvironment(environment) {
@@ -27,6 +37,29 @@ export class ConfigurationService {
 
   getEnvironment() {
     return this.environment;
+  }
+
+  getAssetRoot() {
+    return this.assetRoot;
+  }
+
+  getAssetPath(assetType) {
+    const normalizedAssetType = String(assetType ?? '').toLowerCase().trim();
+    const pathSegment = ASSET_PATHS[normalizedAssetType];
+
+    if (!pathSegment) {
+      return null;
+    }
+
+    return `${this.assetRoot}/${pathSegment}`;
+  }
+
+  getAssetPaths() {
+    return Object.fromEntries(
+      Object.keys(ASSET_PATHS)
+        .sort((a, b) => a.localeCompare(b))
+        .map(assetType => [assetType, this.getAssetPath(assetType)])
+    );
   }
 
   buildDefaultFeatureFlags() {
@@ -291,6 +324,16 @@ export class ConfigurationService {
     return String(providerId ?? '')
       .toLowerCase()
       .trim();
+  }
+
+  normalizeAssetRoot(assetRoot) {
+    const normalized = String(assetRoot ?? '').trim();
+
+    if (normalized.length === 0) {
+      return DEFAULT_ASSET_ROOT;
+    }
+
+    return normalized.replace(/\/+$/g, '');
   }
 
   normalizeProviderConfiguration(configuration) {

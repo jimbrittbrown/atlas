@@ -60,7 +60,7 @@ export class ElevenLabsVoiceService extends VoiceService {
   constructor({
     apiKey = process.env.ELEVENLABS_API_KEY ?? null,
     baseUrl = 'https://api.elevenlabs.io',
-    outputDir = '/tmp/atlas/generated-audio',
+    outputDir = null,
     timeoutMs = 15000,
     maxRetries = 2,
     retryBaseDelayMs = 250,
@@ -74,10 +74,10 @@ export class ElevenLabsVoiceService extends VoiceService {
     sleep = null
   } = {}) {
     super();
-    this.outputDir = outputDir;
     this.assetRegistry = assetRegistry ?? new AssetRegistry();
     this.workerId = workerId;
     this.configurationService = configurationService ?? new ConfigurationService();
+    this.outputDir = outputDir ?? this.configurationService.getAssetPath('audio') ?? '/var/lib/atlas/assets/audio';
     this.secretManager = secretManager
       ?? this.createDefaultSecretManager({ apiKey });
     this.configureRuntime({
