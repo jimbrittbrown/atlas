@@ -366,3 +366,29 @@ test('research executive summary placeholder no longer exists', async () => {
   assert.notEqual(result.report.executiveSummary, 'Synthesis not yet implemented.');
   assert.notEqual(result.report.executiveSummary, 'Pending synthesis');
 });
+
+test('research findings include evidence traceability metadata', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TraceProvider' }),
+    execute: async () => ({ payload: { result: 'ok', detail: 'provider output' } })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-TRACE-001',
+    objective: 'Traceability check',
+    capability: 'research'
+  });
+
+  const finding = result.report.findings[0];
+  const evidence = finding.supportingEvidence[0];
+
+  assert.equal(Array.isArray(finding.supportingEvidence), true);
+  assert.equal(finding.supportingEvidence.length > 0, true);
+  assert.equal(evidence.provider, 'TraceProvider');
+  assert.equal(evidence.requestId, 'REQ-TRACE-001');
+  assert.deepEqual(evidence.sourceResponse, { payload: { result: 'ok', detail: 'provider output' } });
+  assert.equal(result.report.beliefs[0].supportingFindings.length > 0, true);
+});

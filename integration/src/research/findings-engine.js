@@ -3,7 +3,7 @@ import { Finding } from './finding.js';
 export class FindingsEngine {
     extract(report) {
         const supportingProviders = (report.providers || []).map(provider => provider.provider);
-        const supportingEvidence = [];
+        const supportingEvidence = this.buildSupportingEvidence(report);
 
         if (report.providerCount === 0) {
             return [
@@ -70,5 +70,26 @@ export class FindingsEngine {
         }
 
         return [];
+    }
+
+    buildSupportingEvidence(report) {
+        const providers = report.providers || [];
+        const requestId = report.requestId ?? 'unknown-request-id';
+
+        if (providers.length === 0) {
+            return [
+                {
+                    provider: 'system',
+                    requestId,
+                    sourceResponse: 'No provider responses were available for this request.'
+                }
+            ];
+        }
+
+        return providers.map(provider => ({
+            provider: provider.provider ?? 'unknown-provider',
+            requestId,
+            sourceResponse: provider.response ?? provider.error ?? null
+        }));
     }
 }

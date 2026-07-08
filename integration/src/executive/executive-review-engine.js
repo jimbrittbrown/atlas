@@ -46,6 +46,13 @@ export class ExecutiveReviewEngine {
     answerFromPackage(decisionPackage, question) {
         const normalizedQuestion = String(question).toLowerCase();
 
+        if (
+            normalizedQuestion.includes('show me why atlas believes this') ||
+            (normalizedQuestion.includes('why') && normalizedQuestion.includes('believes'))
+        ) {
+            return this.buildBeliefTraceabilityExplanation(decisionPackage);
+        }
+
         if (normalizedQuestion.includes('recommendation')) {
             return decisionPackage.recommendation ?? null;
         }
@@ -73,5 +80,44 @@ export class ExecutiveReviewEngine {
         }
 
         return null;
+    }
+
+    buildBeliefTraceabilityExplanation(decisionPackage) {
+        const recommendation = decisionPackage.recommendation ?? 'UNKNOWN_RECOMMENDATION';
+        const traceabilityPaths = decisionPackage.traceability?.recommendationToBeliefs ?? [];
+
+        if (traceabilityPaths.length === 0) {
+            return null;
+        }
+
+        const firstPath = traceabilityPaths[0];
+        const firstFinding = firstPath.supportingFindings?.[0] ?? null;
+
+        if (!firstFinding) {
+            return null;
+        }
+
+        const evidenceList = firstFinding.evidence ?? [];
+
+        if (evidenceList.length === 0) {
+            return null;
+        }
+
+        const evidenceSummary = evidenceList
+            .map(evidence => {
+                const source = typeof evidence.sourceResponse === 'string'
+                    ? evidence.sourceResponse
+                    : JSON.stringify(evidence.sourceResponse);
+
+                return `Provider ${evidence.provider} (request ${evidence.requestId}) source ${source}`;
+            })
+            .join('; ');
+
+        return [
+            `Recommendation ${recommendation}`,
+            `Belief ${firstPath.beliefId}: ${firstPath.statement ?? 'No belief statement available'}`,
+            `Finding ${firstFinding.findingId}: ${firstFinding.statement ?? 'No finding statement available'}`,
+            `Evidence ${evidenceSummary}`
+        ].join(' -> ');
     }
 }

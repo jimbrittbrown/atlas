@@ -59,6 +59,7 @@ export class ResearchCoordinator {
             error: result.error ?? null
         }));
         const report = {
+            requestId: request.id,
             capability: routing.capability,
             providers,
             providerCount: confidence.providerCount,

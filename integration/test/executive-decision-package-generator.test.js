@@ -56,6 +56,58 @@ test('generated decision package includes required executive fields', () => {
   assert.equal(typeof decisionPackage.authorityRequired, 'string');
 });
 
+test('decision package includes traceability metadata from recommendation to evidence', () => {
+  const generator = new ExecutiveDecisionPackageGenerator();
+  const decisionPackage = generator.generate({
+    mission: { id: 'M-TRACE-001', decisionClass: 'Strategic' },
+    findings: [
+      {
+        id: 'F-TRACE-001',
+        statement: 'Provider evidence supports launch viability.',
+        supportingEvidence: [
+          {
+            provider: 'OpenAI',
+            requestId: 'REQ-TRACE-001',
+            sourceResponse: { summary: 'Demand indicators are positive.' }
+          }
+        ]
+      }
+    ],
+    beliefs: [
+      {
+        id: 'B-TRACE-001',
+        statement: 'Launch viability is supported by provider evidence.',
+        confidence: 0.9,
+        supportingFindings: ['F-TRACE-001']
+      }
+    ],
+    importance: [{ id: 'B-TRACE-001', importance: 'high' }],
+    decisionReadiness: {
+      status: 'READY_WITH_CONDITIONS',
+      rationale: 'Needs executive review.',
+      missingEvidence: [],
+      criticalUnknowns: []
+    },
+    executiveTensions: [],
+    synthesis: { executiveSummary: 'Trace summary.' }
+  });
+
+  assert.equal(typeof decisionPackage.traceability, 'object');
+  assert.equal(decisionPackage.traceability.recommendation, 'REVIEW_REQUIRED_BEFORE_EXECUTIVE_DECISION');
+  assert.equal(Array.isArray(decisionPackage.traceability.recommendationToBeliefs), true);
+  assert.equal(decisionPackage.traceability.recommendationToBeliefs.length, 1);
+  assert.equal(decisionPackage.traceability.recommendationToBeliefs[0].beliefId, 'B-TRACE-001');
+  assert.equal(decisionPackage.traceability.recommendationToBeliefs[0].supportingFindings[0].findingId, 'F-TRACE-001');
+  assert.equal(
+    decisionPackage.traceability.recommendationToBeliefs[0].supportingFindings[0].evidence[0].provider,
+    'OpenAI'
+  );
+  assert.equal(
+    decisionPackage.traceability.recommendationToBeliefs[0].supportingFindings[0].evidence[0].requestId,
+    'REQ-TRACE-001'
+  );
+});
+
 test('existing validation mission pipeline remains intact', async () => {
   const logger = { entries: [], log(entry) { this.entries.push(entry); } };
   const coordinator = new ExecutiveWorkflowCoordinator({

@@ -59,6 +59,74 @@ test('unknown CEO questions generate investigation requests', () => {
   assert.equal(result.responses[0].answer, null);
 });
 
+test('answers why Atlas believes this using traceability chain', () => {
+  const engine = new ExecutiveReviewEngine();
+  const decisionPackage = {
+    executiveSummary: 'Evidence supports recommendation.',
+    recommendation: 'REVIEW_REQUIRED_BEFORE_EXECUTIVE_DECISION',
+    confidence: 90,
+    decisionReadiness: { status: 'READY_WITH_CONDITIONS', rationale: 'review needed', missingEvidence: [], criticalUnknowns: [] },
+    findings: [
+      {
+        id: 'F-TRACE-001',
+        statement: 'Demand indicators are positive.',
+        supportingEvidence: [
+          {
+            provider: 'Perplexity',
+            requestId: 'REQ-TRACE-009',
+            sourceResponse: { summary: 'Positive trend detected.' }
+          }
+        ]
+      }
+    ],
+    beliefs: [
+      {
+        id: 'B-TRACE-001',
+        statement: 'Atlas has a viable launch signal.',
+        confidence: 0.9,
+        supportingFindings: ['F-TRACE-001']
+      }
+    ],
+    importance: [{ id: 'B-TRACE-001', importance: 'high' }],
+    executiveTensions: [],
+    synthesis: {},
+    traceability: {
+      recommendation: 'REVIEW_REQUIRED_BEFORE_EXECUTIVE_DECISION',
+      recommendationToBeliefs: [
+        {
+          beliefId: 'B-TRACE-001',
+          statement: 'Atlas has a viable launch signal.',
+          confidence: 0.9,
+          supportingFindings: [
+            {
+              findingId: 'F-TRACE-001',
+              statement: 'Demand indicators are positive.',
+              evidence: [
+                {
+                  provider: 'Perplexity',
+                  requestId: 'REQ-TRACE-009',
+                  sourceResponse: { summary: 'Positive trend detected.' }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    authorityRequired: 'CEO Strategic Approval Required Before Proceeding'
+  };
+
+  const result = engine.review(decisionPackage, ['Show me why Atlas believes this.']);
+
+  assert.equal(result.additionalInvestigationRequired, false);
+  assert.equal(result.responses.length, 1);
+  assert.match(result.responses[0].answer, /Recommendation REVIEW_REQUIRED_BEFORE_EXECUTIVE_DECISION/);
+  assert.match(result.responses[0].answer, /Belief B-TRACE-001/);
+  assert.match(result.responses[0].answer, /Finding F-TRACE-001/);
+  assert.match(result.responses[0].answer, /Provider Perplexity/);
+  assert.match(result.responses[0].answer, /request REQ-TRACE-009/);
+});
+
 test('existing pipeline remains intact', async () => {
   const logger = { entries: [], log(entry) { this.entries.push(entry); } };
   const coordinator = new ExecutiveWorkflowCoordinator({
