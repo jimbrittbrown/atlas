@@ -1,5 +1,7 @@
 import { ConfidenceEngine } from './confidence-engine.js';
+import { BeliefEngine } from './belief-engine.js';
 import { FindingsEngine } from './findings-engine.js';
+import { ImportanceEngine } from './importance-engine.js';
 import { SynthesisEngine } from './synthesis-engine.js';
 
 export class ResearchCoordinator {
@@ -64,11 +66,20 @@ export class ResearchCoordinator {
             executiveSummary: 'Pending synthesis'
         };
         const findingsEngine = new FindingsEngine();
-        const findings = findingsEngine.extract(report);
+        const findings = findingsEngine.extract({
+            ...report,
+            confidence: confidence.confidence
+        });
+        const beliefEngine = new BeliefEngine();
+        const beliefs = beliefEngine.build(findings);
+        const importanceEngine = new ImportanceEngine();
+        const importance = importanceEngine.prioritize(beliefs);
         const synthesisEngine = new SynthesisEngine();
         const synthesis = synthesisEngine.synthesize({
             ...report,
-            findings
+            findings,
+            beliefs,
+            importance
         });
 
         return {
@@ -82,6 +93,8 @@ export class ResearchCoordinator {
                 agreement: confidence.agreement,
                 providers,
                 findings,
+                beliefs,
+                importance,
                 executiveSummary: 'Pending synthesis',
                 synthesis
             }

@@ -99,3 +99,105 @@ test('research passes generated findings into synthesis engine', async () => {
     SynthesisEngine.prototype.synthesize = originalSynthesize;
   }
 });
+
+test('research generates beliefs from findings', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-003',
+    objective: 'Generate beliefs',
+    capability: 'research'
+  });
+
+  assert.equal(result.report.findings.length, 1);
+  assert.equal(result.report.beliefs.length, 1);
+  assert.equal(result.report.beliefs[0].statement, result.report.findings[0].statement);
+  assert.deepEqual(result.report.beliefs[0].supportingFindings, [result.report.findings[0].id]);
+});
+
+test('research report includes beliefs', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-004',
+    objective: 'Belief field check',
+    capability: 'research'
+  });
+
+  assert.equal(Array.isArray(result.report.beliefs), true);
+  assert.equal(result.report.beliefs.length > 0, true);
+});
+
+test('research generates importance from beliefs', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-005',
+    objective: 'Importance check',
+    capability: 'research'
+  });
+
+  assert.equal(Array.isArray(result.report.importance), true);
+  assert.equal(result.report.importance.length, result.report.beliefs.length);
+  assert.equal(result.report.importance[0].importance, 'high');
+});
+
+test('research passes generated importance into synthesis engine', async () => {
+  const originalSynthesize = SynthesisEngine.prototype.synthesize;
+  let synthesisInput = null;
+
+  SynthesisEngine.prototype.synthesize = function synthesize(report) {
+    synthesisInput = report;
+
+    return {
+      capability: report.capability,
+      providerCount: report.providers.length,
+      confidence: report.confidence,
+      agreement: report.confidence.agreement,
+      executiveSummary: 'Synthesis not yet implemented.',
+      findings: report.findings,
+      conflicts: [],
+      recommendations: []
+    };
+  };
+
+  try {
+    const provider = {
+      identity: () => ({ vendor: 'TestProvider' }),
+      execute: async () => ({ payload: 'ok' })
+    };
+    const coordinator = new ResearchCoordinator({
+      route: () => ({ capability: 'research', providers: [provider] })
+    });
+
+    const result = await coordinator.research({
+      id: 'REQ-006',
+      objective: 'Synthesis importance input check',
+      capability: 'research'
+    });
+
+    assert.equal(Array.isArray(synthesisInput.importance), true);
+    assert.equal(synthesisInput.importance.length, 1);
+    assert.deepEqual(result.report.importance, synthesisInput.importance);
+  } finally {
+    SynthesisEngine.prototype.synthesize = originalSynthesize;
+  }
+});
