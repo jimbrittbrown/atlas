@@ -55,6 +55,13 @@ test('business evaluation selection builds a business opportunity request', asyn
     ceoQuestions: []
   });
   assert.equal(io.closed, true);
+  assert.equal(io.outputs.includes('Atlas Branding: Atlas Executive Command'), true);
+  assert.equal(io.outputs.includes('Executive Health: NO_ACTIVE_MISSIONS'), true);
+  assert.equal(io.outputs.includes('Mission Queue: 0 active (none)'), true);
+  assert.equal(io.outputs.includes('Outstanding Investigation Requests: 0'), true);
+  assert.equal(io.outputs.includes('Latest Executive Recommendation: NO_RECOMMENDATION_AVAILABLE'), true);
+  assert.equal(io.outputs.includes('Enterprise Health: UNKNOWN'), true);
+  assert.equal(io.outputs.includes('Available Executive Applications'), true);
 });
 
 test('business evaluation executes business evaluation application once', async () => {
@@ -101,7 +108,7 @@ test('business evaluation displays executive decision package fields', async () 
 
   assert.equal(io.outputs.includes('================================='), true);
   assert.equal(io.outputs.includes('ATLAS EXECUTIVE OFFICE'), true);
-  assert.equal(io.outputs.includes('Applications'), true);
+  assert.equal(io.outputs.includes('Available Executive Applications'), true);
   assert.equal(io.outputs.includes('1. Business Evaluation'), true);
   assert.equal(io.outputs.includes('2. Exit'), true);
   assert.equal(
@@ -115,4 +122,38 @@ test('business evaluation displays executive decision package fields', async () 
     io.outputs.includes('Authority Required: CEO Strategic Approval Required Before Proceeding'),
     true
   );
+});
+
+test('home screen displays enterprise and executive status from workflow objects', async () => {
+  const io = new MockIO(['2']);
+  const consoleApp = new ExecutiveOfficeConsole({
+    io,
+    businessEvaluationApplication: {
+      evaluateBusinessOpportunity: async () => ({})
+    },
+    workflowResults: [
+      {
+        mission: { id: 'VM-200', status: 'MISSION_CREATED' },
+        decisionPackage: {
+          recommendation: 'NOT_READY_FOR_EXECUTIVE_DECISION',
+          confidence: 61
+        },
+        review: {
+          additionalInvestigationRequired: true,
+          updatedRecommendation: 'REQUIRES_ADDITIONAL_INVESTIGATION',
+          investigationRequests: [{ id: 'INVREQ-200' }]
+        }
+      }
+    ],
+    currentPassingTestCount: 56,
+    latestCommit: 'commit-ui-002'
+  });
+
+  await consoleApp.run();
+
+  assert.equal(io.outputs.includes('Executive Health: AT_RISK'), true);
+  assert.equal(io.outputs.includes('Mission Queue: 1 active (VM-200)'), true);
+  assert.equal(io.outputs.includes('Outstanding Investigation Requests: 1'), true);
+  assert.equal(io.outputs.includes('Latest Executive Recommendation: REQUIRES_ADDITIONAL_INVESTIGATION'), true);
+  assert.equal(io.outputs.includes('Enterprise Health: DEGRADED'), true);
 });

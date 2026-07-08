@@ -1,5 +1,6 @@
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
+import { ExecutiveOfficeDashboard } from './executive-office-dashboard.js';
 
 class NodeConsoleIO {
   constructor() {
@@ -20,16 +21,26 @@ class NodeConsoleIO {
 }
 
 export class ExecutiveOfficeConsole {
-  constructor({ businessEvaluationApplication, io }) {
+  constructor({
+    businessEvaluationApplication,
+    io,
+    executiveOfficeDashboard,
+    workflowResults = [],
+    currentPassingTestCount = 0,
+    latestCommit = 'LATEST_COMMIT_PLACEHOLDER'
+  }) {
     this.businessEvaluationApplication = businessEvaluationApplication;
     this.io = io ?? new NodeConsoleIO();
+    this.executiveOfficeDashboard = executiveOfficeDashboard ?? new ExecutiveOfficeDashboard();
+    this.workflowResults = [...workflowResults];
+    this.currentPassingTestCount = currentPassingTestCount;
+    this.latestCommit = latestCommit;
   }
 
   async run() {
-    this.renderHeader();
-
     let running = true;
     while (running) {
+      this.renderHomeScreen();
       this.renderMenu();
       const selection = (await this.io.prompt('Select application: ')).trim();
 
@@ -58,9 +69,33 @@ export class ExecutiveOfficeConsole {
     this.io.writeLine('=================================');
   }
 
+  renderHomeScreen() {
+    const dashboard = this.executiveOfficeDashboard.build({
+      workflowResults: this.workflowResults,
+      currentPassingTestCount: this.currentPassingTestCount,
+      latestCommit: this.latestCommit
+    });
+    const missionQueueIds = this.workflowResults
+      .map(result => result?.mission?.id)
+      .filter(Boolean);
+
+    this.renderHeader();
+    this.io.writeLine('Atlas Branding: Atlas Executive Command');
+    this.io.writeLine('Executive Health: ' + dashboard.executiveHealth);
+    this.io.writeLine(
+      'Mission Queue: '
+      + dashboard.activeMissions
+      + ' active '
+      + (missionQueueIds.length > 0 ? `(${missionQueueIds.join(', ')})` : '(none)')
+    );
+    this.io.writeLine('Outstanding Investigation Requests: ' + dashboard.outstandingInvestigationRequests);
+    this.io.writeLine('Latest Executive Recommendation: ' + dashboard.latestRecommendation);
+    this.io.writeLine('Enterprise Health: ' + this.calculateEnterpriseHealth(dashboard));
+  }
+
   renderMenu() {
     this.io.writeLine('');
-    this.io.writeLine('Applications');
+    this.io.writeLine('Available Executive Applications');
     this.io.writeLine('');
     this.io.writeLine('1. Business Evaluation');
     this.io.writeLine('2. Exit');
@@ -73,6 +108,22 @@ export class ExecutiveOfficeConsole {
     const decisionPackage = await this.businessEvaluationApplication.evaluateBusinessOpportunity(
       businessOpportunityRequest
     );
+
+    this.workflowResults.push({
+      mission: {
+        id: businessOpportunityRequest.id,
+        title: businessOpportunityRequest.objective,
+        status: 'MISSION_CREATED',
+        sponsor: 'CEO',
+        decisionClass: 'Strategic'
+      },
+      decisionPackage,
+      review: {
+        additionalInvestigationRequired: false,
+        updatedRecommendation: decisionPackage.recommendation ?? null,
+        investigationRequests: []
+      }
+    });
 
     this.renderDecisionPackage(decisionPackage);
   }
@@ -111,5 +162,21 @@ export class ExecutiveOfficeConsole {
     this.io.writeLine('Confidence: ' + (decisionPackage.confidence ?? 0));
     this.io.writeLine('Decision Readiness: ' + readiness);
     this.io.writeLine('Authority Required: ' + (decisionPackage.authorityRequired ?? 'CEO Review Required'));
+  }
+
+  calculateEnterpriseHealth(dashboard) {
+    if ((dashboard.currentPassingTestCount ?? 0) === 0) {
+      return 'UNKNOWN';
+    }
+
+    if (dashboard.executiveHealth === 'AT_RISK') {
+      return 'DEGRADED';
+    }
+
+    if (dashboard.executiveHealth === 'ATTENTION_REQUIRED') {
+      return 'MONITORED';
+    }
+
+    return 'STABLE';
   }
 }
