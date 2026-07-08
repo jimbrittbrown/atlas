@@ -1,6 +1,9 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { AssetRegistry } from '../asset-registry.js';
+import { SecretManager } from '../infrastructure/secret-manager.js';
+import { ConfigurationService } from '../infrastructure/configuration-service.js';
+import { ProductionAdapter } from '../infrastructure/production-adapter.js';
 
 export class VoiceService {
   async synthesizeVoice() {
@@ -63,118 +66,101 @@ export class ElevenLabsVoiceService extends VoiceService {
     retryBaseDelayMs = 250,
     assetRegistry = null,
     fetchImpl = globalThis.fetch,
-    workerId = 'VOICE-WORKER-001'
+    workerId = 'VOICE-WORKER-001',
+    configurationService = null,
+    secretManager = null,
+    logger = null,
+    metricsAdapter = null,
+    sleep = null
   } = {}) {
     super();
-    this.apiKey = apiKey;
-    this.baseUrl = baseUrl;
     this.outputDir = outputDir;
-    this.timeoutMs = timeoutMs;
-    this.maxRetries = maxRetries;
-    this.retryBaseDelayMs = retryBaseDelayMs;
     this.assetRegistry = assetRegistry ?? new AssetRegistry();
-    this.fetchImpl = fetchImpl;
     this.workerId = workerId;
+    this.configurationService = configurationService ?? new ConfigurationService();
+    this.secretManager = secretManager
+      ?? this.createDefaultSecretManager({ apiKey });
+    this.configureRuntime({
+      baseUrl,
+      timeoutMs,
+      maxRetries,
+      retryBaseDelayMs
+    });
+    this.providerAdapter = new ElevenLabsProductionAdapter({
+      fetchImpl,
+      configurationService: this.configurationService,
+      secretManager: this.secretManager,
+      logger,
+      metricsAdapter,
+      sleep: typeof sleep === 'function' ? sleep : undefined
+    });
   }
 
   async synthesizeVoice(metadata = {}) {
     const normalizedMetadata = this.normalizeMetadata(metadata);
-
-    if (!this.isConfigured()) {
-      return this.failGracefully(normalizedMetadata, 'ELEVENLABS_API_KEY is not configured.');
-    }
-
-    if (typeof this.fetchImpl !== 'function') {
-      return this.failGracefully(normalizedMetadata, 'Fetch implementation unavailable.');
-    }
-
-    const endpoint = `${this.baseUrl}/v1/text-to-speech/${encodeURIComponent(normalizedMetadata.voiceId)}`;
-    const requestBody = {
-      text: normalizedMetadata.script,
-      model_id: 'eleven_multilingual_v2',
-      voice_settings: {
-        stability: normalizedMetadata.stability,
-        similarity_boost: normalizedMetadata.similarityBoost,
-        style: normalizedMetadata.style
-      }
-    };
-
-    let attempt = 0;
-    while (attempt <= this.maxRetries) {
-      attempt += 1;
-
-      try {
-        const response = await this.performRequest({ endpoint, requestBody });
-
-        if (response.ok) {
-          const audioFile = this.saveAudioFile(await response.arrayBuffer(), normalizedMetadata);
-
-          this.registerAsset({
-            normalizedMetadata,
-            audioFile,
-            status: 'GENERATED',
-            provider: 'elevenlabs'
-          });
-
-          return {
-            audioFile,
-            estimatedDuration: this.estimateDuration(normalizedMetadata.targetDuration)
-          };
-        }
-
-        const retryAfterHeader = this.readRetryAfter(response);
-        const retriable = this.isRetriableStatus(response.status);
-
-        if (retriable && attempt <= this.maxRetries + 1) {
-          await this.wait(this.computeDelayMs({ attempt, retryAfterHeader }));
-          continue;
-        }
-
-        return this.failGracefully(
-          normalizedMetadata,
-          `ElevenLabs request failed with status ${response.status}.`
-        );
-      } catch (error) {
-        if (attempt <= this.maxRetries + 1) {
-          await this.wait(this.computeDelayMs({ attempt }));
-          continue;
-        }
-
-        return this.failGracefully(normalizedMetadata, error.message ?? 'ElevenLabs request failed.');
-      }
-    }
-
-    return this.failGracefully(normalizedMetadata, 'ElevenLabs request exhausted retries.');
-  }
-
-  async performRequest({ endpoint, requestBody }) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
-
     try {
-      return await this.fetchImpl(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'audio/mpeg',
-          'xi-api-key': this.apiKey
-        },
-        body: JSON.stringify(requestBody),
-        signal: controller.signal
+      const providerResponse = await this.providerAdapter.run({
+        operation: 'synthesize_voice',
+        metadata: normalizedMetadata
       });
-    } catch (error) {
-      if (controller.signal.aborted) {
-        throw new Error('ElevenLabs request timed out.');
-      }
+      const audioFile = this.saveAudioFile(providerResponse.audioBytes, normalizedMetadata);
 
-      throw error;
-    } finally {
-      clearTimeout(timeoutId);
+      this.registerAsset({
+        normalizedMetadata,
+        audioFile,
+        status: 'GENERATED',
+        provider: 'elevenlabs'
+      });
+
+      return {
+        audioFile,
+        estimatedDuration: this.estimateDuration(normalizedMetadata.targetDuration)
+      };
+    } catch (error) {
+      return this.failGracefully(normalizedMetadata, this.buildFailureReason(error));
     }
   }
 
-  isConfigured() {
-    return typeof this.apiKey === 'string' && this.apiKey.trim().length > 0;
+  createDefaultSecretManager({ apiKey }) {
+    if (typeof apiKey === 'string' && apiKey.trim().length > 0) {
+      return new SecretManager({
+        environment: this.configurationService.getEnvironment(),
+        env: {
+          ...process.env,
+          ELEVENLABS_API_KEY: apiKey
+        },
+        loadFromEnvFile: false
+      });
+    }
+
+    return this.configurationService.secretManager ?? new SecretManager({
+      environment: this.configurationService.getEnvironment()
+    });
+  }
+
+  configureRuntime({ baseUrl, timeoutMs, maxRetries, retryBaseDelayMs }) {
+    this.configurationService.registerProviderConfiguration('elevenlabs', {
+      endpoint: `${baseUrl.replace(/\/+$/, '')}/v1/text-to-speech`,
+      retryPolicy: {
+        maxRetries,
+        baseDelayMs: retryBaseDelayMs
+      },
+      timeoutMs,
+      rateLimit: this.configurationService.getProviderRateLimit('elevenlabs') ?? { requestsPerMinute: 120 },
+      requiredSecrets: ['apiKey']
+    });
+  }
+
+  buildFailureReason(error) {
+    if (error?.name === 'ProductionAdapterError') {
+      const code = String(error.details?.code ?? 'UNKNOWN_ERROR')
+        .toUpperCase()
+        .replace(/[^A-Z0-9_]+/g, '_');
+
+      return `ELEVENLABS_${code}`;
+    }
+
+    return 'ELEVENLABS_PROVIDER_FAILURE';
   }
 
   normalizeMetadata(metadata) {
@@ -199,29 +185,6 @@ export class ElevenLabsVoiceService extends VoiceService {
     }
 
     return Math.max(0, Math.min(1, numberValue));
-  }
-
-  isRetriableStatus(status) {
-    return status === 408 || status === 429 || (status >= 500 && status <= 599);
-  }
-
-  readRetryAfter(response) {
-    const retryAfterHeader = response.headers?.get?.('retry-after');
-    const seconds = Number.parseInt(String(retryAfterHeader ?? ''), 10);
-
-    return Number.isNaN(seconds) ? null : seconds;
-  }
-
-  computeDelayMs({ attempt, retryAfterHeader = null }) {
-    if (retryAfterHeader !== null) {
-      return Math.max(0, retryAfterHeader * 1000);
-    }
-
-    return this.retryBaseDelayMs * Math.max(1, attempt);
-  }
-
-  wait(delayMs) {
-    return new Promise(resolve => setTimeout(resolve, delayMs));
   }
 
   saveAudioFile(arrayBuffer, metadata) {
@@ -312,5 +275,74 @@ export class ElevenLabsVoiceService extends VoiceService {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '')
       .slice(0, 12) || 'noscript';
+  }
+}
+
+class ElevenLabsProductionAdapter extends ProductionAdapter {
+  constructor({ fetchImpl = globalThis.fetch, ...options } = {}) {
+    super({
+      providerId: 'elevenlabs',
+      ...options
+    });
+    this.fetchImpl = fetchImpl;
+  }
+
+  async authenticate({ secrets }) {
+    if (typeof this.fetchImpl !== 'function') {
+      throw new Error('Fetch implementation unavailable.');
+    }
+
+    const apiKey = secrets.configuredSecrets.apiKey?.value;
+
+    if (typeof apiKey !== 'string' || apiKey.trim().length === 0) {
+      throw new Error('ElevenLabs authentication failed.');
+    }
+
+    return {
+      authenticated: true
+    };
+  }
+
+  async execute({ request, configuration, secrets }) {
+    const metadata = request.metadata ?? {};
+    const endpoint = `${this.normalizeEndpoint(configuration.endpoint)}/${encodeURIComponent(metadata.voiceId)}`;
+    const response = await this.fetchImpl(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'audio/mpeg',
+        'xi-api-key': secrets.configuredSecrets.apiKey.value
+      },
+      body: JSON.stringify({
+        text: metadata.script,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: {
+          stability: metadata.stability,
+          similarity_boost: metadata.similarityBoost,
+          style: metadata.style
+        }
+      })
+    });
+
+    if (!response?.ok) {
+      const failure = new Error(`ElevenLabs request failed with status ${response?.status ?? 'UNKNOWN'}.`);
+      failure.status = Number.parseInt(String(response?.status ?? 500), 10);
+      failure.retryAfter = response?.headers?.get?.('retry-after') ?? null;
+      throw failure;
+    }
+
+    return {
+      audioBuffer: Buffer.from(await response.arrayBuffer())
+    };
+  }
+
+  normalizeResponse(rawResponse) {
+    return {
+      audioBytes: rawResponse.audioBuffer
+    };
+  }
+
+  normalizeEndpoint(endpoint) {
+    return String(endpoint ?? '').replace(/\/+$/, '');
   }
 }

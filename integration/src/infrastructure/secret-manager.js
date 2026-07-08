@@ -1,14 +1,98 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const SUPPORTED_ENVIRONMENTS = ['development', 'testing', 'production'];
+
+const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
+const DEFAULT_ENV_FILE_CANDIDATES = [
+  join(process.cwd(), '.env'),
+  join(MODULE_DIR, '../../../.env')
+];
 
 export class SecretManager {
   constructor({
     environment = process.env.NODE_ENV ?? 'development',
     env = process.env,
-    providerSchemas = null
+    providerSchemas = null,
+    loadFromEnvFile = env === process.env,
+    envFilePath = null
   } = {}) {
     this.environment = this.normalizeEnvironment(environment);
     this.env = env;
+    this.bootstrapEnv(envFilePath, loadFromEnvFile);
     this.providerSchemas = providerSchemas ?? this.buildDefaultProviderSchemas();
+  }
+
+  bootstrapEnv(envFilePath, loadFromEnvFile) {
+    if (!loadFromEnvFile) {
+      return;
+    }
+
+    const resolvedEnvFilePath = this.resolveEnvFilePath(envFilePath);
+
+    if (!resolvedEnvFilePath) {
+      return;
+    }
+
+    try {
+      const content = readFileSync(resolvedEnvFilePath, 'utf8');
+      this.applyEnvContent(content);
+    } catch (_error) {
+      throw new Error('Failed to load environment file.');
+    }
+  }
+
+  resolveEnvFilePath(envFilePath) {
+    if (typeof envFilePath === 'string' && envFilePath.trim().length > 0) {
+      return envFilePath;
+    }
+
+    for (const candidate of DEFAULT_ENV_FILE_CANDIDATES) {
+      if (existsSync(candidate)) {
+        return candidate;
+      }
+    }
+
+    return null;
+  }
+
+  applyEnvContent(content) {
+    const lines = String(content).split(/\r?\n/);
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+
+      if (trimmed.length === 0 || trimmed.startsWith('#')) {
+        continue;
+      }
+
+      const separatorIndex = trimmed.indexOf('=');
+
+      if (separatorIndex <= 0) {
+        throw new Error('Invalid environment file line.');
+      }
+
+      const key = trimmed.slice(0, separatorIndex).trim();
+      const rawValue = trimmed.slice(separatorIndex + 1).trim();
+
+      if (key.length === 0 || typeof this.env[key] === 'string') {
+        continue;
+      }
+
+      this.env[key] = this.normalizeEnvValue(rawValue);
+    }
+  }
+
+  normalizeEnvValue(value) {
+    if (
+      (value.startsWith('"') && value.endsWith('"'))
+      || (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      return value.slice(1, -1);
+    }
+
+    return value;
   }
 
   normalizeEnvironment(environment) {

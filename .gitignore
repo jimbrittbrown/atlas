@@ -1,0 +1,36 @@
+.env
+.env.*
+!.env.example
+
+# =========================
+# Atlas Secrets
+# =========================
+
+.env
+.env.*
+!.env.example
+
+# API Keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Google Cloud Credentials
+credentials.json
+service-account.json
+
+# Local Secret Storage
+secrets/
+
+# Logs
+*.log
+
+# Node Modules
+node_modules/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

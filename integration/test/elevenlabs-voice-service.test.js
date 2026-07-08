@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, rmSync } from 'node:fs';
 import { AssetRegistry } from '../src/asset-registry.js';
 import { ElevenLabsVoiceService } from '../src/services/voice-service.js';
+import { SecretManager } from '../src/infrastructure/secret-manager.js';
+import { ConfigurationService } from '../src/infrastructure/configuration-service.js';
 
 const TEST_OUTPUT_DIR = '/tmp/atlas-elevenlabs-voice-service-test';
 
@@ -44,12 +46,48 @@ function createErrorResponse(status, retryAfter = null) {
   };
 }
 
-test('elevenlabs voice service sends authentication header', async () => {
+function createConfiguredServices({
+  env = {},
+  retryPolicy = { maxRetries: 0, baseDelayMs: 1 },
+  timeoutMs = 100,
+  endpoint = 'https://api.elevenlabs.io/v1/text-to-speech'
+} = {}) {
+  const secretManager = new SecretManager({
+    environment: 'testing',
+    env,
+    loadFromEnvFile: false
+  });
+  const configurationService = new ConfigurationService({
+    environment: 'testing',
+    secretManager
+  });
+
+  configurationService.registerProviderConfiguration('elevenlabs', {
+    endpoint,
+    retryPolicy,
+    timeoutMs,
+    rateLimit: { requestsPerMinute: 100 },
+    requiredSecrets: ['apiKey']
+  });
+
+  return {
+    secretManager,
+    configurationService
+  };
+}
+
+test('elevenlabs voice service authentication succeeds with production key from secret manager', async () => {
   resetOutputDir();
   const fetchCalls = [];
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      ELEVENLABS_API_KEY: 'test-elevenlabs-key'
+    }
+  });
   const service = new ElevenLabsVoiceService({
-    apiKey: 'test-elevenlabs-key',
     outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
     fetchImpl: async (url, options) => {
       fetchCalls.push({ url, options });
       return createOkResponse([1, 2, 3]);
@@ -72,9 +110,15 @@ test('elevenlabs voice service sends authentication header', async () => {
 test('elevenlabs voice service generates audio and registers asset', async () => {
   resetOutputDir();
   const assetRegistry = new AssetRegistry();
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      ELEVENLABS_API_KEY: 'test-elevenlabs-key'
+    }
+  });
   const service = new ElevenLabsVoiceService({
-    apiKey: 'test-elevenlabs-key',
     outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
     assetRegistry,
     fetchImpl: async () => createOkResponse([65, 66, 67])
   });
@@ -105,9 +149,20 @@ test('elevenlabs voice service generates audio and registers asset', async () =>
 test('elevenlabs voice service retries after rate limit and succeeds', async () => {
   resetOutputDir();
   let attempts = 0;
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      ELEVENLABS_API_KEY: 'test-elevenlabs-key'
+    },
+    retryPolicy: {
+      maxRetries: 1,
+      baseDelayMs: 1
+    }
+  });
   const service = new ElevenLabsVoiceService({
-    apiKey: 'test-elevenlabs-key',
     outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
+    maxRetries: 1,
     retryBaseDelayMs: 1,
     fetchImpl: async () => {
       attempts += 1;
@@ -135,18 +190,25 @@ test('elevenlabs voice service retries after rate limit and succeeds', async () 
 test('elevenlabs voice service handles timeout/failure gracefully', async () => {
   resetOutputDir();
   const assetRegistry = new AssetRegistry();
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      ELEVENLABS_API_KEY: 'test-elevenlabs-key'
+    },
+    timeoutMs: 1,
+    retryPolicy: {
+      maxRetries: 1,
+      baseDelayMs: 1
+    }
+  });
   const service = new ElevenLabsVoiceService({
-    apiKey: 'test-elevenlabs-key',
     outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
     timeoutMs: 1,
     maxRetries: 1,
     retryBaseDelayMs: 1,
     assetRegistry,
-    fetchImpl: async (_url, options) => new Promise((_, reject) => {
-      options.signal.addEventListener('abort', () => {
-        reject(new Error('AbortError'));
-      });
-    })
+    fetchImpl: async () => new Promise(() => {})
   });
 
   const output = await service.synthesizeVoice({
@@ -163,6 +225,6 @@ test('elevenlabs voice service handles timeout/failure gracefully', async () => 
   assert.equal(assets.length, 1);
   assert.equal(assets[0].status, 'FAILED');
   assert.equal(assets[0].metadata.provider, 'elevenlabs');
-  assert.equal(typeof assets[0].metadata.error, 'string');
+  assert.equal(assets[0].metadata.error, 'ELEVENLABS_TIMEOUT');
   resetOutputDir();
 });
