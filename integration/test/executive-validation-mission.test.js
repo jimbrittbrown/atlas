@@ -4,11 +4,28 @@ import { ExecutiveWorkflowCoordinator } from '../src/executive-workflow-coordina
 
 test('runs validation mission and generates executive decision package', async () => {
   const logger = { entries: [], log(entry) { this.entries.push(entry); } };
+  let receivedInvestigations = null;
 
   const coordinator = new ExecutiveWorkflowCoordinator({
     executiveService: { handleRequest: async () => ({ workflowId: 'unused' }) },
     bridge: { execute: async () => ({ status: 'unused' }) },
-    logger
+    logger,
+    investigationManager: {
+      executeInvestigations: async investigations => {
+        receivedInvestigations = investigations;
+
+        return investigations.map(investigation => ({
+          investigationId: investigation.id,
+          investigationName: investigation.name,
+          research: {
+            report: {
+              confidence: 0.8,
+              executiveSummary: `Completed: ${investigation.name}`
+            }
+          }
+        }));
+      }
+    }
   });
 
   const result = await coordinator.runValidationMission({
@@ -18,6 +35,7 @@ test('runs validation mission and generates executive decision package', async (
 
   assert.equal(result.mission.id, 'VM-001');
   assert.equal(result.mission.decisionClass, 'Strategic');
+  assert.equal(receivedInvestigations.length, 6);
   assert.equal(result.investigations.length, 6);
   assert.equal(result.readiness.status, 'READY');
   assert.equal(result.recommendation, 'READY_FOR_EXECUTIVE_REVIEW');

@@ -1,8 +1,9 @@
 export class ExecutiveWorkflowCoordinator {
-  constructor({ executiveService, bridge, logger }) {
+  constructor({ executiveService, bridge, logger, investigationManager }) {
     this.executiveService = executiveService;
     this.bridge = bridge;
     this.logger = logger;
+    this.investigationManager = investigationManager;
   }
 
   async run(request) {
@@ -46,9 +47,21 @@ export class ExecutiveWorkflowCoordinator {
     ].map((name, index) => ({
       id: `INV-${String(index + 1).padStart(3, '0')}`,
       name,
+      objective: `${request.objective} - ${name}`,
+      context: {
+        missionId: workflowId,
+        missionObjective: request.objective,
+        investigationName: name
+      }
+    }));
+
+    const completedInvestigations = await this.investigationManager.executeInvestigations(investigations);
+    const investigationResults = completedInvestigations.map((result) => ({
+      id: result.investigationId,
+      name: result.investigationName,
       status: 'COMPLETE',
-      confidence: 80,
-      findings: [`Placeholder finding for ${name}`],
+      confidence: Math.round((result.research?.report?.confidence ?? 0) * 100),
+      findings: [result.research?.report?.executiveSummary ?? 'No executive summary available.'],
       unknowns: []
     }));
 
@@ -58,13 +71,13 @@ export class ExecutiveWorkflowCoordinator {
     });
 
     const readiness = {
-      status: investigations.every((item) => item.status === 'COMPLETE') ? 'READY' : 'NOT_READY',
-      rationale: 'All required investigations completed using placeholder results.'
+      status: investigationResults.every((item) => item.status === 'COMPLETE') ? 'READY' : 'NOT_READY',
+      rationale: 'All required investigations completed using research coordination results.'
     };
 
     const decisionPackage = {
       mission,
-      investigations,
+      investigations: investigationResults,
       readiness,
       recommendation: 'READY_FOR_EXECUTIVE_REVIEW',
       confidence: 80,
