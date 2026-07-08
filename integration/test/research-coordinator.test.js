@@ -263,3 +263,65 @@ test('research passes decision readiness into synthesis engine', async () => {
     SynthesisEngine.prototype.synthesize = originalSynthesize;
   }
 });
+
+test('research generates executive tensions', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-009',
+    objective: 'Executive tensions check',
+    capability: 'research'
+  });
+
+  assert.equal(Array.isArray(result.report.executiveTensions), true);
+  assert.equal(result.report.executiveTensions.length, 1);
+  assert.equal(result.report.executiveTensions[0].title, 'Executive Review Required');
+});
+
+test('research passes executive tensions into synthesis engine', async () => {
+  const originalSynthesize = SynthesisEngine.prototype.synthesize;
+  let synthesisInput = null;
+
+  SynthesisEngine.prototype.synthesize = function synthesize(report) {
+    synthesisInput = report;
+
+    return {
+      capability: report.capability,
+      providerCount: report.providers.length,
+      confidence: report.confidence,
+      agreement: report.confidence.agreement,
+      executiveSummary: 'Synthesis not yet implemented.',
+      findings: report.findings,
+      conflicts: [],
+      recommendations: []
+    };
+  };
+
+  try {
+    const provider = {
+      identity: () => ({ vendor: 'TestProvider' }),
+      execute: async () => ({ payload: 'ok' })
+    };
+    const coordinator = new ResearchCoordinator({
+      route: () => ({ capability: 'research', providers: [provider] })
+    });
+
+    const result = await coordinator.research({
+      id: 'REQ-010',
+      objective: 'Synthesis tensions input check',
+      capability: 'research'
+    });
+
+    assert.equal(Array.isArray(synthesisInput.executiveTensions), true);
+    assert.equal(synthesisInput.executiveTensions.length, 1);
+    assert.deepEqual(result.report.executiveTensions, synthesisInput.executiveTensions);
+  } finally {
+    SynthesisEngine.prototype.synthesize = originalSynthesize;
+  }
+});
