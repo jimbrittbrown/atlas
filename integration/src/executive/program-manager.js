@@ -1,8 +1,10 @@
 import { WorkerAssignment } from '../worker-assignment.js';
+import { AssignmentRepository } from '../assignment-repository.js';
 
 export class ProgramManager {
-  constructor() {
-    this.assignments = [];
+  constructor({ assignmentRepository } = {}) {
+    this.assignmentRepository = assignmentRepository ?? new AssignmentRepository();
+    this.assignments = this.assignmentRepository.listAssignments();
   }
 
   supervise(businessExecutionPlan = {}) {
@@ -21,19 +23,17 @@ export class ProgramManager {
       }
     }));
 
+    this.assignments.forEach(assignment => {
+      this.assignmentRepository.saveAssignment(assignment);
+    });
+    this.assignments = this.assignmentRepository.listAssignments();
+
     return this.assignments;
   }
 
   receiveCompletion(completedAssignment) {
-    const assignmentIndex = this.assignments.findIndex(
-      assignment => assignment.assignmentId === completedAssignment.assignmentId
-    );
-
-    if (assignmentIndex >= 0) {
-      this.assignments[assignmentIndex] = completedAssignment;
-    } else {
-      this.assignments.push(completedAssignment);
-    }
+    this.assignmentRepository.updateAssignment(completedAssignment);
+    this.assignments = this.assignmentRepository.listAssignments();
 
     return this.generateExecutiveProgressReport({ tasks: this.assignments });
   }
