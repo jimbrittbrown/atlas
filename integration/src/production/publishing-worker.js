@@ -1,8 +1,10 @@
 import { WorkerAssignment } from '../worker-assignment.js';
+import { PlaceholderPublishingService } from '../services/publishing-service.js';
 
 export class PublishingWorker {
-  constructor({ programManager = null } = {}) {
+  constructor({ programManager = null, publishingService = null } = {}) {
     this.programManager = programManager;
+    this.publishingService = publishingService ?? new PlaceholderPublishingService();
   }
 
   async execute(assignment) {
@@ -14,12 +16,12 @@ export class PublishingWorker {
 
     const task = assignment.result?.task ?? {};
     const metadata = this.extractMetadata(task);
-    const validation = this.validateRequiredAssets(metadata);
+    const validation = this.publishingService.validatePublishRequest(metadata);
 
     if (!validation.isValid) {
       const completionReport = this.buildCompletionReport(assignment, 'BLOCKED');
       const blockedResult = {
-        publishId: this.buildPublishId(assignment),
+        publishId: this.publishingService.buildPublishId(assignment),
         platform: metadata.targetPlatform,
         publishStatus: 'BLOCKED_MISSING_ASSETS',
         publishUrl: null,
@@ -33,11 +35,12 @@ export class PublishingWorker {
     }
 
     const completionReport = this.buildCompletionReport(assignment, 'COMPLETED');
+    const publishPackage = this.publishingService.preparePublishPackage({ assignment, metadata });
     const result = {
-      publishId: this.buildPublishId(assignment),
-      platform: metadata.targetPlatform,
-      publishStatus: 'SCHEDULED',
-      publishUrl: this.buildPublishUrl(metadata.targetPlatform, assignment),
+      publishId: publishPackage.publishId,
+      platform: publishPackage.platform,
+      publishStatus: publishPackage.publishStatus,
+      publishUrl: publishPackage.publishUrl,
       completionReport
     };
 
@@ -61,34 +64,6 @@ export class PublishingWorker {
     };
   }
 
-  validateRequiredAssets(metadata) {
-    const checks = {
-      videoAsset: this.isNonEmptyString(metadata.videoAsset),
-      thumbnailAsset: this.isNonEmptyString(metadata.thumbnailAsset),
-      title: this.isNonEmptyString(metadata.title),
-      description: this.isNonEmptyString(metadata.description),
-      targetPlatform: this.isNonEmptyString(metadata.targetPlatform)
-    };
-
-    const missingFields = Object.entries(checks)
-      .filter(([, present]) => present === false)
-      .map(([field]) => field);
-
-    return {
-      isValid: missingFields.length === 0,
-      missingFields,
-      checkedFields: checks
-    };
-  }
-
-  buildPublishId(assignment) {
-    return `PUBLISH-${String(assignment.assignmentId).toUpperCase()}`;
-  }
-
-  buildPublishUrl(targetPlatform, assignment) {
-    return `https://publish.placeholder/${this.slugify(targetPlatform)}/${this.buildPublishId(assignment).toLowerCase()}`;
-  }
-
   buildCompletionReport(assignment, status) {
     return {
       assignmentId: assignment.assignmentId,
@@ -103,16 +78,5 @@ export class PublishingWorker {
     if (typeof this.programManager?.receiveCompletion === 'function') {
       this.programManager.receiveCompletion(assignment);
     }
-  }
-
-  isNonEmptyString(value) {
-    return typeof value === 'string' && value.trim().length > 0;
-  }
-
-  slugify(value) {
-    return String(value)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
   }
 }

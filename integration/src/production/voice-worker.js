@@ -1,8 +1,10 @@
 import { WorkerAssignment } from '../worker-assignment.js';
+import { PlaceholderVoiceService } from '../services/voice-service.js';
 
 export class VoiceWorker {
-  constructor({ programManager = null } = {}) {
+  constructor({ programManager = null, voiceService = null } = {}) {
     this.programManager = programManager;
+    this.voiceService = voiceService ?? new PlaceholderVoiceService();
   }
 
   async execute(assignment) {
@@ -21,10 +23,11 @@ export class VoiceWorker {
       completedAt: 'COMPLETED_AT_PLACEHOLDER',
       status: 'COMPLETED'
     };
+    const voiceOutput = this.voiceService.synthesizeVoice(metadata);
 
     const result = {
-      audioFile: this.buildAudioFileName(metadata),
-      estimatedDuration: this.estimateDuration(metadata.targetDuration),
+      audioFile: voiceOutput.audioFile,
+      estimatedDuration: voiceOutput.estimatedDuration,
       status: 'COMPLETED',
       completionReport
     };
@@ -46,38 +49,9 @@ export class VoiceWorker {
     };
   }
 
-  buildAudioFileName(metadata) {
-    const normalizedStyle = this.slugify(metadata.voiceStyle);
-    const normalizedLanguage = this.slugify(metadata.language);
-    const scriptFingerprint = this.fingerprint(metadata.script);
-
-    return `voice-${normalizedStyle}-${normalizedLanguage}-${scriptFingerprint}.wav`;
-  }
-
-  estimateDuration(targetDuration) {
-    const seconds = Number.parseInt(String(targetDuration), 10);
-    const normalizedSeconds = Number.isNaN(seconds) ? 60 : Math.max(1, seconds);
-
-    return `${normalizedSeconds} seconds`;
-  }
-
   reportCompletion(assignment) {
     if (typeof this.programManager?.receiveCompletion === 'function') {
       this.programManager.receiveCompletion(assignment);
     }
-  }
-
-  slugify(value) {
-    return String(value)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  }
-
-  fingerprint(text) {
-    return String(text)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '')
-      .slice(0, 12) || 'noscript';
   }
 }
