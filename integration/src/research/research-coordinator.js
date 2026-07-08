@@ -6,6 +6,22 @@ export class ResearchCoordinator {
         this.router = router;
     }
 
+    async performInvestigation(investigation) {
+        const request = {
+            id: investigation.id,
+            objective: investigation.objective ?? investigation.name,
+            context: investigation.context ?? {},
+            capability: 'research'
+        };
+        const research = await this.research(request);
+
+        return {
+            investigationId: investigation.id,
+            investigationName: investigation.name,
+            research
+        };
+    }
+
     async research(request) {
         const routing = this.router.route(request);
         const executions = routing.providers.map(provider => ({

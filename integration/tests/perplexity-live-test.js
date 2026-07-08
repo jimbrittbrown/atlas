@@ -4,6 +4,7 @@ import { PerplexityProvider } from '../src/capability/perplexity-provider.js';
 
 const provider = new PerplexityProvider();
 const request = {
+    capability: 'research',
     objective: 'What is the capital of France?'
 };
 
