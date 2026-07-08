@@ -155,7 +155,7 @@ export class ExecutiveWorkflowCoordinator {
       result => result.research?.report?.executiveTensions ?? []
     );
     const synthesis = completedInvestigations[0]?.research?.report?.synthesis ?? {
-      executiveSummary: 'Synthesis not yet implemented.',
+      executiveSummary: 'No executive synthesis summary available.',
       findings: [],
       conflicts: [],
       recommendations: []

@@ -15,7 +15,7 @@ export class ExecutiveDecisionPackageGenerator {
             );
 
         return {
-            executiveSummary: synthesis.executiveSummary ?? 'Synthesis not yet implemented.',
+                executiveSummary: synthesis.executiveSummary ?? 'No executive synthesis summary available.',
             recommendation: this.recommendationFor(decisionReadiness?.status),
             confidence,
             decisionReadiness,

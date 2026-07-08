@@ -65,7 +65,7 @@ export class ResearchCoordinator {
             successfulProviders: confidence.successfulProviders,
             failedProviders: confidence.failedProviders,
             confidence,
-            executiveSummary: 'Pending synthesis'
+            executiveSummary: null
         };
         const findingsEngine = new FindingsEngine();
         const findings = findingsEngine.extract({
@@ -110,7 +110,7 @@ export class ResearchCoordinator {
                 importance,
                 decisionReadiness,
                 executiveTensions,
-                executiveSummary: 'Pending synthesis',
+                executiveSummary: synthesis.executiveSummary,
                 synthesis
             }
         };

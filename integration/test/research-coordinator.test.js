@@ -70,7 +70,7 @@ test('research passes generated findings into synthesis engine', async () => {
       providerCount: report.providers.length,
       confidence: report.confidence,
       agreement: report.confidence.agreement,
-      executiveSummary: 'Synthesis not yet implemented.',
+      executiveSummary: 'Evidence summary generated.',
       findings: report.findings,
       conflicts: [],
       recommendations: []
@@ -172,7 +172,7 @@ test('research passes generated importance into synthesis engine', async () => {
       providerCount: report.providers.length,
       confidence: report.confidence,
       agreement: report.confidence.agreement,
-      executiveSummary: 'Synthesis not yet implemented.',
+      executiveSummary: 'Evidence summary generated.',
       findings: report.findings,
       conflicts: [],
       recommendations: []
@@ -235,7 +235,7 @@ test('research passes decision readiness into synthesis engine', async () => {
       providerCount: report.providers.length,
       confidence: report.confidence,
       agreement: report.confidence.agreement,
-      executiveSummary: 'Synthesis not yet implemented.',
+      executiveSummary: 'Evidence summary generated.',
       findings: report.findings,
       conflicts: [],
       recommendations: []
@@ -296,7 +296,7 @@ test('research passes executive tensions into synthesis engine', async () => {
       providerCount: report.providers.length,
       confidence: report.confidence,
       agreement: report.confidence.agreement,
-      executiveSummary: 'Synthesis not yet implemented.',
+      executiveSummary: 'Evidence summary generated.',
       findings: report.findings,
       conflicts: [],
       recommendations: []
@@ -324,4 +324,45 @@ test('research passes executive tensions into synthesis engine', async () => {
   } finally {
     SynthesisEngine.prototype.synthesize = originalSynthesize;
   }
+});
+
+test('research executive summary is generated from evidence via synthesis output', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-011',
+    objective: 'Executive summary evidence generation check',
+    capability: 'research'
+  });
+
+  assert.equal(result.report.executiveSummary, result.report.synthesis.executiveSummary);
+  assert.match(result.report.executiveSummary, /Strongest finding:/);
+  assert.match(result.report.executiveSummary, /Highest-importance belief:/);
+  assert.match(result.report.executiveSummary, /Readiness: READY_WITH_CONDITIONS/);
+  assert.match(result.report.executiveSummary, /Primary executive tension:/);
+});
+
+test('research executive summary placeholder no longer exists', async () => {
+  const provider = {
+    identity: () => ({ vendor: 'TestProvider' }),
+    execute: async () => ({ payload: 'ok' })
+  };
+  const coordinator = new ResearchCoordinator({
+    route: () => ({ capability: 'research', providers: [provider] })
+  });
+
+  const result = await coordinator.research({
+    id: 'REQ-012',
+    objective: 'Executive summary placeholder removal check',
+    capability: 'research'
+  });
+
+  assert.notEqual(result.report.executiveSummary, 'Synthesis not yet implemented.');
+  assert.notEqual(result.report.executiveSummary, 'Pending synthesis');
 });
