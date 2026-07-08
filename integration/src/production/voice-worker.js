@@ -23,7 +23,7 @@ export class VoiceWorker {
       completedAt: 'COMPLETED_AT_PLACEHOLDER',
       status: 'COMPLETED'
     };
-    const voiceOutput = this.voiceService.synthesizeVoice(metadata);
+    const voiceOutput = await this.voiceService.synthesizeVoice(metadata);
 
     const result = {
       audioFile: voiceOutput.audioFile,
@@ -43,8 +43,14 @@ export class VoiceWorker {
 
     return {
       script: metadata.script ?? task.script ?? 'Script unavailable',
+      voiceId: metadata.voiceId ?? task.voiceId ?? 'EXAVITQu4vr4xnSDxMaL',
       voiceStyle: metadata.voiceStyle ?? task.voiceStyle ?? 'Neutral Narration',
+      style: metadata.style ?? task.style ?? 0.5,
+      stability: metadata.stability ?? task.stability ?? 0.5,
+      similarityBoost: metadata.similarityBoost ?? task.similarityBoost ?? 0.75,
       language: metadata.language ?? task.language ?? 'en-US',
+      businessId: metadata.businessId ?? task.businessId ?? 'BUSINESS_ID_PLACEHOLDER',
+      missionId: metadata.missionId ?? task.missionId ?? 'MISSION_ID_PLACEHOLDER',
       targetDuration: metadata.targetDuration ?? task.targetDuration ?? 60
     };
   }
