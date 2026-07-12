@@ -1,0 +1,230 @@
+{
+  "meta": {
+    "registryName": "Atlas Workforce Registry",
+    "version": 1,
+    "createdAt": "2026-07-10T00:00:00.000Z",
+    "updatedAt": "2026-07-10T22:40:39.916Z"
+  },
+  "specialists": [],
+  "categoryStandings": {
+    "Research": {
+      "category": "Research",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Long-form Writing": {
+      "category": "Long-form Writing",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Editing": {
+      "category": "Editing",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Fact Verification": {
+      "category": "Fact Verification",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Narration": {
+      "category": "Narration",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Image Generation": {
+      "category": "Image Generation",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Video Generation": {
+      "category": "Video Generation",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Music": {
+      "category": "Music",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Translation": {
+      "category": "Translation",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Coding": {
+      "category": "Coding",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Data Analysis": {
+      "category": "Data Analysis",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Marketing Copy": {
+      "category": "Marketing Copy",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "SEO": {
+      "category": "SEO",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Publishing": {
+      "category": "Publishing",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    },
+    "Analytics": {
+      "category": "Analytics",
+      "currentChampion": null,
+      "runnerUp": null,
+      "otherCandidates": [],
+      "lastUpdatedAt": "2026-07-10T22:39:28.157Z"
+    }
+  },
+  "benchmarkSchedules": {
+    "Research": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Long-form Writing": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Editing": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Fact Verification": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Narration": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Image Generation": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Video Generation": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Music": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Translation": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Coding": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Data Analysis": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Marketing Copy": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "SEO": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Publishing": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    },
+    "Analytics": {
+      "cadence": "P30D",
+      "lastRunAt": null,
+      "nextRunDueAt": null,
+      "active": true
+    }
+  },
+  "eventHistory": [
+    {
+      "type": "WORKFORCE_MARKET_DISCOVERY_COMPLETED",
+      "payload": {
+        "category": "Market Research Specialist",
+        "candidateCount": 8,
+        "topCandidate": "NielsenIQ (incl. Nielsen)",
+        "requiresCeoApprovalBeforeBenchmark": true
+      },
+      "timestamp": "2026-07-10T22:40:39.916Z"
+    },
+    {
+      "type": "WORKFORCE_MARKET_DISCOVERY_COMPLETED",
+      "payload": {
+        "category": "Website Generation",
+        "candidateCount": 6,
+        "topCandidate": "Webflow",
+        "requiresCeoApprovalBeforeBenchmark": true
+      },
+      "timestamp": "2026-07-10T22:39:54.755Z"
+    }
+  ]
+}

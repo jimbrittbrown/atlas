@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "registryName": "Atlas Specialist Registry",
+    "version": 1,
+    "createdAt": "2026-07-10T00:00:00.000Z",
+    "updatedAt": "2026-07-10T19:40:00.622Z"
+  },
+  "categories": {
+    "documentary-writing": {
+      "currentChampion": {
+        "providerId": "perplexity",
+        "modelId": "sonar-pro",
+        "overallExecutiveProducerScore": 6.6,
+        "goldStandardCompliance": 4.6,
+        "factualPreservation": 0.63,
+        "runtimeMs": 55430,
+        "cost": 0.21618,
+        "weaknesses": {
+          "weakCategories": [
+            {
+              "category": "factualPreservation",
+              "score": 0.63
+            },
+            {
+              "category": "curiosity",
+              "score": 3
+            },
+            {
+              "category": "hook",
+              "score": 4
+            },
+            {
+              "category": "estimatedNarrationQuality",
+              "score": 4
+            },
+            {
+              "category": "goldStandardCompliance",
+              "score": 4.6
+            }
+          ],
+          "editorialIssueTypes": [
+            "repetition",
+            "repetition",
+            "abstraction-overload",
+            "ending-impact"
+          ],
+          "recommendationSignals": [
+            "Strengthen the first 15 seconds with clearer stakes and a sharper opening hook.",
+            "Increase unresolved but meaningful questions that motivate continuation.",
+            "Rewrite SCENE-001: Low curiosity retention risk; add stronger open loops and tension.",
+            "Rewrite SCENE-003: Low curiosity retention risk; add stronger open loops and tension.",
+            "Rewrite SCENE-004: Low curiosity retention risk; add stronger open loops and tension."
+          ],
+          "factualStatus": "REVIEW_REQUIRED"
+        }
+      },
+      "runnerUp": null,
+      "lastBenchmarkId": "DOC-WRITER-BENCH-1783712400622",
+      "rerunPolicy": {
+        "cadence": "P30D",
+        "nextRunDueAt": "2026-08-09T19:40:00.622Z"
+      },
+      "latestBenchmarkSummary": {
+        "benchmarkId": "DOC-WRITER-BENCH-1783712400622",
+        "runAt": "2026-07-10T19:40:00.622Z",
+        "recommendation": {
+          "recommendation": "HIRE_CURRENT_CHAMPION",
+          "rationale": "Champion selected by benchmark score hierarchy for documentary-writing.",
+          "champion": {
+            "providerId": "perplexity",
+            "modelId": "sonar-pro",
+            "overallExecutiveProducerScore": 6.6,
+            "goldStandardCompliance": 4.6,
+            "factualPreservation": 0.63,
+            "runtimeMs": 55430,
+            "cost": 0.21618,
+            "weaknesses": {
+              "weakCategories": [
+                {
+                  "category": "factualPreservation",
+                  "score": 0.63
+                },
+                {
+                  "category": "curiosity",
+                  "score": 3
+                },
+                {
+                  "category": "hook",
+                  "score": 4
+                },
+                {
+                  "category": "estimatedNarrationQuality",
+                  "score": 4
+                },
+                {
+                  "category": "goldStandardCompliance",
+                  "score": 4.6
+                }
+              ],
+              "editorialIssueTypes": [
+                "repetition",
+                "repetition",
+                "abstraction-overload",
+                "ending-impact"
+              ],
+              "recommendationSignals": [
+                "Strengthen the first 15 seconds with clearer stakes and a sharper opening hook.",
+                "Increase unresolved but meaningful questions that motivate continuation.",
+                "Rewrite SCENE-001: Low curiosity retention risk; add stronger open loops and tension.",
+                "Rewrite SCENE-003: Low curiosity retention risk; add stronger open loops and tension.",
+                "Rewrite SCENE-004: Low curiosity retention risk; add stronger open loops and tension."
+              ],
+              "factualStatus": "REVIEW_REQUIRED"
+            }
+          },
+          "runnerUp": null,
+          "unavailableProviders": [
+            "anthropic",
+            "gemini",
+            "openai"
+          ]
+        },
+        "activeProviderCount": 1,
+        "unavailableProviderCount": 3
+      }
+    }
+  },
+  "benchmarkHistory": [
+    {
+      "benchmarkId": "DOC-WRITER-BENCH-1783712400622",
+      "benchmarkType": "documentary-writing",
+      "runAt": "2026-07-10T19:40:00.622Z",
+      "champion": {
+        "providerId": "perplexity",
+        "modelId": "sonar-pro",
+        "overallExecutiveProducerScore": 6.6
+      },
+      "providerCount": 4
+    }
+  ]
+}
