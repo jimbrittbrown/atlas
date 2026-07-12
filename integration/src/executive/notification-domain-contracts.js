@@ -279,7 +279,9 @@ export const NotificationTemplateStates = Object.freeze({
 export const NotificationConsentStates = Object.freeze({
   OPTED_IN: 'OPTED_IN',
   OPTED_OUT: 'OPTED_OUT',
-  REQUIRED_TRANSACTIONAL_ONLY: 'REQUIRED_TRANSACTIONAL_ONLY',
+  REQUIRED_TRANSACTIONAL: 'REQUIRED_TRANSACTIONAL',
+  REQUIRED_TRANSACTIONAL_ONLY: 'REQUIRED_TRANSACTIONAL',
+  REQUIRED_SECURITY: 'REQUIRED_SECURITY',
   UNKNOWN: 'UNKNOWN'
 });
 
@@ -330,6 +332,7 @@ export const NotificationIntentStateTransitions = Object.freeze({
   [NotificationIntentStates.BLOCKED]: Object.freeze([NotificationIntentStates.CLOSED]),
   [NotificationIntentStates.DEFERRED]: Object.freeze([NotificationIntentStates.POLICY_PENDING, NotificationIntentStates.EXPIRED, NotificationIntentStates.CLOSED]),
   [NotificationIntentStates.APPROVAL_PENDING]: Object.freeze([
+    NotificationIntentStates.POLICY_PENDING,
     NotificationIntentStates.ELIGIBLE,
     NotificationIntentStates.BLOCKED,
     NotificationIntentStates.EXPIRED,
