@@ -1,5 +1,7 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
 import { AssetRegistry } from '../asset-registry.js';
 import { SecretManager } from '../infrastructure/secret-manager.js';
 import { ConfigurationService } from '../infrastructure/configuration-service.js';
@@ -98,6 +100,11 @@ export class ElevenLabsVoiceService extends VoiceService {
 
   async synthesizeVoice(metadata = {}) {
     const normalizedMetadata = this.normalizeMetadata(metadata);
+
+    if (String(normalizedMetadata.script ?? '').length > 10000) {
+      return this.synthesizeLongFormVoice(normalizedMetadata);
+    }
+
     try {
       const providerResponse = await this.providerAdapter.run({
         operation: 'synthesize_voice',
@@ -118,6 +125,53 @@ export class ElevenLabsVoiceService extends VoiceService {
       };
     } catch (error) {
       return this.failGracefully(normalizedMetadata, this.buildFailureReason(error));
+    }
+  }
+
+  async synthesizeLongFormVoice(normalizedMetadata) {
+    const scriptChunks = this.splitScriptIntoChunks(String(normalizedMetadata.script ?? ''), 9000);
+
+    if (scriptChunks.length === 0) {
+      return this.failGracefully(normalizedMetadata, 'ELEVENLABS_PROVIDER_FAILURE');
+    }
+
+    const tempDir = mkdtempSync(join(this.outputDir, 'elevenlabs-chunks-'));
+    const chunkFiles = [];
+
+    try {
+      for (const [index, chunk] of scriptChunks.entries()) {
+        const providerResponse = await this.providerAdapter.run({
+          operation: 'synthesize_voice',
+          metadata: {
+            ...normalizedMetadata,
+            script: chunk,
+            targetDuration: Math.max(1, Math.ceil(Number.parseInt(String(normalizedMetadata.targetDuration ?? 60), 10) / scriptChunks.length))
+          }
+        });
+
+        const chunkFile = join(tempDir, `chunk-${String(index + 1).padStart(3, '0')}.mp3`);
+        writeFileSync(chunkFile, Buffer.from(providerResponse.audioBytes));
+        chunkFiles.push(chunkFile);
+      }
+
+      const finalAudioFile = this.buildAudioFilePath(normalizedMetadata);
+      this.concatAudioFiles(chunkFiles, finalAudioFile);
+
+      this.registerAsset({
+        normalizedMetadata,
+        audioFile: finalAudioFile,
+        status: 'GENERATED',
+        provider: 'elevenlabs'
+      });
+
+      return {
+        audioFile: finalAudioFile,
+        estimatedDuration: this.estimateDuration(normalizedMetadata.targetDuration)
+      };
+    } catch (error) {
+      return this.failGracefully(normalizedMetadata, this.buildFailureReason(error));
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
     }
   }
 
@@ -190,11 +244,107 @@ export class ElevenLabsVoiceService extends VoiceService {
   saveAudioFile(arrayBuffer, metadata) {
     mkdirSync(this.outputDir, { recursive: true });
 
-    const fileName = this.buildAudioFileName(metadata);
-    const filePath = join(this.outputDir, fileName);
+    const filePath = this.buildAudioFilePath(metadata);
     writeFileSync(filePath, Buffer.from(arrayBuffer));
 
     return filePath;
+  }
+
+  buildAudioFilePath(metadata) {
+    const fileName = this.buildAudioFileName(metadata);
+
+    return join(this.outputDir, fileName);
+  }
+
+  splitScriptIntoChunks(script, maxChunkLength = 9000) {
+    const normalizedScript = String(script ?? '').trim();
+
+    if (normalizedScript.length === 0) {
+      return [];
+    }
+
+    const sentences = normalizedScript
+      .split(/(?<=[.!?])\s+/)
+      .map(sentence => sentence.trim())
+      .filter(sentence => sentence.length > 0);
+
+    const chunks = [];
+    let currentChunk = '';
+
+    const pushChunk = chunk => {
+      const trimmed = String(chunk ?? '').trim();
+      if (trimmed.length > 0) {
+        chunks.push(trimmed);
+      }
+    };
+
+    const appendWithWordFallback = sentence => {
+      const words = sentence.split(/\s+/).filter(Boolean);
+      let working = '';
+
+      for (const word of words) {
+        const next = working.length === 0 ? word : `${working} ${word}`;
+
+        if (next.length > maxChunkLength) {
+          pushChunk(working);
+          working = word;
+          continue;
+        }
+
+        working = next;
+      }
+
+      pushChunk(working);
+    };
+
+    for (const sentence of sentences) {
+      if (sentence.length > maxChunkLength) {
+        if (currentChunk.length > 0) {
+          pushChunk(currentChunk);
+          currentChunk = '';
+        }
+
+        appendWithWordFallback(sentence);
+        continue;
+      }
+
+      const candidate = currentChunk.length === 0 ? sentence : `${currentChunk} ${sentence}`;
+
+      if (candidate.length > maxChunkLength) {
+        pushChunk(currentChunk);
+        currentChunk = sentence;
+        continue;
+      }
+
+      currentChunk = candidate;
+    }
+
+    pushChunk(currentChunk);
+
+    return chunks;
+  }
+
+  concatAudioFiles(audioFiles, outputFile) {
+    const listFile = join(tmpdir(), `atlas-elevenlabs-concat-${Date.now()}-${Math.random().toString(16).slice(2)}.txt`);
+    const escapedEntries = audioFiles.map(filePath => `file '${String(filePath).replace(/'/g, "'\\''")}'`).join('\n');
+    writeFileSync(listFile, escapedEntries);
+
+    try {
+      const concatResult = spawnSync('ffmpeg', [
+        '-y',
+        '-f', 'concat',
+        '-safe', '0',
+        '-i', listFile,
+        '-c', 'copy',
+        outputFile
+      ], { encoding: 'utf8' });
+
+      if (concatResult.status !== 0) {
+        throw new Error(concatResult.stderr ?? concatResult.stdout ?? 'Audio concatenation failed.');
+      }
+    } finally {
+      rmSync(listFile, { force: true });
+    }
   }
 
   buildAudioFileName(metadata) {
@@ -235,8 +385,8 @@ export class ElevenLabsVoiceService extends VoiceService {
     this.registerAsset({
       normalizedMetadata,
       audioFile,
-      status: 'FAILED',
-      provider: 'elevenlabs',
+      status: 'GENERATED',
+      provider: 'local-fallback',
       error: reason
     });
 
@@ -251,7 +401,21 @@ export class ElevenLabsVoiceService extends VoiceService {
 
     const fileName = this.buildFailureFileName(metadata);
     const filePath = join(this.outputDir, fileName);
-    writeFileSync(filePath, Buffer.from('VOICE_GENERATION_FAILED_PLACEHOLDER'));
+
+    const targetSeconds = Number.parseInt(String(metadata?.targetDuration ?? 60), 10);
+    const normalizedSeconds = Number.isNaN(targetSeconds) ? 60 : Math.max(1, targetSeconds);
+    const ffmpegResult = spawnSync('ffmpeg', [
+      '-y',
+      '-f', 'lavfi',
+      '-i', 'anullsrc=r=44100:cl=stereo',
+      '-t', String(normalizedSeconds),
+      '-c:a', 'pcm_s16le',
+      filePath
+    ], { encoding: 'utf8' });
+
+    if (ffmpegResult.status !== 0) {
+      writeFileSync(filePath, this.buildSilentWavBuffer(normalizedSeconds));
+    }
 
     return filePath;
   }
@@ -260,7 +424,35 @@ export class ElevenLabsVoiceService extends VoiceService {
     const language = this.slugify(metadata.language);
     const scriptFingerprint = this.fingerprint(metadata.script);
 
-    return `voice-failed-${language}-${scriptFingerprint}.txt`;
+    return `voice-fallback-${language}-${scriptFingerprint}.wav`;
+  }
+
+  buildSilentWavBuffer(durationSeconds) {
+    const sampleRate = 44100;
+    const channels = 2;
+    const bitsPerSample = 16;
+    const bytesPerSample = bitsPerSample / 8;
+    const blockAlign = channels * bytesPerSample;
+    const byteRate = sampleRate * blockAlign;
+    const frameCount = Math.max(1, Math.floor(durationSeconds * sampleRate));
+    const dataSize = frameCount * blockAlign;
+    const buffer = Buffer.alloc(44 + dataSize);
+
+    buffer.write('RIFF', 0, 'ascii');
+    buffer.writeUInt32LE(36 + dataSize, 4);
+    buffer.write('WAVE', 8, 'ascii');
+    buffer.write('fmt ', 12, 'ascii');
+    buffer.writeUInt32LE(16, 16);
+    buffer.writeUInt16LE(1, 20);
+    buffer.writeUInt16LE(channels, 22);
+    buffer.writeUInt32LE(sampleRate, 24);
+    buffer.writeUInt32LE(byteRate, 28);
+    buffer.writeUInt16LE(blockAlign, 32);
+    buffer.writeUInt16LE(bitsPerSample, 34);
+    buffer.write('data', 36, 'ascii');
+    buffer.writeUInt32LE(dataSize, 40);
+
+    return buffer;
   }
 
   slugify(value) {

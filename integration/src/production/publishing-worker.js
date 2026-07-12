@@ -1,10 +1,28 @@
 import { WorkerAssignment } from '../worker-assignment.js';
-import { PlaceholderPublishingService } from '../services/publishing-service.js';
+import { PlaceholderPublishingService, YouTubePublishingService } from '../services/publishing-service.js';
+import { ConfigurationService } from '../infrastructure/configuration-service.js';
 
 export class PublishingWorker {
-  constructor({ programManager = null, publishingService = null } = {}) {
+  constructor({ programManager = null, publishingService = null, configurationService = null } = {}) {
     this.programManager = programManager;
-    this.publishingService = publishingService ?? new PlaceholderPublishingService();
+    this.configurationService = configurationService ?? new ConfigurationService();
+    this.publishingService = publishingService ?? this.createDefaultPublishingService();
+  }
+
+  createDefaultPublishingService() {
+    const hasConfiguredYouTubeSecrets = this.configurationService
+      .secretManager
+      .getProviderSecrets('youtube')
+      .missingRequiredSecrets
+      .length === 0;
+
+    if (this.configurationService.getEnvironment() === 'production' && hasConfiguredYouTubeSecrets) {
+      return new YouTubePublishingService({
+        configurationService: this.configurationService
+      });
+    }
+
+    return new PlaceholderPublishingService();
   }
 
   async execute(assignment) {
@@ -16,7 +34,7 @@ export class PublishingWorker {
 
     const task = assignment.result?.task ?? {};
     const metadata = this.extractMetadata(task);
-    const validation = this.publishingService.validatePublishRequest(metadata);
+    const validation = await this.publishingService.validatePublishRequest(metadata);
 
     if (!validation.isValid) {
       const completionReport = this.buildCompletionReport(assignment, 'BLOCKED');
@@ -34,17 +52,29 @@ export class PublishingWorker {
       return blockedResult;
     }
 
-    const completionReport = this.buildCompletionReport(assignment, 'COMPLETED');
-    const publishPackage = this.publishingService.preparePublishPackage({ assignment, metadata });
+    const publishPackage = await this.publishingService.preparePublishPackage({ assignment, metadata });
+    const isSuccessfulPublish = this.isSuccessfulPublishStatus(publishPackage.publishStatus);
+    const completionReport = this.buildCompletionReport(assignment, isSuccessfulPublish ? 'COMPLETED' : 'BLOCKED');
     const result = {
       publishId: publishPackage.publishId,
       platform: publishPackage.platform,
       publishStatus: publishPackage.publishStatus,
       publishUrl: publishPackage.publishUrl,
+      videoId: publishPackage.videoId ?? null,
+      visibility: publishPackage.visibility ?? metadata.visibility,
+      thumbnailStatus: publishPackage.thumbnailStatus ?? 'SKIPPED',
+      metadataApplied: publishPackage.metadataApplied ?? false,
+      error: publishPackage.error ?? null,
+      errorDetails: publishPackage.errorDetails ?? null,
+      thumbnailErrorDetails: publishPackage.thumbnailErrorDetails ?? null,
       completionReport
     };
 
-    assignment.complete(result, completionReport.completedAt);
+    if (isSuccessfulPublish) {
+      assignment.complete(result, completionReport.completedAt);
+    } else {
+      assignment.block(result, completionReport.completedAt);
+    }
     this.reportCompletion(assignment);
 
     return result;
@@ -59,9 +89,59 @@ export class PublishingWorker {
       title: metadata.title ?? task.title ?? null,
       description: metadata.description ?? task.description ?? null,
       tags: Array.isArray(metadata.tags ?? task.tags) ? [...(metadata.tags ?? task.tags)] : [],
+      categoryId: metadata.categoryId ?? task.categoryId ?? '22',
+      visibility: 'private',
+      publishTime: metadata.publishTime ?? task.publishTime ?? null,
       targetPlatform: metadata.targetPlatform ?? task.targetPlatform ?? 'youtube',
-      scheduledPublishTime: metadata.scheduledPublishTime ?? task.scheduledPublishTime ?? 'SCHEDULED_PUBLISH_TIME_PLACEHOLDER'
+      scheduledPublishTime: metadata.scheduledPublishTime ?? task.scheduledPublishTime ?? 'SCHEDULED_PUBLISH_TIME_PLACEHOLDER',
+      businessId: metadata.businessId ?? task.businessId ?? 'BUSINESS_ID_PLACEHOLDER',
+      missionId: metadata.missionId ?? task.missionId ?? 'MISSION_ID_PLACEHOLDER'
     };
+  }
+
+  validatePublishRequest(metadata = {}) {
+    const checks = {
+      videoAsset: this.isApprovedProductionAsset(metadata.videoAsset),
+      title: this.isNonEmptyString(metadata.title),
+      description: this.isNonEmptyString(metadata.description),
+      targetPlatform: this.isNonEmptyString(metadata.targetPlatform)
+    };
+
+    const missingFields = Object.entries(checks)
+      .filter(([, present]) => present === false)
+      .map(([field]) => field);
+
+    return {
+      isValid: missingFields.length === 0,
+      missingFields,
+      checkedFields: {
+        ...checks,
+        thumbnailAsset: this.isNonEmptyString(metadata.thumbnailAsset)
+          ? this.isApprovedProductionAsset(metadata.thumbnailAsset)
+          : true
+      }
+    };
+  }
+
+  isApprovedProductionAsset(value) {
+    if (!this.isReadableFile(value)) {
+      return false;
+    }
+
+    const normalizedPath = String(value).toLowerCase();
+    const blockedSegments = ['/probe/', '/test/', '/fixture/', '/placeholder/'];
+
+    return !blockedSegments.some(segment => normalizedPath.includes(segment));
+  }
+
+  isReadableFile(value) {
+    return typeof value === 'string' && value.trim().length > 0;
+  }
+
+  isSuccessfulPublishStatus(status) {
+    const normalizedStatus = String(status ?? '').toUpperCase().trim();
+
+    return normalizedStatus === 'SCHEDULED' || normalizedStatus.startsWith('PUBLISHED');
   }
 
   buildCompletionReport(assignment, status) {

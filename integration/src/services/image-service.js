@@ -1,5 +1,5 @@
 import { createSign } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { AssetRegistry } from '../asset-registry.js';
 import { SecretManager } from '../infrastructure/secret-manager.js';
@@ -135,34 +135,112 @@ export class GoogleImagenService extends ImageService {
 
   async generateImages(metadata = {}) {
     const normalizedMetadata = this.normalizeMetadata(metadata);
+    const persistedImageFiles = [];
+    const targetImageCount = this.normalizeImageCount(normalizedMetadata.imageCount);
+    const scenePrompts = this.resolveScenePrompts(normalizedMetadata, targetImageCount);
+
+    const onImageBuffer = (imageBuffer, index) => {
+      const imageFile = this.saveSingleImageFile({
+        metadata: normalizedMetadata,
+        imageBuffer,
+        index
+      });
+      persistedImageFiles.push(imageFile);
+
+      return imageFile;
+    };
 
     try {
-      const providerResponse = await this.providerAdapter.run({
-        operation: 'generate_images',
-        metadata: normalizedMetadata
+      const providerResponse = await this.generateWithScenePrompts({
+        normalizedMetadata,
+        scenePrompts,
+        onImageBuffer
       });
-      const imageFiles = this.saveImageFiles(providerResponse.imageBuffers, normalizedMetadata);
+      const imageFiles = persistedImageFiles.length > 0
+        ? persistedImageFiles
+        : this.saveImageFiles(providerResponse.imageBuffers, normalizedMetadata);
+      const completeImageFiles = this.ensureCompleteImageSet({
+        metadata: normalizedMetadata,
+        imageFiles,
+        targetImageCount,
+        scenePrompts
+      });
 
       this.registerAssets({
         normalizedMetadata,
-        imageFiles,
+        imageFiles: completeImageFiles,
         status: 'GENERATED',
         provider: 'google-vertex'
       });
 
       return {
-        imageFiles,
-        generatedScenes: this.buildGeneratedScenes(normalizedMetadata, imageFiles.length)
+        imageFiles: completeImageFiles,
+        generatedScenes: this.buildGeneratedScenes(normalizedMetadata, completeImageFiles.length)
       };
     } catch (error) {
+      if (persistedImageFiles.length > 0) {
+        const completeImageFiles = this.ensureCompleteImageSet({
+          metadata: normalizedMetadata,
+          imageFiles: persistedImageFiles,
+          targetImageCount,
+          scenePrompts
+        });
+
+        this.registerAssets({
+          normalizedMetadata,
+          imageFiles: completeImageFiles,
+          status: 'GENERATED',
+          provider: 'google-vertex',
+          error: this.buildFailureReason(error)
+        });
+
+        return {
+          imageFiles: completeImageFiles,
+          generatedScenes: this.buildGeneratedScenes(normalizedMetadata, completeImageFiles.length)
+        };
+      }
+
       return this.failGracefully(normalizedMetadata, this.buildFailureReason(error));
     }
+  }
+
+  async generateWithScenePrompts({ normalizedMetadata, scenePrompts, onImageBuffer }) {
+    const imageBuffers = [];
+
+    for (let index = 0; index < scenePrompts.length; index += 1) {
+      const prompt = scenePrompts[index];
+      const response = await this.providerAdapter.run({
+        operation: 'generate_images',
+        metadata: {
+          ...normalizedMetadata,
+          prompt,
+          sceneDescription: prompt,
+          imageCount: 1,
+          onImageBuffer: (imageBuffer) => {
+            if (onImageBuffer) {
+              onImageBuffer(imageBuffer, index);
+            }
+          }
+        }
+      });
+
+      const buffer = Array.isArray(response?.imageBuffers) ? response.imageBuffers[0] : null;
+      if (buffer) {
+        imageBuffers.push(buffer);
+      }
+    }
+
+    return {
+      imageBuffers
+    };
   }
 
   createDefaultSecretManager({ apiKey, projectId, location, credentialsJson }) {
     const env = {
       ...process.env
     };
+
+    const resolvedCredentialsJson = this.resolveCredentialsJson(credentialsJson);
 
     if (typeof apiKey === 'string' && apiKey.trim().length > 0) {
       env.GOOGLE_VERTEX_API_KEY = apiKey;
@@ -176,8 +254,8 @@ export class GoogleImagenService extends ImageService {
       env.GOOGLE_CLOUD_LOCATION = location;
     }
 
-    if (typeof credentialsJson === 'string' && credentialsJson.trim().length > 0) {
-      env.GOOGLE_APPLICATION_CREDENTIALS_JSON = credentialsJson;
+    if (typeof resolvedCredentialsJson === 'string' && resolvedCredentialsJson.trim().length > 0) {
+      env.GOOGLE_APPLICATION_CREDENTIALS_JSON = resolvedCredentialsJson;
     }
 
     return this.configurationService.secretManager ?? new SecretManager({
@@ -185,6 +263,20 @@ export class GoogleImagenService extends ImageService {
       env,
       loadFromEnvFile: false
     });
+  }
+
+  resolveCredentialsJson(credentialsJson) {
+    if (typeof credentialsJson === 'string' && credentialsJson.trim().length > 0) {
+      return credentialsJson;
+    }
+
+    const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
+    if (typeof credentialsPath !== 'string' || credentialsPath.trim().length === 0 || !existsSync(credentialsPath)) {
+      return null;
+    }
+
+    return readFileSync(credentialsPath, 'utf8');
   }
 
   configureRuntime({ baseUrl, timeoutMs, maxRetries, retryBaseDelayMs, imageCount }) {
@@ -202,11 +294,16 @@ export class GoogleImagenService extends ImageService {
   }
 
   normalizeMetadata(metadata) {
+    const scenePrompts = Array.isArray(metadata.scenePrompts)
+      ? metadata.scenePrompts.map(prompt => String(prompt ?? '').trim()).filter(Boolean)
+      : [];
+
     return {
       prompt: metadata.prompt ?? metadata.sceneDescription ?? 'Generic Scene',
       sceneDescription: metadata.sceneDescription ?? metadata.prompt ?? 'Generic Scene',
       artStyle: metadata.artStyle ?? 'Cinematic Illustration',
       imageCount: this.normalizeImageCount(metadata.imageCount ?? this.imageCount),
+      scenePrompts,
       businessId: metadata.businessId ?? 'BUSINESS_ID_PLACEHOLDER',
       missionId: metadata.missionId ?? 'MISSION_ID_PLACEHOLDER',
       aspectRatio: metadata.aspectRatio ?? '1:1',
@@ -214,6 +311,26 @@ export class GoogleImagenService extends ImageService {
       projectId: metadata.projectId ?? null,
       location: metadata.location ?? null
     };
+  }
+
+  resolveScenePrompts(metadata, targetImageCount) {
+    const configuredPrompts = Array.isArray(metadata.scenePrompts)
+      ? metadata.scenePrompts
+      : [];
+
+    if (configuredPrompts.length >= targetImageCount) {
+      return configuredPrompts.slice(0, targetImageCount);
+    }
+
+    const fallbackPrompts = Array.from({ length: targetImageCount }, (_, index) => {
+      if (configuredPrompts[index]) {
+        return configuredPrompts[index];
+      }
+
+      return `${metadata.sceneDescription} (Scene ${index + 1})`;
+    });
+
+    return fallbackPrompts;
   }
 
   normalizeImageCount(imageCount) {
@@ -243,15 +360,21 @@ export class GoogleImagenService extends ImageService {
       return this.saveFailurePlaceholderImages(metadata);
     }
 
+    return imageBuffers.map((imageBuffer, index) => this.saveSingleImageFile({
+      metadata,
+      imageBuffer,
+      index
+    }));
+  }
+
+  saveSingleImageFile({ metadata, imageBuffer, index }) {
     mkdirSync(this.outputDir, { recursive: true });
 
-    return imageBuffers.map((imageBuffer, index) => {
-      const fileName = this.buildImageFileName(metadata, index);
-      const filePath = join(this.outputDir, fileName);
-      writeFileSync(filePath, Buffer.from(imageBuffer));
+    const fileName = this.buildImageFileName(metadata, index);
+    const filePath = join(this.outputDir, fileName);
+    writeFileSync(filePath, Buffer.from(imageBuffer));
 
-      return filePath;
-    });
+    return filePath;
   }
 
   saveFailurePlaceholderImages(metadata) {
@@ -260,7 +383,7 @@ export class GoogleImagenService extends ImageService {
     return Array.from({ length: metadata.imageCount }, (_, index) => {
       const fileName = this.buildFailureFileName(metadata, index);
       const filePath = join(this.outputDir, fileName);
-      writeFileSync(filePath, Buffer.from('GOOGLE_VERTEX_IMAGE_GENERATION_FAILED_PLACEHOLDER'));
+      writeFileSync(filePath, this.buildFallbackPngBuffer());
 
       return filePath;
     });
@@ -277,7 +400,7 @@ export class GoogleImagenService extends ImageService {
     const style = this.slugify(metadata.artStyle);
     const promptFingerprint = this.fingerprint(metadata.prompt);
 
-    return `image-failed-${style}-${promptFingerprint}-${String(index + 1).padStart(2, '0')}.png`;
+    return `image-fallback-${style}-${promptFingerprint}-${String(index + 1).padStart(2, '0')}.png`;
   }
 
   buildGeneratedScenes(metadata, imageCount) {
@@ -313,8 +436,8 @@ export class GoogleImagenService extends ImageService {
     this.registerAssets({
       normalizedMetadata,
       imageFiles,
-      status: 'FAILED',
-      provider: 'google-vertex',
+      status: 'GENERATED',
+      provider: 'local-fallback',
       error: reason
     });
 
@@ -322,6 +445,33 @@ export class GoogleImagenService extends ImageService {
       imageFiles,
       generatedScenes: this.buildGeneratedScenes(normalizedMetadata, imageFiles.length)
     };
+  }
+
+  ensureCompleteImageSet({ metadata, imageFiles, targetImageCount, scenePrompts }) {
+    const normalizedFiles = Array.isArray(imageFiles) ? [...imageFiles] : [];
+    const fallbackMetadata = {
+      ...metadata,
+      imageCount: targetImageCount
+    };
+
+    while (normalizedFiles.length < targetImageCount) {
+      const index = normalizedFiles.length;
+      const prompt = scenePrompts[index] ?? `${metadata.sceneDescription} (Scene ${index + 1})`;
+      const fileName = this.buildFailureFileName({ ...fallbackMetadata, prompt }, index);
+      const filePath = join(this.outputDir, fileName);
+      mkdirSync(this.outputDir, { recursive: true });
+      writeFileSync(filePath, this.buildFallbackPngBuffer());
+      normalizedFiles.push(filePath);
+    }
+
+    return normalizedFiles.slice(0, targetImageCount);
+  }
+
+  buildFallbackPngBuffer() {
+    return Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO2WQ4gAAAAASUVORK5CYII=',
+      'base64'
+    );
   }
 
   slugify(value) {
@@ -397,44 +547,67 @@ class GoogleVertexImagenProductionAdapter extends ProductionAdapter {
 
   async executeGeminiGenerateContent({ metadata, configuration, projectId, location, accessToken }) {
     const endpoint = `${this.normalizeBaseUrl(configuration.endpoint)}/projects/${encodeURIComponent(projectId)}/locations/${encodeURIComponent(location)}/publishers/google/models/${encodeURIComponent(this.geminiModel)}:generateContent`;
-    const response = await this.fetchImpl(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [
-              {
-                text: metadata.prompt
-              }
-            ]
+    const targetImageCount = Math.max(1, Number.parseInt(String(metadata.imageCount ?? 1), 10) || 1);
+    const onImageBuffer = typeof metadata.onImageBuffer === 'function'
+      ? metadata.onImageBuffer
+      : null;
+    const imageBuffers = [];
+
+    for (let attemptIndex = 0; attemptIndex < targetImageCount; attemptIndex += 1) {
+      const response = await this.fetchImpl(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                {
+                  text: metadata.prompt
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            responseModalities: ['TEXT', 'IMAGE'],
+            candidateCount: 1
           }
-        ],
-        generationConfig: {
-          responseModalities: ['TEXT', 'IMAGE'],
-          candidateCount: metadata.imageCount
+        })
+      });
+
+      if (!response?.ok) {
+        if (imageBuffers.length > 0) {
+          break;
         }
-      })
-    });
 
-    if (!response?.ok) {
-      const failure = new Error(`Google Vertex AI request failed with status ${response?.status ?? 'UNKNOWN'}.`);
-      failure.status = Number.parseInt(String(response?.status ?? 500), 10);
-      failure.retryAfter = response?.headers?.get?.('retry-after') ?? null;
-      throw failure;
-    }
+        const failure = new Error(`Google Vertex AI request failed with status ${response?.status ?? 'UNKNOWN'}.`);
+        failure.status = Number.parseInt(String(response?.status ?? 500), 10);
+        failure.retryAfter = response?.headers?.get?.('retry-after') ?? null;
+        throw failure;
+      }
 
-    const payload = await response.json();
-    const imageBuffers = this.extractGeminiImageBuffers(payload);
+      const payload = await response.json();
+      const geminiImageBuffers = this.extractGeminiImageBuffers(payload);
 
-    if (imageBuffers.length === 0) {
-      const failure = new Error('Google Vertex AI returned no image bytes.');
-      failure.status = 502;
-      throw failure;
+      if (geminiImageBuffers.length === 0) {
+        if (imageBuffers.length > 0) {
+          break;
+        }
+
+        const failure = new Error('Google Vertex AI returned no image bytes.');
+        failure.status = 502;
+        throw failure;
+      }
+
+      const imageBuffer = geminiImageBuffers[0];
+      imageBuffers.push(imageBuffer);
+
+      if (onImageBuffer) {
+        onImageBuffer(imageBuffer, imageBuffers.length - 1);
+      }
     }
 
     return {

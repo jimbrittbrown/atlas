@@ -1,8 +1,10 @@
 import { WorkerAssignment } from '../worker-assignment.js';
+import { GoogleVideoAssemblyService } from '../services/video-service.js';
 
 export class VideoWorker {
-  constructor({ programManager = null } = {}) {
+  constructor({ programManager = null, videoService = null } = {}) {
     this.programManager = programManager;
+    this.videoService = videoService ?? null;
   }
 
   async execute(assignment) {
@@ -32,12 +34,50 @@ export class VideoWorker {
       return blockedResult;
     }
 
+    if (this.hasProductionVideoService()) {
+      const completionReport = this.buildCompletionReport(assignment, 'COMPLETED');
+      const renderedVideo = await this.videoService.generateVideo({
+        script: metadata.script,
+        voiceOutput: metadata.voiceOutput,
+        imageOutputs: metadata.imageOutputs,
+        timeline: metadata.timeline,
+        targetFormat: metadata.targetFormat,
+        targetResolution: metadata.targetResolution,
+        businessId: metadata.businessId,
+        missionId: metadata.missionId
+      });
+
+      const result = {
+        videoFile: renderedVideo.videoFile ?? renderedVideo.videoFilePath ?? null,
+        duration: renderedVideo.duration ?? this.estimateDuration(metadata.script),
+        validation,
+        status: renderedVideo.status ?? 'COMPLETED',
+        timelineSceneCount: Array.isArray(metadata.timeline?.scenes) ? metadata.timeline.scenes.length : 0,
+        inputImageCount: Array.isArray(metadata.imageOutputs) ? metadata.imageOutputs.length : 0,
+        diagnostics: renderedVideo.diagnostics ?? null,
+        completionReport
+      };
+
+      if (result.status === 'BLOCKED') {
+        assignment.block(result, completionReport.completedAt);
+      } else {
+        assignment.complete(result, completionReport.completedAt);
+      }
+
+      this.reportCompletion(assignment);
+
+      return result;
+    }
+
     const completionReport = this.buildCompletionReport(assignment, 'COMPLETED');
     const result = {
       videoFile: this.buildVideoFileName(metadata),
       duration: this.estimateDuration(metadata.script),
       validation,
       status: 'COMPLETED',
+      timelineSceneCount: Array.isArray(metadata.timeline?.scenes) ? metadata.timeline.scenes.length : 0,
+      inputImageCount: Array.isArray(metadata.imageOutputs) ? metadata.imageOutputs.length : 0,
+      diagnostics: null,
       completionReport
     };
 
@@ -47,6 +87,10 @@ export class VideoWorker {
     return result;
   }
 
+  hasProductionVideoService() {
+    return this.videoService !== null && typeof this.videoService.generateVideo === 'function';
+  }
+
   extractMetadata(task) {
     const metadata = task.metadata ?? {};
 
@@ -54,6 +98,7 @@ export class VideoWorker {
       script: metadata.script ?? task.script ?? null,
       voiceOutput: metadata.voiceOutput ?? task.voiceOutput ?? null,
       imageOutputs: metadata.imageOutputs ?? task.imageOutputs ?? null,
+      timeline: metadata.timeline ?? task.timeline ?? null,
       targetFormat: metadata.targetFormat ?? task.targetFormat ?? 'mp4',
       targetResolution: metadata.targetResolution ?? task.targetResolution ?? '1920x1080'
     };

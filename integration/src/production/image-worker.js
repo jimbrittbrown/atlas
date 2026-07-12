@@ -23,7 +23,7 @@ export class ImageWorker {
       completedAt: 'COMPLETED_AT_PLACEHOLDER',
       status: 'COMPLETED'
     };
-    const imageOutput = this.imageService.generateImages(metadata);
+    const imageOutput = await this.imageService.generateImages(metadata);
 
     const result = {
       imageFiles: imageOutput.imageFiles,
@@ -45,7 +45,11 @@ export class ImageWorker {
       script: metadata.script ?? task.script ?? 'Script unavailable',
       sceneDescription: metadata.sceneDescription ?? task.sceneDescription ?? 'Generic Scene',
       artStyle: metadata.artStyle ?? task.artStyle ?? 'Cinematic Illustration',
-      imageCount: metadata.imageCount ?? task.imageCount ?? 3
+      imageCount: metadata.imageCount ?? task.imageCount ?? 3,
+      scenePrompts: Array.isArray(metadata.scenePrompts) ? metadata.scenePrompts : [],
+      narrativeBeats: Array.isArray(metadata.narrativeBeats) ? metadata.narrativeBeats : [],
+      businessId: metadata.businessId ?? task.businessId ?? null,
+      missionId: metadata.missionId ?? task.missionId ?? null
     };
   }
 

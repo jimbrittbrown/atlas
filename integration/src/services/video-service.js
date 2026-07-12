@@ -6,6 +6,8 @@ import { AssetRegistry } from '../asset-registry.js';
 import { SecretManager } from '../infrastructure/secret-manager.js';
 import { ConfigurationService } from '../infrastructure/configuration-service.js';
 import { ProductionAdapter } from '../infrastructure/production-adapter.js';
+import { AtlasMediaEngineService } from '../media-engine/core/atlas-media-engine-service.js';
+import { LegacyVideoAssemblyCompatibilityAdapter } from '../media-engine/adapters/legacy-video-assembly-compatibility-adapter.js';
 
 export class VideoService {
   generateVideo() {
@@ -103,11 +105,29 @@ export class GoogleVideoAssemblyService extends VideoService {
       outputDir: this.outputDir,
       workerId: this.workerId
     });
+    this.mediaEngineService = new AtlasMediaEngineService({
+      engineId: 'media-engine',
+      engineVersion: '0.1.0'
+    });
+    this.compatibilityAdapter = new LegacyVideoAssemblyCompatibilityAdapter();
   }
 
   async generateVideo(metadata = {}) {
     const normalizedMetadata = this.normalizeMetadata(metadata);
+    const mediaRenderRequest = this.compatibilityAdapter.toMediaRenderRequest(normalizedMetadata);
 
+    await this.mediaEngineService.initialize({
+      source: 'GoogleVideoAssemblyService'
+    });
+
+    const engineExecution = await this.mediaEngineService.execute(mediaRenderRequest, {
+      executor: async (executionRequest) => this.generateVideoWithLegacyPipeline(executionRequest.metadata ?? normalizedMetadata)
+    });
+
+    return this.compatibilityAdapter.toLegacyVideoResult(engineExecution);
+  }
+
+  async generateVideoWithLegacyPipeline(normalizedMetadata) {
     try {
       const providerResponse = await this.providerAdapter.run({
         operation: 'generate_video',
@@ -126,17 +146,133 @@ export class GoogleVideoAssemblyService extends VideoService {
         videoFile,
         duration: this.estimateDuration(normalizedMetadata.script),
         validation: normalizedMetadata.validation,
-        status: 'COMPLETED'
+        status: 'COMPLETED',
+        diagnostics: providerResponse.diagnostics ?? null
       };
     } catch (error) {
+      const fallbackResult = this.generateVideoWithLocalFallback({ normalizedMetadata, error });
+
+      if (fallbackResult) {
+        this.registerAsset({
+          normalizedMetadata,
+          videoFile: fallbackResult.videoFile,
+          status: 'GENERATED',
+          provider: 'local-fallback'
+        });
+
+        return fallbackResult;
+      }
+
       return this.failGracefully(normalizedMetadata, this.buildFailureReason(error));
     }
+  }
+
+  generateVideoWithLocalFallback({ normalizedMetadata, error }) {
+    const narrationFile = String(normalizedMetadata?.voiceOutput ?? '').trim();
+    const imageOutputs = Array.isArray(normalizedMetadata?.imageOutputs)
+      ? normalizedMetadata.imageOutputs
+      : [];
+    const timelineScenes = Array.isArray(normalizedMetadata?.timeline?.scenes)
+      ? normalizedMetadata.timeline.scenes
+      : [];
+
+    if (narrationFile.length === 0 || imageOutputs.length === 0 || !existsSync(narrationFile)) {
+      return null;
+    }
+
+    const renderInstructions = (timelineScenes.length > 0 ? timelineScenes : imageOutputs.map(imageAsset => ({
+      imageAsset,
+      durationSeconds: 2
+    })))
+      .map((scene, index) => ({
+        imageAsset: scene.imageAsset ?? imageOutputs[index] ?? null,
+        durationSeconds: this.normalizeFallbackDuration(scene.durationSeconds)
+      }))
+      .filter(item => typeof item.imageAsset === 'string' && item.imageAsset.trim().length > 0 && existsSync(item.imageAsset));
+
+    if (renderInstructions.length === 0) {
+      return null;
+    }
+
+    mkdirSync(this.outputDir, { recursive: true });
+    const outputFile = join(this.outputDir, this.buildVideoFileName(normalizedMetadata));
+    const concatInputs = renderInstructions.flatMap(instruction => [
+      '-loop', '1',
+      '-t', String(instruction.durationSeconds),
+      '-i', instruction.imageAsset
+    ]);
+    const filterComplex = this.buildFallbackFilterComplex({
+      imageCount: renderInstructions.length,
+      targetResolution: normalizedMetadata.targetResolution
+    });
+
+    const command = [
+      '-y',
+      '-stream_loop', '-1',
+      '-i', narrationFile,
+      ...concatInputs,
+      '-filter_complex', filterComplex,
+      '-map', '[v]',
+      '-map', '0:a',
+      '-c:v', 'libx264',
+      '-c:a', 'aac',
+      '-shortest',
+      '-pix_fmt', 'yuv420p',
+      outputFile
+    ];
+
+    const ffmpegResult = spawnSync(this.ffmpegPath, command, {
+      encoding: 'utf8'
+    });
+
+    if (ffmpegResult.status !== 0 || !existsSync(outputFile)) {
+      return null;
+    }
+
+    const totalDurationSeconds = Math.round(
+      renderInstructions.reduce((sum, instruction) => sum + Number(instruction.durationSeconds ?? 0), 0)
+    );
+
+    return {
+      videoFile: outputFile,
+      duration: `${Math.max(1, totalDurationSeconds)} seconds`,
+      validation: normalizedMetadata.validation,
+      status: 'COMPLETED',
+      diagnostics: {
+        fallbackRenderer: true,
+        originalFailure: String(error?.message ?? error)
+      }
+    };
+  }
+
+  normalizeFallbackDuration(value) {
+    const parsed = Number(value);
+    if (Number.isNaN(parsed) || parsed <= 0) return 2;
+    return Math.round(parsed * 1000) / 1000;
+  }
+
+  buildFallbackFilterComplex({ imageCount, targetResolution }) {
+    const resolution = String(targetResolution ?? '1920x1080').replace('x', ':');
+
+    if (imageCount === 1) {
+      return `[1:v]scale=${resolution}:force_original_aspect_ratio=decrease,pad=${resolution}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p[v]`;
+    }
+
+    const scaledVideos = Array.from(
+      { length: imageCount },
+      (_, index) => `[${index + 1}:v]scale=${resolution}:force_original_aspect_ratio=decrease,pad=${resolution}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p[v${index}]`
+    );
+    const concatInputs = Array.from({ length: imageCount }, (_, index) => `[v${index}]`).join('');
+
+    return `${scaledVideos.join(';')};${concatInputs}concat=n=${imageCount}:v=1:a=0[v]`;
   }
 
   createDefaultSecretManager({ apiKey, projectId, location, credentialsJson }) {
     const env = {
       ...process.env
     };
+
+    const resolvedCredentialsJson = this.resolveCredentialsJson(credentialsJson);
 
     if (typeof apiKey === 'string' && apiKey.trim().length > 0) {
       env.GOOGLE_VERTEX_API_KEY = apiKey;
@@ -150,8 +286,8 @@ export class GoogleVideoAssemblyService extends VideoService {
       env.GOOGLE_CLOUD_LOCATION = location;
     }
 
-    if (typeof credentialsJson === 'string' && credentialsJson.trim().length > 0) {
-      env.GOOGLE_APPLICATION_CREDENTIALS_JSON = credentialsJson;
+    if (typeof resolvedCredentialsJson === 'string' && resolvedCredentialsJson.trim().length > 0) {
+      env.GOOGLE_APPLICATION_CREDENTIALS_JSON = resolvedCredentialsJson;
     }
 
     return this.configurationService.secretManager ?? new SecretManager({
@@ -159,6 +295,20 @@ export class GoogleVideoAssemblyService extends VideoService {
       env,
       loadFromEnvFile: false
     });
+  }
+
+  resolveCredentialsJson(credentialsJson) {
+    if (typeof credentialsJson === 'string' && credentialsJson.trim().length > 0) {
+      return credentialsJson;
+    }
+
+    const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
+    if (typeof credentialsPath !== 'string' || credentialsPath.trim().length === 0 || !existsSync(credentialsPath)) {
+      return null;
+    }
+
+    return readFileSync(credentialsPath, 'utf8');
   }
 
   configureRuntime({ baseUrl, timeoutMs, maxRetries, retryBaseDelayMs }) {
@@ -175,11 +325,31 @@ export class GoogleVideoAssemblyService extends VideoService {
   }
 
   normalizeMetadata(metadata) {
+    const timeline = Array.isArray(metadata.timeline)
+      ? {
+        scenes: metadata.timeline,
+        narrationDurationSeconds: metadata.narrationDurationSeconds ?? null
+      }
+      : (metadata.timeline && typeof metadata.timeline === 'object'
+        ? metadata.timeline
+        : {});
+
     return {
       script: metadata.script ?? 'Script unavailable',
       voiceOutput: metadata.voiceOutput ?? null,
       imageOutputs: Array.isArray(metadata.imageOutputs) ? [...metadata.imageOutputs] : [],
       subtitles: metadata.subtitles ?? null,
+      productionProfileId: metadata.productionProfileId ?? null,
+      featureFlags: (metadata.featureFlags && typeof metadata.featureFlags === 'object')
+        ? { ...metadata.featureFlags }
+        : {},
+      compositionPolicy: (metadata.compositionPolicy && typeof metadata.compositionPolicy === 'object')
+        ? { ...metadata.compositionPolicy }
+        : {},
+      timeline: {
+        scenes: Array.isArray(timeline.scenes) ? [...timeline.scenes] : [],
+        narrationDurationSeconds: timeline.narrationDurationSeconds ?? metadata.narrationDurationSeconds ?? null
+      },
       targetFormat: metadata.targetFormat ?? 'mp4',
       targetResolution: metadata.targetResolution ?? '1920x1080',
       businessId: metadata.businessId ?? 'BUSINESS_ID_PLACEHOLDER',
@@ -339,6 +509,7 @@ class GoogleVideoAssemblyProductionAdapter extends ProductionAdapter {
 
     const narrationFile = metadata.voiceOutput;
     const imageFiles = Array.isArray(metadata.imageOutputs) ? metadata.imageOutputs : [];
+    const renderInstructions = this.resolveRenderInstructions(metadata, imageFiles);
 
     if (typeof narrationFile !== 'string' || narrationFile.trim().length === 0) {
       throw new Error('Google Vertex AI video assembly failed.');
@@ -351,13 +522,15 @@ class GoogleVideoAssemblyProductionAdapter extends ProductionAdapter {
     const subtitlesFile = this.createSubtitlesFile(metadata);
     const workingDirectory = this.createWorkingDirectory(metadata);
     const outputFile = join(this.outputDir, this.buildVideoFileName(metadata));
-    const filterComplex = this.buildFilterComplex(imageFiles.length, metadata.targetResolution);
-    const concatInputs = imageFiles.flatMap(imageFile => ['-loop', '1', '-t', '2', '-i', imageFile]);
+    const filterBuild = this.buildFilterComplex(renderInstructions, metadata.targetResolution);
+    const filterComplex = filterBuild.filterComplex;
+    const concatInputs = renderInstructions.flatMap(instruction => ['-loop', '1', '-t', String(instruction.durationSeconds), '-i', instruction.imageAsset]);
     const subtitleArguments = subtitlesFile ? ['-i', subtitlesFile] : [];
-    const subtitleMapping = subtitlesFile ? ['-c:s', 'mov_text', '-map', `${imageFiles.length + 1}:s?`] : [];
+    const subtitleMapping = subtitlesFile ? ['-c:s', 'mov_text', '-map', `${renderInstructions.length + 1}:s?`] : [];
 
     const command = [
       '-y',
+      '-stream_loop', '-1',
       '-i', narrationFile,
       ...concatInputs,
       ...subtitleArguments,
@@ -398,13 +571,19 @@ class GoogleVideoAssemblyProductionAdapter extends ProductionAdapter {
     rmSync(workingDirectory, { recursive: true, force: true });
 
     return {
-      videoFilePath: outputFile
+      videoFilePath: outputFile,
+      diagnostics: {
+        xfadePathUsed: filterBuild.usedXfadePath,
+        transitionCount: filterBuild.transitionCount,
+        filterComplex
+      }
     };
   }
 
   normalizeResponse(rawResponse) {
     return {
-      videoFilePath: rawResponse.videoFilePath
+      videoFilePath: rawResponse.videoFilePath,
+      diagnostics: rawResponse.diagnostics ?? null
     };
   }
 
@@ -493,12 +672,187 @@ class GoogleVideoAssemblyProductionAdapter extends ProductionAdapter {
     return subtitlesPath;
   }
 
-  buildFilterComplex(imageCount, targetResolution) {
+  resolveRenderInstructions(metadata, imageFiles) {
+    const compositionInstructions = Array.isArray(metadata.compositionPlan?.renderInstructions)
+      ? metadata.compositionPlan.renderInstructions
+      : [];
+
+    if (compositionInstructions.length > 0) {
+      return compositionInstructions.map((instruction, index) => ({
+        imageAsset: instruction.imageAsset ?? imageFiles[index],
+        durationSeconds: this.normalizeSceneDuration(instruction.durationSeconds),
+        transitionPreset: {
+          presetId: instruction.transitionPreset?.presetId ?? 'TRANSITION_NONE',
+          policy: instruction.transitionPreset?.policy ?? 'CUT',
+          durationSeconds: this.normalizeTransitionDuration(instruction.transitionPreset?.durationSeconds),
+          parameters: {
+            ffmpegTransition: instruction.transitionPreset?.parameters?.ffmpegTransition ?? 'fade'
+          }
+        }
+      }));
+    }
+
+    return this.resolveTimelineScenes(metadata, imageFiles);
+  }
+
+  resolveTimelineScenes(metadata, imageFiles) {
+    const timelineScenes = Array.isArray(metadata.timeline?.scenes)
+      ? metadata.timeline.scenes
+      : [];
+
+    if (timelineScenes.length > 0) {
+      return timelineScenes.map((scene, index) => ({
+        imageAsset: scene.imageAsset ?? imageFiles[index],
+        durationSeconds: this.normalizeSceneDuration(scene.durationSeconds),
+        transitionPreset: {
+          presetId: 'TRANSITION_NONE',
+          policy: 'CUT',
+          durationSeconds: 0,
+          parameters: {
+            ffmpegTransition: 'fade'
+          }
+        }
+      }));
+    }
+
+    return imageFiles.map(imageAsset => ({
+      imageAsset,
+      durationSeconds: 2,
+      transitionPreset: {
+        presetId: 'TRANSITION_NONE',
+        policy: 'CUT',
+        durationSeconds: 0,
+        parameters: {
+          ffmpegTransition: 'fade'
+        }
+      }
+    }));
+  }
+
+  normalizeSceneDuration(value) {
+    const parsed = Number(value);
+
+    if (Number.isNaN(parsed) || parsed <= 0) {
+      return 2;
+    }
+
+    return Math.round(parsed * 1000) / 1000;
+  }
+
+  normalizeTransitionDuration(value) {
+    const parsed = Number(value);
+
+    if (Number.isNaN(parsed) || parsed < 0) {
+      return 0;
+    }
+
+    return Math.round(parsed * 1000) / 1000;
+  }
+
+  buildFilterComplex(renderInstructions, targetResolution) {
+    if (!this.hasEnabledTransitions(renderInstructions)) {
+      return {
+        filterComplex: this.buildLegacyFilterComplex(renderInstructions.length, targetResolution),
+        usedXfadePath: false,
+        transitionCount: 0
+      };
+    }
+
+    const transitionBuild = this.buildTransitionFilterComplex(renderInstructions, targetResolution);
+
+    if (transitionBuild.transitionCount === 0) {
+      return {
+        filterComplex: this.buildLegacyFilterComplex(renderInstructions.length, targetResolution),
+        usedXfadePath: false,
+        transitionCount: 0
+      };
+    }
+
+    return {
+      filterComplex: transitionBuild.filterComplex,
+      usedXfadePath: true,
+      transitionCount: transitionBuild.transitionCount
+    };
+  }
+
+  hasEnabledTransitions(renderInstructions) {
+    if (!Array.isArray(renderInstructions)) {
+      return false;
+    }
+
+    return renderInstructions.some(instruction => (
+      instruction.transitionPreset?.presetId !== 'TRANSITION_NONE'
+      && Number(instruction.transitionPreset?.durationSeconds ?? 0) > 0
+    ));
+  }
+
+  buildLegacyFilterComplex(imageCount, targetResolution) {
     const scale = this.normalizeResolution(targetResolution);
     const scaledVideos = Array.from({ length: imageCount }, (_, index) => `[${index + 1}:v]scale=${scale}:force_original_aspect_ratio=decrease,pad=${scale}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p[v${index}]`);
     const concatInputs = Array.from({ length: imageCount }, (_, index) => `[v${index}]`).join('');
 
     return `${scaledVideos.join(';')};${concatInputs}concat=n=${imageCount}:v=1:a=0[v]`;
+  }
+
+  buildTransitionFilterComplex(renderInstructions, targetResolution) {
+    const scale = this.normalizeResolution(targetResolution);
+    const scaledVideos = Array.from(
+      { length: renderInstructions.length },
+      (_, index) => `[${index + 1}:v]scale=${scale}:force_original_aspect_ratio=decrease,pad=${scale}:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,format=yuv420p[v${index}]`
+    );
+
+    let currentLabel = '[v0]';
+    let offsetSeconds = Number(renderInstructions[0]?.durationSeconds ?? 0);
+    const transitionChains = [];
+    let transitionCount = 0;
+
+    for (let index = 1; index < renderInstructions.length; index += 1) {
+      const previousInstruction = renderInstructions[index - 1] ?? {};
+      const transitionDuration = this.computeSafeTransitionDuration({
+        requestedDuration: previousInstruction.transitionPreset?.durationSeconds,
+        previousSceneDuration: previousInstruction.durationSeconds,
+        nextSceneDuration: renderInstructions[index]?.durationSeconds
+      });
+
+      if (transitionDuration <= 0 || previousInstruction.transitionPreset?.presetId === 'TRANSITION_NONE') {
+        const outLabel = `vx${index}`;
+        transitionChains.push(`${currentLabel}[v${index}]concat=n=2:v=1:a=0[${outLabel}]`);
+        currentLabel = `[${outLabel}]`;
+        offsetSeconds += Number(renderInstructions[index]?.durationSeconds ?? 0);
+        continue;
+      }
+
+      const transitionType = String(previousInstruction.transitionPreset?.parameters?.ffmpegTransition ?? 'fade');
+      const outLabel = `vt${index}`;
+      const transitionOffset = Math.max(offsetSeconds - transitionDuration, 0);
+      transitionChains.push(`${currentLabel}[v${index}]xfade=transition=${transitionType}:duration=${transitionDuration}:offset=${transitionOffset}[${outLabel}]`);
+      currentLabel = `[${outLabel}]`;
+      offsetSeconds += Number(renderInstructions[index]?.durationSeconds ?? 0) - transitionDuration;
+      transitionCount += 1;
+    }
+
+    return {
+      filterComplex: `${scaledVideos.join(';')};${transitionChains.join(';')};${currentLabel}setpts=PTS-STARTPTS[v]`,
+      transitionCount
+    };
+  }
+
+  computeSafeTransitionDuration({ requestedDuration, previousSceneDuration, nextSceneDuration }) {
+    const requested = this.normalizeTransitionDuration(requestedDuration);
+
+    if (requested <= 0) {
+      return 0;
+    }
+
+    const previousLimit = Math.max(this.normalizeSceneDuration(previousSceneDuration) - 0.05, 0);
+    const nextLimit = Math.max(this.normalizeSceneDuration(nextSceneDuration) - 0.05, 0);
+    const safeMax = Math.min(previousLimit, nextLimit);
+
+    if (safeMax <= 0) {
+      return 0;
+    }
+
+    return Math.round(Math.min(requested, safeMax) * 1000) / 1000;
   }
 
   normalizeResolution(value) {
