@@ -1,5 +1,7 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 
+export const DEFAULT_DEVELOPMENT_ENVELOPE_KEY = 'atlas-dev-auth-envelope-key-v1';
+
 function normalizeKeyMaterial(value) {
   if (!value) return null;
   if (Buffer.isBuffer(value)) return value;
@@ -62,6 +64,7 @@ export class SecurityEnvelopeCrypto {
     this.algorithm = algorithm;
     this.keyRing = new Map();
     this.keyResolver = keyResolver;
+    this.fallbackSource = null;
 
     for (const [version, material] of Object.entries(keyRing ?? {})) {
       const key = normalizeKeyMaterial(material);
@@ -73,12 +76,19 @@ export class SecurityEnvelopeCrypto {
     if (!this.keyRing.has(this.activeKeyVersion)) {
       const fallback = process.env.ATLAS_AUTH_ENCRYPTION_KEY
         ?? process.env.ATLAS_AUTH_ENCRYPTION_FALLBACK_KEY
-        ?? 'atlas-dev-auth-envelope-key-v1';
+        ?? DEFAULT_DEVELOPMENT_ENVELOPE_KEY;
       const normalized = normalizeKeyMaterial(fallback);
       if (normalized && normalized.length === 32) {
         this.keyRing.set(this.activeKeyVersion, normalized);
+        this.fallbackSource = String(fallback ?? '') === DEFAULT_DEVELOPMENT_ENVELOPE_KEY
+          ? 'DEFAULT_DEVELOPMENT_FALLBACK'
+          : 'ENV_FALLBACK';
       }
     }
+  }
+
+  isUsingDevelopmentFallbackKey() {
+    return this.fallbackSource === 'DEFAULT_DEVELOPMENT_FALLBACK';
   }
 
   resolveEncryptionKey() {

@@ -1150,6 +1150,17 @@ export class OidcIdentityProviderAdapter {
       };
     }
 
+    const now = nowMs(this.now);
+    const discoveryRecords = Array.from(this.discoveryCache.values());
+    const jwksRecords = Array.from(this.jwksCache.values());
+    const latestDiscovery = discoveryRecords.sort((a, b) => Number(b?.fetchedAtMs ?? 0) - Number(a?.fetchedAtMs ?? 0))[0] ?? null;
+    const latestJwks = jwksRecords.sort((a, b) => Number(b?.fetchedAtMs ?? 0) - Number(a?.fetchedAtMs ?? 0))[0] ?? null;
+    const discoveryAgeMs = latestDiscovery ? Math.max(0, now - Number(latestDiscovery.fetchedAtMs ?? 0)) : null;
+    const jwksAgeMs = latestJwks ? Math.max(0, now - Number(latestJwks.fetchedAtMs ?? 0)) : null;
+    const jwksFreshness = jwksAgeMs == null
+      ? 'STALE'
+      : (jwksAgeMs <= this.jwksSoftTtlMs ? 'FRESH' : (jwksAgeMs <= this.jwksHardTtlMs ? 'STALE_BUT_USABLE' : 'EXPIRED'));
+
     return {
       provider: this.getProviderName(),
       ...status,
@@ -1157,7 +1168,21 @@ export class OidcIdentityProviderAdapter {
       clientConfigured: hasText(this.config.clientId),
       managementConfigured: hasText(this.config.managementToken),
       discoveryCacheEntries: this.discoveryCache.size,
-      jwksCacheEntries: this.jwksCache.size
+      jwksCacheEntries: this.jwksCache.size,
+      discovery: {
+        status: latestDiscovery ? 'AVAILABLE' : 'NOT_READY',
+        ageMs: discoveryAgeMs
+      },
+      jwks: {
+        status: latestJwks ? 'AVAILABLE' : 'NOT_READY',
+        ageMs: jwksAgeMs,
+        freshness: jwksFreshness
+      },
+      readiness: {
+        callback: hasText(this.config.issuerUrl) && hasText(this.config.clientId) && hasText(this.config.clientSecret),
+        refresh: this.getCapabilities().refresh.supported,
+        logout: this.getCapabilities().logout.federatedSupported
+      }
     };
   }
 }

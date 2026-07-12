@@ -5,7 +5,7 @@ import { normalizeEmail, IdentityErrorCodes, IdentityProviderStatuses } from './
 import { getMetaMap, setMetaValue } from '../storage/provider-backed-state.js';
 import { CustomerOidcAuthTransactionStore } from './customer-oidc-auth-transaction-store.js';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { SecurityEnvelopeCrypto } from './security-envelope-crypto.js';
+import { DEFAULT_DEVELOPMENT_ENVELOPE_KEY, SecurityEnvelopeCrypto } from './security-envelope-crypto.js';
 
 function nowIso(nowFn) {
   return nowFn?.() ?? new Date().toISOString();
@@ -25,6 +25,32 @@ function toBase64Url(buffer) {
 
 function stableHash(value) {
   return createHash('sha256').update(String(value ?? ''), 'utf8').digest('hex').slice(0, 16);
+}
+
+function boolFlag(value, fallback = false) {
+  if (value === true || value === 'true' || value === '1') return true;
+  if (value === false || value === 'false' || value === '0') return false;
+  return fallback;
+}
+
+function isHttpsUrl(value) {
+  try {
+    const parsed = new URL(String(value ?? '').trim());
+    return parsed.protocol === 'https:' && Boolean(parsed.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function parseCsv(value) {
+  return String(value ?? '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function hasText(value) {
+  return String(value ?? '').trim().length > 0;
 }
 
 function genericAuthFailure() {
@@ -83,12 +109,14 @@ export class CustomerAuthManager {
     storageProvider,
     now,
     logger,
+    environment = process.env.NODE_ENV ?? 'development',
     providerFactoryArgs = {},
     namespace = 'executive.customer-auth'
   } = {}) {
     this.missionControl = missionControl ?? null;
     this.storageProvider = storageProvider ?? null;
     this.now = now;
+    this.environment = String(environment ?? 'development').toLowerCase();
     this.logger = logger ?? { log: () => {} };
     this.namespace = namespace;
     this.identityLinks = getMetaMap({ provider: this.storageProvider, namespace: `${namespace}.identity-links` });
@@ -101,6 +129,7 @@ export class CustomerAuthManager {
       storageProvider: this.storageProvider,
       now: this.now,
       logger: this.logger,
+      environment: this.environment,
       ...providerFactoryArgs
     });
 
@@ -111,16 +140,139 @@ export class CustomerAuthManager {
       logger: this.logger,
       namespace: `${namespace}.sessions`
     });
+    this.envelopeCrypto = new SecurityEnvelopeCrypto();
     this.oidcTransactionStore = new CustomerOidcAuthTransactionStore({
       storageProvider: this.storageProvider,
       now: this.now,
-      verifierCipher: new SecurityEnvelopeCrypto(),
+      verifierCipher: this.envelopeCrypto,
       namespace: `${namespace}.oidc-transactions`
     });
 
     this.identityProvider.setTelemetryRecorder?.((eventName, details = {}) => {
       this.recordProviderTelemetry(eventName, details.providerType ?? this.providerSelection.type);
     });
+
+    this.startupReadiness = this.evaluateOperationalReadiness();
+    if (this.startupReadiness.failStartup) {
+      throw new Error(`AUTH_STARTUP_VALIDATION_FAILED: ${this.startupReadiness.summary}`);
+    }
+  }
+
+  isProductionMode() {
+    return this.environment === 'production';
+  }
+
+  parseConfiguredCallbackUrls() {
+    return parseCsv(process.env.ATLAS_IDENTITY_OIDC_CALLBACK_URLS);
+  }
+
+  evaluateOperationalReadiness() {
+    const checks = {
+      providerConfiguration: { ready: true, issues: [] },
+      cryptoConfiguration: { ready: true, issues: [] },
+      callbackConfiguration: { ready: true, issues: [] },
+      telemetryAvailability: { ready: true, issues: [] },
+      auditAvailability: { ready: true, issues: [] },
+      persistenceAvailability: { ready: true, issues: [] }
+    };
+
+    const providerType = String(this.providerSelection.type ?? '').trim().toLowerCase();
+    const rollout = this.providerSelection.rollout ?? {
+      stage: 'disabled',
+      enabled: false,
+      emergencyDisabled: false
+    };
+    const providerStatus = this.identityProvider.getStatus?.() ?? {};
+    const configuredCallbacks = this.parseConfiguredCallbackUrls();
+
+    if (providerType === 'oidc') {
+      if (!this.identityProvider.isConfigured?.()) {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC provider configuration is incomplete.');
+      }
+
+      const issuer = String(this.identityProvider.config?.issuerUrl ?? process.env.ATLAS_IDENTITY_OIDC_ISSUER_URL ?? '').trim();
+      if (!isHttpsUrl(issuer)) {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC issuer must be a valid HTTPS URL.');
+      }
+
+      if (!hasText(this.identityProvider.config?.clientSecret ?? process.env.ATLAS_IDENTITY_OIDC_CLIENT_SECRET)) {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC client secret is required.');
+      }
+
+      if (!hasText(this.identityProvider.config?.clientId ?? process.env.ATLAS_IDENTITY_OIDC_CLIENT_ID)) {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC client id is required.');
+      }
+
+      if (configuredCallbacks.length === 0) {
+        checks.callbackConfiguration.ready = false;
+        checks.callbackConfiguration.issues.push('ATLAS_IDENTITY_OIDC_CALLBACK_URLS must include at least one callback URL.');
+      }
+      if (configuredCallbacks.some((url) => !isHttpsUrl(url))) {
+        checks.callbackConfiguration.ready = false;
+        checks.callbackConfiguration.issues.push('OIDC callback URLs must be valid HTTPS URLs.');
+      }
+
+      const keyringRaw = String(process.env.ATLAS_AUTH_ENCRYPTION_KEYRING_JSON ?? '').trim();
+      const activeKeyVersion = String(process.env.ATLAS_AUTH_ENCRYPTION_KEY_VERSION ?? this.envelopeCrypto.activeKeyVersion ?? '').trim();
+      const hasKeyring = keyringRaw.length > 0;
+      if (!hasKeyring) {
+        checks.cryptoConfiguration.ready = false;
+        checks.cryptoConfiguration.issues.push('ATLAS_AUTH_ENCRYPTION_KEYRING_JSON is required for OIDC production encryption.');
+      }
+      if (!activeKeyVersion) {
+        checks.cryptoConfiguration.ready = false;
+        checks.cryptoConfiguration.issues.push('ATLAS_AUTH_ENCRYPTION_KEY_VERSION is required for production key versioning.');
+      }
+      if (this.envelopeCrypto.isUsingDevelopmentFallbackKey() || String(process.env.ATLAS_AUTH_ENCRYPTION_KEY ?? '') === DEFAULT_DEVELOPMENT_ENVELOPE_KEY) {
+        checks.cryptoConfiguration.ready = false;
+        checks.cryptoConfiguration.issues.push('Development fallback encryption key is not allowed in production readiness.');
+      }
+
+      if (!rollout.enabled || rollout.stage === 'disabled') {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC rollout stage is disabled.');
+      }
+      if (rollout.emergencyDisabled) {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC provider is disabled by emergency kill switch.');
+      }
+      if (providerStatus.readiness === IdentityProviderStatuses.NOT_CONFIGURED) {
+        checks.providerConfiguration.ready = false;
+        checks.providerConfiguration.issues.push('OIDC provider readiness is NOT_CONFIGURED.');
+      }
+    }
+
+    if (typeof this.identityProvider.setTelemetryRecorder !== 'function') {
+      checks.telemetryAvailability.ready = false;
+      checks.telemetryAvailability.issues.push('Provider telemetry recorder is unavailable.');
+    }
+
+    if (typeof this.sessionManager.createAudit !== 'function') {
+      checks.auditAvailability.ready = false;
+      checks.auditAvailability.issues.push('Audit infrastructure is unavailable.');
+    }
+
+    if (!this.storageProvider && this.isProductionMode()) {
+      checks.persistenceAvailability.ready = false;
+      checks.persistenceAvailability.issues.push('Persistent storage provider is required in production mode.');
+    }
+
+    const failedChecks = Object.entries(checks).filter(([, value]) => !value.ready);
+    const failStartup = this.isProductionMode() && providerType === 'oidc' && failedChecks.length > 0;
+
+    return {
+      environment: this.environment,
+      providerType,
+      rollout,
+      checks,
+      ready: failedChecks.length === 0,
+      failStartup,
+      summary: failedChecks.map(([name, value]) => `${name}: ${value.issues.join('; ')}`).join(' | ') || 'READY'
+    };
   }
 
   generateOidcState() {
@@ -296,8 +448,13 @@ export class CustomerAuthManager {
 
   rejectBlockedProvider() {
     const providerType = String(this.providerSelection.type ?? 'unknown').toUpperCase();
+    const rollout = this.providerSelection.rollout ?? {};
     const reason = providerType === 'OIDC'
-      ? 'OIDC authentication adapter is selected but not enabled for production use in this build.'
+      ? (rollout.emergencyDisabled
+          ? 'OIDC authentication is disabled by emergency kill switch.'
+          : (rollout.enabled === false
+              ? 'OIDC authentication rollout stage is disabled.'
+              : 'OIDC authentication is blocked due to provider configuration readiness.'))
       : 'Development authentication is blocked in this environment without emergency override.';
 
     return {
@@ -1575,6 +1732,21 @@ export class CustomerAuthManager {
   getAuthHealth() {
     const providerHealth = this.identityProvider.healthReport?.() ?? this.identityProvider.getStatus?.() ?? {};
     const sessionStats = this.sessionManager.getSessionStats();
+    const startupReadiness = this.startupReadiness ?? this.evaluateOperationalReadiness();
+    const rollout = this.providerSelection.rollout ?? { stage: 'disabled', enabled: false, emergencyDisabled: false };
+
+    const operationalHealth = {
+      providerDiscoveryStatus: providerHealth.discovery?.status ?? 'UNKNOWN',
+      jwksFreshness: providerHealth.jwks?.freshness ?? 'UNKNOWN',
+      keyVersion: this.envelopeCrypto.activeKeyVersion,
+      providerConnectivity: providerHealth.connectivity ?? IdentityProviderStatuses.NOT_CONNECTED,
+      callbackReadiness: startupReadiness.checks.callbackConfiguration.ready,
+      refreshReadiness: Boolean(this.getProviderCapabilities().refresh?.supported),
+      logoutReadiness: Boolean(this.getProviderCapabilities().logout?.supported),
+      startupReadiness: startupReadiness.ready,
+      rolloutStage: rollout.stage,
+      emergencyDisabled: Boolean(rollout.emergencyDisabled)
+    };
 
     const suspendedCount = this.missionControl?.customerRegistry?.listCustomers?.().filter((customer) => String(customer.status ?? '').toUpperCase() === CustomerStatuses.SUSPENDED).length ?? 0;
     const disabledCount = this.missionControl?.customerRegistry?.listCustomers?.().filter((customer) => String(customer.status ?? '').toUpperCase() === CustomerStatuses.DISABLED).length ?? 0;
@@ -1584,9 +1756,12 @@ export class CustomerAuthManager {
     return {
       providerType: this.providerSelection.type,
       providerBlocked: this.providerBlocked(),
+      providerRollout: rollout,
       providerStatus: providerHealth,
       warnings: this.providerWarnings(),
       configurationReady: !this.providerBlocked() && providerHealth.readiness !== IdentityProviderStatuses.NOT_CONFIGURED,
+      startupReadiness,
+      operationalHealth,
       sessions: sessionStats,
       pendingVerificationCount,
       failedLoginCount: Array.from(this.loginFailures.values()).reduce((sum, value) => sum + Number(value ?? 0), 0),
