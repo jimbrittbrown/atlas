@@ -540,6 +540,144 @@ function appendUrlParams(urlText, params = {}) {
   return fragment ? `${withQuery}#${fragment}` : withQuery;
 }
 
+function parsePortalRedirectAllowlist(value) {
+  const routes = String(value ?? '/customer/portal,/customer/portal/')
+    .split(',')
+    .map((item) => String(item ?? '').trim())
+    .filter(Boolean)
+    .filter((item) => item.startsWith('/'));
+  return routes.length > 0 ? routes : ['/customer/portal', '/customer/portal/'];
+}
+
+function hasPathTraversal(pathname) {
+  const text = String(pathname ?? '');
+  return text.includes('..') || text.includes('\\') || text.includes('/./') || text.endsWith('/.') || text.endsWith('/..');
+}
+
+function decodeRedirectInput(value) {
+  const raw = String(value ?? '').trim().normalize('NFKC');
+  if (!raw) return { ok: false, value: null };
+  if (/\s/.test(raw[0] ?? '')) return { ok: false, value: null };
+  if (/%25/i.test(raw)) {
+    return { ok: false, value: null };
+  }
+
+  let decoded = raw;
+  if (raw.includes('%')) {
+    try {
+      decoded = decodeURIComponent(raw);
+    } catch {
+      return { ok: false, value: null };
+    }
+    if (decoded.includes('%')) {
+      return { ok: false, value: null };
+    }
+  }
+
+  return { ok: true, value: decoded };
+}
+
+function isDisallowedScheme(value) {
+  const text = String(value ?? '').trim().toLowerCase();
+  return text.startsWith('javascript:')
+    || text.startsWith('data:')
+    || text.startsWith('file:')
+    || text.startsWith('vbscript:');
+}
+
+function containsNestedRedirect(urlObj) {
+  const suspiciousKeys = new Set(['redirect', 'redirect_url', 'return', 'return_to', 'next', 'url', 'target', 'destination', 'continue']);
+  for (const [key, value] of urlObj.searchParams.entries()) {
+    const normalizedKey = String(key ?? '').trim().toLowerCase();
+    if (!suspiciousKeys.has(normalizedKey)) continue;
+    const decoded = decodeRedirectInput(value);
+    if (!decoded.ok) return true;
+    const nested = String(decoded.value ?? '').trim();
+    if (!nested) continue;
+    if (nested.startsWith('//') || isDisallowedScheme(nested)) return true;
+    try {
+      const parsed = new URL(nested);
+      if (['http:', 'https:', 'javascript:', 'data:', 'file:'].includes(parsed.protocol)) {
+        return true;
+      }
+    } catch {
+      // Relative nested paths are tolerated only if non-traversal.
+      if (hasPathTraversal(nested)) return true;
+    }
+  }
+  return false;
+}
+
+function pathAllowed(pathname, allowlist = []) {
+  const normalized = String(pathname ?? '').trim();
+  return allowlist.some((prefix) => {
+    const candidate = String(prefix ?? '').trim();
+    if (!candidate) return false;
+    if (normalized === candidate) return true;
+    return normalized.startsWith(candidate.endsWith('/') ? candidate : `${candidate}/`);
+  });
+}
+
+function sanitizePortalRedirectTarget({
+  env = process.env,
+  candidate,
+  fallback,
+  success,
+  errorCode,
+  requestId
+} = {}) {
+  const defaultBase = success
+    ? (env.ATLAS_CUSTOMER_PORTAL_AUTH_SUCCESS_URL ?? '/customer/portal')
+    : (env.ATLAS_CUSTOMER_PORTAL_AUTH_ERROR_URL ?? '/customer/portal/login');
+  const fallbackTarget = String(fallback ?? defaultBase).trim() || defaultBase;
+  const allowlist = parsePortalRedirectAllowlist(env.ATLAS_CUSTOMER_PORTAL_REDIRECT_RELATIVE_ALLOWLIST);
+  const trusted = normalizeTrustedOrigins(env.ATLAS_CUSTOMER_TRUSTED_ORIGINS ?? '').origins;
+  const portalOrigins = normalizeTrustedOrigins(env.ATLAS_CUSTOMER_PORTAL_REDIRECT_ORIGINS ?? '').origins;
+  const allowedOrigins = new Set([...trusted, ...portalOrigins]);
+
+  const append = (value) => appendUrlParams(value, success
+    ? { auth: 'ok', requestId }
+    : { auth: 'error', code: errorCode ?? 'AUTH_FAILED', requestId });
+
+  const normalized = decodeRedirectInput(candidate);
+  if (!normalized.ok || !normalized.value) {
+    return append(fallbackTarget);
+  }
+
+  const target = String(normalized.value).trim();
+  if (!target || isDisallowedScheme(target) || target.startsWith('//')) {
+    return append(fallbackTarget);
+  }
+
+  try {
+    const parsed = new URL(target);
+    if (!['https:', 'http:'].includes(parsed.protocol)) {
+      return append(fallbackTarget);
+    }
+    if (!allowedOrigins.has(parsed.origin)) {
+      return append(fallbackTarget);
+    }
+    if (hasPathTraversal(parsed.pathname) || !pathAllowed(parsed.pathname, allowlist) || containsNestedRedirect(parsed)) {
+      return append(fallbackTarget);
+    }
+    return append(parsed.toString());
+  } catch {
+    if (!target.startsWith('/')) {
+      return append(fallbackTarget);
+    }
+
+    try {
+      const parsedRelative = new URL(target, 'https://atlas.local');
+      if (hasPathTraversal(parsedRelative.pathname) || !pathAllowed(parsedRelative.pathname, allowlist) || containsNestedRedirect(parsedRelative)) {
+        return append(fallbackTarget);
+      }
+      return append(`${parsedRelative.pathname}${parsedRelative.search}${parsedRelative.hash}`);
+    } catch {
+      return append(fallbackTarget);
+    }
+  }
+}
+
 function resolvePortalRedirectTarget({
   env = process.env,
   fallback,
@@ -548,14 +686,14 @@ function resolvePortalRedirectTarget({
   errorCode,
   requestId
 } = {}) {
-  const defaultBase = success
-    ? (env.ATLAS_CUSTOMER_PORTAL_AUTH_SUCCESS_URL ?? '/customer/portal')
-    : (env.ATLAS_CUSTOMER_PORTAL_AUTH_ERROR_URL ?? '/customer/portal/login');
-  const baseTarget = String(preferred ?? fallback ?? defaultBase).trim() || defaultBase;
-
-  return appendUrlParams(baseTarget, success
-    ? { auth: 'ok', requestId }
-    : { auth: 'error', code: errorCode ?? 'AUTH_FAILED', requestId });
+  return sanitizePortalRedirectTarget({
+    env,
+    candidate: preferred,
+    fallback,
+    success,
+    errorCode,
+    requestId
+  });
 }
 
 function resolveCustomerContext({ headers = {}, auth = {} } = {}) {

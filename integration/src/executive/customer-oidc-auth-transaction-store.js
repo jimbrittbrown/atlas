@@ -2,6 +2,52 @@ import { loadRecordMap, upsertRecord, deleteRecord } from '../storage/provider-b
 import { randomUUID } from 'node:crypto';
 import { SecurityEnvelopeCrypto } from './security-envelope-crypto.js';
 
+function getProvider(store) {
+  return store?.storageProvider && typeof store.storageProvider === 'object'
+    ? store.storageProvider
+    : null;
+}
+
+function conditionalSetRecord({ store, key, expectedVersion, value }) {
+  const provider = getProvider(store);
+  if (!provider || typeof provider.conditionalSetStateRecord !== 'function') {
+    store.persistRecord(key, value);
+    return { ok: true, code: 'OK', reason: null };
+  }
+
+  const result = provider.conditionalSetStateRecord({
+    namespace: store.namespace,
+    key,
+    expectedVersion,
+    value
+  });
+
+  if (result?.ok) {
+    store.records.set(key, value);
+    return { ok: true, code: 'OK', reason: null };
+  }
+
+  if (result?.code === 'VERSION_MISMATCH') {
+    const latest = provider.getStateRecord({ namespace: store.namespace, key });
+    if (latest?.ok) {
+      store.records.set(key, latest.value);
+    }
+    return {
+      ok: false,
+      code: 'INVALID_STATE',
+      reason: 'OIDC transaction was modified by another worker.',
+      data: null
+    };
+  }
+
+  return {
+    ok: false,
+    code: 'PERSISTENCE_FAILURE',
+    reason: 'Conditional write failed for OIDC transaction.',
+    data: null
+  };
+}
+
 function nowMs(nowFn) {
   const value = nowFn?.();
   if (typeof value === 'number' && Number.isFinite(value)) return value;
@@ -228,7 +274,15 @@ export class CustomerOidcAuthTransactionStore {
       version: nextVersion(record)
     };
     try {
-      this.persistRecord(key, reserved);
+      const persisted = conditionalSetRecord({
+        store: this,
+        key,
+        expectedVersion: Number(record.version ?? 0),
+        value: reserved
+      });
+      if (!persisted.ok) {
+        return persisted;
+      }
       return {
         ok: true,
         code: 'OK',
@@ -269,7 +323,15 @@ export class CustomerOidcAuthTransactionStore {
       version: nextVersion(record)
     };
     try {
-      this.persistRecord(key, released);
+      const persisted = conditionalSetRecord({
+        store: this,
+        key,
+        expectedVersion: Number(record.version ?? 0),
+        value: released
+      });
+      if (!persisted.ok) {
+        return persisted;
+      }
       return { ok: true, code: 'OK', reason: null, data: released };
     } catch {
       return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to release OIDC transaction reservation.', data: null };
@@ -308,7 +370,15 @@ export class CustomerOidcAuthTransactionStore {
     };
 
     try {
-      this.persistRecord(key, consumed);
+      const persisted = conditionalSetRecord({
+        store: this,
+        key,
+        expectedVersion: Number(record.version ?? 0),
+        value: consumed
+      });
+      if (!persisted.ok) {
+        return persisted;
+      }
       return { ok: true, code: 'OK', reason: null, data: consumed };
     } catch {
       return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to commit OIDC transaction consumption.', data: null };

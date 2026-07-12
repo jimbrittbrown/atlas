@@ -111,7 +111,7 @@ function createOidcFetchMock({
   };
 }
 
-function createRuntime({ fetchImpl }) {
+function createRuntime({ fetchImpl, envOverrides = {} }) {
   const missionControl = new CustomerIntakeMissionControl();
   const planning = new ExecutivePlanningSystem({ missionControl });
   const authManager = new CustomerAuthManager({
@@ -144,7 +144,8 @@ function createRuntime({ fetchImpl }) {
       ...process.env,
       ATLAS_CUSTOMER_AUTH_TRANSPORT_MODE: 'secure_cookie',
       ATLAS_CUSTOMER_TRUSTED_ORIGINS: 'https://portal.atlas.example',
-      ATLAS_CUSTOMER_ENFORCE_TRUSTED_ORIGIN: 'true'
+      ATLAS_CUSTOMER_ENFORCE_TRUSTED_ORIGIN: 'true',
+      ...envOverrides
     },
     auth: new ExecutiveDashboardApiAuth({ env: {
       ATLAS_DASHBOARD_API_TOKEN_CUSTOMER: 'token-customer',
@@ -154,6 +155,42 @@ function createRuntime({ fetchImpl }) {
   });
 
   return { api, manager, authManager };
+}
+
+async function runSuccessfulCallback({ runtime, portalRedirectUri, code = 'code-success' } = {}) {
+  const started = await startFlow({ api: runtime.api, portalRedirectUri });
+  const transaction = runtime.authManager.oidcTransactionStore.records.get(started.state);
+  const nowSec = Math.floor(Date.now() / 1000);
+  const key = createRsaJwk({ kid: `kid-${code}` });
+  const idToken = signJwt({
+    header: { alg: 'RS256', typ: 'JWT', kid: key.kid },
+    payload: {
+      iss: 'https://issuer.example',
+      aud: 'atlas-client',
+      exp: nowSec + 300,
+      iat: nowSec - 10,
+      sub: `oidc-user-${code}`,
+      email: `${code}@example.com`,
+      email_verified: true,
+      nonce: transaction.nonce
+    },
+    privateKey: key.privateKey
+  });
+
+  runtime.authManager.identityProvider.fetchImpl = createOidcFetchMock({
+    jwks: [key.jwk],
+    codeHandler: () => ({ ok: true, status: 200, payload: { id_token: idToken } })
+  });
+
+  return callApi(runtime.api, {
+    path: '/api/v1/customer/auth/oidc/callback',
+    method: 'GET',
+    query: {
+      state: started.state,
+      code,
+      redirect_uri: 'https://portal.atlas.example/oidc/callback'
+    }
+  });
 }
 
 async function callApi(api, {
@@ -334,6 +371,81 @@ test('duplicate callback', async () => {
       query: { state: started.state, code: 'code-dup', redirect_uri: 'https://portal.atlas.example/oidc/callback' }
     });
     assertRedirect(second, 'INVALID_STATE');
+  });
+});
+
+test('callback redirect sanitization rejects adversarial targets', async () => {
+  await withEnv({
+    ATLAS_IDENTITY_OIDC_ISSUER_URL: 'https://issuer.example',
+    ATLAS_IDENTITY_OIDC_CLIENT_ID: 'atlas-client',
+    ATLAS_IDENTITY_OIDC_CLIENT_SECRET: 'atlas-secret'
+  }, async () => {
+    const baseFetch = createOidcFetchMock({ jwks: [createRsaJwk({ kid: 'kid-base' }).jwk] });
+    const runtime = createRuntime({
+      fetchImpl: baseFetch,
+      envOverrides: {
+        ATLAS_CUSTOMER_PORTAL_REDIRECT_RELATIVE_ALLOWLIST: '/customer/portal,/customer/portal/',
+        ATLAS_CUSTOMER_PORTAL_AUTH_SUCCESS_URL: '/customer/portal'
+      }
+    });
+
+    const cases = [
+      'https://evil.example/steal',
+      '//evil.example/steal',
+      'javascript:alert(1)',
+      '/customer/portal/../admin',
+      '/customer/portal?return_to=https://evil.example/steal',
+      '/customer/portal?next=%252F%252Fevil.example%252Fsteal',
+      ' data:text/html,boom '
+    ];
+
+    for (const [index, portalRedirectUri] of cases.entries()) {
+      const response = await runSuccessfulCallback({
+        runtime,
+        portalRedirectUri,
+        code: `sanitized-${index}`
+      });
+      const location = assertRedirect(response);
+      assert.equal(location.startsWith('/customer/portal?'), true);
+      assert.equal(location.includes('auth=ok'), true);
+      assert.equal(location.includes('evil.example'), false);
+      assert.equal(location.includes('javascript:'), false);
+      assert.equal(location.includes('data:'), false);
+    }
+  });
+});
+
+test('callback redirect allows trusted origin and approved deep links only', async () => {
+  await withEnv({
+    ATLAS_IDENTITY_OIDC_ISSUER_URL: 'https://issuer.example',
+    ATLAS_IDENTITY_OIDC_CLIENT_ID: 'atlas-client',
+    ATLAS_IDENTITY_OIDC_CLIENT_SECRET: 'atlas-secret'
+  }, async () => {
+    const runtime = createRuntime({
+      fetchImpl: createOidcFetchMock({ jwks: [createRsaJwk({ kid: 'kid-allow' }).jwk] }),
+      envOverrides: {
+        ATLAS_CUSTOMER_PORTAL_REDIRECT_RELATIVE_ALLOWLIST: '/customer/portal,/customer/portal/projects',
+        ATLAS_CUSTOMER_PORTAL_REDIRECT_ORIGINS: 'https://portal.atlas.example'
+      }
+    });
+
+    const allowedAbsolute = await runSuccessfulCallback({
+      runtime,
+      portalRedirectUri: 'https://portal.atlas.example/customer/portal/projects/alpha?tab=overview',
+      code: 'allow-absolute'
+    });
+    const allowedLocation = assertRedirect(allowedAbsolute);
+    assert.equal(allowedLocation.startsWith('https://portal.atlas.example/customer/portal/projects/alpha?tab=overview'), true);
+    assert.equal(allowedLocation.includes('auth=ok'), true);
+
+    const blockedRelative = await runSuccessfulCallback({
+      runtime,
+      portalRedirectUri: '/customer/private',
+      code: 'block-relative'
+    });
+    const blockedLocation = assertRedirect(blockedRelative);
+    assert.equal(blockedLocation.startsWith('/customer/portal?'), true);
+    assert.equal(blockedLocation.includes('/customer/private'), false);
   });
 });
 

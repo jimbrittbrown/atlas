@@ -259,3 +259,82 @@ test('persistence recovery', async () => {
     assert.equal(consumed.data.state, 'state-persist-1');
   });
 });
+
+test('cross-worker contention allows only one reservation winner', async () => {
+  await withEnv({
+    ATLAS_IDENTITY_OIDC_ISSUER_URL: 'https://issuer.example',
+    ATLAS_IDENTITY_OIDC_CLIENT_ID: 'atlas-client',
+    ATLAS_IDENTITY_OIDC_CLIENT_SECRET: 'atlas-secret'
+  }, async () => {
+    const storageProviderA = createStorageProvider();
+    const sharedPath = storageProviderA.databasePath;
+    const storageProviderB = new SQLiteStorageProvider({ databasePath: sharedPath });
+    const nowRef = { value: Date.parse('2026-01-01T00:00:00.000Z') };
+
+    const managerA = createAuthManager({ storageProvider: storageProviderA, nowRef });
+    const started = await managerA.startOidcAuthorization({
+      redirectUri: 'https://portal.atlas.example/callback',
+      state: 'state-race-1'
+    });
+    assert.equal(started.accepted, true);
+
+    const managerB = createAuthManager({ storageProvider: storageProviderB, nowRef });
+
+    const [first, second] = await Promise.all([
+      Promise.resolve(managerA.consumeOidcAuthorizationTransaction({
+        state: 'state-race-1',
+        provider: 'oidc',
+        redirectUri: 'https://portal.atlas.example/callback'
+      })),
+      Promise.resolve(managerB.consumeOidcAuthorizationTransaction({
+        state: 'state-race-1',
+        provider: 'oidc',
+        redirectUri: 'https://portal.atlas.example/callback'
+      }))
+    ]);
+
+    const winners = [first, second].filter((result) => result.accepted === true);
+    const losers = [first, second].filter((result) => result.accepted === false);
+    assert.equal(winners.length, 1);
+    assert.equal(losers.length, 1);
+    assert.equal(losers[0].code, 'INVALID_STATE');
+  });
+});
+
+test('duplicate callback storm denies all but one consumer', async () => {
+  await withEnv({
+    ATLAS_IDENTITY_OIDC_ISSUER_URL: 'https://issuer.example',
+    ATLAS_IDENTITY_OIDC_CLIENT_ID: 'atlas-client',
+    ATLAS_IDENTITY_OIDC_CLIENT_SECRET: 'atlas-secret'
+  }, async () => {
+    const primaryStorage = createStorageProvider();
+    const sharedPath = primaryStorage.databasePath;
+    const nowRef = { value: Date.parse('2026-01-01T00:00:00.000Z') };
+    const primaryManager = createAuthManager({ storageProvider: primaryStorage, nowRef });
+
+    const started = await primaryManager.startOidcAuthorization({
+      redirectUri: 'https://portal.atlas.example/callback',
+      state: 'state-race-storm'
+    });
+    assert.equal(started.accepted, true);
+
+    const contenders = Array.from({ length: 10 }, () => createAuthManager({
+      storageProvider: new SQLiteStorageProvider({ databasePath: sharedPath }),
+      nowRef
+    }));
+
+    const outcomes = await Promise.all(contenders.map((manager) => Promise.resolve(
+      manager.consumeOidcAuthorizationTransaction({
+        state: 'state-race-storm',
+        provider: 'oidc',
+        redirectUri: 'https://portal.atlas.example/callback'
+      })
+    )));
+
+    const winners = outcomes.filter((entry) => entry.accepted);
+    const losers = outcomes.filter((entry) => !entry.accepted);
+    assert.equal(winners.length, 1);
+    assert.equal(losers.length, 9);
+    assert.equal(losers.every((entry) => entry.code === 'INVALID_STATE' || entry.code === 'NOT_FOUND'), true);
+  });
+});
