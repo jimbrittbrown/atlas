@@ -477,6 +477,7 @@ export class CustomerAuthManager {
     loginHint = null,
     expiresInMs = null,
     provider = 'oidc',
+    portalRedirectUri = null,
     state = null,
     nonce = null
   } = {}) {
@@ -525,6 +526,7 @@ export class CustomerAuthManager {
       pkceVerifier,
       providerType: requestedProvider,
       redirectUri: redirect,
+      portalRedirectUri,
       transactionId: `oidc_txn_${randomUUID()}`,
       createdAt: new Date(nowMs(this.now)).toISOString(),
       ttlMs: expiresInMs
@@ -575,10 +577,336 @@ export class CustomerAuthManager {
         state: transaction.data.state,
         nonce: transaction.data.nonce,
         redirectUri: transaction.data.redirectUri,
+        portalRedirectUri: transaction.data.portalRedirectUri,
         expiresAt: transaction.data.expiresAt,
         authorizationUrl: providerResult.data.authorizationUrl,
         authorizationEndpoint: providerResult.data.authorizationEndpoint,
         codeChallengeMethod: providerResult.data.pkceMethod ?? 'S256'
+      }
+    };
+  }
+
+  resolveCustomerByNormalizedEmail(normalizedEmail) {
+    return this.missionControl?.customerRegistry?.listCustomers?.()
+      ?.find((customer) => normalizeEmail(customer.email) === normalizedEmail) ?? null;
+  }
+
+  async completeOidcAuthorizationCallback({ state, code, redirectUri, provider = 'oidc' } = {}) {
+    if (this.providerBlocked()) return this.rejectBlockedProvider();
+
+    const requestedProvider = String(provider ?? 'oidc').trim().toLowerCase();
+    if (requestedProvider !== String(this.providerSelection.type ?? '').trim().toLowerCase()) {
+      return {
+        accepted: false,
+        status: 409,
+        code: 'PROVIDER_MISMATCH',
+        reason: 'Requested provider does not match configured authentication provider.',
+        data: null
+      };
+    }
+
+    if (requestedProvider !== 'oidc') {
+      return {
+        accepted: false,
+        status: 400,
+        code: 'INVALID_REQUEST',
+        reason: 'OIDC callback completion is only available for OIDC provider.',
+        data: null
+      };
+    }
+
+    const normalizedState = String(state ?? '').trim();
+    const normalizedCode = String(code ?? '').trim();
+    const normalizedRedirect = String(redirectUri ?? '').trim();
+    if (!normalizedState || !normalizedCode) {
+      return {
+        accepted: false,
+        status: 400,
+        code: 'INVALID_REQUEST',
+        reason: 'state and code are required for OIDC callback completion.',
+        data: null
+      };
+    }
+
+    const reserved = this.oidcTransactionStore.reserveTransaction({
+      state: normalizedState,
+      providerType: requestedProvider,
+      redirectUri: normalizedRedirect || null,
+      reservationOwner: 'callback-completion'
+    });
+
+    const statusByCode = {
+      INVALID_REQUEST: 400,
+      NOT_FOUND: 404,
+      TOKEN_EXPIRED: 409,
+      INVALID_STATE: 409,
+      PROVIDER_MISMATCH: 409,
+      PERSISTENCE_FAILURE: 500
+    };
+
+    if (!reserved.ok) {
+      return {
+        accepted: false,
+        status: statusByCode[reserved.code] ?? 400,
+        code: reserved.code,
+        reason: reserved.reason,
+        data: null
+      };
+    }
+
+    const releaseReservation = () => this.oidcTransactionStore.releaseReservation({
+      state: normalizedState,
+      reservationId: reserved.data.reservationId
+    });
+    const commitReservation = (reason) => this.oidcTransactionStore.commitConsumption({
+      state: normalizedState,
+      reservationId: reserved.data.reservationId,
+      consumedReason: reason
+    });
+
+    const providerResult = await this.identityProvider.exchangeAuthorizationCode?.({
+      code: normalizedCode,
+      redirectUri: reserved.data.redirectUri,
+      pkceVerifier: reserved.data.pkceVerifier,
+      expectedNonce: reserved.data.nonce,
+      expectedState: reserved.data.state,
+      receivedState: normalizedState
+    });
+
+    if (!providerResult || !providerResult.ok) {
+      const providerCode = providerResult?.error?.code ?? 'PROVIDER_UNAVAILABLE';
+      const retryable = providerCode === IdentityErrorCodes.PROVIDER_UNAVAILABLE;
+      const settle = retryable ? releaseReservation() : commitReservation('CALLBACK_FAILED');
+      if (!settle?.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist callback transaction state.',
+          data: null
+        };
+      }
+
+      return {
+        accepted: false,
+        status: providerCode === IdentityErrorCodes.PROVIDER_UNAVAILABLE ? 503 : 401,
+        code: providerCode,
+        reason: providerResult?.error?.message ?? 'OIDC callback processing failed.',
+        data: {
+          providerStatus: providerResult?.providerStatus ?? this.identityProvider.getStatus?.() ?? null,
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    const claims = providerResult.data?.claims ?? {};
+    const providerUserId = String(providerResult.data?.providerUserId ?? claims.sub ?? '').trim();
+    const normalizedEmail = normalizeEmail(providerResult.data?.email ?? claims.email ?? '');
+    const emailVerified = Boolean(providerResult.data?.emailVerified ?? claims.email_verified ?? false);
+
+    if (!providerUserId || !normalizedEmail) {
+      const settled = commitReservation('CALLBACK_FAILED');
+      if (!settled.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist callback transaction state.',
+          data: null
+        };
+      }
+      return {
+        accepted: false,
+        status: 401,
+        code: 'TOKEN_INVALID',
+        reason: 'OIDC claims are missing required subject or email attributes.',
+        data: {
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    const existingByProvider = this.getIdentityLinkByProviderUserId(providerUserId);
+    const existingByEmail = this.getIdentityLinkByEmail(normalizedEmail);
+
+    if (existingByEmail && existingByProvider && existingByEmail.linkId !== existingByProvider.linkId) {
+      const settled = commitReservation('CALLBACK_FAILED');
+      if (!settled.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist callback transaction state.',
+          data: null
+        };
+      }
+      return {
+        accepted: false,
+        status: 409,
+        code: 'PROVIDER_MISMATCH',
+        reason: 'OIDC identity conflicts with existing Atlas identity link.',
+        data: {
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    const existingLink = existingByProvider ?? existingByEmail ?? null;
+    const linkedCustomer = existingLink
+      ? this.missionControl?.customerRegistry?.getCustomerById?.(existingLink.customerId) ?? null
+      : null;
+    const resolvedCustomer = linkedCustomer
+      ?? this.resolveOrCreateCustomer({ email: normalizedEmail }).customer
+      ?? this.resolveCustomerByNormalizedEmail(normalizedEmail);
+
+    if (!resolvedCustomer) {
+      const settled = commitReservation('CALLBACK_FAILED');
+      if (!settled.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist callback transaction state.',
+          data: null
+        };
+      }
+      return {
+        accepted: false,
+        status: 404,
+        code: 'NOT_FOUND',
+        reason: 'Customer account could not be resolved from OIDC claims.',
+        data: {
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    try {
+      const link = this.buildIdentityLink({
+        providerUserId,
+        normalizedEmail,
+        emailVerified,
+        customerId: existingLink?.customerId ?? resolvedCustomer.customerId,
+        existingLink
+      });
+      this.persistIdentityLink(link);
+      this.identityProvider.linkIdentity?.({ providerUserId: link.providerUserId, linkedCustomerId: link.customerId });
+    } catch {
+      const settled = releaseReservation();
+      if (!settled.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist identity mapping after callback.',
+          data: null
+        };
+      }
+      return {
+        accepted: false,
+        status: 500,
+        code: 'PERSISTENCE_FAILURE',
+        reason: 'Failed to persist identity mapping after callback.',
+        data: {
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    let effectiveCustomer = resolvedCustomer;
+    const currentStatus = String(resolvedCustomer.status ?? '').toUpperCase();
+    if (emailVerified && PendingLifecycleStatuses.has(currentStatus)) {
+      this.missionControl?.customerRegistry?.updateCustomer?.(resolvedCustomer.customerId, {
+        status: CustomerStatuses.ACTIVE
+      });
+      effectiveCustomer = this.missionControl?.customerRegistry?.getCustomerById?.(resolvedCustomer.customerId) ?? {
+        ...resolvedCustomer,
+        status: CustomerStatuses.ACTIVE
+      };
+    }
+
+    const lifecycle = lifecycleDecision(effectiveCustomer.status);
+    if (!lifecycle.allowed) {
+      const settled = commitReservation('CALLBACK_COMPLETED');
+      if (!settled.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist callback transaction state.',
+          data: null
+        };
+      }
+      return {
+        accepted: false,
+        status: 403,
+        code: lifecycle.code,
+        reason: lifecycle.reason,
+        data: {
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    let session;
+    try {
+      session = this.sessionManager.createSession({
+        customerId: effectiveCustomer.customerId,
+        role: 'CUSTOMER',
+        accountStatus: effectiveCustomer.status,
+        metadata: {}
+      });
+    } catch {
+      const settled = releaseReservation();
+      if (!settled.ok) {
+        return {
+          accepted: false,
+          status: 500,
+          code: 'PERSISTENCE_FAILURE',
+          reason: 'Failed to persist callback transaction state.',
+          data: null
+        };
+      }
+      return {
+        accepted: false,
+        status: 500,
+        code: 'SESSION_CREATION_FAILED',
+        reason: 'Failed to create customer session after OIDC callback.',
+        data: {
+          portalRedirectUri: reserved.data.portalRedirectUri
+        }
+      };
+    }
+
+    const consumed = commitReservation('CALLBACK_COMPLETED');
+    if (!consumed.ok) {
+      this.sessionManager.revokeSession({ sessionId: session.session.sessionId, reason: 'CALLBACK_TRANSACTION_COMMIT_FAILED' });
+      return {
+        accepted: false,
+        status: 500,
+        code: 'PERSISTENCE_FAILURE',
+        reason: 'Failed to persist callback transaction state.',
+        data: null
+      };
+    }
+
+    this.incrementMetric('loginSuccessful', 1);
+    return {
+      accepted: true,
+      status: 200,
+      code: 'OK',
+      reason: null,
+      data: {
+        customerId: effectiveCustomer.customerId,
+        accountStatus: effectiveCustomer.status,
+        sessionToken: session.sessionToken,
+        csrfToken: session.csrfToken,
+        sessionId: session.session.sessionId,
+        expiresAt: session.session.expiresAt,
+        idleExpiresAt: session.session.idleExpiresAt,
+        absoluteExpiresAt: session.session.absoluteExpiresAt,
+        providerStatus: providerResult.providerStatus,
+        portalRedirectUri: reserved.data.portalRedirectUri
       }
     };
   }
@@ -596,7 +924,8 @@ export class CustomerAuthManager {
         NOT_FOUND: 404,
         INVALID_STATE: 409,
         TOKEN_EXPIRED: 409,
-        PROVIDER_MISMATCH: 409
+        PROVIDER_MISMATCH: 409,
+        PERSISTENCE_FAILURE: 500
       };
       return {
         accepted: false,

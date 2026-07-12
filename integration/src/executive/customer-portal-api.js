@@ -142,8 +142,18 @@ export class CustomerPortalApi {
       loginHint: body.loginHint ?? null,
       expiresInMs: body.expiresInMs,
       provider: body.provider ?? 'oidc',
+      portalRedirectUri: body.portalRedirectUri ?? null,
       state: body.state ?? null,
       nonce: body.nonce ?? null
+    });
+  }
+
+  async completeOidcAuthorizationCallback({ query = {} } = {}) {
+    return this.manager.completeOidcAuthorizationCallback({
+      state: query.state,
+      code: query.code,
+      redirectUri: query.redirect_uri,
+      provider: query.provider ?? 'oidc'
     });
   }
 

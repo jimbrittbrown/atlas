@@ -208,6 +208,111 @@ export class OidcIdentityProviderAdapter {
     });
   }
 
+  async exchangeAuthorizationCode({
+    code,
+    redirectUri,
+    pkceVerifier,
+    expectedNonce = null,
+    expectedState = null,
+    receivedState = null
+  } = {}) {
+    if (!this.isConfigured()) return this.notConfiguredResult();
+    if (!hasText(code) || !hasText(redirectUri) || !hasText(pkceVerifier)) {
+      return this.failure({
+        code: IdentityErrorCodes.INVALID_REQUEST,
+        message: 'OIDC callback exchange requires code, redirectUri, and PKCE verifier.',
+        details: { reason: 'CALLBACK_INPUT_INVALID' }
+      });
+    }
+
+    const discovery = await this.discoverProviderMetadata();
+    if (!discovery.ok) return discovery;
+
+    const tokenEndpoint = String(discovery.data?.metadata?.token_endpoint ?? '').trim();
+    if (!tokenEndpoint) {
+      return this.failure({
+        code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+        message: 'OIDC discovery metadata is missing token endpoint.',
+        details: { reason: 'TOKEN_ENDPOINT_MISSING' }
+      });
+    }
+
+    let payload;
+    let response;
+    try {
+      const requestBody = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: String(code),
+        redirect_uri: String(redirectUri),
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret,
+        code_verifier: String(pkceVerifier)
+      });
+
+      response = await this.fetchImpl(tokenEndpoint, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+          accept: 'application/json'
+        },
+        body: requestBody.toString()
+      });
+      payload = await response.json();
+    } catch (error) {
+      return this.failure({
+        code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+        message: 'OIDC authorization code exchange failed.',
+        details: {
+          reason: error instanceof Error ? error.message : String(error)
+        }
+      });
+    }
+
+    if (!response?.ok) {
+      const invalidGrant = String(payload?.error ?? '').toLowerCase() === 'invalid_grant';
+      return this.failure({
+        code: invalidGrant ? IdentityErrorCodes.TOKEN_EXPIRED : IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+        message: invalidGrant
+          ? 'OIDC authorization code is invalid or expired.'
+          : 'OIDC authorization code exchange failed.',
+        details: {
+          status: response?.status ?? null,
+          providerError: payload?.error ?? null,
+          providerErrorDescription: payload?.error_description ?? null
+        }
+      });
+    }
+
+    const idToken = String(payload?.id_token ?? '').trim();
+    if (!idToken) {
+      return this.failure({
+        code: IdentityErrorCodes.TOKEN_INVALID,
+        message: 'OIDC token response is missing id_token.',
+        details: { reason: 'ID_TOKEN_MISSING' }
+      });
+    }
+
+    const verifyResult = await this.verifyIdToken({
+      idToken,
+      expectedIssuer: this.config.issuerUrl,
+      expectedAudience: this.config.clientId,
+      expectedNonce,
+      expectedState,
+      receivedState
+    });
+    if (!verifyResult.ok) return verifyResult;
+
+    const claims = verifyResult.data.claims ?? {};
+    return this.success({
+      claims,
+      providerUserId: claims.sub ?? null,
+      email: normalizeEmail(claims.email ?? ''),
+      emailVerified: Boolean(claims.email_verified ?? false),
+      keyId: verifyResult.data.keyId,
+      algorithm: verifyResult.data.algorithm
+    });
+  }
+
   failure({ code = IdentityErrorCodes.PROVIDER_UNAVAILABLE, message = 'OIDC operation failed.', details = null } = {}) {
     return createIdentityResult({
       ok: false,

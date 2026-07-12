@@ -303,8 +303,18 @@ export class CustomerPortalManager {
       loginHint: input.loginHint ?? null,
       expiresInMs: input.expiresInMs ?? null,
       provider: input.provider ?? 'oidc',
+      portalRedirectUri: input.portalRedirectUri ?? null,
       state: input.state ?? null,
       nonce: input.nonce ?? null
+    });
+  }
+
+  async completeOidcAuthorizationCallback(input = {}) {
+    return this.authManager.completeOidcAuthorizationCallback({
+      state: input.state,
+      code: input.code,
+      redirectUri: input.redirectUri,
+      provider: input.provider ?? 'oidc'
     });
   }
 

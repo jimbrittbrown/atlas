@@ -1,4 +1,5 @@
 import { loadRecordMap, upsertRecord, deleteRecord } from '../storage/provider-backed-state.js';
+import { randomUUID } from 'node:crypto';
 
 function nowMs(nowFn) {
   const value = nowFn?.();
@@ -16,6 +17,16 @@ function isText(value) {
   return String(value ?? '').trim().length > 0;
 }
 
+const OidcTransactionStates = Object.freeze({
+  CREATED: 'CREATED',
+  RESERVED: 'RESERVED',
+  CONSUMED: 'CONSUMED'
+});
+
+function nextVersion(record) {
+  return Number(record?.version ?? 0) + 1;
+}
+
 export class CustomerOidcAuthTransactionStore {
   constructor({
     storageProvider,
@@ -30,6 +41,11 @@ export class CustomerOidcAuthTransactionStore {
       ? Number(defaultTtlMs)
       : 10 * 60 * 1000;
     this.records = loadRecordMap({ provider: this.storageProvider, namespace: this.namespace });
+  }
+
+  persistRecord(key, value) {
+    this.records.set(key, value);
+    upsertRecord({ provider: this.storageProvider, namespace: this.namespace, key, value });
   }
 
   isExpired(record) {
@@ -55,6 +71,7 @@ export class CustomerOidcAuthTransactionStore {
     pkceVerifier,
     providerType,
     redirectUri,
+    portalRedirectUri = null,
     transactionId,
     createdAt = null,
     ttlMs = this.defaultTtlMs
@@ -82,17 +99,24 @@ export class CustomerOidcAuthTransactionStore {
       pkceVerifier: String(pkceVerifier),
       providerType: String(providerType),
       redirectUri: String(redirectUri),
+      portalRedirectUri: isText(portalRedirectUri) ? String(portalRedirectUri) : null,
       createdAt: createdAtIso,
       expiresAt: expiresAtIso,
-      consumedAt: null
+      consumedAt: null,
+      consumedReason: null,
+      status: OidcTransactionStates.CREATED,
+      reservationId: null,
+      reservationOwner: null,
+      reservationExpiresAt: null,
+      reservedAt: null,
+      version: 1
     };
 
-    this.records.set(key, record);
-    upsertRecord({ provider: this.storageProvider, namespace: this.namespace, key, value: record });
+    this.persistRecord(key, record);
     return { ok: true, code: 'OK', reason: null, data: record };
   }
 
-  consumeTransaction({ state, providerType, redirectUri } = {}) {
+  reserveTransaction({ state, providerType, redirectUri, reservationOwner = 'callback' } = {}) {
     const key = String(state ?? '').trim();
     if (!isText(key)) {
       return { ok: false, code: 'INVALID_REQUEST', reason: 'OIDC state is required.', data: null };
@@ -109,7 +133,7 @@ export class CustomerOidcAuthTransactionStore {
       return { ok: false, code: 'TOKEN_EXPIRED', reason: 'OIDC transaction has expired.', data: null };
     }
 
-    if (record.consumedAt) {
+    if (record.status === OidcTransactionStates.CONSUMED || record.consumedAt) {
       return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction has already been consumed.', data: null };
     }
 
@@ -121,13 +145,107 @@ export class CustomerOidcAuthTransactionStore {
       return { ok: false, code: 'INVALID_REQUEST', reason: 'OIDC redirect URI does not match transaction.', data: null };
     }
 
+    const now = nowMs(this.now);
+    const reservationActive = record.status === OidcTransactionStates.RESERVED
+      && isText(record.reservationId)
+      && Date.parse(String(record.reservationExpiresAt ?? '')) > now;
+
+    if (reservationActive) {
+      return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction is already reserved.', data: null };
+    }
+
+    const reserved = {
+      ...record,
+      status: OidcTransactionStates.RESERVED,
+      reservationId: `oidc_res_${randomUUID()}`,
+      reservationOwner: String(reservationOwner),
+      reservedAt: nowIso(this.now),
+      reservationExpiresAt: new Date(now + 2 * 60 * 1000).toISOString(),
+      version: nextVersion(record)
+    };
+    try {
+      this.persistRecord(key, reserved);
+      return { ok: true, code: 'OK', reason: null, data: reserved };
+    } catch {
+      return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to reserve OIDC transaction.', data: null };
+    }
+  }
+
+  releaseReservation({ state, reservationId } = {}) {
+    const key = String(state ?? '').trim();
+    if (!isText(key) || !isText(reservationId)) {
+      return { ok: false, code: 'INVALID_REQUEST', reason: 'State and reservationId are required.', data: null };
+    }
+
+    const record = this.records.get(key) ?? null;
+    if (!record) {
+      return { ok: false, code: 'NOT_FOUND', reason: 'OIDC transaction not found.', data: null };
+    }
+
+    if (record.status !== OidcTransactionStates.RESERVED || String(record.reservationId) !== String(reservationId)) {
+      return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction reservation is not active.', data: null };
+    }
+
+    const released = {
+      ...record,
+      status: OidcTransactionStates.CREATED,
+      reservationId: null,
+      reservationOwner: null,
+      reservedAt: null,
+      reservationExpiresAt: null,
+      version: nextVersion(record)
+    };
+    try {
+      this.persistRecord(key, released);
+      return { ok: true, code: 'OK', reason: null, data: released };
+    } catch {
+      return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to release OIDC transaction reservation.', data: null };
+    }
+  }
+
+  commitConsumption({ state, reservationId, consumedReason = 'COMPLETED' } = {}) {
+    const key = String(state ?? '').trim();
+    if (!isText(key) || !isText(reservationId)) {
+      return { ok: false, code: 'INVALID_REQUEST', reason: 'State and reservationId are required.', data: null };
+    }
+
+    const record = this.records.get(key) ?? null;
+    if (!record) {
+      return { ok: false, code: 'NOT_FOUND', reason: 'OIDC transaction not found.', data: null };
+    }
+
+    if (record.status === OidcTransactionStates.CONSUMED || record.consumedAt) {
+      return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction has already been consumed.', data: null };
+    }
+
+    if (record.status !== OidcTransactionStates.RESERVED || String(record.reservationId) !== String(reservationId)) {
+      return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction reservation is not active.', data: null };
+    }
+
     const consumed = {
       ...record,
-      consumedAt: nowIso(this.now)
+      status: OidcTransactionStates.CONSUMED,
+      consumedAt: nowIso(this.now),
+      consumedReason: String(consumedReason),
+      reservationId: null,
+      reservationOwner: null,
+      reservedAt: null,
+      reservationExpiresAt: null,
+      version: nextVersion(record)
     };
-    this.records.set(key, consumed);
-    upsertRecord({ provider: this.storageProvider, namespace: this.namespace, key, value: consumed });
-    return { ok: true, code: 'OK', reason: null, data: consumed };
+
+    try {
+      this.persistRecord(key, consumed);
+      return { ok: true, code: 'OK', reason: null, data: consumed };
+    } catch {
+      return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to commit OIDC transaction consumption.', data: null };
+    }
+  }
+
+  consumeTransaction({ state, providerType, redirectUri } = {}) {
+    const reserved = this.reserveTransaction({ state, providerType, redirectUri, reservationOwner: 'direct-consume' });
+    if (!reserved.ok) return reserved;
+    return this.commitConsumption({ state, reservationId: reserved.data.reservationId, consumedReason: 'DIRECT_CONSUME' });
   }
 
   cancelTransaction({ state } = {}) {
@@ -143,13 +261,16 @@ export class CustomerOidcAuthTransactionStore {
     this.cleanupExpiredTransactions();
     let active = 0;
     let consumed = 0;
+    let reserved = 0;
     for (const record of this.records.values()) {
-      if (record?.consumedAt) consumed += 1;
+      if (record?.status === OidcTransactionStates.CONSUMED || record?.consumedAt) consumed += 1;
+      else if (record?.status === OidcTransactionStates.RESERVED) reserved += 1;
       else active += 1;
     }
     return {
       total: this.records.size,
       active,
+      reserved,
       consumed
     };
   }
