@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-07-11T18:39:00.701Z",
+  "mission": "ceo-decision-center-v1",
+  "overallStatus": "PASS",
+  "checks": [
+    {
+      "name": "http status is 200",
+      "passed": true
+    },
+    {
+      "name": "envelope success",
+      "passed": true
+    },
+    {
+      "name": "has executiveReviews",
+      "passed": true
+    },
+    {
+      "name": "has blockedMissions",
+      "passed": true
+    },
+    {
+      "name": "has opportunities",
+      "passed": true
+    },
+    {
+      "name": "has risks",
+      "passed": true
+    },
+    {
+      "name": "has decisionHistory",
+      "passed": true
+    },
+    {
+      "name": "governance read-only",
+      "passed": true
+    }
+  ],
+  "executiveSummary": {
+    "approvalsNeeded": 0,
+    "blockedMissions": 0,
+    "rankedOpportunities": 0,
+    "activeRisks": 6,
+    "recentDecisions": 0
+  },
+  "filesCreated": [
+    "integration/src/executive/ceo-decision-center-contracts.js",
+    "integration/src/executive/ceo-decision-center-manager.js",
+    "integration/src/executive/ceo-decision-center-dashboard-model.js",
+    "integration/src/executive/ceo-decision-center-api.js",
+    "integration/test/ceo-decision-center-v1.test.js",
+    "integration/scripts/run-ceo-decision-center-v1.js",
+    "integration/docs/ceo-decision-center-v1.md"
+  ]
+}

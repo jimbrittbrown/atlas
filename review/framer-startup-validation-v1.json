@@ -1,0 +1,37 @@
+{
+  "ok": true,
+  "issues": [],
+  "checks": {
+    "environmentComplete": true,
+    "apiKeyFormatValid": true,
+    "projectUrlFormatValid": true,
+    "configValid": true
+  },
+  "redactedConfig": {
+    "projectUrl": "https://framer.com/projects/Atlas-Sandbox--et8OSabDDPQDIAZaWphw-e3M7c",
+    "apiKey": "***REDACTED***",
+    "apiKeyEnvVarName": "FRAMER_API_KEY",
+    "readOnly": true,
+    "liveMode": true,
+    "dryRun": false,
+    "allowPreviewPublish": false,
+    "allowProductionDeploy": false,
+    "allowProjectDuplication": false,
+    "maxRetries": 2,
+    "retryDelayMs": 250,
+    "requestTimeoutMs": 30000,
+    "externalAgentEnabled": true,
+    "pluginFallbackEnabled": true
+  },
+  "requiredVariables": [
+    "FRAMER_PROJECT_URL",
+    "FRAMER_API_KEY",
+    "FRAMER_READ_ONLY",
+    "FRAMER_LIVE_MODE",
+    "FRAMER_DRY_RUN",
+    "FRAMER_ALLOW_PREVIEW_PUBLISH",
+    "FRAMER_ALLOW_PRODUCTION_DEPLOY",
+    "FRAMER_ALLOW_PROJECT_DUPLICATION"
+  ],
+  "missingVariables": []
+}

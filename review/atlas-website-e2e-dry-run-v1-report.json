@@ -1,0 +1,463 @@
+{
+  "mission": {
+    "id": "atlas-web-e2e-dry-run-1783774792368",
+    "objective": "Atlas Website End-to-End Dry Run v1",
+    "customer": "RidgeLine Roofing (Fictional Demonstration)",
+    "mode": "DRY_RUN",
+    "publishPolicy": "NO_PUBLISH",
+    "stopCondition": "CEO_APPROVAL_GATE"
+  },
+  "overallStatus": "PASS",
+  "summary": {
+    "stagePassCount": 11,
+    "totalStages": 11,
+    "confidence": 0.89
+  },
+  "stageResults": [
+    {
+      "stageId": "S1",
+      "stageName": "Simulate Prospect Approval",
+      "status": "PASS",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "approvedBy": "ATLAS_EXECUTIVE_DEMO_SYSTEM",
+        "companyName": "RidgeLine Roofing (Fictional Demonstration)"
+      }
+    },
+    {
+      "stageId": "S2",
+      "stageName": "Execute Website Intelligence Engine",
+      "status": "PASS",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "summary": "Dry-run Framer research for RidgeLine Roofing (Fictional Demonstration).",
+        "confidence": 0.7,
+        "findings": [],
+        "projectInfo": null,
+        "publishInfo": null,
+        "dryRun": true,
+        "idempotentReplay": false
+      }
+    },
+    {
+      "stageId": "S3",
+      "stageName": "Generate Brand Asset Package",
+      "status": "PASS",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "preservedBranding": {
+          "companyName": "RidgeLine Roofing",
+          "logo": "ridgeline-roofing-logo-demo.svg",
+          "colors": {
+            "primary": "#1E3A5F",
+            "secondary": "#D97706",
+            "neutral": "#F3F4F6"
+          },
+          "services": [
+            "Roof Repair",
+            "Roof Replacement",
+            "Storm Damage Inspection"
+          ],
+          "contact": {
+            "phone": "(303) 555-0119",
+            "email": "hello@ridgeline-roofing.demo"
+          },
+          "serviceAreas": [
+            "Denver",
+            "Aurora",
+            "Lakewood"
+          ],
+          "reviews": [
+            {
+              "source": "Demo Review",
+              "quote": "Fast response, clear estimate, and excellent cleanup."
+            }
+          ],
+          "photography": [
+            "roof-inspection-demo-01.jpg",
+            "crew-install-demo-02.jpg"
+          ]
+        },
+        "brandNarrative": "Dry-run Framer research for RidgeLine Roofing (Fictional Demonstration).",
+        "confidence": 0.78,
+        "warnings": [],
+        "capabilityNotes": {
+          "approach": "Preserve existing branding in Atlas orchestration and map to Framer styles/assets.",
+          "pluginPlan": {
+            "boundary": "PLUGIN",
+            "operation": "brand-style-application",
+            "status": "REQUIRES_PLUGIN_CONTEXT",
+            "details": {
+              "supportsColorStyles": true,
+              "supportsTextStyles": true
+            },
+            "guidance": [
+              "Use Framer Plugin APIs from within editor context.",
+              "Confirm user permissions with isAllowedTo before write operations.",
+              "Record resulting node/item IDs for resume and idempotent checkpoints."
+            ]
+          }
+        },
+        "idempotentReplay": false
+      }
+    },
+    {
+      "stageId": "S4",
+      "stageName": "Validate Asset Package",
+      "status": "PASS",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "isValid": true,
+        "requiredFields": [
+          "preservedBranding",
+          "brandNarrative"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "stageId": "S5",
+      "stageName": "Select Roofing Template v1",
+      "status": "PASS",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "templateId": "roofing-template-v1",
+        "rationale": "Framer Server API works against an existing project URL; Atlas applies updates into connected project.",
+        "confidence": 0.74,
+        "externalAgentPlan": {
+          "boundary": "EXTERNAL_AGENT",
+          "operation": "template-remix-or-layout-heavy-selection",
+          "enabled": true,
+          "status": "AVAILABLE",
+          "installCommand": "npx @framer/agent setup",
+          "connectCommand": "/framer",
+          "details": {
+            "reason": "Template-level canvas restructuring may require external agent/plugin context."
+          },
+          "guidance": [
+            "Authorize only explicit project scope in browser grant flow.",
+            "Review all branch changes before merge/publish.",
+            "Use explicit prompts containing Atlas stage ID and idempotency key."
+          ]
+        },
+        "idempotentReplay": false
+      }
+    },
+    {
+      "stageId": "S6",
+      "stageName": "Execute Website Production System",
+      "status": "PASS",
+      "warnings": [
+        "Dry-run enabled: no Framer mutations executed."
+      ],
+      "blockingIssues": [],
+      "output": {
+        "websiteId": "framer-site-1783774792370",
+        "provider": "Framer Adapter",
+        "templateId": "roofing-template-v1",
+        "brandingSnapshot": {
+          "companyName": "RidgeLine Roofing",
+          "logo": "ridgeline-roofing-logo-demo.svg",
+          "colors": {
+            "primary": "#1E3A5F",
+            "secondary": "#D97706",
+            "neutral": "#F3F4F6"
+          },
+          "services": [
+            "Roof Repair",
+            "Roof Replacement",
+            "Storm Damage Inspection"
+          ],
+          "contact": {
+            "phone": "(303) 555-0119",
+            "email": "hello@ridgeline-roofing.demo"
+          },
+          "serviceAreas": [
+            "Denver",
+            "Aurora",
+            "Lakewood"
+          ],
+          "reviews": [
+            {
+              "source": "Demo Review",
+              "quote": "Fast response, clear estimate, and excellent cleanup."
+            }
+          ],
+          "photography": [
+            "roof-inspection-demo-01.jpg",
+            "crew-install-demo-02.jpg"
+          ]
+        },
+        "previewUrl": null,
+        "confidence": 0.8,
+        "warnings": [
+          "Dry-run enabled: no Framer mutations executed."
+        ],
+        "projectInfo": null,
+        "publishInfo": null,
+        "cmsCollections": [],
+        "managedCollections": [],
+        "pendingOperations": {
+          "content": "CAPABILITY_GATED",
+          "cms": "CAPABILITY_GATED",
+          "assets": "CAPABILITY_GATED",
+          "canvas": "CAPABILITY_GATED"
+        },
+        "boundaryPlans": {
+          "plugin": {
+            "boundary": "PLUGIN",
+            "operation": "canvas-and-component-mutations",
+            "status": "REQUIRES_PLUGIN_CONTEXT",
+            "details": {
+              "nodesApi": true,
+              "assetsApi": true,
+              "cmsApi": true
+            },
+            "guidance": [
+              "Use Framer Plugin APIs from within editor context.",
+              "Confirm user permissions with isAllowedTo before write operations.",
+              "Record resulting node/item IDs for resume and idempotent checkpoints."
+            ]
+          },
+          "externalAgent": {
+            "boundary": "EXTERNAL_AGENT",
+            "operation": "high-level-site-rewrites",
+            "enabled": true,
+            "status": "AVAILABLE",
+            "installCommand": "npx @framer/agent setup",
+            "connectCommand": "/framer",
+            "details": {
+              "supportsCmsAndCanvas": true
+            },
+            "guidance": [
+              "Authorize only explicit project scope in browser grant flow.",
+              "Review all branch changes before merge/publish.",
+              "Use explicit prompts containing Atlas stage ID and idempotency key."
+            ]
+          }
+        },
+        "idempotentReplay": false
+      }
+    },
+    {
+      "stageId": "S7",
+      "stageName": "Execute Website Orchestrator (Stop at CEO Gate)",
+      "status": "PASS",
+      "warnings": [
+        "Dry-run enabled: no Framer mutations executed."
+      ],
+      "blockingIssues": [],
+      "output": {
+        "missionState": "REVISION_REQUIRED",
+        "currentStage": "CEO_APPROVAL_GATE",
+        "completion": 70
+      }
+    },
+    {
+      "stageId": "S8",
+      "stageName": "Execute Framer Adapter in PREVIEW MODE ONLY",
+      "status": "PASS",
+      "warnings": [
+        "Framer preview response generated in dry-run mode."
+      ],
+      "blockingIssues": [],
+      "output": {
+        "deployment": {
+          "id": "dry-run-preview"
+        },
+        "hostnames": [
+          "https://preview.dry-run.framer.local"
+        ],
+        "dryRun": true,
+        "idempotentReplay": false
+      }
+    },
+    {
+      "stageId": "S9",
+      "stageName": "Generate QA Report",
+      "status": "PASS",
+      "warnings": [
+        "Dry-run enabled: no Framer mutations executed."
+      ],
+      "blockingIssues": [],
+      "output": {
+        "source": "WEBSITE_ORCHESTRATOR_QA_ENGINE",
+        "passed": true,
+        "warnings": [
+          "Dry-run enabled: no Framer mutations executed."
+        ],
+        "blockingIssues": [],
+        "confidence": 0.88
+      }
+    },
+    {
+      "stageId": "S10",
+      "stageName": "Generate Executive Delivery Report",
+      "status": "PASS",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "readyForCeoApproval": true,
+        "publishExecuted": false,
+        "stopReason": "CEO approval required before publish."
+      }
+    },
+    {
+      "stageId": "S11",
+      "stageName": "STOP (CEO Approval Required Before Publish)",
+      "status": "PASS",
+      "warnings": [
+        "Publish intentionally not executed."
+      ],
+      "blockingIssues": [],
+      "output": {
+        "stopConfirmed": true,
+        "rationale": "Mission intentionally stopped before publish."
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "stageId": "S1",
+      "stageName": "Simulate Prospect Approval",
+      "startedAt": "2026-07-11T12:59:52.369Z",
+      "completedAt": "2026-07-11T12:59:52.369Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S2",
+      "stageName": "Execute Website Intelligence Engine",
+      "startedAt": "2026-07-11T12:59:52.369Z",
+      "completedAt": "2026-07-11T12:59:52.369Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S3",
+      "stageName": "Generate Brand Asset Package",
+      "startedAt": "2026-07-11T12:59:52.369Z",
+      "completedAt": "2026-07-11T12:59:52.369Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S4",
+      "stageName": "Validate Asset Package",
+      "startedAt": "2026-07-11T12:59:52.369Z",
+      "completedAt": "2026-07-11T12:59:52.369Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S5",
+      "stageName": "Select Roofing Template v1",
+      "startedAt": "2026-07-11T12:59:52.369Z",
+      "completedAt": "2026-07-11T12:59:52.369Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S6",
+      "stageName": "Execute Website Production System",
+      "startedAt": "2026-07-11T12:59:52.369Z",
+      "completedAt": "2026-07-11T12:59:52.370Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S7",
+      "stageName": "Execute Website Orchestrator (Stop at CEO Gate)",
+      "startedAt": "2026-07-11T12:59:52.370Z",
+      "completedAt": "2026-07-11T12:59:52.371Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S8",
+      "stageName": "Execute Framer Adapter in PREVIEW MODE ONLY",
+      "startedAt": "2026-07-11T12:59:52.371Z",
+      "completedAt": "2026-07-11T12:59:52.372Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S9",
+      "stageName": "Generate QA Report",
+      "startedAt": "2026-07-11T12:59:52.372Z",
+      "completedAt": "2026-07-11T12:59:52.372Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S10",
+      "stageName": "Generate Executive Delivery Report",
+      "startedAt": "2026-07-11T12:59:52.372Z",
+      "completedAt": "2026-07-11T12:59:52.372Z",
+      "status": "PASS"
+    },
+    {
+      "stageId": "S11",
+      "stageName": "STOP (CEO Approval Required Before Publish)",
+      "startedAt": "2026-07-11T12:59:52.372Z",
+      "completedAt": "2026-07-11T12:59:52.372Z",
+      "status": "PASS"
+    }
+  ],
+  "handoffValidation": {
+    "intelligenceOutputAcceptedByProductionSystem": true,
+    "productionOutputAcceptedByWebsiteOrchestrator": true,
+    "orchestratorInvokedFramerAdapter": true,
+    "framerAdapterReturnedPreviewResponse": true,
+    "qaExecuted": true,
+    "executiveReportGenerated": true
+  },
+  "orchestrator": {
+    "missionState": "REVISION_REQUIRED",
+    "currentStage": "CEO Approval Gate",
+    "completionPercentage": 70,
+    "blockingIssues": [
+      "CEO approval is required before publish."
+    ]
+  },
+  "framerPreview": {
+    "deployment": {
+      "id": "dry-run-preview"
+    },
+    "hostnames": [
+      "https://preview.dry-run.framer.local"
+    ],
+    "dryRun": true,
+    "idempotentReplay": false
+  },
+  "qaReport": {
+    "source": "WEBSITE_ORCHESTRATOR_QA_ENGINE",
+    "passed": true,
+    "warnings": [
+      "Dry-run enabled: no Framer mutations executed."
+    ],
+    "blockingIssues": [],
+    "confidence": 0.88
+  },
+  "warnings": [
+    "Website Intelligence Engine executed in Framer dry-run mode."
+  ],
+  "blockingIssues": [
+    "CEO approval is required before publish."
+  ],
+  "missingIntegrations": [
+    "Live Framer Server API credentials not configured (dry-run placeholders used).",
+    "Live Plugin/External Agent execution not invoked in this VPS-only dry run.",
+    "Persistent idempotency storage across process restarts is not yet implemented."
+  ],
+  "dependencyReport": [
+    {
+      "name": "Framer Server API Credentials",
+      "status": "MOCKED",
+      "detail": "Dry run used placeholder credentials and did not call live project."
+    }
+  ],
+  "recommendedNextEngineeringTasks": [
+    "Add live Framer sandbox credentials in secret manager after CEO approval ticket.",
+    "Implement capability probes for method-level Server API availability and route unsupported edits to Plugin/External Agent boundaries.",
+    "Add persistent checkpoint storage for resume across process restarts (current idempotency cache is in-memory).",
+    "Add executive dashboard mission panel for dry-run dependency status and approval readiness.",
+    "Add a controlled live sandbox integration test command guarded by FRAMER_ALLOW_PRODUCTION_DEPLOY=false."
+  ]
+}

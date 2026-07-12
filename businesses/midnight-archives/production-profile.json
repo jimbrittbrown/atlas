@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "businessId": "MIDNIGHT_ARCHIVES",
+  "displayName": "Midnight Archives",
+  "productionReady": true,
+  "qualityProfile": {
+    "id": "QUALITY_CINEMATIC",
+    "decisionPolicy": "PASS_REVISE_BLOCK",
+    "minimumOverallScore": 85,
+    "criticalIssuePolicy": "BLOCK"
+  },
+  "voiceProfile": {
+    "id": "VOICE_MIDNIGHT_ARCHIVES_V1",
+    "style": "Cinematic suspense narration",
+    "language": "en-US",
+    "pacing": "deliberate"
+  },
+  "imageProfile": {
+    "id": "IMAGE_MIDNIGHT_ARCHIVES_V1",
+    "style": "Dark cinematic horror",
+    "resolution": "1920x1080",
+    "palette": "shadow-dominant"
+  },
+  "videoProfile": {
+    "id": "cinematic_horror_landscape_v1",
+    "targetFormat": "mp4",
+    "frameRate": 30,
+    "aspectRatio": "16:9",
+    "transitionPolicy": "feature-gated"
+  },
+  "publishingDefaults": {
+    "platform": "YouTube",
+    "visibilityDefault": "PRIVATE",
+    "publishMode": "NONE",
+    "approvalRequired": true,
+    "rollbackEnabled": true
+  },
+  "knowledgePartition": "knowledge/midnight-archives/",
+  "assetNamespace": "assets/midnight-archives/",
+  "metricsNamespace": "midnight_archives",
+  "metricsProfile": {
+    "youtubeMetrics": true,
+    "qualityMetrics": true,
+    "businessMetrics": true,
+    "learningMetrics": true
+  }
+}

@@ -1,0 +1,606 @@
+{
+  "packageName": "Atlas Executive OS Mission 003 Strategy Package",
+  "missionId": "MISSION_003_BUILD_ATLAS_WEB_V1",
+  "version": "1.0.0",
+  "constitutionalCompliance": {
+    "followsConstitution": true,
+    "rulesApplied": [
+      "No hard-coded website generator selection.",
+      "Workforce Registry queried before specialist selection.",
+      "If no active champion exists in Workforce Registry, external market discovery is mandatory.",
+      "CEO approval is required before benchmark execution and hiring decision."
+    ]
+  },
+  "registrySnapshot": {
+    "workforceRegistryUpdatedAt": "2026-07-10T00:00:00.000Z",
+    "workforceSpecialistCount": 0
+  },
+  "workforceHiringDecision": {
+    "category": "Website Generation",
+    "decision": "MARKET_DISCOVERY_REQUIRED",
+    "selectedSpecialistId": null,
+    "selectedSpecialist": null,
+    "topBenchmarkCandidates": [
+      {
+        "rank": 1,
+        "provider": "Webflow",
+        "company": "Webflow, Inc.",
+        "capability": "Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.",
+        "strengths": [
+          "Mature **visual design interface** with granular control similar to front‑end development tools, enabling high‑quality, responsive sites.[5]",
+          "Integrated **CMS, hosting, and animation** tools suitable for complex marketing sites and content‑rich properties.[5]",
+          "Large ecosystem, template and expert community; widely adopted by agencies and startups as a primary web presence platform.[5]",
+          "Positioned as a professional‑grade builder, bridging design and development without requiring full coding.[5]"
+        ],
+        "weaknesses": [
+          "Primarily focused on **frontend and CMS**; complex backend logic and app‑like functionality often need external services or custom code embeds.[5]",
+          "Learning curve can be moderate for non‑designers compared to simpler template builders.[5]",
+          "AI capabilities are more assistive than fully generative full‑stack app creation (relative to Lovable or developer‑oriented AI tools).[3][5]"
+        ],
+        "typicalUseCases": [
+          "Corporate marketing sites, product landing pages, and content‑driven websites.[5]",
+          "Agency‑built sites for clients requiring strong brand control and animations.[5]",
+          "Founders and growth teams managing web presence without hiring full engineering teams.[5]"
+        ],
+        "pricing": "Webflow offers tiered site plans (Basic, CMS, Business) and workspace plans with per‑site and per‑user pricing; pricing is mid‑to‑high relative to template builders, reflecting its professional positioning.[5]",
+        "apiAvailability": "AVAILABLE",
+        "enterpriseReadiness": "HIGH",
+        "evidenceSources": [
+          "https://lovable.dev/guides/best-no-code-website-builders"
+        ],
+        "overallRecommendation": "Must‑include benchmark provider for **professional website generation**; critical for comparing AI‑first approaches (Lovable, v0) to incumbent visual‑design platforms that dominate marketing and content sites.",
+        "recommendationScore": 9.1
+      },
+      {
+        "rank": 2,
+        "provider": "Lovable",
+        "company": "Lovable, Inc.",
+        "capability": "AI-native full‑stack website and web app generation from natural language prompts, producing editable React/Tailwind frontends with Supabase‑backed backends and built‑in hosting.",
+        "strengths": [
+          "Generates **real, production‑grade code** (React, Tailwind, Supabase) that can be edited, extended, or exported to GitHub.[1][2][5][10]",
+          "Supports **full‑stack apps** (frontend, backend logic, database schema, authentication) instead of only static marketing sites.[1][2][5][10]",
+          "Conversational, chat‑based workflow that lets non‑technical users describe changes and iteratively refine sites/apps.[1][4][6][7][10]",
+          "Integrated deployment: one‑click publishing to Lovable subdomains and support for custom domains on paid plans.[1][3][4][7]",
+          "Targets technical solopreneurs and innovation teams who want speed plus code ownership and flexibility.[1][3][5][10]",
+          "Native **GitHub integration** and Supabase backend connection for version control and data.[1][7][9][10]"
+        ],
+        "weaknesses": [
+          "Tooling and ecosystem are **newer and less battle‑tested** than incumbents like Webflow/Wix for large‑scale content sites.[3][5][10]",
+          "Best suited to users comfortable with code concepts; purely non‑technical small businesses may prefer more template‑driven builders.[3][5]",
+          "Enterprise‑grade features (SSO, advanced governance, SLA) are not yet as clearly packaged or documented as legacy website platforms.[3][5][9]"
+        ],
+        "typicalUseCases": [
+          "Rapid MVPs and prototypes for web applications and SaaS products.[1][2][4][10]",
+          "Small business and startup marketing sites that also need forms, dashboards, or simple app logic.[1][3][4][7]",
+          "Developer portfolios and personal sites that require code access and customization.[2][3][5]",
+          "Internal tools or data‑driven dashboards where full‑stack generation saves engineering time.[1][3][9][10]"
+        ],
+        "pricing": "Lovable markets an AI website builder with a **Premium Website Builder** plan around ~$12/month for 1 website, 2GB storage, AI generation, and free domain for 1 year, alongside a free tier; pricing is still evolving and may differ by plan and usage.[3]",
+        "apiAvailability": "LIMITED",
+        "enterpriseReadiness": "MEDIUM",
+        "evidenceSources": [
+          "https://gpt-lab.eu/exploring-lovable/",
+          "https://www.codecademy.com/article/lovable-ai-website-builder",
+          "https://lovable.dev/guides/best-ai-website-builder",
+          "https://lovable.dev/solutions/use-case/small-business-website",
+          "https://lovable.dev/guides/best-no-code-website-builders",
+          "https://lovable.dev/blog",
+          "https://uibakery.io/blog/what-is-lovable-ai",
+          "https://www.youtube.com/watch?v=UtVMsvu4JfU",
+          "https://www.youtube.com/watch?v=gw0GQe3e5NI"
+        ],
+        "overallRecommendation": "High‑priority for Atlas discovery in **AI-native website generation** and full‑stack app creation; strong fit where code ownership, rapid iteration, and AI‑assisted development are key, less ideal as a generic non‑technical site builder at very large enterprise scale today.",
+        "recommendationScore": 8.7
+      },
+      {
+        "rank": 3,
+        "provider": "Wix Studio / Wix",
+        "company": "Wix.com Ltd.",
+        "capability": "All‑in‑one website builder with templates, hosting, e‑commerce, and extensive AI‑assisted creation (ADI, content generation) aimed at small businesses and general web presence.",
+        "strengths": [
+          "Very broad adoption among **small business owners** for general business and personal sites.[3][5]",
+          "Template‑based system with over **hundreds of professionally designed templates** across industries.[5]",
+          "Includes **hosting, SEO, e‑commerce, scheduling, analytics**, and comprehensive site‑management tools.[3][5]",
+          "AI features (e.g., ADI, content generation) assist with layout, copy, and site structure from simple business descriptions.[3][5]"
+        ],
+        "weaknesses": [
+          "Customization is largely **template‑based**, with less granular control than Webflow for advanced designers.[3][5]",
+          "Backend logic and app‑like behavior are partial; complex workflows often require marketplace apps or custom dev.[5]",
+          "Code ownership and export flexibility are limited compared with code‑first AI builders like Lovable.[3][5]"
+        ],
+        "typicalUseCases": [
+          "Local business websites (restaurants, salons, professionals) with bookings and basic e‑commerce.[3][5]",
+          "Personal sites and blogs for non‑technical users.[3][5]",
+          "SMBs needing turnkey web presence with minimal technical overhead.[3][5]"
+        ],
+        "pricing": "Wix offers multiple plans (e.g., website, business/eCommerce) with bundled hosting; pricing is broad, from entry‑level personal plans to higher‑tier business packages, competitive in SMB segment.[3][5]",
+        "apiAvailability": "AVAILABLE",
+        "enterpriseReadiness": "MEDIUM",
+        "evidenceSources": [
+          "https://lovable.dev/guides/best-ai-website-builder",
+          "https://lovable.dev/guides/best-no-code-website-builders"
+        ],
+        "overallRecommendation": "Important incumbent to benchmark for **SMB‑oriented website generation with AI assistance**; useful where Atlas considers non‑technical users and all‑in‑one suites rather than code‑centric generation.",
+        "recommendationScore": 8.3
+      }
+    ],
+    "ceoApprovalRequiredBeforeBenchmark": true,
+    "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+    "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+    "marketDiscoveryReport": {
+      "category": "Website Generation",
+      "generatedAt": "2026-07-10T22:39:54.755Z",
+      "overallRecommendation": "For Atlas’s specialist market discovery in **Website Generation**, prioritize deep evaluation of Lovable, Webflow, Wix (including Wix Studio), Framer, and v0 as the primary 2025–2026 market leaders across AI‑native generation, professional visual design, SMB all‑in‑one builders, design‑first marketing sites, and developer‑centric prompt‑to‑code platforms. Use Replit as a secondary, developer‑environment comparator rather than a core website builder.",
+      "providers": [
+        {
+          "provider": "Webflow",
+          "company": "Webflow, Inc.",
+          "capability": "Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.",
+          "strengths": [
+            "Mature **visual design interface** with granular control similar to front‑end development tools, enabling high‑quality, responsive sites.[5]",
+            "Integrated **CMS, hosting, and animation** tools suitable for complex marketing sites and content‑rich properties.[5]",
+            "Large ecosystem, template and expert community; widely adopted by agencies and startups as a primary web presence platform.[5]",
+            "Positioned as a professional‑grade builder, bridging design and development without requiring full coding.[5]"
+          ],
+          "weaknesses": [
+            "Primarily focused on **frontend and CMS**; complex backend logic and app‑like functionality often need external services or custom code embeds.[5]",
+            "Learning curve can be moderate for non‑designers compared to simpler template builders.[5]",
+            "AI capabilities are more assistive than fully generative full‑stack app creation (relative to Lovable or developer‑oriented AI tools).[3][5]"
+          ],
+          "typicalUseCases": [
+            "Corporate marketing sites, product landing pages, and content‑driven websites.[5]",
+            "Agency‑built sites for clients requiring strong brand control and animations.[5]",
+            "Founders and growth teams managing web presence without hiring full engineering teams.[5]"
+          ],
+          "pricing": "Webflow offers tiered site plans (Basic, CMS, Business) and workspace plans with per‑site and per‑user pricing; pricing is mid‑to‑high relative to template builders, reflecting its professional positioning.[5]",
+          "apiAvailability": "AVAILABLE",
+          "enterpriseReadiness": "HIGH",
+          "evidenceSources": [
+            "https://lovable.dev/guides/best-no-code-website-builders"
+          ],
+          "overallRecommendation": "Must‑include benchmark provider for **professional website generation**; critical for comparing AI‑first approaches (Lovable, v0) to incumbent visual‑design platforms that dominate marketing and content sites.",
+          "recommendationScore": 9.1
+        },
+        {
+          "provider": "Lovable",
+          "company": "Lovable, Inc.",
+          "capability": "AI-native full‑stack website and web app generation from natural language prompts, producing editable React/Tailwind frontends with Supabase‑backed backends and built‑in hosting.",
+          "strengths": [
+            "Generates **real, production‑grade code** (React, Tailwind, Supabase) that can be edited, extended, or exported to GitHub.[1][2][5][10]",
+            "Supports **full‑stack apps** (frontend, backend logic, database schema, authentication) instead of only static marketing sites.[1][2][5][10]",
+            "Conversational, chat‑based workflow that lets non‑technical users describe changes and iteratively refine sites/apps.[1][4][6][7][10]",
+            "Integrated deployment: one‑click publishing to Lovable subdomains and support for custom domains on paid plans.[1][3][4][7]",
+            "Targets technical solopreneurs and innovation teams who want speed plus code ownership and flexibility.[1][3][5][10]",
+            "Native **GitHub integration** and Supabase backend connection for version control and data.[1][7][9][10]"
+          ],
+          "weaknesses": [
+            "Tooling and ecosystem are **newer and less battle‑tested** than incumbents like Webflow/Wix for large‑scale content sites.[3][5][10]",
+            "Best suited to users comfortable with code concepts; purely non‑technical small businesses may prefer more template‑driven builders.[3][5]",
+            "Enterprise‑grade features (SSO, advanced governance, SLA) are not yet as clearly packaged or documented as legacy website platforms.[3][5][9]"
+          ],
+          "typicalUseCases": [
+            "Rapid MVPs and prototypes for web applications and SaaS products.[1][2][4][10]",
+            "Small business and startup marketing sites that also need forms, dashboards, or simple app logic.[1][3][4][7]",
+            "Developer portfolios and personal sites that require code access and customization.[2][3][5]",
+            "Internal tools or data‑driven dashboards where full‑stack generation saves engineering time.[1][3][9][10]"
+          ],
+          "pricing": "Lovable markets an AI website builder with a **Premium Website Builder** plan around ~$12/month for 1 website, 2GB storage, AI generation, and free domain for 1 year, alongside a free tier; pricing is still evolving and may differ by plan and usage.[3]",
+          "apiAvailability": "LIMITED",
+          "enterpriseReadiness": "MEDIUM",
+          "evidenceSources": [
+            "https://gpt-lab.eu/exploring-lovable/",
+            "https://www.codecademy.com/article/lovable-ai-website-builder",
+            "https://lovable.dev/guides/best-ai-website-builder",
+            "https://lovable.dev/solutions/use-case/small-business-website",
+            "https://lovable.dev/guides/best-no-code-website-builders",
+            "https://lovable.dev/blog",
+            "https://uibakery.io/blog/what-is-lovable-ai",
+            "https://www.youtube.com/watch?v=UtVMsvu4JfU",
+            "https://www.youtube.com/watch?v=gw0GQe3e5NI"
+          ],
+          "overallRecommendation": "High‑priority for Atlas discovery in **AI-native website generation** and full‑stack app creation; strong fit where code ownership, rapid iteration, and AI‑assisted development are key, less ideal as a generic non‑technical site builder at very large enterprise scale today.",
+          "recommendationScore": 8.7
+        },
+        {
+          "provider": "Wix Studio / Wix",
+          "company": "Wix.com Ltd.",
+          "capability": "All‑in‑one website builder with templates, hosting, e‑commerce, and extensive AI‑assisted creation (ADI, content generation) aimed at small businesses and general web presence.",
+          "strengths": [
+            "Very broad adoption among **small business owners** for general business and personal sites.[3][5]",
+            "Template‑based system with over **hundreds of professionally designed templates** across industries.[5]",
+            "Includes **hosting, SEO, e‑commerce, scheduling, analytics**, and comprehensive site‑management tools.[3][5]",
+            "AI features (e.g., ADI, content generation) assist with layout, copy, and site structure from simple business descriptions.[3][5]"
+          ],
+          "weaknesses": [
+            "Customization is largely **template‑based**, with less granular control than Webflow for advanced designers.[3][5]",
+            "Backend logic and app‑like behavior are partial; complex workflows often require marketplace apps or custom dev.[5]",
+            "Code ownership and export flexibility are limited compared with code‑first AI builders like Lovable.[3][5]"
+          ],
+          "typicalUseCases": [
+            "Local business websites (restaurants, salons, professionals) with bookings and basic e‑commerce.[3][5]",
+            "Personal sites and blogs for non‑technical users.[3][5]",
+            "SMBs needing turnkey web presence with minimal technical overhead.[3][5]"
+          ],
+          "pricing": "Wix offers multiple plans (e.g., website, business/eCommerce) with bundled hosting; pricing is broad, from entry‑level personal plans to higher‑tier business packages, competitive in SMB segment.[3][5]",
+          "apiAvailability": "AVAILABLE",
+          "enterpriseReadiness": "MEDIUM",
+          "evidenceSources": [
+            "https://lovable.dev/guides/best-ai-website-builder",
+            "https://lovable.dev/guides/best-no-code-website-builders"
+          ],
+          "overallRecommendation": "Important incumbent to benchmark for **SMB‑oriented website generation with AI assistance**; useful where Atlas considers non‑technical users and all‑in‑one suites rather than code‑centric generation.",
+          "recommendationScore": 8.3
+        },
+        {
+          "provider": "v0",
+          "company": "Vercel (v0.dev)",
+          "capability": "Prompt‑to‑UI and website generation tool from Vercel that creates React/Next.js components and layouts from natural language, aimed at developers building modern web apps and sites.",
+          "strengths": [
+            "Developer‑oriented **prompt‑to‑code** generation aligned with modern React/Next.js stacks (Vercel ecosystem).",
+            "Strong fit for teams already building on Vercel, enabling AI‑assisted creation of UI and page structures.",
+            "Supports export and integration into existing codebases, maintaining developer control."
+          ],
+          "weaknesses": [
+            "Focuses more on **component and UI generation** than fully managed non‑technical site building.",
+            "Requires familiarity with modern web development stacks; less suitable for small non‑technical businesses than Wix‑style builders.",
+            "Public information on deep enterprise features is still emerging compared to Webflow/Wix."
+          ],
+          "typicalUseCases": [
+            "Developers scaffolding marketing sites and product pages within a Next.js/Vercel stack.",
+            "Engineering teams accelerating UI development for dashboards and app interfaces.",
+            "Startups wanting AI‑assisted React code rather than drag‑and‑drop builders."
+          ],
+          "pricing": "Typically bundled or aligned with Vercel’s existing usage‑based and tiered pricing; AI usage may be metered separately depending on plan.",
+          "apiAvailability": "LIMITED",
+          "enterpriseReadiness": "MEDIUM",
+          "evidenceSources": [
+            "https://v0.dev",
+            "https://vercel.com"
+          ],
+          "overallRecommendation": "Strategic provider for Atlas where **developer‑centric AI code generation** for websites is in scope; complementary to Lovable with stronger anchoring in the Vercel ecosystem.",
+          "recommendationScore": 8
+        },
+        {
+          "provider": "Framer",
+          "company": "Framer B.V.",
+          "capability": "Design‑centric website builder focused on marketing sites and landing pages, with instant publishing and modern design tooling.",
+          "strengths": [
+            "Combines **design editing with instant publishing**, making it fast to go from layout to live marketing sites.[5]",
+            "Optimized for **marketing‑focused websites**, especially high‑conversion landing pages and startup sites.[5]",
+            "Low learning curve relative to more complex visual builders, with opinionated templates and modern aesthetics.[5]"
+          ],
+          "weaknesses": [
+            "Backend logic is **limited**; best suited for static or lightly interactive sites, not complex web apps.[5]",
+            "Less comprehensive for e‑commerce, deep CMS, or complex workflows compared to Webflow or Wix.[5]",
+            "Enterprise feature set and compliance posture are not as broad as long‑established incumbents."
+          ],
+          "typicalUseCases": [
+            "Startup and product landing pages.[5]",
+            "Marketing websites that prioritize design polish and quick iteration.[5]",
+            "Design teams wanting a direct path from Figma‑style design to live site."
+          ],
+          "pricing": "Framer provides tiered site plans with hosted publishing; pricing is comparable to modern SaaS site builders, optimized for small businesses and startups.[5]",
+          "apiAvailability": "LIMITED",
+          "enterpriseReadiness": "MEDIUM",
+          "evidenceSources": [
+            "https://lovable.dev/guides/best-no-code-website-builders"
+          ],
+          "overallRecommendation": "Relevant for Atlas when assessing **design‑first, marketing‑site generation**; useful comparator against AI‑generated full‑stack approaches but less central for application‑level logic.",
+          "recommendationScore": 7.9
+        },
+        {
+          "provider": "Replit AI / Replit Web",
+          "company": "Replit, Inc.",
+          "capability": "Cloud‑based development environment with AI pair‑programming and project templates, capable of generating and hosting web applications and sites from code.",
+          "strengths": [
+            "Popular **online IDE** with AI coding assistance, suitable for quickly building and hosting web apps.",
+            "Supports full‑stack development across multiple languages and frameworks, not limited to one stack.",
+            "Built‑in hosting and deployment for projects, enabling fast shareable websites."
+          ],
+          "weaknesses": [
+            "Not a traditional website builder; requires users to work with code rather than visual templates or pure prompts.",
+            "Website generation is indirect (via coding) rather than dedicated AI website builder UX like Lovable or Wix ADI.",
+            "Enterprise feature set around governance, SSO, and compliance is less prominently marketed than Webflow/Wix."
+          ],
+          "typicalUseCases": [
+            "Developers and learners building web apps and experimental sites.",
+            "Hackathon and prototype environments where AI assists coding.",
+            "Educational and bootcamp contexts for teaching web development with AI support."
+          ],
+          "pricing": "Replit offers a free tier and paid plans (e.g., Replit Core) with additional compute, storage, and collaboration; AI features may be metered or bundled in higher tiers.",
+          "apiAvailability": "AVAILABLE",
+          "enterpriseReadiness": "LOW",
+          "evidenceSources": [
+            "https://replit.com"
+          ],
+          "overallRecommendation": "Relevant as a **developer‑tool baseline** for AI‑assisted website creation via code, but secondary for Atlas compared to dedicated AI website generators; best treated as a control in the developer‑IDE segment rather than core website‑generation category.",
+          "recommendationScore": 6.8
+        }
+      ],
+      "evidenceSources": [
+        "https://lovable.dev/guides/best-no-code-website-builders",
+        "https://gpt-lab.eu/exploring-lovable/",
+        "https://www.codecademy.com/article/lovable-ai-website-builder",
+        "https://lovable.dev/guides/best-ai-website-builder",
+        "https://lovable.dev/solutions/use-case/small-business-website",
+        "https://lovable.dev/blog",
+        "https://uibakery.io/blog/what-is-lovable-ai",
+        "https://www.youtube.com/watch?v=UtVMsvu4JfU",
+        "https://www.youtube.com/watch?v=gw0GQe3e5NI",
+        "https://v0.dev",
+        "https://vercel.com",
+        "https://replit.com"
+      ]
+    }
+  },
+  "selectedWebsiteSpecialist": {
+    "provider": "Webflow",
+    "product": "Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.",
+    "source": "MARKET_DISCOVERY_TOP_CANDIDATE_PENDING_BENCHMARK"
+  },
+  "benchmarkJustification": {
+    "benchmarkStatus": "NO_WEBSITE_GENERATION_BENCHMARK_FOUND",
+    "selectionMode": "MARKET_RESEARCH_RECOMMENDATION_PENDING_FORMAL_BENCHMARK",
+    "category": "website-generation",
+    "benchmarkEvidence": {
+      "topCandidates": [
+        {
+          "rank": 1,
+          "provider": "Webflow",
+          "product": "Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.",
+          "suitabilityScore": 9.1,
+          "conversionReadiness": 9.1,
+          "designQuality": 9.1,
+          "speedToPrototype": 9.1,
+          "customizationControl": 9.1,
+          "seoAndPerformanceReadiness": 9.1,
+          "strengths": [
+            "Mature **visual design interface** with granular control similar to front‑end development tools, enabling high‑quality, responsive sites.[5]",
+            "Integrated **CMS, hosting, and animation** tools suitable for complex marketing sites and content‑rich properties.[5]",
+            "Large ecosystem, template and expert community; widely adopted by agencies and startups as a primary web presence platform.[5]",
+            "Positioned as a professional‑grade builder, bridging design and development without requiring full coding.[5]"
+          ],
+          "limitations": [
+            "Primarily focused on **frontend and CMS**; complex backend logic and app‑like functionality often need external services or custom code embeds.[5]",
+            "Learning curve can be moderate for non‑designers compared to simpler template builders.[5]",
+            "AI capabilities are more assistive than fully generative full‑stack app creation (relative to Lovable or developer‑oriented AI tools).[3][5]"
+          ],
+          "rationale": "Must‑include benchmark provider for **professional website generation**; critical for comparing AI‑first approaches (Lovable, v0) to incumbent visual‑design platforms that dominate marketing and content sites."
+        },
+        {
+          "rank": 2,
+          "provider": "Lovable",
+          "product": "AI-native full‑stack website and web app generation from natural language prompts, producing editable React/Tailwind frontends with Supabase‑backed backends and built‑in hosting.",
+          "suitabilityScore": 8.7,
+          "conversionReadiness": 8.7,
+          "designQuality": 8.7,
+          "speedToPrototype": 8.7,
+          "customizationControl": 8.7,
+          "seoAndPerformanceReadiness": 8.7,
+          "strengths": [
+            "Generates **real, production‑grade code** (React, Tailwind, Supabase) that can be edited, extended, or exported to GitHub.[1][2][5][10]",
+            "Supports **full‑stack apps** (frontend, backend logic, database schema, authentication) instead of only static marketing sites.[1][2][5][10]",
+            "Conversational, chat‑based workflow that lets non‑technical users describe changes and iteratively refine sites/apps.[1][4][6][7][10]",
+            "Integrated deployment: one‑click publishing to Lovable subdomains and support for custom domains on paid plans.[1][3][4][7]",
+            "Targets technical solopreneurs and innovation teams who want speed plus code ownership and flexibility.[1][3][5][10]",
+            "Native **GitHub integration** and Supabase backend connection for version control and data.[1][7][9][10]"
+          ],
+          "limitations": [
+            "Tooling and ecosystem are **newer and less battle‑tested** than incumbents like Webflow/Wix for large‑scale content sites.[3][5][10]",
+            "Best suited to users comfortable with code concepts; purely non‑technical small businesses may prefer more template‑driven builders.[3][5]",
+            "Enterprise‑grade features (SSO, advanced governance, SLA) are not yet as clearly packaged or documented as legacy website platforms.[3][5][9]"
+          ],
+          "rationale": "High‑priority for Atlas discovery in **AI-native website generation** and full‑stack app creation; strong fit where code ownership, rapid iteration, and AI‑assisted development are key, less ideal as a generic non‑technical site builder at very large enterprise scale today."
+        },
+        {
+          "rank": 3,
+          "provider": "Wix Studio / Wix",
+          "product": "All‑in‑one website builder with templates, hosting, e‑commerce, and extensive AI‑assisted creation (ADI, content generation) aimed at small businesses and general web presence.",
+          "suitabilityScore": 8.3,
+          "conversionReadiness": 8.3,
+          "designQuality": 8.3,
+          "speedToPrototype": 8.3,
+          "customizationControl": 8.3,
+          "seoAndPerformanceReadiness": 8.3,
+          "strengths": [
+            "Very broad adoption among **small business owners** for general business and personal sites.[3][5]",
+            "Template‑based system with over **hundreds of professionally designed templates** across industries.[5]",
+            "Includes **hosting, SEO, e‑commerce, scheduling, analytics**, and comprehensive site‑management tools.[3][5]",
+            "AI features (e.g., ADI, content generation) assist with layout, copy, and site structure from simple business descriptions.[3][5]"
+          ],
+          "limitations": [
+            "Customization is largely **template‑based**, with less granular control than Webflow for advanced designers.[3][5]",
+            "Backend logic and app‑like behavior are partial; complex workflows often require marketplace apps or custom dev.[5]",
+            "Code ownership and export flexibility are limited compared with code‑first AI builders like Lovable.[3][5]"
+          ],
+          "rationale": "Important incumbent to benchmark for **SMB‑oriented website generation with AI assistance**; useful where Atlas considers non‑technical users and all‑in‑one suites rather than code‑centric generation."
+        }
+      ],
+      "recommendation": {
+        "provider": "Webflow",
+        "product": "Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.",
+        "hireRecommendation": "RUN_BENCHMARK_AFTER_CEO_APPROVAL",
+        "why": "For Atlas’s specialist market discovery in **Website Generation**, prioritize deep evaluation of Lovable, Webflow, Wix (including Wix Studio), Framer, and v0 as the primary 2025–2026 market leaders across AI‑native generation, professional visual design, SMB all‑in‑one builders, design‑first marketing sites, and developer‑centric prompt‑to‑code platforms. Use Replit as a secondary, developer‑environment comparator rather than a core website builder.",
+        "risks": [
+          "No benchmark run has executed yet.",
+          "Champion designation is pending benchmark outcomes and CEO decision."
+        ]
+      }
+    },
+    "why": "No active champion existed in Workforce Registry, so Atlas executed external market discovery and produced top benchmark candidates pending CEO approval."
+  },
+  "websiteStrategy": {
+    "strategicIntent": "Atlas Web must project premium trust and immediate conversion confidence for service-business buyers.",
+    "audience": "Owner-led local/regional businesses that need more qualified leads and booked jobs.",
+    "promise": "Atlas Web designs and builds conversion-focused business websites that turn traffic into booked opportunities.",
+    "trustPillars": [
+      "Executive process transparency",
+      "Demonstration-backed quality proof",
+      "Research-backed conversion decisions",
+      "Clear accountability and measurable outcomes"
+    ],
+    "specialistExecutionModel": "Website production led by Webflow (Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.) under Atlas executive governance."
+  },
+  "informationArchitecture": {
+    "primaryNavigation": [
+      "Home",
+      "Our Process",
+      "Demonstration Projects",
+      "Free Website Audit",
+      "Contact"
+    ],
+    "globalCta": "Request Your Free Website Audit",
+    "pagePurpose": {
+      "Home": "Create immediate trust and conversion intent.",
+      "Our Process": "Show clear, executive-grade, repeatable delivery method.",
+      "Demonstration Projects": "Provide capability proof through clearly labeled Atlas demonstrations.",
+      "Free Website Audit": "Capture high-intent leads through low-friction audit request.",
+      "Contact": "Offer direct trust-preserving communication and scheduling path."
+    }
+  },
+  "pageStructure": {
+    "home": {
+      "firstScreenRequirements": [
+        "What Atlas Web does stated in one sentence.",
+        "Proof of quality signal block.",
+        "Trust indicators and credibility markers.",
+        "Single clear CTA: Request Your Free Website Audit."
+      ],
+      "sections": [
+        "Hero: conversion-focused websites for service businesses",
+        "Proof strip: demonstration metrics and quality claims",
+        "Trust section: executive process and compliance language",
+        "Offer section: free website audit outcomes",
+        "CTA close: audit request form entry"
+      ]
+    },
+    "ourProcess": {
+      "sections": [
+        "Step-by-step executive workflow",
+        "Research-to-design decision chain",
+        "Production quality gates",
+        "Handoff and optimization model"
+      ]
+    },
+    "demonstrationProjects": {
+      "sections": [
+        "Portfolio demonstrations with disclosure labels",
+        "Prospect demonstration framework overview",
+        "Before/after structure and audit logic",
+        "Quality rationale and supporting references"
+      ]
+    },
+    "freeWebsiteAudit": {
+      "sections": [
+        "Audit value proposition",
+        "What prospect receives in 48 hours",
+        "Short qualification form",
+        "Privacy and no-obligation trust statement"
+      ]
+    },
+    "contact": {
+      "sections": [
+        "Direct contact options",
+        "Response time expectation",
+        "Scheduling prompt with CTA continuity"
+      ]
+    }
+  },
+  "visualDirection": {
+    "styleIntent": "Premium, modern, trustworthy, and focused on business outcomes.",
+    "typographyDirection": "High-contrast editorial sans with strong hierarchy and short scan-friendly lines.",
+    "colorSystem": {
+      "primary": "Deep navy and slate neutrals",
+      "accent": "Controlled electric cyan for CTA emphasis",
+      "support": "Warm gray backgrounds for trust sections"
+    },
+    "uiPrinciples": [
+      "High legibility over decoration",
+      "Deliberate whitespace to signal confidence",
+      "Proof modules above fold where possible",
+      "Consistent CTA treatment across all pages"
+    ],
+    "imageryApproach": "Use executive-quality demonstration mockups and structured before/after frames with clear labels."
+  },
+  "conversionStrategy": {
+    "primaryCta": "Request Your Free Website Audit",
+    "conversionModel": [
+      "Single core CTA across site to reduce decision friction.",
+      "Proof-first sequencing before any detailed process explanation.",
+      "Trust markers near every major conversion decision point.",
+      "Short audit form with qualifying fields tied to sales readiness."
+    ],
+    "measurableTargets": [
+      "Hero-to-CTA click-through rate",
+      "Audit form completion rate",
+      "Qualified lead submission rate",
+      "Booked audit call conversion rate"
+    ],
+    "frictionControls": [
+      "No multi-offer confusion on first session",
+      "No dense technical jargon in conversion paths",
+      "No conflicting CTA language across pages"
+    ]
+  },
+  "productionPlan": {
+    "status": "STRATEGY_ONLY_PENDING_CEO_APPROVAL",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Specialist selection and governance lock",
+        "outcome": "Champion selected: Webflow (Visual, design‑led website builder with CMS and hosting that is increasingly integrating AI assistance, widely used for professional, responsive marketing sites.)."
+      },
+      {
+        "phase": 2,
+        "name": "Strategy and architecture approval",
+        "outcome": "Finalize IA, page structure, visual direction, and conversion model."
+      },
+      {
+        "phase": 3,
+        "name": "Design system and content blueprint",
+        "outcome": "Produce wireframes, visual system tokens, and page-level copy outlines."
+      },
+      {
+        "phase": 4,
+        "name": "Build execution (post-approval only)",
+        "outcome": "Generate production website assets using champion specialist workflow."
+      },
+      {
+        "phase": 5,
+        "name": "QA and launch readiness",
+        "outcome": "Validate conversion flows, mobile fidelity, speed, and analytics instrumentation."
+      }
+    ],
+    "stopGate": "Do not build Atlas Web until CEO approves this strategy package."
+  },
+  "missionGuardrails": {
+    "websiteBuildExecuted": false,
+    "outreachExecuted": false,
+    "publishingExecuted": false,
+    "prospectContactExecuted": false,
+    "ceoApprovalRequiredBeforeBuild": true,
+    "ceoApprovalRequiredBeforeBenchmark": true,
+    "benchmarkExecuted": false
+  },
+  "benchmarkSource": "MARKET_DISCOVERY_PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+  "externalResearch": {
+    "provider": "perplexity",
+    "model": "sonar-pro",
+    "citations": [
+      "https://lovable.dev/guides/best-no-code-website-builders",
+      "https://gpt-lab.eu/exploring-lovable/",
+      "https://www.codecademy.com/article/lovable-ai-website-builder",
+      "https://lovable.dev/guides/best-ai-website-builder",
+      "https://lovable.dev/solutions/use-case/small-business-website",
+      "https://lovable.dev/blog",
+      "https://uibakery.io/blog/what-is-lovable-ai",
+      "https://www.youtube.com/watch?v=UtVMsvu4JfU",
+      "https://www.youtube.com/watch?v=gw0GQe3e5NI",
+      "https://v0.dev",
+      "https://vercel.com",
+      "https://replit.com"
+    ],
+    "usage": null
+  },
+  "generatedAt": "2026-07-10T22:39:54.756Z"
+}

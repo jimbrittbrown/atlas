@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-07-11T19:14:38.638Z",
+  "mission": "executive-mission-control-api-v1",
+  "overallStatus": "PASS",
+  "checks": [
+    {
+      "name": "viewer can list mission control projection",
+      "passed": true
+    },
+    {
+      "name": "viewer can read mission detail",
+      "passed": true
+    },
+    {
+      "name": "executive pause command accepted",
+      "passed": true
+    },
+    {
+      "name": "executive resume command accepted",
+      "passed": true
+    },
+    {
+      "name": "executive rollback is forbidden",
+      "passed": true
+    },
+    {
+      "name": "ceo rollback command accepted",
+      "passed": true
+    },
+    {
+      "name": "ceo cancel command accepted",
+      "passed": true
+    },
+    {
+      "name": "duplicate idempotency key rejected",
+      "passed": true
+    }
+  ],
+  "missionId": "mis_869df859-d31c-4ffc-b7bf-20a6c39ec202",
+  "finalMissionState": "CANCELLED",
+  "auditEventCount": 6,
+  "routesValidated": [
+    "GET /api/v1/mission-control",
+    "GET /api/v1/mission-control/:missionId",
+    "POST /api/v1/mission-control/:missionId/pause",
+    "POST /api/v1/mission-control/:missionId/resume",
+    "POST /api/v1/mission-control/:missionId/rollback",
+    "POST /api/v1/mission-control/:missionId/cancel"
+  ],
+  "filesCreated": [
+    "integration/src/executive/executive-mission-control-contracts.js",
+    "integration/src/executive/executive-mission-control-audit-log.js",
+    "integration/src/executive/executive-mission-control-manager.js",
+    "integration/src/executive/executive-mission-control-api.js",
+    "integration/test/executive-mission-control-api-v1.test.js",
+    "integration/scripts/run-executive-mission-control-api-v1.js",
+    "integration/docs/executive-mission-control-api-v1.md"
+  ]
+}

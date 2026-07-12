@@ -1,0 +1,248 @@
+{
+  "packageName": "Atlas Web Website Specialist Handoff Package",
+  "version": "1.0.0",
+  "status": "STRATEGY_AND_HANDOFF_ONLY",
+  "missionId": "MISSION_003_WEBSITE_SPECIALIST_HANDOFF_PREPARATION",
+  "business": {
+    "name": "Atlas Web",
+    "launchStatus": "PRE_LAUNCH",
+    "initialTargetMarket": "Local and regional service businesses",
+    "initialFlagshipNiche": "Roofing",
+    "primaryCta": "Request Your Free Website Audit",
+    "flagshipOffer": {
+      "name": "Roofing Lead Engine Sprint - 14-Day Conversion Build",
+      "priceUsd": 3500,
+      "pricingModel": "Fixed fee",
+      "optionalAddOn": {
+        "name": "Call tracking and follow-up automation",
+        "priceUsd": 750
+      }
+    }
+  },
+  "factsPolicy": {
+    "noPriorPayingCustomers": true,
+    "noClientTestimonials": true,
+    "noClientPerformanceClaims": true,
+    "disallowInventedEvidence": true,
+    "disallowGuaranteedOutcomeClaims": true
+  },
+  "publicPositioning": {
+    "coreMessage": "Atlas Web creates premium, evidence-backed websites focused on improving qualified leads and booked opportunities.",
+    "messagePriorities": [
+      "Business outcomes",
+      "Conversion improvement",
+      "Qualified leads",
+      "Booked opportunities",
+      "Evidence-backed design decisions",
+      "Clear accountability",
+      "Premium visual quality"
+    ],
+    "languageRules": {
+      "preferredTerm": "evidence-backed",
+      "avoidTerms": [
+        "revolutionary",
+        "cutting-edge",
+        "game-changing",
+        "AI-powered architecture",
+        "orchestration"
+      ],
+      "internalArchitectureInvisible": true
+    }
+  },
+  "disclosurePolicy": {
+    "demonstrationsAreNotClientWork": true,
+    "requiredStatement": "Prepared by Atlas as a demonstration of our recommended improvements.",
+    "placementRules": [
+      "Visible near transformation visuals",
+      "Visible on each demonstration project card",
+      "Never hidden in fine print"
+    ]
+  },
+  "navigationAndIa": {
+    "primaryNavigation": [
+      "Home",
+      "Demonstration Projects",
+      "Free Website Audit",
+      "Our Process",
+      "Contact"
+    ],
+    "journeyRule": "Demonstration Projects should appear before detailed Process information.",
+    "globalCta": "Request Your Free Website Audit"
+  },
+  "homePagePriorityOrder": [
+    "Navigation",
+    "Visually exceptional hero",
+    "Immediate transformation proof",
+    "Core business outcome proposition",
+    "Demonstration project previews",
+    "Evidence-backed design principles",
+    "Free website audit offer",
+    "Concise process",
+    "Final CTA",
+    "Footer"
+  ],
+  "firstScreenRequirements": [
+    "What Atlas Web does",
+    "Proof of quality",
+    "Why businesses should trust Atlas",
+    "Single clear CTA: Request Your Free Website Audit"
+  ],
+  "pages": {
+    "home": {
+      "goal": "Immediate trust and conversion intent",
+      "requiredSections": [
+        "Hero",
+        "Before/after proof",
+        "Outcome proposition",
+        "Demonstration previews",
+        "Audit offer",
+        "Concise process",
+        "Final CTA"
+      ]
+    },
+    "demonstrationProjects": {
+      "goal": "Transparent capability proof",
+      "requiredSections": [
+        "Demonstration gallery",
+        "Before/after comparisons",
+        "Rationale summaries",
+        "Disclosure labels"
+      ]
+    },
+    "freeWebsiteAudit": {
+      "goal": "Qualified lead capture",
+      "requiredSections": [
+        "Offer summary",
+        "Short form",
+        "No-obligation statement",
+        "Privacy access"
+      ]
+    },
+    "ourProcess": {
+      "goal": "Execution clarity after proof",
+      "requiredSections": [
+        "Step summary",
+        "Evidence-backed decision approach",
+        "Handoff expectations"
+      ]
+    },
+    "contact": {
+      "goal": "Low-friction communication",
+      "requiredSections": [
+        "Contact channels",
+        "Response expectation",
+        "CTA continuity"
+      ]
+    }
+  },
+  "visualDirection": {
+    "intent": "Premium, modern, visually sophisticated, commercially credible",
+    "principles": [
+      "Premium editorial composition",
+      "Strong typography",
+      "Sophisticated spacing",
+      "Controlled motion",
+      "Transformation storytelling",
+      "Business credibility over tech-startup aesthetic"
+    ],
+    "constraints": [
+      "Do not copy existing websites",
+      "Do not lock to provider-specific components",
+      "Prioritize memorable clarity over trend effects"
+    ]
+  },
+  "conversion": {
+    "primaryGoal": "Qualified free audit submissions",
+    "secondaryGoals": [
+      "Demonstration engagement",
+      "Contact intent",
+      "Trust interaction depth"
+    ],
+    "ctaHierarchy": [
+      "Request Your Free Website Audit",
+      "View Demonstration Projects",
+      "Contact Atlas Web"
+    ],
+    "leadQualificationFields": [
+      "name",
+      "businessName",
+      "websiteUrl",
+      "email",
+      "phone",
+      "serviceArea",
+      "primaryOutcomeGoal",
+      "currentWebsiteChallenge"
+    ],
+    "analyticsEvents": [
+      "page_view_home",
+      "click_primary_cta_hero",
+      "open_before_after_module",
+      "click_demo_project_card",
+      "start_audit_form",
+      "submit_audit_form",
+      "submit_audit_form_error",
+      "view_process_section",
+      "click_contact_cta"
+    ]
+  },
+  "technicalRequirements": {
+    "providerNeutral": true,
+    "responsive": ["desktop", "tablet", "mobile"],
+    "accessibilityStandard": "WCAG 2.1 AA baseline",
+    "seoReadiness": true,
+    "analyticsReadiness": true,
+    "crmHandoffReadiness": true,
+    "securityAndPrivacyReadiness": true,
+    "browserTestingRequired": ["Chrome", "Safari", "Edge", "Firefox", "iOS Safari", "Android Chrome"]
+  },
+  "qaGates": {
+    "required": [
+      "Visual quality",
+      "Brand alignment",
+      "Messaging accuracy",
+      "Demonstration disclosure",
+      "Conversion clarity",
+      "Mobile usability",
+      "Accessibility",
+      "Form behavior",
+      "Page speed",
+      "Navigation",
+      "Broken links",
+      "Analytics readiness",
+      "SEO readiness",
+      "Unsupported claims check",
+      "Privacy",
+      "Technical handoff quality"
+    ],
+    "automaticFailConditions": [
+      "Generic/template appearance",
+      "Invented proof",
+      "Internal architecture exposure",
+      "AI buzzword overuse",
+      "Weak mobile presentation",
+      "Unclear CTA hierarchy",
+      "Demonstration represented as client work",
+      "Guaranteed business-result claims",
+      "Placeholder content",
+      "Untested forms or links"
+    ]
+  },
+  "stopConditions": {
+    "buildWebsite": false,
+    "generateProductionCode": false,
+    "openAccounts": false,
+    "connectProviders": false,
+    "purchasePlans": false,
+    "selectPermanentProvider": false,
+    "publishAnything": false,
+    "contactProspects": false
+  },
+  "openDecisions": {
+    "requiresCeoDecision": [
+      "Final legal footer details",
+      "Privacy legal text and jurisdiction",
+      "Audit response SLA commitment",
+      "Final mandatory/optional form field policy"
+    ]
+  }
+}

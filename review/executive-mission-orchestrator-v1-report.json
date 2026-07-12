@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-07-11T19:14:38.841Z",
+  "mission": "executive-mission-orchestrator-v1",
+  "overallStatus": "PASS",
+  "checks": [
+    {
+      "name": "orchestrate succeeded",
+      "passed": true
+    },
+    {
+      "name": "session created",
+      "passed": true
+    },
+    {
+      "name": "pipeline key assigned",
+      "passed": true
+    },
+    {
+      "name": "read-only governance enforced",
+      "passed": true
+    },
+    {
+      "name": "publish bypass prevented",
+      "passed": true
+    },
+    {
+      "name": "projection available",
+      "passed": true
+    }
+  ],
+  "summary": {
+    "orchestrationState": "COMPLETED",
+    "completionPercentage": 13,
+    "blockers": [],
+    "activeSessions": 0,
+    "totalSessions": 1
+  },
+  "filesCreated": [
+    "integration/src/executive/executive-mission-orchestrator-contracts.js",
+    "integration/src/executive/executive-mission-orchestrator-pipeline-registry.js",
+    "integration/src/executive/executive-mission-orchestrator-manager.js",
+    "integration/src/executive/executive-mission-orchestrator-dashboard-model.js",
+    "integration/src/executive/executive-mission-orchestrator-api.js",
+    "integration/test/executive-mission-orchestrator-v1.test.js",
+    "integration/scripts/run-executive-mission-orchestrator-v1.js",
+    "integration/docs/executive-mission-orchestrator-v1.md"
+  ]
+}

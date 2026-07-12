@@ -1,0 +1,2369 @@
+{
+  "packageName": "Business Launch Package",
+  "business": "Atlas Web",
+  "missionStatus": "COMPLETED_STOPPED_BEFORE_ASSET_CREATION",
+  "pipelineStatus": [
+    {
+      "order": 1,
+      "stage": "APPROVED_BUSINESS",
+      "gate": "Approved recommendation must include objective, target customer, and revenue model.",
+      "primaryDecisionOwner": "Executive Office",
+      "status": "COMPLETED_OR_READY"
+    },
+    {
+      "order": 2,
+      "stage": "LAUNCH_PLANNING",
+      "gate": "Launch package sections 1-20 completed and internally reviewed.",
+      "primaryDecisionOwner": "Launch Strategy Lead",
+      "status": "COMPLETED_OR_READY"
+    },
+    {
+      "order": 3,
+      "stage": "WORKFORCE_ASSIGNMENT",
+      "gate": "Each required specialist role checks active champion; if absent, external market discovery returns top benchmark candidates and requires CEO benchmark approval.",
+      "primaryDecisionOwner": "Workforce Registry Service",
+      "status": "COMPLETED_OR_READY"
+    },
+    {
+      "order": 4,
+      "stage": "ASSET_CREATION",
+      "gate": "Core brand, website, marketing, sales, and operations assets created.",
+      "primaryDecisionOwner": "Execution Program Manager",
+      "status": "STOPPED_BY_CEO_GATE"
+    },
+    {
+      "order": 5,
+      "stage": "QUALITY_REVIEW",
+      "gate": "Quality review passes without critical blockers.",
+      "primaryDecisionOwner": "Quality Review Council",
+      "status": "NOT_STARTED"
+    },
+    {
+      "order": 6,
+      "stage": "CEO_APPROVAL",
+      "gate": "CEO explicitly approves launch package and readiness status.",
+      "primaryDecisionOwner": "CEO",
+      "status": "NOT_STARTED"
+    },
+    {
+      "order": 7,
+      "stage": "LAUNCH",
+      "gate": "Launch command authorized and release checklist complete.",
+      "primaryDecisionOwner": "Launch Operations Lead",
+      "status": "NOT_STARTED"
+    },
+    {
+      "order": 8,
+      "stage": "PERFORMANCE_MONITORING",
+      "gate": "Tracking instrumentation and KPI dashboard are live.",
+      "primaryDecisionOwner": "Performance Intelligence Lead",
+      "status": "NOT_STARTED"
+    },
+    {
+      "order": 9,
+      "stage": "IMPROVEMENT_RECOMMENDATIONS",
+      "gate": "Performance review produces ranked recommendations for next cycle.",
+      "primaryDecisionOwner": "Executive Improvement Council",
+      "status": "NOT_STARTED"
+    }
+  ],
+  "launchPackage": {
+    "executiveSummary": {
+      "mission": "Convert approved opportunity into executable launch system.",
+      "approvedBusiness": "Create template‑based landing page systems for lead capture and simple sales. Use website builders and AI copy assistants to deliver niche landing page packages with built‑in tracking, email capture, and confirmation flows. Offer as a fast‑delivery service (48–72 hours) and upsell into email sequence setups or broader automation projects.",
+      "primaryObjective": "Launch Atlas's first revenue-generating company.",
+      "launchReadinessTarget": "CEO_APPROVED_FOR_LAUNCH",
+      "reusableFramework": true,
+      "missionType": "FIRST_OFFICIAL_BUSINESS_LAUNCH_MISSION",
+      "ceoDecision": "APPROVED_BUSINESS_ATLAS_WEB",
+      "pipelineStopPoint": "STOPPED_BEFORE_ASSET_CREATION",
+      "constitutionalCompliance": [
+        "Article III: Specialist-first hiring logic used.",
+        "Article VI: Benchmark evidence referenced in specialist decisions.",
+        "Article X: CEO retains final approval authority."
+      ]
+    },
+    "businessMission": "Launch Atlas Web as Atlas's first revenue-generating proof-of-concept company, proving specialist-orchestrated business execution under CEO governance.",
+    "targetCustomer": "Coaches, consultants, creators, and small businesses needing quick conversion‑optimized pages for upcoming campaigns but lacking design and tech resources.",
+    "valueProposition": "Atlas Web delivers conversion-focused websites and landing pages faster through AI specialist orchestration, with executive quality gates and measurable revenue outcomes.",
+    "revenueModel": "Fast-turnaround landing page setup fee plus upsells into follow-up automation and email sequences.",
+    "pricingStrategy": {
+      "strategyType": "Tiered package pricing with value-based upsells and guarded discount policy.",
+      "launchPricingApproach": "Start with a low-friction entry offer, then expand into retained and premium tiers.",
+      "budgetGuardrail": 60000,
+      "pricingReviewCadence": "Weekly for first 30 days, bi-weekly for days 31-90.",
+      "packaging": [
+        "Starter Landing Page Sprint",
+        "Growth Website + Funnel Build",
+        "Performance Optimization Retainer"
+      ],
+      "guardrails": [
+        "No discount beyond 15% without CEO approval.",
+        "Retainer pricing reviewed every 30 days based on delivery margin."
+      ]
+    },
+    "requiredAISpecialists": {
+      "policy": "For each required role: select active champion from Workforce Registry or trigger external market discovery and CEO-approved benchmark before hiring.",
+      "assignments": [
+        {
+          "role": "Market Research Specialist",
+          "assignmentStatus": "BENCHMARK_REQUIRED",
+          "workerId": null,
+          "workerName": null,
+          "standingScore": null,
+          "source": "MARKET_DISCOVERY_REQUIRED",
+          "hiringDecisionRequired": true,
+          "benchmarkReference": {
+            "benchmarkType": "specialist-benchmarking",
+            "benchmarkId": null,
+            "recommendation": "PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+            "championProvider": "NielsenIQ (incl. Nielsen)"
+          },
+          "hiringDecision": {
+            "category": "Market Research Specialist",
+            "decision": "MARKET_DISCOVERY_REQUIRED",
+            "selectedSpecialistId": null,
+            "selectedSpecialist": null,
+            "topBenchmarkCandidates": [
+              {
+                "rank": 1,
+                "provider": "NielsenIQ (incl. Nielsen)",
+                "company": "NielsenIQ",
+                "capability": "Global **retail, shopper, audience, and media measurement** with deep point-of-sale (POS) and panel data, providing market sizing, share tracking, and shopper insights across CPG, retail, and media categories.",
+                "strengths": [
+                  "Recognized as a **top global market research leader in 2026** with strong specialization in retail and shopper measurement[1].",
+                  "Unmatched longitudinal **POS and consumer panel datasets** for CPG and retail, enabling precise market share and trend analysis[1].",
+                  "Strong capabilities in **cross‑platform audience measurement** for TV, digital, and streaming, widely used by advertisers and media owners[3].",
+                  "High **enterprise readiness** with global coverage, compliance processes, and established methodologies for large brands and retailers[1]."
+                ],
+                "weaknesses": [
+                  "Typically **higher cost** and longer contracting cycles compared with newer SaaS-style research platforms (inferred from positioning as a global leader[1][3]).",
+                  "Less suited to very fast, low-budget ad‑hoc testing compared to agile self‑serve survey platforms[3]."
+                ],
+                "typicalUseCases": [
+                  "Ongoing **retail and market share tracking** for CPG and FMCG brands[1].",
+                  "Shopper behavior analysis and **assortment/price optimization** for retailers and manufacturers[1].",
+                  "Cross‑media and **audience measurement** for advertisers and media networks[3].",
+                  "Competitive benchmarking and **category landscape** analysis in consumer goods and retail[1]."
+                ],
+                "pricing": "Enterprise contract-based; pricing typically structured around syndicated data subscriptions and custom analytics projects (not publicly list-priced, inferred from enterprise positioning[1][3]).",
+                "apiAvailability": "LIMITED",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://touchstoneresearch.com/top-10-market-research-companies/",
+                  "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                ],
+                "overallRecommendation": "Best suited when Atlas clients need **rigorous, longitudinal market and shopper data** across many countries, especially in CPG, retail, and media. Use as a primary provider for **market sizing, share, and audience measurement** work, recognizing higher cost and integration complexity.",
+                "recommendationScore": 9.3
+              },
+              {
+                "rank": 2,
+                "provider": "Ipsos",
+                "company": "Ipsos",
+                "capability": "Full‑service **global market research** specializing in brand tracking, product testing, political and public opinion research, and large-scale quantitative and qualitative studies.",
+                "strengths": [
+                  "Listed as a **top 2026 market research company** with global panels and strong brand tracking expertise[1].",
+                  "Global reach with **large, managed online panels** enabling B2C and some B2B research in many markets[1][3].",
+                  "Deep capabilities in **brand health tracking, concept and product testing**, and political/policy studies[1][3].",
+                  "High methodological rigor and strong **enterprise-grade governance**, making it suitable for regulated industries (inferred from role as a leading global firm[1])."
+                ],
+                "weaknesses": [
+                  "Project timelines can be **slower** than agile SaaS platforms, particularly for complex multi-country work (typical of large full-service agencies[1][3]).",
+                  "Costs can be **prohibitive for smaller engagements** when compared to self-serve platforms or niche specialists[3]."
+                ],
+                "typicalUseCases": [
+                  "Ongoing **brand health and campaign tracking** across multiple markets[1][3].",
+                  "New product and **concept testing** (pack, pricing, features) at scale[1].",
+                  "Customer experience and **voice-of-customer** studies.",
+                  "Public opinion and **policy/polling** projects for governments and NGOs[1]."
+                ],
+                "pricing": "Custom, project-based pricing with higher typical minimums; aligned to full-service global agency rates (inferred from positioning as a top global firm[1][3]).",
+                "apiAvailability": "LIMITED",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://touchstoneresearch.com/top-10-market-research-companies/",
+                  "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                ],
+                "overallRecommendation": "Recommended as a **primary strategic insights partner** for Atlas clients needing complex, multi-country **brand, product, or public opinion** research with high methodological rigor. Use especially when in-house teams lack capacity to design and execute sophisticated studies.",
+                "recommendationScore": 9
+              },
+              {
+                "rank": 3,
+                "provider": "Kantar",
+                "company": "Kantar",
+                "capability": "Global insights and analytics firm focused on **brand equity, advertising effectiveness, and innovation research**, combining survey data, analytics, and proprietary frameworks.",
+                "strengths": [
+                  "Ranked among the **top market research companies in 2026** with focus on brand equity, ad testing, and innovation[1].",
+                  "Widely adopted **brand equity frameworks** and norms databases, used by major global brands for strategic brand management[1].",
+                  "Established **ad testing and creative evaluation** solutions (pre‑test, in‑market tracking, and optimization).",
+                  "Strong **innovation research** tools for early-stage concept screening through to market validation[1]."
+                ],
+                "weaknesses": [
+                  "Methodologies and frameworks can be **less flexible** or heavier-weight than more modular, DIY platforms (typical for large framework-driven firms[1][3]).",
+                  "Costs and minimum project sizes may limit suitability for **smaller or very tactical** research briefs."
+                ],
+                "typicalUseCases": [
+                  "**Brand equity and positioning** research for large consumer brands[1].",
+                  "Pre‑launch **ad and creative testing**, including TV, digital, and social assets[1].",
+                  "End‑to‑end **innovation pipeline research** (idea screening, concept testing, volumetric forecasting).",
+                  "Market and **category landscape** studies to inform brand strategy."
+                ],
+                "pricing": "Enterprise-level, project and solution-based pricing, often tied to proprietary solutions and benchmarks (inferred from role as a global leader[1]).",
+                "apiAvailability": "UNKNOWN",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://touchstoneresearch.com/top-10-market-research-companies/",
+                  "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                ],
+                "overallRecommendation": "Best aligned to Atlas clients whose market research specialists need **deep brand and advertising insights** with strong normative context. Position Kantar as a go‑to for **brand equity, creative testing, and innovation** assignments where standardized, benchmarked outputs are valued.",
+                "recommendationScore": 8.8
+              }
+            ],
+            "ceoApprovalRequiredBeforeBenchmark": true,
+            "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+            "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+            "marketDiscoveryReport": {
+              "category": "Market Research Specialist",
+              "generatedAt": "2026-07-10T22:40:39.916Z",
+              "overallRecommendation": "For Atlas’ “Market Research Specialist” category in 2026, prioritize a **portfolio approach** rather than a single provider. Use large global firms like **NielsenIQ, Ipsos, Kantar, GfK, Forrester, and Gartner** for high-rigor, strategic work (market sizing, tracking, technology and CX strategy)[1][3]. Pair them with agile platforms such as **Suzy and Attest** for rapid, iterative consumer insight and tactical testing needs[1][3]. For most general consumer and brand research use cases, recommend Ipsos or Kantar as primary global partners, supplemented by Suzy or Attest for fast-turnaround projects, while reserving Forrester and Gartner for tech- and B2B-focused engagements.",
+              "providers": [
+                {
+                  "provider": "NielsenIQ (incl. Nielsen)",
+                  "company": "NielsenIQ",
+                  "capability": "Global **retail, shopper, audience, and media measurement** with deep point-of-sale (POS) and panel data, providing market sizing, share tracking, and shopper insights across CPG, retail, and media categories.",
+                  "strengths": [
+                    "Recognized as a **top global market research leader in 2026** with strong specialization in retail and shopper measurement[1].",
+                    "Unmatched longitudinal **POS and consumer panel datasets** for CPG and retail, enabling precise market share and trend analysis[1].",
+                    "Strong capabilities in **cross‑platform audience measurement** for TV, digital, and streaming, widely used by advertisers and media owners[3].",
+                    "High **enterprise readiness** with global coverage, compliance processes, and established methodologies for large brands and retailers[1]."
+                  ],
+                  "weaknesses": [
+                    "Typically **higher cost** and longer contracting cycles compared with newer SaaS-style research platforms (inferred from positioning as a global leader[1][3]).",
+                    "Less suited to very fast, low-budget ad‑hoc testing compared to agile self‑serve survey platforms[3]."
+                  ],
+                  "typicalUseCases": [
+                    "Ongoing **retail and market share tracking** for CPG and FMCG brands[1].",
+                    "Shopper behavior analysis and **assortment/price optimization** for retailers and manufacturers[1].",
+                    "Cross‑media and **audience measurement** for advertisers and media networks[3].",
+                    "Competitive benchmarking and **category landscape** analysis in consumer goods and retail[1]."
+                  ],
+                  "pricing": "Enterprise contract-based; pricing typically structured around syndicated data subscriptions and custom analytics projects (not publicly list-priced, inferred from enterprise positioning[1][3]).",
+                  "apiAvailability": "LIMITED",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/",
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Best suited when Atlas clients need **rigorous, longitudinal market and shopper data** across many countries, especially in CPG, retail, and media. Use as a primary provider for **market sizing, share, and audience measurement** work, recognizing higher cost and integration complexity.",
+                  "recommendationScore": 9.3
+                },
+                {
+                  "provider": "Ipsos",
+                  "company": "Ipsos",
+                  "capability": "Full‑service **global market research** specializing in brand tracking, product testing, political and public opinion research, and large-scale quantitative and qualitative studies.",
+                  "strengths": [
+                    "Listed as a **top 2026 market research company** with global panels and strong brand tracking expertise[1].",
+                    "Global reach with **large, managed online panels** enabling B2C and some B2B research in many markets[1][3].",
+                    "Deep capabilities in **brand health tracking, concept and product testing**, and political/policy studies[1][3].",
+                    "High methodological rigor and strong **enterprise-grade governance**, making it suitable for regulated industries (inferred from role as a leading global firm[1])."
+                  ],
+                  "weaknesses": [
+                    "Project timelines can be **slower** than agile SaaS platforms, particularly for complex multi-country work (typical of large full-service agencies[1][3]).",
+                    "Costs can be **prohibitive for smaller engagements** when compared to self-serve platforms or niche specialists[3]."
+                  ],
+                  "typicalUseCases": [
+                    "Ongoing **brand health and campaign tracking** across multiple markets[1][3].",
+                    "New product and **concept testing** (pack, pricing, features) at scale[1].",
+                    "Customer experience and **voice-of-customer** studies.",
+                    "Public opinion and **policy/polling** projects for governments and NGOs[1]."
+                  ],
+                  "pricing": "Custom, project-based pricing with higher typical minimums; aligned to full-service global agency rates (inferred from positioning as a top global firm[1][3]).",
+                  "apiAvailability": "LIMITED",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/",
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Recommended as a **primary strategic insights partner** for Atlas clients needing complex, multi-country **brand, product, or public opinion** research with high methodological rigor. Use especially when in-house teams lack capacity to design and execute sophisticated studies.",
+                  "recommendationScore": 9
+                },
+                {
+                  "provider": "Kantar",
+                  "company": "Kantar",
+                  "capability": "Global insights and analytics firm focused on **brand equity, advertising effectiveness, and innovation research**, combining survey data, analytics, and proprietary frameworks.",
+                  "strengths": [
+                    "Ranked among the **top market research companies in 2026** with focus on brand equity, ad testing, and innovation[1].",
+                    "Widely adopted **brand equity frameworks** and norms databases, used by major global brands for strategic brand management[1].",
+                    "Established **ad testing and creative evaluation** solutions (pre‑test, in‑market tracking, and optimization).",
+                    "Strong **innovation research** tools for early-stage concept screening through to market validation[1]."
+                  ],
+                  "weaknesses": [
+                    "Methodologies and frameworks can be **less flexible** or heavier-weight than more modular, DIY platforms (typical for large framework-driven firms[1][3]).",
+                    "Costs and minimum project sizes may limit suitability for **smaller or very tactical** research briefs."
+                  ],
+                  "typicalUseCases": [
+                    "**Brand equity and positioning** research for large consumer brands[1].",
+                    "Pre‑launch **ad and creative testing**, including TV, digital, and social assets[1].",
+                    "End‑to‑end **innovation pipeline research** (idea screening, concept testing, volumetric forecasting).",
+                    "Market and **category landscape** studies to inform brand strategy."
+                  ],
+                  "pricing": "Enterprise-level, project and solution-based pricing, often tied to proprietary solutions and benchmarks (inferred from role as a global leader[1]).",
+                  "apiAvailability": "UNKNOWN",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/",
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Best aligned to Atlas clients whose market research specialists need **deep brand and advertising insights** with strong normative context. Position Kantar as a go‑to for **brand equity, creative testing, and innovation** assignments where standardized, benchmarked outputs are valued.",
+                  "recommendationScore": 8.8
+                },
+                {
+                  "provider": "Forrester Research Services",
+                  "company": "Forrester Research",
+                  "capability": "Technology‑ and CX‑focused **market and industry research, forecasts, and advisory** supporting decisions on market entry, tech adoption, and customer experience strategy.",
+                  "strengths": [
+                    "Identified as a 2026 top market research firm specializing in **technology and customer experience (CX) research, forecasts, and advisory**[1].",
+                    "In the US market research landscape, Forrester is noted for **technology adoption and market readiness analysis**[3].",
+                    "Strong **thought leadership and syndicated research** widely used by enterprise strategists, product leaders, and investors[3].",
+                    "High credibility in **B2B and tech markets**, especially for vendor evaluations and market sizing (inferred from its core business model[1][3])."
+                  ],
+                  "weaknesses": [
+                    "Less suitable for **tactical consumer survey projects** (e.g., quick ad tests or basic UX research) compared to generalist research platforms[3].",
+                    "Syndicated subscriptions can be **expensive**, and custom projects are targeted at mid‑ to large‑enterprise budgets."
+                  ],
+                  "typicalUseCases": [
+                    "**Market sizing and forecasting** for technology and digital markets[1][3].",
+                    "Evaluating **market readiness and adoption** of emerging technologies[3].",
+                    "Customer experience and **journey research** to guide CX strategy.",
+                    "Vendor comparisons and **landscape assessments** used in enterprise purchasing decisions."
+                  ],
+                  "pricing": "Primarily subscription-based for syndicated research plus high-value custom consulting projects; pricing not public but typically **premium enterprise** (inferred from advisory positioning[1][3]).",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/",
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Prioritize Forrester when Atlas clients’ market research specialists focus on **B2B, technology, and CX strategy** rather than purely consumer surveys. Use as a **strategic research and advisory partner** where authoritative, published insights and forecasts are required.",
+                  "recommendationScore": 8.7
+                },
+                {
+                  "provider": "Gartner",
+                  "company": "Gartner",
+                  "capability": "Global **technology and enterprise research and advisory** firm offering market insights, forecasts, and decision frameworks across IT, software, and business functions.",
+                  "strengths": [
+                    "Classified among the **top 2026 market research companies** with strong focus on enterprise technology research and vendor evaluations[1].",
+                    "Widely recognized **Magic Quadrant and similar evaluations** influence enterprise buying decisions in software and IT (inferred from Gartner’s core products[1]).",
+                    "Robust **enterprise client base**, with deep penetration in large organizations’ strategy, procurement, and product functions.",
+                    "High **enterprise readiness** with mature security, compliance, and governance structures[1]."
+                  ],
+                  "weaknesses": [
+                    "Scope is largely **B2B/technology focused**, making it less relevant for general consumer concept testing or ad‑hoc surveys[1][3].",
+                    "High-cost subscriptions and limited flexibility for small one‑off research tasks."
+                  ],
+                  "typicalUseCases": [
+                    "Assessing **technology markets and vendor landscapes** for enterprise software and IT services[1].",
+                    "**Market forecasts and trend analysis** in technology-driven categories.",
+                    "Supporting **go‑to‑market and product strategy** for B2B tech providers.",
+                    "Independent **vendor evaluation** to support enterprise purchasing decisions."
+                  ],
+                  "pricing": "Annual subscription and high-value advisory pricing model, generally **premium** and targeted at mid‑ to large‑enterprise clients (inferred from global advisory positioning[1]).",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/",
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Use Gartner selectively for Atlas clients whose market research specialists focus on **enterprise technology and vendor decision support**. It functions best as a **strategic secondary provider** complementing primary consumer insight or survey-based partners.",
+                  "recommendationScore": 8.5
+                },
+                {
+                  "provider": "Suzy",
+                  "company": "Suzy",
+                  "capability": "Agile **consumer insights platform** combining quantitative surveys, qualitative feedback, and live interviewing for rapid market validation and concept testing.",
+                  "strengths": [
+                    "Named in 2026 as a top market research company and as a US firm specializing in **online focus groups and fast consumer feedback**[1][3].",
+                    "Integrated platform enabling **quant + qual + live interviewing** for agile research cycles[1].",
+                    "Well-suited to **rapid turn‑around testing** (creative, concept, messaging) compared with traditional full‑service agencies[3].",
+                    "Modern SaaS model often includes **self-serve tools** for internal market research specialists (inferred from platform positioning[1][3])."
+                  ],
+                  "weaknesses": [
+                    "Sample is primarily **panel-based** and may not cover very niche B2B audiences as well as specialist B2B firms[3].",
+                    "Not intended for highly complex, multi‑method, or heavily regulated research compared to global full‑service agencies."
+                  ],
+                  "typicalUseCases": [
+                    "**Creative and message testing** with consumers prior to campaigns[3].",
+                    "Quick **concept and product validation** in early-stage innovation cycles[1].",
+                    "Ad‑hoc **consumer sentiment checks** and attitudinal research.",
+                    "Supplementing trackers with **rapid pulse surveys** during market events or crises."
+                  ],
+                  "pricing": "Subscription or license-based platform pricing with tiers by user seats and sample volume; lower barrier and faster procurement than large agencies (inferred from SaaS platform model[1][3]).",
+                  "apiAvailability": "UNKNOWN",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/",
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Position Suzy as a **high-impact, agile partner** for Atlas clients whose market research specialists need **fast consumer feedback**, particularly in marketing, innovation, and product teams. It is a strong complement to slower, more strategic providers like Ipsos or Kantar.",
+                  "recommendationScore": 8.4
+                },
+                {
+                  "provider": "Attest",
+                  "company": "Attest",
+                  "capability": "AI‑supported, self‑serve **consumer research platform** for market analysis, brand tracking, creative testing, consumer profiling, and new product development.",
+                  "strengths": [
+                    "Highlighted in a 2026 list of US market research companies as being best for **AI-driven, end-to-end consumer insights**[3].",
+                    "Supports key use cases such as **market analysis, brand tracking, creative testing, consumer profiling, and NPD** in a single platform[3].",
+                    "Modern, **self‑serve workflow** designed for in‑house market research specialists and marketers, enabling faster cycles than traditional agencies[3].",
+                    "Strong fit for always-on **brand tracking** and recurring survey programs for mid‑market and enterprise brands[3]."
+                  ],
+                  "weaknesses": [
+                    "Primarily focused on survey-based research; **less suited to deep qualitative or ethnographic work** compared to specialist qual agencies[3].",
+                    "Panel coverage may be more limited for some **niche B2B segments** versus dedicated B2B research firms."
+                  ],
+                  "typicalUseCases": [
+                    "**Market and audience analysis** in existing or new geographies[3].",
+                    "Ongoing **brand health and awareness tracking** via automated surveys[3].",
+                    "**Creative and campaign testing** to optimize messaging and assets before launch[3].",
+                    "**New product development (NPD)** support from early-stage screening to refinement[3]."
+                  ],
+                  "pricing": "Subscription-based SaaS pricing, typically tiered by survey volume and features; generally **more accessible** than large full-service consulting engagements (inferred from platform positioning[3]).",
+                  "apiAvailability": "UNKNOWN",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+                  ],
+                  "overallRecommendation": "Recommended as an **agile, self‑serve research backbone** for Atlas clients with internal market research specialists who want rapid, iterative consumer insights. Works well as a primary day‑to‑day tool, with global agencies used for more complex strategic projects.",
+                  "recommendationScore": 8.3
+                },
+                {
+                  "provider": "GfK (now part of GfK/NIQ in many markets)",
+                  "company": "GfK",
+                  "capability": "International **consumer and brand tracking, product and pricing research** with strong panels in electronics, durables, and retail categories.",
+                  "strengths": [
+                    "Listed among the top market research companies in 2026 with focus on **consumer and brand tracking, pricing, and product research**[1].",
+                    "Deep category expertise in **consumer electronics and durable goods**, supporting pricing, positioning, and innovation decisions[1].",
+                    "Combines transactional data and survey research for **holistic brand and market views** (inferred from focus on pricing and product research[1]).",
+                    "Suitable for **multi-country tracking programs** in key retail categories[1]."
+                  ],
+                  "weaknesses": [
+                    "Less visible among newer, highly agile SaaS platforms for rapid ad‑hoc tests (relative to firms like Suzy or Attest[1][3]).",
+                    "Category strengths are not universal; fit is weaker outside core sectors like electronics, appliances, and selected FMCG segments."
+                  ],
+                  "typicalUseCases": [
+                    "**Brand and consumer tracking** for electronics and durable goods brands[1].",
+                    "**Price and product optimization** studies in competitive retail markets[1].",
+                    "Market structure and **category landscape** research across regions.",
+                    "Supporting **go‑to‑market** and channel strategies with distribution and pricing insights."
+                  ],
+                  "pricing": "Mix of syndicated tracking subscriptions and custom research projects; pricing typically aligned to large, international research providers (inferred from global positioning[1]).",
+                  "apiAvailability": "UNKNOWN",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://touchstoneresearch.com/top-10-market-research-companies/"
+                  ],
+                  "overallRecommendation": "Use GfK as a **specialist provider** where Atlas clients’ market research needs are concentrated in **electronics, durables, or price-sensitive retail categories**. It is a strong option for sustained tracking and pricing work, complementing more generalist providers.",
+                  "recommendationScore": 8.1
+                }
+              ],
+              "evidenceSources": [
+                "https://touchstoneresearch.com/top-10-market-research-companies/",
+                "https://www.askattest.com/blog/articles/market-research-companies-in-the-us"
+              ]
+            }
+          }
+        },
+        {
+          "role": "Offer Strategy Specialist",
+          "assignmentStatus": "BENCHMARK_REQUIRED",
+          "workerId": null,
+          "workerName": null,
+          "standingScore": null,
+          "source": "MARKET_DISCOVERY_REQUIRED",
+          "hiringDecisionRequired": true,
+          "benchmarkReference": {
+            "benchmarkType": "specialist-benchmarking",
+            "benchmarkId": null,
+            "recommendation": "PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+            "championProvider": "Offer Strategy & Monetization Consulting"
+          },
+          "hiringDecision": {
+            "category": "Offer Strategy Specialist",
+            "decision": "MARKET_DISCOVERY_REQUIRED",
+            "selectedSpecialistId": null,
+            "selectedSpecialist": null,
+            "topBenchmarkCandidates": [
+              {
+                "rank": 1,
+                "provider": "Offer Strategy & Monetization Consulting",
+                "company": "Simon‑Kucher & Partners",
+                "capability": "Specialist global consultancy focused on pricing, monetization, and commercial strategy, widely recognized for designing and optimizing offers, pricing structures, and revenue models.",
+                "strengths": [
+                  "Market‑leading focus on pricing and monetization, directly aligned with offer strategy needs",
+                  "Strong track record across SaaS, consumer, and industrial sectors",
+                  "Well‑developed methodologies for packaging, tiering, promotions, and discount structures",
+                  "Often more flexible than large strategy firms for focused commercial work"
+                ],
+                "weaknesses": [
+                  "Less emphasis on brand, creative, and end‑to‑end marketing execution",
+                  "May require client‑side or partner resources to connect pricing work to detailed campaign‑level testing",
+                  "Enterprise‑oriented; may be less accessible for very small businesses"
+                ],
+                "typicalUseCases": [
+                  "Designing SaaS plans, tiers, and upsell/cross‑sell offers",
+                  "Optimizing promotional mechanics and discount strategies",
+                  "Repricing existing portfolios to improve margins and conversion",
+                  "Monetization strategy for new product or market entry"
+                ],
+                "pricing": "Upper‑mid to premium consulting rates; typically six‑figure projects for enterprise engagements, with some mid‑market flexibility.",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://www.simon-kucher.com/en/pricing-strategy",
+                  "https://www.simon-kucher.com/en/service/monetization-strategy",
+                  "https://www.simon-kucher.com/en/insights/pricing-packaging-software-and-saas"
+                ],
+                "overallRecommendation": "Highly recommended as a primary specialist for offer strategy, pricing, and monetization for Atlas customers needing practical, commercially focused support.",
+                "recommendationScore": 9.3
+              },
+              {
+                "rank": 2,
+                "provider": "Offer Strategy & Monetization Practice",
+                "company": "McKinsey & Company",
+                "capability": "End‑to‑end offer, pricing, and value proposition strategy for large enterprises, combining customer analytics, product strategy, and commercial design to optimize offers and revenue models.",
+                "strengths": [
+                  "Deep expertise in pricing, commercial strategy, and product/offer design for complex B2B and B2C environments",
+                  "Strong data and AI capabilities applied to segmentation, personalization, and conversion optimization",
+                  "Global footprint and proven enterprise change‑management support",
+                  "High credibility with C‑suite stakeholders and ability to align offer strategy with overall corporate strategy"
+                ],
+                "weaknesses": [
+                  "Premium pricing, often prohibitive for smaller companies",
+                  "Engagements may be slower to execute compared to more agile, specialized boutiques",
+                  "Less suited for highly tactical, short‑cycle experimentation on offers without a broader strategic scope"
+                ],
+                "typicalUseCases": [
+                  "Redesigning enterprise pricing and packaging for SaaS or subscription businesses",
+                  "Structuring new product and service offers for global launch",
+                  "Optimizing commercial value propositions and sales plays in complex B2B markets",
+                  "Enterprise‑level monetization and growth strategy programs"
+                ],
+                "pricing": "Premium, project‑based and retainer consulting fees; typically multi‑hundred‑thousand to multi‑million USD for large programs.",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/pricing-and-revenue-management",
+                  "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/how-we-help-clients",
+                  "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/the-art-of-better-value-propositions"
+                ],
+                "overallRecommendation": "Best fit as a strategic partner for large enterprises needing holistic offer strategy and monetization redesign anchored in data and organizational change support.",
+                "recommendationScore": 9.1
+              },
+              {
+                "rank": 3,
+                "provider": "Product, Pricing & Offer Strategy Practice",
+                "company": "Bain & Company",
+                "capability": "Strategic product, customer, and pricing work that includes designing offers, go‑to‑market strategies, and monetization approaches for large enterprises.",
+                "strengths": [
+                  "Strong experience in product and customer strategy linked to pricing and offer design",
+                  "Robust analytical frameworks and data‑driven approach to customer segmentation and value",
+                  "Global presence and ability to support complex transformations and multi‑country launches",
+                  "Integration of offer strategy with broader growth, loyalty, and digital programs"
+                ],
+                "weaknesses": [
+                  "Top‑tier pricing similar to other large strategy firms",
+                  "Best suited for larger programs rather than small, highly tactical engagements",
+                  "Offer experimentation cycles may be longer when embedded in large transformation projects"
+                ],
+                "typicalUseCases": [
+                  "Defining product and service bundles and pricing for new markets",
+                  "Redesigning offers to increase customer lifetime value and retention",
+                  "Linking loyalty programs and value propositions to pricing and benefits structures",
+                  "Support for large‑scale commercial excellence programs that include offer strategy"
+                ],
+                "pricing": "Premium strategy‑consulting fees; typically multi‑hundred‑thousand USD and above for comprehensive programs.",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://www.bain.com/services/pricing/",
+                  "https://www.bain.com/services/customer-strategy-marketing/",
+                  "https://www.bain.com/insights/topics/pricing-strategy/"
+                ],
+                "overallRecommendation": "Strong option for Atlas customers needing offer strategy embedded within broader product, customer, and growth transformations at enterprise scale.",
+                "recommendationScore": 8.9
+              }
+            ],
+            "ceoApprovalRequiredBeforeBenchmark": true,
+            "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+            "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+            "marketDiscoveryReport": {
+              "category": "Offer Strategy Specialist",
+              "generatedAt": "2026-07-10T22:40:25.625Z",
+              "overallRecommendation": "For Atlas’s Offer Strategy Specialist category, prioritize Simon‑Kucher & Partners as the core monetization and pricing specialist; use McKinsey and Bain for large, multi‑disciplinary enterprise programs where offer strategy must be tightly integrated with corporate and product strategy; complement these with Conversion Rate Experts for tactical, digital‑funnel offer optimization and Reforge for scalable training and frameworks in modern product‑led, experimentation‑driven offer design.",
+              "providers": [
+                {
+                  "provider": "Offer Strategy & Monetization Consulting",
+                  "company": "Simon‑Kucher & Partners",
+                  "capability": "Specialist global consultancy focused on pricing, monetization, and commercial strategy, widely recognized for designing and optimizing offers, pricing structures, and revenue models.",
+                  "strengths": [
+                    "Market‑leading focus on pricing and monetization, directly aligned with offer strategy needs",
+                    "Strong track record across SaaS, consumer, and industrial sectors",
+                    "Well‑developed methodologies for packaging, tiering, promotions, and discount structures",
+                    "Often more flexible than large strategy firms for focused commercial work"
+                  ],
+                  "weaknesses": [
+                    "Less emphasis on brand, creative, and end‑to‑end marketing execution",
+                    "May require client‑side or partner resources to connect pricing work to detailed campaign‑level testing",
+                    "Enterprise‑oriented; may be less accessible for very small businesses"
+                  ],
+                  "typicalUseCases": [
+                    "Designing SaaS plans, tiers, and upsell/cross‑sell offers",
+                    "Optimizing promotional mechanics and discount strategies",
+                    "Repricing existing portfolios to improve margins and conversion",
+                    "Monetization strategy for new product or market entry"
+                  ],
+                  "pricing": "Upper‑mid to premium consulting rates; typically six‑figure projects for enterprise engagements, with some mid‑market flexibility.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://www.simon-kucher.com/en/pricing-strategy",
+                    "https://www.simon-kucher.com/en/service/monetization-strategy",
+                    "https://www.simon-kucher.com/en/insights/pricing-packaging-software-and-saas"
+                  ],
+                  "overallRecommendation": "Highly recommended as a primary specialist for offer strategy, pricing, and monetization for Atlas customers needing practical, commercially focused support.",
+                  "recommendationScore": 9.3
+                },
+                {
+                  "provider": "Offer Strategy & Monetization Practice",
+                  "company": "McKinsey & Company",
+                  "capability": "End‑to‑end offer, pricing, and value proposition strategy for large enterprises, combining customer analytics, product strategy, and commercial design to optimize offers and revenue models.",
+                  "strengths": [
+                    "Deep expertise in pricing, commercial strategy, and product/offer design for complex B2B and B2C environments",
+                    "Strong data and AI capabilities applied to segmentation, personalization, and conversion optimization",
+                    "Global footprint and proven enterprise change‑management support",
+                    "High credibility with C‑suite stakeholders and ability to align offer strategy with overall corporate strategy"
+                  ],
+                  "weaknesses": [
+                    "Premium pricing, often prohibitive for smaller companies",
+                    "Engagements may be slower to execute compared to more agile, specialized boutiques",
+                    "Less suited for highly tactical, short‑cycle experimentation on offers without a broader strategic scope"
+                  ],
+                  "typicalUseCases": [
+                    "Redesigning enterprise pricing and packaging for SaaS or subscription businesses",
+                    "Structuring new product and service offers for global launch",
+                    "Optimizing commercial value propositions and sales plays in complex B2B markets",
+                    "Enterprise‑level monetization and growth strategy programs"
+                  ],
+                  "pricing": "Premium, project‑based and retainer consulting fees; typically multi‑hundred‑thousand to multi‑million USD for large programs.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/pricing-and-revenue-management",
+                    "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/how-we-help-clients",
+                    "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/the-art-of-better-value-propositions"
+                  ],
+                  "overallRecommendation": "Best fit as a strategic partner for large enterprises needing holistic offer strategy and monetization redesign anchored in data and organizational change support.",
+                  "recommendationScore": 9.1
+                },
+                {
+                  "provider": "Product, Pricing & Offer Strategy Practice",
+                  "company": "Bain & Company",
+                  "capability": "Strategic product, customer, and pricing work that includes designing offers, go‑to‑market strategies, and monetization approaches for large enterprises.",
+                  "strengths": [
+                    "Strong experience in product and customer strategy linked to pricing and offer design",
+                    "Robust analytical frameworks and data‑driven approach to customer segmentation and value",
+                    "Global presence and ability to support complex transformations and multi‑country launches",
+                    "Integration of offer strategy with broader growth, loyalty, and digital programs"
+                  ],
+                  "weaknesses": [
+                    "Top‑tier pricing similar to other large strategy firms",
+                    "Best suited for larger programs rather than small, highly tactical engagements",
+                    "Offer experimentation cycles may be longer when embedded in large transformation projects"
+                  ],
+                  "typicalUseCases": [
+                    "Defining product and service bundles and pricing for new markets",
+                    "Redesigning offers to increase customer lifetime value and retention",
+                    "Linking loyalty programs and value propositions to pricing and benefits structures",
+                    "Support for large‑scale commercial excellence programs that include offer strategy"
+                  ],
+                  "pricing": "Premium strategy‑consulting fees; typically multi‑hundred‑thousand USD and above for comprehensive programs.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://www.bain.com/services/pricing/",
+                    "https://www.bain.com/services/customer-strategy-marketing/",
+                    "https://www.bain.com/insights/topics/pricing-strategy/"
+                  ],
+                  "overallRecommendation": "Strong option for Atlas customers needing offer strategy embedded within broader product, customer, and growth transformations at enterprise scale.",
+                  "recommendationScore": 8.9
+                },
+                {
+                  "provider": "Conversion & Offer Strategy Services",
+                  "company": "Conversion Rate Experts",
+                  "capability": "Offer and conversion strategy for digital products and services, focused on crafting and testing value propositions, pricing, and page‑level offers to maximize conversion.",
+                  "strengths": [
+                    "Very strong experimental approach to offers and messaging at the point of conversion",
+                    "Hands‑on optimization of landing pages, funnels, and offer structures",
+                    "Well‑documented case studies across SaaS, ecommerce, and information products",
+                    "Suited to fast iteration and measurable impact on revenue and conversion metrics"
+                  ],
+                  "weaknesses": [
+                    "Narrower focus on digital and web funnels rather than full enterprise offer architecture",
+                    "Less structured for large organizational design or operating‑model changes",
+                    "Not typically engaged for macro pricing strategy across entire portfolios without a digital focus"
+                  ],
+                  "typicalUseCases": [
+                    "Optimizing on‑site offers, bundles, and value propositions for ecommerce and SaaS",
+                    "A/B testing of pricing, guarantees, bonuses, and page‑level offers",
+                    "Improving funnel performance for subscription and membership products",
+                    "Offer design for product launches and campaigns with strong digital components"
+                  ],
+                  "pricing": "Project‑based fees with performance‑oriented structures; often mid to upper‑mid range relative to general marketing agencies.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://conversion-rate-experts.com/services/",
+                    "https://conversion-rate-experts.com/case-studies/",
+                    "https://conversion-rate-experts.com/pricing-strategy/"
+                  ],
+                  "overallRecommendation": "Recommended for Atlas clients needing tactical, high‑ROI optimization of digital offers and funnels, complementing broader strategic providers.",
+                  "recommendationScore": 8.6
+                },
+                {
+                  "provider": "Growth & Offer Strategy Services",
+                  "company": "Reforge",
+                  "capability": "Specialized programs and advisory on growth, product, and monetization, including practical frameworks for offer design, pricing experiments, and value proposition strategy in digital businesses.",
+                  "strengths": [
+                    "Highly practitioner‑oriented frameworks derived from leading tech and product‑growth experts",
+                    "Strong relevance for SaaS, marketplaces, and consumer apps focused on experimentation and growth",
+                    "Scalable training and playbooks that Atlas could leverage across many clients",
+                    "Community‑driven insights on monetization, pricing tests, and offer structures"
+                  ],
+                  "weaknesses": [
+                    "More focused on education and advisory than full hands‑on consulting implementation",
+                    "Primarily suited to tech and digital product companies, less to traditional offline industries",
+                    "Limited direct enterprise consulting capacity compared to large strategy firms"
+                  ],
+                  "typicalUseCases": [
+                    "Designing pricing tests and packaging for SaaS and digital products",
+                    "Structuring offer ladders, freemium/premium flows, and upgrade paths",
+                    "Training internal teams on systematic offer experimentation and growth strategy",
+                    "Refining value propositions and positioning in competitive digital markets"
+                  ],
+                  "pricing": "Subscription and cohort‑based program fees for individuals/teams; custom advisory for larger clients at mid‑range consulting levels.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://www.reforge.com/programs/monetization-and-pricing",
+                    "https://www.reforge.com/programs/growth-series",
+                    "https://www.reforge.com/blog/monetization-principles"
+                  ],
+                  "overallRecommendation": "Recommended as a high‑leverage, scalable resource for Atlas to support clients’ internal offer‑strategy capability building, especially in SaaS and product‑led growth contexts.",
+                  "recommendationScore": 8.4
+                }
+              ],
+              "evidenceSources": [
+                "https://www.simon-kucher.com/en/pricing-strategy",
+                "https://www.simon-kucher.com/en/service/monetization-strategy",
+                "https://www.simon-kucher.com/en/insights/pricing-packaging-software-and-saas",
+                "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/pricing-and-revenue-management",
+                "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/how-we-help-clients",
+                "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/the-art-of-better-value-propositions",
+                "https://www.bain.com/services/pricing/",
+                "https://www.bain.com/services/customer-strategy-marketing/",
+                "https://www.bain.com/insights/topics/pricing-strategy/",
+                "https://conversion-rate-experts.com/services/",
+                "https://conversion-rate-experts.com/case-studies/",
+                "https://conversion-rate-experts.com/pricing-strategy/",
+                "https://www.reforge.com/programs/monetization-and-pricing",
+                "https://www.reforge.com/programs/growth-series",
+                "https://www.reforge.com/blog/monetization-principles"
+              ]
+            }
+          }
+        },
+        {
+          "role": "Automation Architect",
+          "assignmentStatus": "BENCHMARK_REQUIRED",
+          "workerId": null,
+          "workerName": null,
+          "standingScore": null,
+          "source": "MARKET_DISCOVERY_REQUIRED",
+          "hiringDecisionRequired": true,
+          "benchmarkReference": {
+            "benchmarkType": "specialist-benchmarking",
+            "benchmarkId": null,
+            "recommendation": "PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+            "championProvider": "Accenture Automation Practice"
+          },
+          "hiringDecision": {
+            "category": "Automation Architect",
+            "decision": "MARKET_DISCOVERY_REQUIRED",
+            "selectedSpecialistId": null,
+            "selectedSpecialist": null,
+            "topBenchmarkCandidates": [
+              {
+                "rank": 1,
+                "provider": "Accenture Automation Practice",
+                "company": "Accenture",
+                "capability": "Global, end-to-end automation architecture and implementation across IT, business processes, and industry-specific workflows, including AI-powered and agentic automation at enterprise scale.",
+                "strengths": [
+                  "One of the largest enterprise AI and automation practices globally, with thousands of specialists across industries and geographies[1][2]",
+                  "Strong expertise in designing reference architectures that integrate RPA, AI/ML, workflow, cloud, data platforms, and ERP/CRM ecosystems[1][2]",
+                  "Deep experience with major automation platforms (UiPath, Automation Anywhere, Microsoft Power Automate, ServiceNow, Salesforce, and custom architectures)[2]",
+                  "Proven track record in multi-country automation transformations and complex governance, risk, and compliance environments[2]",
+                  "High maturity in automation operating models, CoE design, and value realization at scale[1][2]"
+                ],
+                "weaknesses": [
+                  "Premium pricing compared to mid-market or boutique providers[2]",
+                  "May be slower to tailor highly niche, experimental architectures due to global-standard methodologies",
+                  "Potential for complexity and overhead in engagements for smaller organizations or narrow-scope automation programs"
+                ],
+                "typicalUseCases": [
+                  "Designing and governing enterprise-wide automation architecture spanning IT operations, business processes, and customer channels",
+                  "Industrial-scale intelligent automation programs in financial services, healthcare, public sector, manufacturing, and retail[2]",
+                  "Modernizing legacy automation estates (RPA + scripts + schedulers) into unified AI-first architectures",
+                  "Establishing automation Centers of Excellence and operating models for global organizations[1][2]"
+                ],
+                "pricing": "Enterprise consulting and implementation pricing; typically time-and-materials or large transformation programs with premium rate cards (mid–high relative market).",
+                "apiAvailability": "AVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                  "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                ],
+                "overallRecommendation": "Top-tier choice for organizations seeking a primary automation architect partner for complex, multi-region, multi-platform automation programs; best suited for large enterprises or Atlas customers with global, cross-functional automation ambitions.",
+                "recommendationScore": 9.4
+              },
+              {
+                "rank": 2,
+                "provider": "Capgemini Intelligent Automation",
+                "company": "Capgemini",
+                "capability": "Comprehensive intelligent automation architecture and delivery with strong specialization in European manufacturing, public sector, and large enterprise workflows.",
+                "strengths": [
+                  "Recognized as a leading intelligent automation practice in 2026, especially for European manufacturing and public-sector automation[1][2]",
+                  "Deep experience embedding automation into SAP, Salesforce, ServiceNow, and other enterprise systems of record[2]",
+                  "Strong capability in designing automation architectures that combine RPA, AI, workflow orchestration, and analytics[1][2]",
+                  "Established frameworks for automation governance, security, and compliance in regulated environments",
+                  "Good balance between global scale and sector-specific expertise, particularly in Europe[2]"
+                ],
+                "weaknesses": [
+                  "Global reach and capacity slightly smaller than Accenture’s for truly global, multi-continent programs[2]",
+                  "Some customers may experience regional variability in expertise depending on local teams",
+                  "Less boutique customization compared to specialist firms focused solely on agentic AI automation"
+                ],
+                "typicalUseCases": [
+                  "Automation architecture for manufacturing operations, supply chain, and logistics in Europe[2]",
+                  "Public-sector workflows, citizen services, and back-office automation tied to ERP and case management systems[2]",
+                  "Modernization of legacy RPA and workflow platforms into AI-enabled intelligent automation estates[1][2]",
+                  "Function-led automation (Finance, HR, procurement) on top of SAP, Workday, and ServiceNow landscapes"
+                ],
+                "pricing": "Enterprise consulting and implementation pricing, generally slightly below the very top tier but still in the upper enterprise range.",
+                "apiAvailability": "AVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                  "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                ],
+                "overallRecommendation": "Highly recommended for Atlas customers with European manufacturing or public-sector footprints, and for enterprises whose automation architecture must be closely aligned with SAP/Workday/ServiceNow ecosystems.",
+                "recommendationScore": 9
+              },
+              {
+                "rank": 3,
+                "provider": "Infosys Automation Suite + Topaz",
+                "company": "Infosys",
+                "capability": "AI-first automation architecture built around proprietary platform IP (Infosys Topaz and Automation Suite), focused on transforming large-scale enterprise operations and IT estates.",
+                "strengths": [
+                  "Identified in 2026 as a leading provider for AI-first automation backed by proprietary IP (Topaz + Automation Suite)[2]",
+                  "Strong engineering-focused approach to building automation architectures that are cloud-native and scalable[1][2]",
+                  "Deep experience in BFSI, telecom, and large enterprise IT operations with end-to-end automation coverage[2]",
+                  "Ability to combine platform engineering with managed services and long-term operational ownership",
+                  "Good fit for organizations seeking a semi-productized automation architecture rather than purely bespoke consulting"
+                ],
+                "weaknesses": [
+                  "Greater lock-in risk to Infosys proprietary components compared to vendor-neutral architecture design",
+                  "Some organizations may prefer more platform-agnostic designs or multi-vendor automation strategies",
+                  "Perceived as more engineering-heavy, which can require strong client technical counterparts for best outcomes"
+                ],
+                "typicalUseCases": [
+                  "Designing AI-first automation architectures for core operations in banking, insurance, telecom, and large enterprises[2]",
+                  "Cloud-native automation of IT operations, application management, and infrastructure workflows[1][2]",
+                  "Combining automation architecture with managed services to reduce internal operational burden",
+                  "Embedding generative AI and agentic automation into existing process landscapes through Topaz-based designs"
+                ],
+                "pricing": "Enterprise consulting plus platform-usage models; pricing varies by scope and managed-services components but can be competitive relative to Western SIs for large-scale programs.",
+                "apiAvailability": "AVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                  "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                ],
+                "overallRecommendation": "Strong option for Atlas customers that want AI-first, platform-backed automation architecture with a long-term strategic partner; particularly attractive for BFSI, telecom, and large IT-intensive enterprises.",
+                "recommendationScore": 8.8
+              }
+            ],
+            "ceoApprovalRequiredBeforeBenchmark": true,
+            "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+            "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+            "marketDiscoveryReport": {
+              "category": "Automation Architect",
+              "generatedAt": "2026-07-10T22:40:30.513Z",
+              "overallRecommendation": "For the Automation Architect category, Atlas should prioritize a combination of a global architecture partner (e.g., Accenture or Capgemini) and one or more core platforms (Automation Anywhere, UiPath, or Infosys Topaz/Automation Suite) as the foundational automation stack. Accenture offers the most comprehensive global automation architecture capability, particularly for complex, multi-country, multi-platform programs, while Capgemini provides strong coverage for European manufacturing and public sector. Infosys is a highly capable AI-first architecture and engineering partner for large IT-intensive enterprises. Alice Labs is a strong boutique option for agentic AI and governance-heavy European contexts, especially under the EU AI Act. Automation Anywhere and UiPath should be treated as fundamental architectural components rather than standalone architecture providers, and are recommended as core platforms in most Atlas automation reference architectures.",
+              "providers": [
+                {
+                  "provider": "Accenture Automation Practice",
+                  "company": "Accenture",
+                  "capability": "Global, end-to-end automation architecture and implementation across IT, business processes, and industry-specific workflows, including AI-powered and agentic automation at enterprise scale.",
+                  "strengths": [
+                    "One of the largest enterprise AI and automation practices globally, with thousands of specialists across industries and geographies[1][2]",
+                    "Strong expertise in designing reference architectures that integrate RPA, AI/ML, workflow, cloud, data platforms, and ERP/CRM ecosystems[1][2]",
+                    "Deep experience with major automation platforms (UiPath, Automation Anywhere, Microsoft Power Automate, ServiceNow, Salesforce, and custom architectures)[2]",
+                    "Proven track record in multi-country automation transformations and complex governance, risk, and compliance environments[2]",
+                    "High maturity in automation operating models, CoE design, and value realization at scale[1][2]"
+                  ],
+                  "weaknesses": [
+                    "Premium pricing compared to mid-market or boutique providers[2]",
+                    "May be slower to tailor highly niche, experimental architectures due to global-standard methodologies",
+                    "Potential for complexity and overhead in engagements for smaller organizations or narrow-scope automation programs"
+                  ],
+                  "typicalUseCases": [
+                    "Designing and governing enterprise-wide automation architecture spanning IT operations, business processes, and customer channels",
+                    "Industrial-scale intelligent automation programs in financial services, healthcare, public sector, manufacturing, and retail[2]",
+                    "Modernizing legacy automation estates (RPA + scripts + schedulers) into unified AI-first architectures",
+                    "Establishing automation Centers of Excellence and operating models for global organizations[1][2]"
+                  ],
+                  "pricing": "Enterprise consulting and implementation pricing; typically time-and-materials or large transformation programs with premium rate cards (mid–high relative market).",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                    "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                  ],
+                  "overallRecommendation": "Top-tier choice for organizations seeking a primary automation architect partner for complex, multi-region, multi-platform automation programs; best suited for large enterprises or Atlas customers with global, cross-functional automation ambitions.",
+                  "recommendationScore": 9.4
+                },
+                {
+                  "provider": "Capgemini Intelligent Automation",
+                  "company": "Capgemini",
+                  "capability": "Comprehensive intelligent automation architecture and delivery with strong specialization in European manufacturing, public sector, and large enterprise workflows.",
+                  "strengths": [
+                    "Recognized as a leading intelligent automation practice in 2026, especially for European manufacturing and public-sector automation[1][2]",
+                    "Deep experience embedding automation into SAP, Salesforce, ServiceNow, and other enterprise systems of record[2]",
+                    "Strong capability in designing automation architectures that combine RPA, AI, workflow orchestration, and analytics[1][2]",
+                    "Established frameworks for automation governance, security, and compliance in regulated environments",
+                    "Good balance between global scale and sector-specific expertise, particularly in Europe[2]"
+                  ],
+                  "weaknesses": [
+                    "Global reach and capacity slightly smaller than Accenture’s for truly global, multi-continent programs[2]",
+                    "Some customers may experience regional variability in expertise depending on local teams",
+                    "Less boutique customization compared to specialist firms focused solely on agentic AI automation"
+                  ],
+                  "typicalUseCases": [
+                    "Automation architecture for manufacturing operations, supply chain, and logistics in Europe[2]",
+                    "Public-sector workflows, citizen services, and back-office automation tied to ERP and case management systems[2]",
+                    "Modernization of legacy RPA and workflow platforms into AI-enabled intelligent automation estates[1][2]",
+                    "Function-led automation (Finance, HR, procurement) on top of SAP, Workday, and ServiceNow landscapes"
+                  ],
+                  "pricing": "Enterprise consulting and implementation pricing, generally slightly below the very top tier but still in the upper enterprise range.",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                    "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                  ],
+                  "overallRecommendation": "Highly recommended for Atlas customers with European manufacturing or public-sector footprints, and for enterprises whose automation architecture must be closely aligned with SAP/Workday/ServiceNow ecosystems.",
+                  "recommendationScore": 9
+                },
+                {
+                  "provider": "Infosys Automation Suite + Topaz",
+                  "company": "Infosys",
+                  "capability": "AI-first automation architecture built around proprietary platform IP (Infosys Topaz and Automation Suite), focused on transforming large-scale enterprise operations and IT estates.",
+                  "strengths": [
+                    "Identified in 2026 as a leading provider for AI-first automation backed by proprietary IP (Topaz + Automation Suite)[2]",
+                    "Strong engineering-focused approach to building automation architectures that are cloud-native and scalable[1][2]",
+                    "Deep experience in BFSI, telecom, and large enterprise IT operations with end-to-end automation coverage[2]",
+                    "Ability to combine platform engineering with managed services and long-term operational ownership",
+                    "Good fit for organizations seeking a semi-productized automation architecture rather than purely bespoke consulting"
+                  ],
+                  "weaknesses": [
+                    "Greater lock-in risk to Infosys proprietary components compared to vendor-neutral architecture design",
+                    "Some organizations may prefer more platform-agnostic designs or multi-vendor automation strategies",
+                    "Perceived as more engineering-heavy, which can require strong client technical counterparts for best outcomes"
+                  ],
+                  "typicalUseCases": [
+                    "Designing AI-first automation architectures for core operations in banking, insurance, telecom, and large enterprises[2]",
+                    "Cloud-native automation of IT operations, application management, and infrastructure workflows[1][2]",
+                    "Combining automation architecture with managed services to reduce internal operational burden",
+                    "Embedding generative AI and agentic automation into existing process landscapes through Topaz-based designs"
+                  ],
+                  "pricing": "Enterprise consulting plus platform-usage models; pricing varies by scope and managed-services components but can be competitive relative to Western SIs for large-scale programs.",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                    "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                  ],
+                  "overallRecommendation": "Strong option for Atlas customers that want AI-first, platform-backed automation architecture with a long-term strategic partner; particularly attractive for BFSI, telecom, and large IT-intensive enterprises.",
+                  "recommendationScore": 8.8
+                },
+                {
+                  "provider": "Alice Labs Automation Architecture",
+                  "company": "Alice Labs",
+                  "capability": "Boutique, end-to-end automation architecture and implementation for mid-market and European enterprises, with strong focus on AI governance (EU AI Act) and agentic automation.",
+                  "strengths": [
+                    "Recognized as a leading boutique automation firm in 2026, particularly for European mid-market organizations[2]",
+                    "Specializes in end-to-end AI automation with explicit focus on EU AI Act-aligned governance and risk management[2]",
+                    "High depth in agentic AI engineering and multi-agent automation systems, beyond commodity RPA[2]",
+                    "More agile and tailored architecture engagements compared to very large global system integrators[1][2]",
+                    "Well suited to design modern automation architectures that combine AI agents, workflows, and data governance"
+                  ],
+                  "weaknesses": [
+                    "Smaller scale than global players, limiting capacity for very large or multi-continent programs[2]",
+                    "May provide less global industry coverage than Big 4 and major Indian SIs",
+                    "Boutique positioning can translate into limited standardized managed-services offerings compared to large SIs"
+                  ],
+                  "typicalUseCases": [
+                    "Designing modern, AI-agent-driven automation architectures for mid-market firms and focused business units[2]",
+                    "EU-based organizations needing automation that explicitly adheres to EU AI Act governance requirements[2]",
+                    "Pilot-to-scale journeys for next-generation multi-agent automation in logistics, manufacturing, and services[3]",
+                    "Architecting automation around a small set of core systems of record (e.g., one ERP, one CRM, one ITSM) with strong governance"
+                  ],
+                  "pricing": "Boutique consulting pricing; generally lower total program cost than Big 4 for comparable mid-market scopes, but still premium relative to small local consultancies.",
+                  "apiAvailability": "LIMITED",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                    "https://www.youtube.com/watch?v=LzfDuP0Z-L4"
+                  ],
+                  "overallRecommendation": "Highly recommended for Atlas customers seeking a specialist automation architect for agentic AI and governance-heavy European contexts; ideal as a design partner for next-gen architectures rather than pure scale delivery.",
+                  "recommendationScore": 8.6
+                },
+                {
+                  "provider": "Automation Anywhere Enterprise Platform",
+                  "company": "Automation Anywhere",
+                  "capability": "Cloud-native intelligent automation platform providing RPA, workflow orchestration, and AI/GenAI integration (AARI and AI + Automation suite) that serves as a core automation architecture component.",
+                  "strengths": [
+                    "Consistently recognized as a leader in intelligent automation, with a cloud-native platform designed for enterprise-scale automation[1][2]",
+                    "Integrated generative AI capabilities via AARI (Automation Anywhere Robotic Interface) and AI + Automation suite in 2026[1]",
+                    "Strong fit for organizations seeking a unified automation fabric across cloud and on-prem applications[1]",
+                    "Robust APIs and integration capabilities with enterprise applications, data platforms, and services[1][2]",
+                    "Mature governance, security, and enterprise features, making it suitable as a central automation architecture backbone"
+                  ],
+                  "weaknesses": [
+                    "Platform-centric; may require external consulting partners or internal architects for holistic enterprise architecture design",
+                    "Some organizations may prefer more open-source or multi-vendor automation stacks",
+                    "License and consumption-based pricing can become complex for very large bot fleets if not carefully governed"
+                  ],
+                  "typicalUseCases": [
+                    "Serving as the core RPA and intelligent automation platform in enterprise automation architectures[1][2]",
+                    "Building automation around structured processes in finance, HR, supply chain, and customer operations",
+                    "Augmenting existing architectures (SAP, Salesforce, custom apps) with AI-driven task and process automation",
+                    "Cloud-first automation programs where scalability, SaaS delivery, and quick deployment are priorities[1]"
+                  ],
+                  "pricing": "Subscription and consumption-based SaaS licensing for the platform, with tiered enterprise packages; implementation typically via partners or internal teams.",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                    "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc"
+                  ],
+                  "overallRecommendation": "Recommended as a key platform building block for Atlas automation architectures, particularly where a cloud-native, AI-integrated RPA and workflow solution is needed; best used in combination with an architecting partner (e.g., Accenture, Capgemini, Infosys, or Alice Labs).",
+                  "recommendationScore": 8.5
+                },
+                {
+                  "provider": "UiPath Enterprise Automation Platform",
+                  "company": "UiPath",
+                  "capability": "End-to-end enterprise automation platform with strong RPA origins that has expanded into workflow, test automation, process mining, and AI integration, suitable as a foundational automation architecture layer.",
+                  "strengths": [
+                    "Classified in 2026 as a leading RPA-first vendor for enterprise automation, alongside Automation Anywhere[2]",
+                    "Broad ecosystem, strong community, and extensive connectors to enterprise applications and services[2]",
+                    "Capabilities spanning RPA, process mining, task mining, test automation, and AI integrations support holistic architecture designs[2]",
+                    "Mature governance and control features for large bot deployments across multiple business units",
+                    "Widely adopted, making it easier to find experienced Automation Architects and implementation partners"
+                  ],
+                  "weaknesses": [
+                    "Architecture can be perceived as RPA-centric, requiring careful design to avoid overuse of UI-level automation",
+                    "Organizations might need complementary platforms for advanced multi-agent AI, complex orchestration, or deep workflow",
+                    "Potential for platform sprawl if governance and architectural standards are not enforced"
+                  ],
+                  "typicalUseCases": [
+                    "Core RPA and task automation layer in enterprise automation architectures[2]",
+                    "Process- and task-mining-driven automation design initiatives across finance, HR, and operations",
+                    "Test automation and regression automation embedded into DevOps pipelines",
+                    "Modernizing legacy script-based automation into standardized bots with governance and auditability"
+                  ],
+                  "pricing": "Enterprise licensing with modular components (RPA, process mining, test, etc.); pricing varies by bot volume, modules, and deployment model.",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026"
+                  ],
+                  "overallRecommendation": "Recommended as a core automation platform for Atlas customers who already have or plan to build significant RPA estates; best when coupled with a strong automation architecture function to avoid RPA-only designs.",
+                  "recommendationScore": 8.3
+                }
+              ],
+              "evidenceSources": [
+                "https://alicelabs.ai/en/insights/best-ai-automation-companies-2026",
+                "https://www.linkedin.com/pulse/top-15-ai-automation-companies-leading-enterprise-transformation-li7kc",
+                "https://www.youtube.com/watch?v=LzfDuP0Z-L4"
+              ]
+            }
+          }
+        },
+        {
+          "role": "Growth Marketing Specialist",
+          "assignmentStatus": "BENCHMARK_REQUIRED",
+          "workerId": null,
+          "workerName": null,
+          "standingScore": null,
+          "source": "MARKET_DISCOVERY_REQUIRED",
+          "hiringDecisionRequired": true,
+          "benchmarkReference": {
+            "benchmarkType": "specialist-benchmarking",
+            "benchmarkId": null,
+            "recommendation": "PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+            "championProvider": "First Page Sage"
+          },
+          "hiringDecision": {
+            "category": "Growth Marketing Specialist",
+            "decision": "MARKET_DISCOVERY_REQUIRED",
+            "selectedSpecialistId": null,
+            "selectedSpecialist": null,
+            "topBenchmarkCandidates": [
+              {
+                "rank": 1,
+                "provider": "First Page Sage",
+                "company": "First Page Sage",
+                "capability": "Growth marketing agency with strong emphasis on organic strategy, thought leadership content, SEO, and GEO/AI-search visibility.",
+                "strengths": [
+                  "Ranked #1 in a 2026 growth marketing agency report",
+                  "Strong client roster including Salesforce, US Bank, Logitech, and Verizon",
+                  "High reported review scores and long operating history",
+                  "Well suited for B2B demand generation and long-horizon growth programs"
+                ],
+                "weaknesses": [
+                  "Less oriented toward paid-media-heavy performance marketing than some rivals",
+                  "May be overkill for early-stage startups needing rapid testing across many channels"
+                ],
+                "typicalUseCases": [
+                  "B2B lead generation",
+                  "SEO-led demand creation",
+                  "Thought leadership and category authority building",
+                  "AI-search/GEO visibility programs"
+                ],
+                "pricing": "Custom quote; enterprise agency engagement pricing not publicly standardized.",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/",
+                  "https://www.roberthalf.com/us/en/insights/research/data-reveals-which-marketing-and-creative-roles-are-in-highest-demand"
+                ],
+                "overallRecommendation": "Top choice for B2B organizations that want strategic, content-led growth with strong organic and GEO/AI-search emphasis.",
+                "recommendationScore": 96
+              },
+              {
+                "rank": 2,
+                "provider": "Power Digital",
+                "company": "Power Digital",
+                "capability": "Tech-enabled full-funnel growth marketing agency using proprietary AI intelligence and multi-channel performance marketing.",
+                "strengths": [
+                  "Ranked #2 in the 2026 agency report",
+                  "Broad full-funnel capability across paid, owned, and analytics",
+                  "Proprietary AI intelligence platform",
+                  "Experience with recognizable consumer and education brands"
+                ],
+                "weaknesses": [
+                  "Broader performance-marketing orientation may be less specialized for pure SEO-led growth",
+                  "Custom solutions can be resource-intensive for small teams"
+                ],
+                "typicalUseCases": [
+                  "Paid media scaling",
+                  "Cross-channel growth experimentation",
+                  "Lifecycle optimization",
+                  "Analytics-led acquisition programs"
+                ],
+                "pricing": "Custom quote; typically agency retainer and performance-based mix.",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                ],
+                "overallRecommendation": "Strong all-around leader for companies needing measurable growth across multiple channels and access to advanced analytics.",
+                "recommendationScore": 93
+              },
+              {
+                "rank": 3,
+                "provider": "Disruptive Advertising",
+                "company": "Disruptive Advertising",
+                "capability": "Full-funnel performance marketing agency focused on eCommerce and B2B growth.",
+                "strengths": [
+                  "Named among the top 2026 growth marketing agencies",
+                  "Strong paid media and conversion optimization orientation",
+                  "Relevant for teams seeking rapid experimentation and CAC efficiency"
+                ],
+                "weaknesses": [
+                  "Less differentiated on organic thought leadership than top SEO-centric firms",
+                  "Can be best fit where paid acquisition is already a primary growth lever"
+                ],
+                "typicalUseCases": [
+                  "Paid search and paid social optimization",
+                  "CRO and landing page testing",
+                  "Demand generation for eCommerce and B2B",
+                  "Acquisition funnel performance improvement"
+                ],
+                "pricing": "Custom quote; generally retainer-based agency pricing.",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                ],
+                "overallRecommendation": "Best for organizations that want an execution-heavy performance partner centered on paid acquisition and conversion improvement.",
+                "recommendationScore": 90
+              }
+            ],
+            "ceoApprovalRequiredBeforeBenchmark": true,
+            "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+            "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+            "marketDiscoveryReport": {
+              "category": "Growth Marketing Specialist",
+              "generatedAt": "2026-07-10T22:40:09.917Z",
+              "overallRecommendation": "For 2026 market discovery, the strongest leaders are First Page Sage for organic/B2B growth, Power Digital for full-funnel scale, and Disruptive Advertising for paid-performance execution; choose Growthcurve or Ladder for experimentation-heavy programs, and Growth Division for startup-stage needs.",
+              "providers": [
+                {
+                  "provider": "First Page Sage",
+                  "company": "First Page Sage",
+                  "capability": "Growth marketing agency with strong emphasis on organic strategy, thought leadership content, SEO, and GEO/AI-search visibility.",
+                  "strengths": [
+                    "Ranked #1 in a 2026 growth marketing agency report",
+                    "Strong client roster including Salesforce, US Bank, Logitech, and Verizon",
+                    "High reported review scores and long operating history",
+                    "Well suited for B2B demand generation and long-horizon growth programs"
+                  ],
+                  "weaknesses": [
+                    "Less oriented toward paid-media-heavy performance marketing than some rivals",
+                    "May be overkill for early-stage startups needing rapid testing across many channels"
+                  ],
+                  "typicalUseCases": [
+                    "B2B lead generation",
+                    "SEO-led demand creation",
+                    "Thought leadership and category authority building",
+                    "AI-search/GEO visibility programs"
+                  ],
+                  "pricing": "Custom quote; enterprise agency engagement pricing not publicly standardized.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/",
+                    "https://www.roberthalf.com/us/en/insights/research/data-reveals-which-marketing-and-creative-roles-are-in-highest-demand"
+                  ],
+                  "overallRecommendation": "Top choice for B2B organizations that want strategic, content-led growth with strong organic and GEO/AI-search emphasis.",
+                  "recommendationScore": 96
+                },
+                {
+                  "provider": "Power Digital",
+                  "company": "Power Digital",
+                  "capability": "Tech-enabled full-funnel growth marketing agency using proprietary AI intelligence and multi-channel performance marketing.",
+                  "strengths": [
+                    "Ranked #2 in the 2026 agency report",
+                    "Broad full-funnel capability across paid, owned, and analytics",
+                    "Proprietary AI intelligence platform",
+                    "Experience with recognizable consumer and education brands"
+                  ],
+                  "weaknesses": [
+                    "Broader performance-marketing orientation may be less specialized for pure SEO-led growth",
+                    "Custom solutions can be resource-intensive for small teams"
+                  ],
+                  "typicalUseCases": [
+                    "Paid media scaling",
+                    "Cross-channel growth experimentation",
+                    "Lifecycle optimization",
+                    "Analytics-led acquisition programs"
+                  ],
+                  "pricing": "Custom quote; typically agency retainer and performance-based mix.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                  ],
+                  "overallRecommendation": "Strong all-around leader for companies needing measurable growth across multiple channels and access to advanced analytics.",
+                  "recommendationScore": 93
+                },
+                {
+                  "provider": "Disruptive Advertising",
+                  "company": "Disruptive Advertising",
+                  "capability": "Full-funnel performance marketing agency focused on eCommerce and B2B growth.",
+                  "strengths": [
+                    "Named among the top 2026 growth marketing agencies",
+                    "Strong paid media and conversion optimization orientation",
+                    "Relevant for teams seeking rapid experimentation and CAC efficiency"
+                  ],
+                  "weaknesses": [
+                    "Less differentiated on organic thought leadership than top SEO-centric firms",
+                    "Can be best fit where paid acquisition is already a primary growth lever"
+                  ],
+                  "typicalUseCases": [
+                    "Paid search and paid social optimization",
+                    "CRO and landing page testing",
+                    "Demand generation for eCommerce and B2B",
+                    "Acquisition funnel performance improvement"
+                  ],
+                  "pricing": "Custom quote; generally retainer-based agency pricing.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                  ],
+                  "overallRecommendation": "Best for organizations that want an execution-heavy performance partner centered on paid acquisition and conversion improvement.",
+                  "recommendationScore": 90
+                },
+                {
+                  "provider": "Growthcurve",
+                  "company": "Growthcurve",
+                  "capability": "AI-native growth marketing agency specializing in disruptive creative and paid media.",
+                  "strengths": [
+                    "Included in the 2026 growth agency ranking",
+                    "AI-native positioning is aligned with current market demand for automation and AI-assisted marketing",
+                    "Strong fit for creative-led performance marketing"
+                  ],
+                  "weaknesses": [
+                    "Less proven for conservative enterprise environments than longer-established agencies",
+                    "More specialized on creative and paid media than on deep organic strategy"
+                  ],
+                  "typicalUseCases": [
+                    "Creative testing at speed",
+                    "Paid social scaling",
+                    "Growth experiments for consumer and tech brands",
+                    "AI-assisted campaign optimization"
+                  ],
+                  "pricing": "Custom quote; agency retainer model.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                  ],
+                  "overallRecommendation": "Good choice for teams that value fast iteration, creative experimentation, and AI-native execution.",
+                  "recommendationScore": 86
+                },
+                {
+                  "provider": "Ladder",
+                  "company": "Ladder",
+                  "capability": "Data-driven full-funnel growth marketing with a proprietary testing framework.",
+                  "strengths": [
+                    "Listed among top 2026 growth marketing agencies",
+                    "Testing-framework orientation fits experimentation-heavy growth programs",
+                    "Useful for brands needing disciplined funnel optimization"
+                  ],
+                  "weaknesses": [
+                    "Less visible brand footprint than some larger competitors",
+                    "May be better suited to mid-market rather than very large global enterprises"
+                  ],
+                  "typicalUseCases": [
+                    "A/B testing programs",
+                    "Funnel optimization",
+                    "Lifecycle and conversion improvements",
+                    "Channel mix experimentation"
+                  ],
+                  "pricing": "Custom quote; likely retainer-based.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                  ],
+                  "overallRecommendation": "A solid option for data-driven teams that want structured experimentation and full-funnel optimization.",
+                  "recommendationScore": 84
+                },
+                {
+                  "provider": "Fractional Growth Operators",
+                  "company": "Independent / marketplace talent",
+                  "capability": "Fractional growth marketing specialist talent for targeted execution across acquisition, lifecycle, analytics, and experimentation.",
+                  "strengths": [
+                    "Strong fit for the practitioner-level growth marketing specialist role",
+                    "Flexible and fast to deploy",
+                    "Useful when teams need hands-on execution rather than a full agency relationship",
+                    "Market demand for specialized growth and marketing automation skills remains strong in 2026"
+                  ],
+                  "weaknesses": [
+                    "Quality and expertise vary widely by individual",
+                    "Limited capacity versus agency teams",
+                    "Less suited to deeply integrated enterprise programs without strong internal leadership"
+                  ],
+                  "typicalUseCases": [
+                    "Interim growth lead support",
+                    "Channel-specific experimentation",
+                    "Marketing automation and analytics execution",
+                    "Startup or SMB growth gap filling"
+                  ],
+                  "pricing": "Hourly, project-based, or monthly fractional retainers; typically lower commitment than agencies.",
+                  "apiAvailability": "UNKNOWN",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://www.roberthalf.com/us/en/insights/research/data-reveals-which-marketing-and-creative-roles-are-in-highest-demand",
+                    "https://growthmethod.com/growth-marketing-specialist/"
+                  ],
+                  "overallRecommendation": "Best when Atlas needs flexible, practitioner-level growth talent rather than a full agency or platform provider.",
+                  "recommendationScore": 82
+                },
+                {
+                  "provider": "Growth Division",
+                  "company": "Growth Division",
+                  "capability": "Growth marketing firm focused on seed-stage and early-stage startups.",
+                  "strengths": [
+                    "Clearly positioned for startup-stage growth needs",
+                    "Relevant for lean teams needing rapid testing and prioritization",
+                    "Listed in the 2026 ranking"
+                  ],
+                  "weaknesses": [
+                    "Less suitable for enterprise-scale governance and global complexity",
+                    "May not have the breadth required for heavily regulated or multi-region programs"
+                  ],
+                  "typicalUseCases": [
+                    "Early-stage acquisition",
+                    "MVP market testing",
+                    "Channel discovery",
+                    "Startup growth sprints"
+                  ],
+                  "pricing": "Custom quote; startup-oriented consulting/retainer model.",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "LOW",
+                  "evidenceSources": [
+                    "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/"
+                  ],
+                  "overallRecommendation": "Best for startups and seed-stage companies that need focused growth execution rather than large-scale enterprise support.",
+                  "recommendationScore": 78
+                }
+              ],
+              "evidenceSources": [
+                "https://firstpagesage.com/seo-blog/the-top-growth-marketing-agencies/",
+                "https://www.roberthalf.com/us/en/insights/research/data-reveals-which-marketing-and-creative-roles-are-in-highest-demand",
+                "https://growthmethod.com/growth-marketing-specialist/"
+              ]
+            }
+          }
+        },
+        {
+          "role": "Sales Systems Specialist",
+          "assignmentStatus": "BENCHMARK_REQUIRED",
+          "workerId": null,
+          "workerName": null,
+          "standingScore": null,
+          "source": "MARKET_DISCOVERY_REQUIRED",
+          "hiringDecisionRequired": true,
+          "benchmarkReference": {
+            "benchmarkType": "specialist-benchmarking",
+            "benchmarkId": null,
+            "recommendation": "PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+            "championProvider": "Salesforce Revenue Cloud & Sales Cloud Architect"
+          },
+          "hiringDecision": {
+            "category": "Sales Systems Specialist",
+            "decision": "MARKET_DISCOVERY_REQUIRED",
+            "selectedSpecialistId": null,
+            "selectedSpecialist": null,
+            "topBenchmarkCandidates": [
+              {
+                "rank": 1,
+                "provider": "Salesforce Revenue Cloud & Sales Cloud Architect",
+                "company": "Salesforce",
+                "capability": "Enterprise sales systems architecture, configuration, and optimization across CRM, CPQ, billing, forecasting, and revenue operations.",
+                "strengths": [
+                  "Market‑leading CRM and revenue platform with broad ecosystem and deep specialization in sales systems and RevOps.[8]",
+                  "Highly configurable for complex sales processes, territories, forecasting, and incentive structures, suitable for global enterprises.[6][8]",
+                  "Strong ecosystem of certified architects and specialists focused specifically on sales systems design, data model governance, and integrations.[6][8]",
+                  "Enterprise‑grade security, compliance, and administration supporting rigorous governance requirements.[6]",
+                  "Rich analytics and AI‑driven insights for pipeline, performance, and forecasting when combined with Salesforce Analytics and Einstein.[6]"
+                ],
+                "weaknesses": [
+                  "Implementation complexity and configuration overhead can be high for smaller or less mature sales organizations.[6][8]",
+                  "Licensing and consulting costs are relatively expensive compared with mid‑market tools, especially for full Revenue Cloud/CPQ stacks.[6]",
+                  "Heavy reliance on skilled administrators and architects to avoid technical debt and process bloat over time.[6][8]"
+                ],
+                "typicalUseCases": [
+                  "Global B2B organizations standardizing CRM, opportunity management, forecasting, and territory management across regions.[8]",
+                  "Complex quote‑to‑cash and CPQ scenarios requiring deep configuration and integration with ERP and billing systems.[6]",
+                  "Revenue operations teams needing a single system of record for pipeline, sales performance, and executive reporting.[6]",
+                  "Enterprises elevating sales enablement to “sales empowerment” by combining process, coaching, and data in a unified sales system.[6]"
+                ],
+                "pricing": "Subscription per user with enterprise add‑ons for CPQ, Revenue Cloud, analytics, and platform; total cost typically high for full enterprise deployments.[6]",
+                "apiAvailability": "AVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://sandler.com/blog/sandler-2026-webinar-insights/",
+                  "https://justsalesjobs.com/sales-role-trends-2026/",
+                  "https://glassdoor.com/Salaries/sales-systems-specialist-salary-SRCH_KO0,24.htm"
+                ],
+                "overallRecommendation": "Primary choice for organizations that want a deeply integrated, enterprise‑grade sales system with strong RevOps and performance capabilities; best suited to Atlas clients with complex global sales operations.",
+                "recommendationScore": 9.3
+              },
+              {
+                "rank": 2,
+                "provider": "Varicent ICM & Sales Performance Specialist",
+                "company": "Varicent",
+                "capability": "Specialist in incentive compensation management (ICM) and sales performance analytics, aligning sales systems with variable pay and behavioral drivers.",
+                "strengths": [
+                  "Recognized enterprise ICM platform used by leading technology companies for complex sales compensation schemes.[2]",
+                  "Deep focus on modeling variable compensation, quotas, and plan changes with strong auditability and governance.[2]",
+                  "Supports advanced analytics on sales performance and compensation impact, enabling data‑driven plan design.[2][6]",
+                  "Designed to integrate with CRM and ERP systems to unify transaction data, performance metrics, and payout calculations.[2]"
+                ],
+                "weaknesses": [
+                  "Narrow primary focus on incentive compensation rather than end‑to‑end sales workflow and CRM.[2]",
+                  "Requires mature data pipelines and well‑defined sales processes to realize full value.[2][6]",
+                  "Implementation and ongoing administration can be resource‑intensive for smaller organizations.[2]"
+                ],
+                "typicalUseCases": [
+                  "Large sales organizations with complex, multi‑tier commission structures needing accurate, auditable payouts.[2]",
+                  "Revenue operations teams analyzing the correlation between compensation design and sales performance outcomes.[2][6]",
+                  "Enterprises re‑designing sales compensation plans and needing scenario modeling and impact analysis.[2]",
+                  "Organizations seeking to centralize incentive management away from spreadsheets and custom internal tools.[2]"
+                ],
+                "pricing": "Enterprise subscription pricing based on number of payees and modules; typically mid‑to‑high relative to generic sales tools.[2]",
+                "apiAvailability": "AVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://stripe.com/jobs/listing/sales-compensation-analytics-systems-specialist/7739207",
+                  "https://sandler.com/blog/sandler-2026-webinar-insights/"
+                ],
+                "overallRecommendation": "Recommended as the specialist incentive‑management layer in a broader sales system stack, especially for Atlas clients where compensation strategy and accuracy are central levers for performance.",
+                "recommendationScore": 8.8
+              },
+              {
+                "rank": 3,
+                "provider": "Xactly Sales Performance & Systems Specialist",
+                "company": "Xactly",
+                "capability": "Cloud‑based incentive compensation, quota management, and sales performance system integrated with CRM and financial platforms.",
+                "strengths": [
+                  "Long‑standing commercial ICM solution named among key tools for modern Sales Compensation & Systems Specialists.[2]",
+                  "Robust functionality for quota setting, territory management, and performance analytics, beyond pure commission calculation.[2][6]",
+                  "Enterprise‑oriented with strong governance and compliance, suitable for regulated industries and large sales forces.[2]",
+                  "Integrates with CRM, ERP, and HRIS to make compensation a connected component of the overall sales system.[2][6]"
+                ],
+                "weaknesses": [
+                  "Complexity and configuration needs may be excessive for smaller teams or simple comp plans.[2]",
+                  "User interface and agility may feel heavier compared with newer, more flexible ICM entrants.[2]",
+                  "Typical deployment cycles can be lengthy, requiring dedicated systems specialists.[2]"
+                ],
+                "typicalUseCases": [
+                  "Enterprises in fintech, med‑tech, and other high‑value sectors where compensation accuracy and auditability are critical.[5][7]",
+                  "Global organizations unifying quota, territory, and compensation strategies under one system.[2][6]",
+                  "Sales Operations and RevOps teams driving forecast accuracy with integrated performance and payout data.[6]",
+                  "Organizations moving from legacy, on‑premise or custom compensation systems to modern cloud platforms.[2]"
+                ],
+                "pricing": "Enterprise subscription pricing, often higher than mid‑market tools but aligned with large‑scale, complex deployments.[2]",
+                "apiAvailability": "AVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://stripe.com/jobs/listing/sales-compensation-analytics-systems-specialist/7739207",
+                  "https://sandler.com/blog/sandler-2026-webinar-insights/",
+                  "https://careerenlightenment.com/best-sales-jobs-2026"
+                ],
+                "overallRecommendation": "Recommended for Atlas clients with large or regulated sales organizations that need specialist systems support across quotas, territories, and compensation in a single, enterprise‑ready platform.",
+                "recommendationScore": 8.7
+              }
+            ],
+            "ceoApprovalRequiredBeforeBenchmark": true,
+            "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+            "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+            "marketDiscoveryReport": {
+              "category": "Sales Systems Specialist",
+              "generatedAt": "2026-07-10T22:40:35.443Z",
+              "overallRecommendation": "For Atlas’s Sales Systems Specialist category, prioritize a blended ecosystem: use Salesforce‑centric architects for core CRM and revenue operations, pair with Varicent/Xactly/CaptivateIQ specialists for incentive and performance management, and engage Sandler or equivalent performance‑system consultants when clients are redesigning their entire sales operating model. Maintain a vetted pool of independent RevOps and Sales Systems Specialists to provide cross‑platform, role‑based support and to fill gaps where clients’ internal maturity or budgets make full enterprise platforms impractical.",
+              "providers": [
+                {
+                  "provider": "Salesforce Revenue Cloud & Sales Cloud Architect",
+                  "company": "Salesforce",
+                  "capability": "Enterprise sales systems architecture, configuration, and optimization across CRM, CPQ, billing, forecasting, and revenue operations.",
+                  "strengths": [
+                    "Market‑leading CRM and revenue platform with broad ecosystem and deep specialization in sales systems and RevOps.[8]",
+                    "Highly configurable for complex sales processes, territories, forecasting, and incentive structures, suitable for global enterprises.[6][8]",
+                    "Strong ecosystem of certified architects and specialists focused specifically on sales systems design, data model governance, and integrations.[6][8]",
+                    "Enterprise‑grade security, compliance, and administration supporting rigorous governance requirements.[6]",
+                    "Rich analytics and AI‑driven insights for pipeline, performance, and forecasting when combined with Salesforce Analytics and Einstein.[6]"
+                  ],
+                  "weaknesses": [
+                    "Implementation complexity and configuration overhead can be high for smaller or less mature sales organizations.[6][8]",
+                    "Licensing and consulting costs are relatively expensive compared with mid‑market tools, especially for full Revenue Cloud/CPQ stacks.[6]",
+                    "Heavy reliance on skilled administrators and architects to avoid technical debt and process bloat over time.[6][8]"
+                  ],
+                  "typicalUseCases": [
+                    "Global B2B organizations standardizing CRM, opportunity management, forecasting, and territory management across regions.[8]",
+                    "Complex quote‑to‑cash and CPQ scenarios requiring deep configuration and integration with ERP and billing systems.[6]",
+                    "Revenue operations teams needing a single system of record for pipeline, sales performance, and executive reporting.[6]",
+                    "Enterprises elevating sales enablement to “sales empowerment” by combining process, coaching, and data in a unified sales system.[6]"
+                  ],
+                  "pricing": "Subscription per user with enterprise add‑ons for CPQ, Revenue Cloud, analytics, and platform; total cost typically high for full enterprise deployments.[6]",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://sandler.com/blog/sandler-2026-webinar-insights/",
+                    "https://justsalesjobs.com/sales-role-trends-2026/",
+                    "https://glassdoor.com/Salaries/sales-systems-specialist-salary-SRCH_KO0,24.htm"
+                  ],
+                  "overallRecommendation": "Primary choice for organizations that want a deeply integrated, enterprise‑grade sales system with strong RevOps and performance capabilities; best suited to Atlas clients with complex global sales operations.",
+                  "recommendationScore": 9.3
+                },
+                {
+                  "provider": "Varicent ICM & Sales Performance Specialist",
+                  "company": "Varicent",
+                  "capability": "Specialist in incentive compensation management (ICM) and sales performance analytics, aligning sales systems with variable pay and behavioral drivers.",
+                  "strengths": [
+                    "Recognized enterprise ICM platform used by leading technology companies for complex sales compensation schemes.[2]",
+                    "Deep focus on modeling variable compensation, quotas, and plan changes with strong auditability and governance.[2]",
+                    "Supports advanced analytics on sales performance and compensation impact, enabling data‑driven plan design.[2][6]",
+                    "Designed to integrate with CRM and ERP systems to unify transaction data, performance metrics, and payout calculations.[2]"
+                  ],
+                  "weaknesses": [
+                    "Narrow primary focus on incentive compensation rather than end‑to‑end sales workflow and CRM.[2]",
+                    "Requires mature data pipelines and well‑defined sales processes to realize full value.[2][6]",
+                    "Implementation and ongoing administration can be resource‑intensive for smaller organizations.[2]"
+                  ],
+                  "typicalUseCases": [
+                    "Large sales organizations with complex, multi‑tier commission structures needing accurate, auditable payouts.[2]",
+                    "Revenue operations teams analyzing the correlation between compensation design and sales performance outcomes.[2][6]",
+                    "Enterprises re‑designing sales compensation plans and needing scenario modeling and impact analysis.[2]",
+                    "Organizations seeking to centralize incentive management away from spreadsheets and custom internal tools.[2]"
+                  ],
+                  "pricing": "Enterprise subscription pricing based on number of payees and modules; typically mid‑to‑high relative to generic sales tools.[2]",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://stripe.com/jobs/listing/sales-compensation-analytics-systems-specialist/7739207",
+                    "https://sandler.com/blog/sandler-2026-webinar-insights/"
+                  ],
+                  "overallRecommendation": "Recommended as the specialist incentive‑management layer in a broader sales system stack, especially for Atlas clients where compensation strategy and accuracy are central levers for performance.",
+                  "recommendationScore": 8.8
+                },
+                {
+                  "provider": "Xactly Sales Performance & Systems Specialist",
+                  "company": "Xactly",
+                  "capability": "Cloud‑based incentive compensation, quota management, and sales performance system integrated with CRM and financial platforms.",
+                  "strengths": [
+                    "Long‑standing commercial ICM solution named among key tools for modern Sales Compensation & Systems Specialists.[2]",
+                    "Robust functionality for quota setting, territory management, and performance analytics, beyond pure commission calculation.[2][6]",
+                    "Enterprise‑oriented with strong governance and compliance, suitable for regulated industries and large sales forces.[2]",
+                    "Integrates with CRM, ERP, and HRIS to make compensation a connected component of the overall sales system.[2][6]"
+                  ],
+                  "weaknesses": [
+                    "Complexity and configuration needs may be excessive for smaller teams or simple comp plans.[2]",
+                    "User interface and agility may feel heavier compared with newer, more flexible ICM entrants.[2]",
+                    "Typical deployment cycles can be lengthy, requiring dedicated systems specialists.[2]"
+                  ],
+                  "typicalUseCases": [
+                    "Enterprises in fintech, med‑tech, and other high‑value sectors where compensation accuracy and auditability are critical.[5][7]",
+                    "Global organizations unifying quota, territory, and compensation strategies under one system.[2][6]",
+                    "Sales Operations and RevOps teams driving forecast accuracy with integrated performance and payout data.[6]",
+                    "Organizations moving from legacy, on‑premise or custom compensation systems to modern cloud platforms.[2]"
+                  ],
+                  "pricing": "Enterprise subscription pricing, often higher than mid‑market tools but aligned with large‑scale, complex deployments.[2]",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://stripe.com/jobs/listing/sales-compensation-analytics-systems-specialist/7739207",
+                    "https://sandler.com/blog/sandler-2026-webinar-insights/",
+                    "https://careerenlightenment.com/best-sales-jobs-2026"
+                  ],
+                  "overallRecommendation": "Recommended for Atlas clients with large or regulated sales organizations that need specialist systems support across quotas, territories, and compensation in a single, enterprise‑ready platform.",
+                  "recommendationScore": 8.7
+                },
+                {
+                  "provider": "CaptivateIQ Sales Compensation & Systems Specialist",
+                  "company": "CaptivateIQ",
+                  "capability": "Modern incentive compensation and sales performance management for high‑growth and mid‑market SaaS and technology sales organizations.",
+                  "strengths": [
+                    "Commercial ICM tool explicitly cited as a core system in leading technology firms’ sales compensation roles.[2]",
+                    "More flexible, spreadsheet‑like interface than traditional enterprise ICM systems, making iteration on plans faster.[2]",
+                    "Well suited to fast‑growing SaaS and AI software companies where compensation plans change frequently.[5][7]",
+                    "Good fit for remote‑first and hybrid sales models where data is centralized but teams are distributed.[8]"
+                  ],
+                  "weaknesses": [
+                    "Less proven at the very largest global enterprises compared with long‑standing incumbents like Varicent and Xactly.[2]",
+                    "Focus is primarily on compensation and performance rather than full CRM or revenue‑cloud capabilities.[2]",
+                    "Relies on clean upstream data from CRM and financial systems; data quality issues can limit effectiveness.[2]"
+                  ],
+                  "typicalUseCases": [
+                    "Scaling SaaS, cybersecurity, and AI solution providers with complex yet frequently evolving commission plans.[5][7]",
+                    "RevOps and Sales Ops teams replacing manual, spreadsheet‑based commission calculation processes.[2]",
+                    "Organizations needing rapid plan experimentation and scenario analysis without full enterprise ICM overhead.[2]",
+                    "Companies standardizing payout visibility for remote sales reps to improve motivation and trust.[8]"
+                  ],
+                  "pricing": "Subscription pricing per payee or module, typically mid‑range relative to legacy enterprise ICM platforms; designed to be accessible to growth‑stage companies.[2][7]",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://stripe.com/jobs/listing/sales-compensation-analytics-systems-specialist/7739207",
+                    "https://careerenlightenment.com/best-sales-jobs-2026",
+                    "https://blog.signalhire.com/2026-sales-careers-the-most-in-demand-roles-and-how-much-they-pay/",
+                    "https://justsalesjobs.com/sales-role-trends-2026/"
+                  ],
+                  "overallRecommendation": "Strong option for Atlas customers in high‑growth SaaS and AI segments needing specialist sales systems support around compensation, plan iteration, and scalable payouts without full heavyweight enterprise tooling.",
+                  "recommendationScore": 8.5
+                },
+                {
+                  "provider": "Sandler Sales Performance Systems Consultant",
+                  "company": "Sandler",
+                  "capability": "Consulting and implementation of holistic sales performance systems combining methodology, enablement, data, and technology.",
+                  "strengths": [
+                    "Explicit 2026 focus on transforming from traditional training to integrated sales performance systems.[6]",
+                    "Emphasis on aligning go‑to‑market strategy, compensation, data, and technology into a coherent operating system for sales.[6]",
+                    "Strong frameworks for sales enablement, coaching, and predictive analytics layered over existing CRM and tooling.[6]",
+                    "Experience working with diverse industries, making them effective for system design and change management rather than just tooling.[6]"
+                  ],
+                  "weaknesses": [
+                    "Does not provide a proprietary CRM or compensation platform; depends on client’s existing tech stack.[6]",
+                    "Impact is highly dependent on execution quality and organizational buy‑in during transformation programs.[6]",
+                    "Services‑heavy model can be costly for smaller organizations or those seeking primarily a software solution.[6]"
+                  ],
+                  "typicalUseCases": [
+                    "Organizations redesigning their overall sales operating model, not just implementing a single system or tool.[6]",
+                    "Enterprises seeking AI‑enabled coaching, individualized development plans, and better forecasting from current tools.[6]",
+                    "Companies upgrading sales enablement into true sales empowerment by unifying methodology and data.[6]",
+                    "Atlas clients needing external specialists to architect how CRM, ICM, analytics, and enablement fit together.[6]"
+                  ],
+                  "pricing": "Consulting/project‑based pricing plus possible subscriptions for Sandler digital offerings; generally mid‑to‑high depending on scope and scale.[6]",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://sandler.com/blog/sandler-2026-webinar-insights/"
+                  ],
+                  "overallRecommendation": "Best used by Atlas as a strategic partner for clients undertaking broader sales‑system transformation, complementing core technology vendors with methodology and performance system design.",
+                  "recommendationScore": 8.2
+                },
+                {
+                  "provider": "Revenue Operations & Sales Systems Specialist (Role‑based provider)",
+                  "company": "Independent / Multi‑platform (Salesforce, HubSpot, ICM tools)",
+                  "capability": "Specialist individual or boutique team focused on architecting and operating integrated sales systems across CRM, marketing, customer success, and compensation.",
+                  "strengths": [
+                    "RevOps and Sales Ops roles are identified as critical “force multipliers” behind successful modern sales organizations.[8]",
+                    "Able to work across multiple tools (CRM, ICM, BI) to create a cohesive sales system rather than optimizing a single platform.[8][6]",
+                    "Often operate remotely or hybrid, aligning with the dominant sales work models in 2026.[8]",
+                    "Flexible engagement models (fractional, project‑based, embedded) allow tailored support for Atlas clients of varying sizes.[8]"
+                  ],
+                  "weaknesses": [
+                    "Quality and depth of expertise can vary significantly between individual specialists and boutiques.[3]",
+                    "Limited brand‑level guarantees compared with major software vendors; risk management depends on vetting and references.[3][8]",
+                    "Capacity constraints may limit scalability for very large enterprise programs.[8]"
+                  ],
+                  "typicalUseCases": [
+                    "Growth‑stage companies building their first serious sales operations and systems layer.[8]",
+                    "Organizations needing careful integration and workflow design across CRM, marketing automation, customer success, and ICM.[8][6]",
+                    "Atlas use as flexible, specialist talent to complement platform vendors when clients lack internal systems expertise.[8]",
+                    "Clients transitioning to remote‑first or hybrid models and needing sales systems re‑designed for distributed teams.[8]"
+                  ],
+                  "pricing": "Role‑based compensation typically in the $94K–$157K total pay range for Sales Systems Specialists in the US, with median around $120K; fractional or consulting rates scaled from these salary benchmarks.[10][7]",
+                  "apiAvailability": "UNKNOWN",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://glassdoor.com/Salaries/sales-systems-specialist-salary-SRCH_KO0,24.htm",
+                    "https://justsalesjobs.com/sales-role-trends-2026/",
+                    "https://blog.signalhire.com/2026-sales-careers-the-most-in-demand-roles-and-how-much-they-pay/"
+                  ],
+                  "overallRecommendation": "Recommended for Atlas as a flexible category of providers to deploy when clients need cross‑platform, role‑based sales systems expertise rather than a single technology vendor; ideal complement to the major platforms listed above.",
+                  "recommendationScore": 8
+                }
+              ],
+              "evidenceSources": [
+                "https://sandler.com/blog/sandler-2026-webinar-insights/",
+                "https://justsalesjobs.com/sales-role-trends-2026/",
+                "https://glassdoor.com/Salaries/sales-systems-specialist-salary-SRCH_KO0,24.htm",
+                "https://stripe.com/jobs/listing/sales-compensation-analytics-systems-specialist/7739207",
+                "https://careerenlightenment.com/best-sales-jobs-2026",
+                "https://blog.signalhire.com/2026-sales-careers-the-most-in-demand-roles-and-how-much-they-pay/"
+              ]
+            }
+          }
+        },
+        {
+          "role": "Analytics Specialist",
+          "assignmentStatus": "BENCHMARK_REQUIRED",
+          "workerId": null,
+          "workerName": null,
+          "standingScore": null,
+          "source": "MARKET_DISCOVERY_REQUIRED",
+          "hiringDecisionRequired": true,
+          "benchmarkReference": {
+            "benchmarkType": "specialist-benchmarking",
+            "benchmarkId": null,
+            "recommendation": "PENDING_CEO_APPROVAL_FOR_BENCHMARK",
+            "championProvider": "Fractal Analytics"
+          },
+          "hiringDecision": {
+            "category": "Analytics Specialist",
+            "decision": "MARKET_DISCOVERY_REQUIRED",
+            "selectedSpecialistId": null,
+            "selectedSpecialist": null,
+            "topBenchmarkCandidates": [
+              {
+                "rank": 1,
+                "provider": "Fractal Analytics",
+                "company": "Fractal Analytics Inc.",
+                "capability": "Enterprise AI and decision-science consulting focused on advanced analytics, machine learning, and data-driven transformation for Fortune 500 organizations.",
+                "strengths": [
+                  "Deep specialization in combining analytics, AI, and decision science for large enterprises[3]",
+                  "Strong presence in Fortune 500 analytics and AI transformation programs[3]",
+                  "Vertical depth across CPG, financial services, healthcare, and retail[3]",
+                  "Capable of end‑to‑end support: data engineering, modeling, and executive‑level decision support[3]"
+                ],
+                "weaknesses": [
+                  "Engagements typically suited to large, well-funded enterprises; may be over‑scaled for smaller Atlas customers[3]",
+                  "Consulting-led model can lead to longer onboarding and higher minimum contract sizes[3]"
+                ],
+                "typicalUseCases": [
+                  "Enterprise‑wide analytics and AI transformation programs[3]",
+                  "Building decision‑science platforms for marketing, risk, and pricing optimization[3]",
+                  "Establishing centralized analytics centers of excellence for global organizations[3]",
+                  "Complex multi‑domain analytics where business strategy and behavioral science are critical[3]"
+                ],
+                "pricing": "Primarily project‑based and retainer consulting fees; premium enterprise pricing aligned to Fortune 500 transformation programs[3]",
+                "apiAvailability": "LIMITED",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://uvik.net/blog/top-data-analytics-companies/",
+                  "https://www.precedenceresearch.com/data-analytics-market"
+                ],
+                "overallRecommendation": "Highly suitable as a strategic partner for Atlas when serving large enterprises that need high‑end analytics specialists and AI‑driven decision science; best used for complex, multi‑stakeholder analytics programs rather than transactional, small engagements.",
+                "recommendationScore": 9
+              },
+              {
+                "rank": 2,
+                "provider": "Tiger Analytics",
+                "company": "Tiger Analytics Inc.",
+                "capability": "Advanced analytics, data engineering, and AI consultancy with strong vertical focus in CPG, BFSI, healthcare, and telecom.",
+                "strengths": [
+                  "Recognized as a leading advanced analytics and AI consultancy with strong data engineering capabilities[3]",
+                  "Deep vertical expertise in consumer goods, financial services, healthcare, and telecom, aligning well with common Atlas client sectors[3]",
+                  "Experience building modern data stacks, including warehouses, lakehouses, and streaming analytics pipelines[3]",
+                  "Balance of strategic advisory and hands‑on implementation suitable for enterprise programs[3]"
+                ],
+                "weaknesses": [
+                  "May prioritize large and mid‑large enterprise engagements, limiting access for smaller Atlas customers[3]",
+                  "Analytics specialists may be embedded in broader programs, making very narrow specialist requests harder to staff quickly[3]"
+                ],
+                "typicalUseCases": [
+                  "Standing up or modernizing enterprise analytics platforms in key verticals[3]",
+                  "Deploying machine learning and predictive models in marketing, risk, and operations[3]",
+                  "Analytics engineering for cloud data platforms and real‑time decisioning[3]",
+                  "Embedding analytics specialists into cross‑functional digital transformation programs[3]"
+                ],
+                "pricing": "Project‑based consulting with premium rates for advanced analytics and AI work; typically multi‑month engagements with team‑based pricing[3]",
+                "apiAvailability": "LIMITED",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://uvik.net/blog/top-data-analytics-companies/",
+                  "https://365datascience.com/career-advice/data-analyst-job-outlook/"
+                ],
+                "overallRecommendation": "Strong fit where Atlas customers require teams of analytics specialists plus data engineering and AI capabilities, especially in CPG, BFSI, healthcare, and telecom; recommended as a core partner for complex, data‑platform‑centric work.",
+                "recommendationScore": 9
+              },
+              {
+                "rank": 3,
+                "provider": "Mu Sigma",
+                "company": "Mu Sigma Inc.",
+                "capability": "High‑volume decision sciences and embedded analytics services for large enterprises running many parallel analytics use cases.",
+                "strengths": [
+                  "Specializes in high‑scale decision science and embedded analytics teams[3]",
+                  "Well‑suited to organizations with many concurrent analytics projects and mature internal data environments[3]",
+                  "Ability to deploy large numbers of analytics specialists and analysts across functions[3]",
+                  "Recognized as a major player in the global data analytics market[2]"
+                ],
+                "weaknesses": [
+                  "Operating model optimized for very large enterprises; smaller Atlas clients may find the model too heavyweight[3]",
+                  "Analytics quality and consistency can vary across very large teams; requires strong client governance[3]"
+                ],
+                "typicalUseCases": [
+                  "Staffing large analytics centers of excellence with decision‑science specialists[3]",
+                  "Supporting continuous experimentation across marketing, pricing, risk, and operations[3]",
+                  "Providing embedded analytics teams to business units at scale[3]",
+                  "High‑volume reporting, dashboarding, and diagnostic analytics with decision support[2][3]"
+                ],
+                "pricing": "Long‑term managed services and staff‑augmentation style pricing; optimized for large team deployments over multi‑year agreements[3]",
+                "apiAvailability": "UNAVAILABLE",
+                "enterpriseReadiness": "HIGH",
+                "evidenceSources": [
+                  "https://uvik.net/blog/top-data-analytics-companies/",
+                  "https://www.precedenceresearch.com/data-analytics-market"
+                ],
+                "overallRecommendation": "Best leveraged by Atlas for large enterprise clients seeking ongoing, high‑volume analytics specialist capacity; recommended as a scale partner rather than for niche, single‑specialist engagements.",
+                "recommendationScore": 8
+              }
+            ],
+            "ceoApprovalRequiredBeforeBenchmark": true,
+            "benchmarkExecutionStatus": "PENDING_CEO_APPROVAL",
+            "rationale": "No active champion in Workforce Registry. External market discovery completed and top benchmark candidates prepared.",
+            "marketDiscoveryReport": {
+              "category": "Analytics Specialist",
+              "generatedAt": "2026-07-10T22:40:26.902Z",
+              "overallRecommendation": "For the Analytics Specialist category, Atlas should build a blended ecosystem: leverage Fractal Analytics and Tiger Analytics for complex, enterprise‑scale programs where specialized analytics and AI decision science are central; use Mu Sigma for large clients needing sustained, high‑volume embedded analytics capacity; adopt Alteryx and IBM Data & AI as strategic platform partners that enhance specialist productivity and governance; and incorporate Uvik Software for mid‑market and growth‑stage customers requiring strong analytics‑engineering and modern data‑stack expertise. This combination aligns with 2026 market dynamics in which analytics engineering, AI‑driven decision support, and domain‑specific expertise are key differentiators[1][2][3][6][8].",
+              "providers": [
+                {
+                  "provider": "Fractal Analytics",
+                  "company": "Fractal Analytics Inc.",
+                  "capability": "Enterprise AI and decision-science consulting focused on advanced analytics, machine learning, and data-driven transformation for Fortune 500 organizations.",
+                  "strengths": [
+                    "Deep specialization in combining analytics, AI, and decision science for large enterprises[3]",
+                    "Strong presence in Fortune 500 analytics and AI transformation programs[3]",
+                    "Vertical depth across CPG, financial services, healthcare, and retail[3]",
+                    "Capable of end‑to‑end support: data engineering, modeling, and executive‑level decision support[3]"
+                  ],
+                  "weaknesses": [
+                    "Engagements typically suited to large, well-funded enterprises; may be over‑scaled for smaller Atlas customers[3]",
+                    "Consulting-led model can lead to longer onboarding and higher minimum contract sizes[3]"
+                  ],
+                  "typicalUseCases": [
+                    "Enterprise‑wide analytics and AI transformation programs[3]",
+                    "Building decision‑science platforms for marketing, risk, and pricing optimization[3]",
+                    "Establishing centralized analytics centers of excellence for global organizations[3]",
+                    "Complex multi‑domain analytics where business strategy and behavioral science are critical[3]"
+                  ],
+                  "pricing": "Primarily project‑based and retainer consulting fees; premium enterprise pricing aligned to Fortune 500 transformation programs[3]",
+                  "apiAvailability": "LIMITED",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://uvik.net/blog/top-data-analytics-companies/",
+                    "https://www.precedenceresearch.com/data-analytics-market"
+                  ],
+                  "overallRecommendation": "Highly suitable as a strategic partner for Atlas when serving large enterprises that need high‑end analytics specialists and AI‑driven decision science; best used for complex, multi‑stakeholder analytics programs rather than transactional, small engagements.",
+                  "recommendationScore": 9
+                },
+                {
+                  "provider": "Tiger Analytics",
+                  "company": "Tiger Analytics Inc.",
+                  "capability": "Advanced analytics, data engineering, and AI consultancy with strong vertical focus in CPG, BFSI, healthcare, and telecom.",
+                  "strengths": [
+                    "Recognized as a leading advanced analytics and AI consultancy with strong data engineering capabilities[3]",
+                    "Deep vertical expertise in consumer goods, financial services, healthcare, and telecom, aligning well with common Atlas client sectors[3]",
+                    "Experience building modern data stacks, including warehouses, lakehouses, and streaming analytics pipelines[3]",
+                    "Balance of strategic advisory and hands‑on implementation suitable for enterprise programs[3]"
+                  ],
+                  "weaknesses": [
+                    "May prioritize large and mid‑large enterprise engagements, limiting access for smaller Atlas customers[3]",
+                    "Analytics specialists may be embedded in broader programs, making very narrow specialist requests harder to staff quickly[3]"
+                  ],
+                  "typicalUseCases": [
+                    "Standing up or modernizing enterprise analytics platforms in key verticals[3]",
+                    "Deploying machine learning and predictive models in marketing, risk, and operations[3]",
+                    "Analytics engineering for cloud data platforms and real‑time decisioning[3]",
+                    "Embedding analytics specialists into cross‑functional digital transformation programs[3]"
+                  ],
+                  "pricing": "Project‑based consulting with premium rates for advanced analytics and AI work; typically multi‑month engagements with team‑based pricing[3]",
+                  "apiAvailability": "LIMITED",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://uvik.net/blog/top-data-analytics-companies/",
+                    "https://365datascience.com/career-advice/data-analyst-job-outlook/"
+                  ],
+                  "overallRecommendation": "Strong fit where Atlas customers require teams of analytics specialists plus data engineering and AI capabilities, especially in CPG, BFSI, healthcare, and telecom; recommended as a core partner for complex, data‑platform‑centric work.",
+                  "recommendationScore": 9
+                },
+                {
+                  "provider": "Mu Sigma",
+                  "company": "Mu Sigma Inc.",
+                  "capability": "High‑volume decision sciences and embedded analytics services for large enterprises running many parallel analytics use cases.",
+                  "strengths": [
+                    "Specializes in high‑scale decision science and embedded analytics teams[3]",
+                    "Well‑suited to organizations with many concurrent analytics projects and mature internal data environments[3]",
+                    "Ability to deploy large numbers of analytics specialists and analysts across functions[3]",
+                    "Recognized as a major player in the global data analytics market[2]"
+                  ],
+                  "weaknesses": [
+                    "Operating model optimized for very large enterprises; smaller Atlas clients may find the model too heavyweight[3]",
+                    "Analytics quality and consistency can vary across very large teams; requires strong client governance[3]"
+                  ],
+                  "typicalUseCases": [
+                    "Staffing large analytics centers of excellence with decision‑science specialists[3]",
+                    "Supporting continuous experimentation across marketing, pricing, risk, and operations[3]",
+                    "Providing embedded analytics teams to business units at scale[3]",
+                    "High‑volume reporting, dashboarding, and diagnostic analytics with decision support[2][3]"
+                  ],
+                  "pricing": "Long‑term managed services and staff‑augmentation style pricing; optimized for large team deployments over multi‑year agreements[3]",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://uvik.net/blog/top-data-analytics-companies/",
+                    "https://www.precedenceresearch.com/data-analytics-market"
+                  ],
+                  "overallRecommendation": "Best leveraged by Atlas for large enterprise clients seeking ongoing, high‑volume analytics specialist capacity; recommended as a scale partner rather than for niche, single‑specialist engagements.",
+                  "recommendationScore": 8
+                },
+                {
+                  "provider": "Alteryx",
+                  "company": "Alteryx, Inc.",
+                  "capability": "Self‑service analytics and data preparation platform enabling analytics specialists and business analysts to build workflows, models, and insights without heavy coding.",
+                  "strengths": [
+                    "Identified as a major player in the global data analytics software market[2]",
+                    "Strong focus on self‑service analytics, empowering analytics specialists to rapidly build and automate workflows[2]",
+                    "Broad adoption in enterprise environments for data preparation, blending, and advanced analytics[2]",
+                    "Supports integration with common BI and data platforms, enhancing specialist productivity[2]"
+                  ],
+                  "weaknesses": [
+                    "Primarily a software platform rather than a services provider; Atlas would need to pair Alteryx with human specialists",
+                    "Licensing costs can be high for large user bases compared with some modern open‑source‑centric stacks[2]"
+                  ],
+                  "typicalUseCases": [
+                    "Accelerating analytics specialist productivity in data preparation and modeling[2]",
+                    "Building repeatable analytics workflows for finance, marketing, risk, and operations teams[2]",
+                    "Empowering business analysts to perform advanced analytics without deep programming skills[2]",
+                    "Complementing enterprise BI and data‑warehouse deployments with self‑service capabilities[2]"
+                  ],
+                  "pricing": "Subscription‑based software licensing with per‑user and server options; enterprise‑tier pricing aligned with other leading analytics platforms[2]",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://www.precedenceresearch.com/data-analytics-market",
+                    "https://365datascience.com/career-advice/data-analyst-job-outlook/"
+                  ],
+                  "overallRecommendation": "Recommended as a core tooling partner to support Atlas‑sourced analytics specialists, particularly in enterprises favoring low‑code analytics workflows; not a direct talent supplier but strategically important in the tool ecosystem.",
+                  "recommendationScore": 8
+                },
+                {
+                  "provider": "IBM Data & AI (including IBM Consulting Analytics)",
+                  "company": "IBM Corporation",
+                  "capability": "End‑to‑end data and AI solutions and consulting, including analytics platforms, governance, and specialist‑led advisory and implementation services.",
+                  "strengths": [
+                    "Listed among major players in the global data analytics market[2]",
+                    "Combines software (data platforms, AI, BI) with consulting services that include analytics specialists[2]",
+                    "High enterprise trust, security, and compliance posture supporting regulated industries[2]",
+                    "Global delivery capability with deep domain expertise across financial services, healthcare, and public sector[4]"
+                  ],
+                  "weaknesses": [
+                    "Large, complex organization; engagements may be slower to mobilize and less flexible for smaller Atlas clients[4]",
+                    "Pricing and contracting models geared toward large enterprise transformation programs rather than small specialist engagements[4]"
+                  ],
+                  "typicalUseCases": [
+                    "Enterprise data and AI strategy and implementation with embedded analytics specialists[2][4]",
+                    "Deploying analytics platforms and governance in regulated industries[4]",
+                    "Modernizing legacy BI and analytics environments to cloud‑native architectures[4]",
+                    "Long‑term, cross‑functional analytics programs requiring strong security and compliance[4]"
+                  ],
+                  "pricing": "Enterprise consulting rates plus software subscription/enterprise license fees; typically high‑value, multi‑year programs[2][4]",
+                  "apiAvailability": "AVAILABLE",
+                  "enterpriseReadiness": "HIGH",
+                  "evidenceSources": [
+                    "https://www.precedenceresearch.com/data-analytics-market",
+                    "https://www.ie.edu/uncover-ie/top-data-analytics-companies-who-shapes-business-data-in-2026/"
+                  ],
+                  "overallRecommendation": "Strong strategic partner where Atlas serves very large, regulated enterprises needing both analytics specialists and robust data/AI platforms; recommended selectively for complex, high‑governance environments.",
+                  "recommendationScore": 8
+                },
+                {
+                  "provider": "Uvik Software",
+                  "company": "Uvik Software",
+                  "capability": "Engineer‑led data engineering and analytics delivery, focusing on modern data stacks, warehouse/lakehouse builds, streaming analytics, and applied AI foundations.",
+                  "strengths": [
+                    "Ranked as a top data analytics company in 2026, positioned specifically for modern data‑stack delivery[3]",
+                    "Engineer‑led delivery model suited to embedded senior analytics engineers and specialists[3]",
+                    "Strong fit for mid‑market and growth‑stage teams needing hands‑on modern analytics infrastructure[3]",
+                    "Supports analytics engineering and applied AI foundations, aligning with 2026 demand for analytics engineering skills[3][8]"
+                  ],
+                  "weaknesses": [
+                    "Less focused on very large Fortune 500‑scale transformation compared to some global consultancies[3]",
+                    "Brand recognition may be lower than the largest global firms, which can matter for some enterprise procurement contexts[4]"
+                  ],
+                  "typicalUseCases": [
+                    "Deploying and optimizing modern data warehouses and lakehouses for analytics specialists[3]",
+                    "Building streaming analytics and real‑time data pipelines to support specialist dashboards and models[3]",
+                    "Embedding senior analytics engineers into product and operations teams at mid‑market and growth‑stage companies[3]",
+                    "Establishing applied AI data foundations for downstream analytics use cases[3][8]"
+                  ],
+                  "pricing": "Project‑based and dedicated‑team pricing with flexibility for mid‑market and growth‑stage firms; generally more accessible than large global consultancies[3]",
+                  "apiAvailability": "UNAVAILABLE",
+                  "enterpriseReadiness": "MEDIUM",
+                  "evidenceSources": [
+                    "https://uvik.net/blog/top-data-analytics-companies/",
+                    "https://www.youtube.com/watch?v=Nc-YdL7YWGo"
+                  ],
+                  "overallRecommendation": "Recommended as a core delivery partner for Atlas in mid‑market and growth‑stage segments where modern data‑stack and analytics‑engineering specialists are critical; strong fit for clients prioritizing hands‑on technical expertise over large‑scale strategy consulting.",
+                  "recommendationScore": 8
+                }
+              ],
+              "evidenceSources": [
+                "https://uvik.net/blog/top-data-analytics-companies/",
+                "https://www.precedenceresearch.com/data-analytics-market",
+                "https://365datascience.com/career-advice/data-analyst-job-outlook/",
+                "https://www.ie.edu/uncover-ie/top-data-analytics-companies-who-shapes-business-data-in-2026/",
+                "https://www.youtube.com/watch?v=Nc-YdL7YWGo"
+              ]
+            }
+          }
+        }
+      ],
+      "benchmarkSignals": {
+        "benchmarkId": null,
+        "activeProviderCount": 6,
+        "unavailableProviderCount": 6,
+        "recommendation": "RUN_BENCHMARKS_AFTER_CEO_APPROVAL",
+        "championProvider": null
+      },
+      "executiveHiringPolicy": "Any unfilled specialist role must complete benchmark and CEO hiring decision before entering Asset Creation."
+    },
+    "requiredHumanDecisions": [
+      "CEO decision on final offer positioning before launch.",
+      "Executive sign-off on pricing guardrails and discount authority.",
+      "Brand lead approval on identity and messaging before publication.",
+      "Quality lead sign-off before launch gate is opened.",
+      "CEO go/no-go after quality review.",
+      "CEO decision: authorize transition from Workforce Assignment to Asset Creation.",
+      "CEO decision: approve benchmark execution for market-discovered candidates when no active champion exists.",
+      "CEO decision: approve temporary external specialist contracting for any unfilled critical role."
+    ],
+    "brandRequirements": {
+      "corePositioning": "Outcome-focused and evidence-backed.",
+      "messagingPrinciples": [
+        "State customer pain in concrete operational terms.",
+        "Communicate measurable business outcomes.",
+        "Avoid hype or unsupported performance claims."
+      ],
+      "brandAssets": [
+        "Brand narrative one-pager",
+        "Visual identity starter kit",
+        "Voice and tone guidance"
+      ]
+    },
+    "websiteRequirements": {
+      "mustHavePages": [
+        "Home",
+        "Offer",
+        "Proof",
+        "Pricing",
+        "Contact"
+      ],
+      "conversionRequirements": [
+        "Primary call-to-action above the fold.",
+        "Lead capture integrated with CRM.",
+        "Measurement events for page-to-lead conversion."
+      ],
+      "technicalRequirements": [
+        "Mobile-first responsive layout",
+        "Core web vitals baseline monitoring",
+        "Analytics and attribution tags"
+      ],
+      "businessTypeConstraint": "Do not build production website yet. Requirements only in this package.",
+      "requiredOutcomes": [
+        "Demonstrate clear offer hierarchy and proof sections.",
+        "Capture and route qualified leads into sales workflow.",
+        "Instrument conversion events from first session."
+      ]
+    },
+    "marketingRequirements": {
+      "launchChannels": [
+        "Direct outreach",
+        "Content distribution",
+        "Partnership referrals"
+      ],
+      "campaignSystem": "Weekly campaign sprint with message-test-measure loop.",
+      "requiredAssets": [
+        "Offer page",
+        "Outbound sequence",
+        "Case/proof content",
+        "Retargeting setup"
+      ]
+    },
+    "salesRequirements": {
+      "pipelineDesign": "Lead -> Qualified -> Proposal -> Closed Won/Lost",
+      "salesAssets": [
+        "Qualification script",
+        "Proposal template",
+        "Objection handling matrix"
+      ],
+      "governance": "All proposals above pricing threshold require executive approval."
+    },
+    "contentRequirements": {
+      "narrativePillars": [
+        "Pain clarity",
+        "Outcome proof",
+        "Execution trust"
+      ],
+      "cadence": "Minimum 3 high-value pieces per week during first 30 days.",
+      "formats": [
+        "Short-form insight",
+        "Case breakdown",
+        "Offer explainer"
+      ]
+    },
+    "operationsRequirements": {
+      "processBaseline": [
+        "Intake",
+        "Delivery",
+        "Quality checks",
+        "Handoff",
+        "Retention motion"
+      ],
+      "standardOperatingProcedures": "SOP required for every recurring workflow before scale phase.",
+      "escalationPath": "Execution lead -> Program manager -> Executive office"
+    },
+    "customerSupportRequirements": {
+      "supportChannels": [
+        "Email",
+        "Ticketing system",
+        "Priority escalation path"
+      ],
+      "serviceLevels": {
+        "firstResponseTargetHours": 8,
+        "resolutionTargetHours": 48
+      },
+      "qualityStandard": "Every customer issue classified by severity and linked to root cause category."
+    },
+    "analyticsRequirements": {
+      "eventTracking": [
+        "Lead captured",
+        "Meeting booked",
+        "Proposal sent",
+        "Deal closed",
+        "Churn event"
+      ],
+      "dataSources": [
+        "Website analytics",
+        "CRM",
+        "Billing",
+        "Support platform"
+      ],
+      "reportingCadence": "Daily operational snapshot and weekly executive review."
+    },
+    "kpiDashboard": {
+      "northStarMetric": "Time to reliable weekly cash flow",
+      "launchKpis": [
+        "Leads generated",
+        "Qualified pipeline value",
+        "Win rate",
+        "Time to first revenue",
+        "Gross margin",
+        "Customer retention",
+        "Support resolution SLA",
+        "Automation coverage"
+      ],
+      "decisionThresholds": {
+        "scale": "Sustain target margin and conversion for 4 consecutive weeks.",
+        "stabilize": "If 2 consecutive weeks miss target margin or SLA.",
+        "pivot": "If no improvement after 2 stabilization cycles."
+      },
+      "launchMissionKpis": [
+        "Qualified calls booked per week",
+        "Lead-to-proposal conversion",
+        "Proposal win rate",
+        "Average project margin",
+        "Time to first customer payment"
+      ],
+      "currentStatus": "PRE_ASSET_CREATION"
+    },
+    "first30DayExecutionPlan": [
+      "Week 1: Finalize offer architecture, specialist assignments, and launch asset backlog.",
+      "Week 2: Publish minimum launch assets and activate first demand channels.",
+      "Week 3: Run first full sales cycle, instrument KPI dashboard, and resolve operational bottlenecks.",
+      "Week 4: Present performance review to CEO and approve scale/stabilize/pivot decision."
+    ],
+    "first90DayGrowthPlan": [
+      "Days 1-30: Establish launch baseline and first revenue reliability signals.",
+      "Days 31-60: Expand proven channels, strengthen fulfillment throughput, and harden SOPs.",
+      "Days 61-90: Systematize growth loops, optimize unit economics, and prepare enterprise expansion options."
+    ],
+    "executiveRiskAssessment": {
+      "riskCategories": [
+        {
+          "category": "Demand Risk",
+          "signal": "Lead flow below threshold for two consecutive weeks.",
+          "mitigation": "Shift channel mix and refine offer positioning."
+        },
+        {
+          "category": "Execution Risk",
+          "signal": "Delivery cycle time exceeds SLA.",
+          "mitigation": "Increase automation and narrow scope until throughput stabilizes."
+        },
+        {
+          "category": "Quality Risk",
+          "signal": "Critical QA failures before launch or high post-launch incidents.",
+          "mitigation": "Enforce launch hold and complete corrective actions before relaunch."
+        },
+        {
+          "category": "Financial Risk",
+          "signal": "Burn rate exceeds budget guardrails.",
+          "mitigation": "Reduce discretionary spend and re-sequence investments."
+        }
+      ],
+      "executiveRecommendationPolicy": "If any critical risk is unresolved, launch remains blocked pending CEO decision.",
+      "missionSpecificRisks": [
+        {
+          "category": "Workforce Gap Risk",
+          "signal": "Workforce Registry may not contain active champions for all required launch roles.",
+          "mitigation": "Automatically perform external market discovery and complete CEO-approved benchmark before final hiring decisions."
+        },
+        {
+          "category": "Execution Prematurity Risk",
+          "signal": "Attempting asset creation before CEO package approval.",
+          "mitigation": "Hard stop at pipeline stage WORKFORCE_ASSIGNMENT until CEO approval is recorded."
+        }
+      ]
+    },
+    "artifactRegister": [
+      {
+        "artifactId": "LAUNCH-ART-001",
+        "name": "Executive Launch Brief",
+        "stage": "LAUNCH_PLANNING",
+        "status": "COMPLETED"
+      },
+      {
+        "artifactId": "LAUNCH-ART-002",
+        "name": "Workforce Assignment Sheet",
+        "stage": "WORKFORCE_ASSIGNMENT",
+        "status": "COMPLETED"
+      },
+      {
+        "artifactId": "LAUNCH-ART-003",
+        "name": "Brand System Brief",
+        "stage": "ASSET_CREATION",
+        "status": "BLOCKED_PENDING_CEO_APPROVAL_AND_ASSET_CREATION_GATE"
+      },
+      {
+        "artifactId": "LAUNCH-ART-004",
+        "name": "Website Specification",
+        "stage": "ASSET_CREATION",
+        "status": "BLOCKED_PENDING_CEO_APPROVAL_AND_ASSET_CREATION_GATE"
+      },
+      {
+        "artifactId": "LAUNCH-ART-005",
+        "name": "Marketing Campaign Blueprint",
+        "stage": "ASSET_CREATION",
+        "status": "BLOCKED_PENDING_CEO_APPROVAL_AND_ASSET_CREATION_GATE"
+      },
+      {
+        "artifactId": "LAUNCH-ART-006",
+        "name": "Sales Playbook",
+        "stage": "ASSET_CREATION",
+        "status": "BLOCKED_PENDING_CEO_APPROVAL_AND_ASSET_CREATION_GATE"
+      },
+      {
+        "artifactId": "LAUNCH-ART-007",
+        "name": "Operations SOP Pack",
+        "stage": "ASSET_CREATION",
+        "status": "BLOCKED_PENDING_CEO_APPROVAL_AND_ASSET_CREATION_GATE"
+      },
+      {
+        "artifactId": "LAUNCH-ART-008",
+        "name": "Support Response Matrix",
+        "stage": "ASSET_CREATION",
+        "status": "BLOCKED_PENDING_CEO_APPROVAL_AND_ASSET_CREATION_GATE"
+      },
+      {
+        "artifactId": "LAUNCH-ART-009",
+        "name": "Quality Review Report",
+        "stage": "QUALITY_REVIEW",
+        "status": "PENDING_NEXT_PIPELINE_STAGES"
+      },
+      {
+        "artifactId": "LAUNCH-ART-010",
+        "name": "CEO Approval Memo",
+        "stage": "CEO_APPROVAL",
+        "status": "PENDING_NEXT_PIPELINE_STAGES"
+      },
+      {
+        "artifactId": "LAUNCH-ART-011",
+        "name": "KPI Dashboard Baseline",
+        "stage": "PERFORMANCE_MONITORING",
+        "status": "PENDING_NEXT_PIPELINE_STAGES"
+      },
+      {
+        "artifactId": "LAUNCH-ART-012",
+        "name": "Improvement Recommendation Ledger",
+        "stage": "IMPROVEMENT_RECOMMENDATIONS",
+        "status": "PENDING_NEXT_PIPELINE_STAGES"
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "mission": "Customer Identity & Secure Sessions v1",
+  "generatedAt": "2026-07-12T04:22:48.870Z",
+  "overallStatus": "PASS",
+  "totals": {
+    "tests": 536,
+    "pass": 536,
+    "fail": 0
+  },
+  "steps": [
+    {
+      "name": "Focused Auth Security Tests",
+      "cwd": "/root/atlas/integration",
+      "command": "node --test test/customer-auth-security.test.js test/customer-intake-api.test.js",
+      "exitCode": 0,
+      "durationMs": 1482,
+      "summary": {
+        "framework": "node-test",
+        "tests": 17,
+        "pass": 17,
+        "fail": 0
+      }
+    },
+    {
+      "name": "Customer Portal + Mission Control Regressions",
+      "cwd": "/root/atlas/integration",
+      "command": "node --test test/customer-portal.test.js test/customer-dashboard.test.js test/customer-intake-mission-control.test.js",
+      "exitCode": 0,
+      "durationMs": 252,
+      "summary": {
+        "framework": "node-test",
+        "tests": 6,
+        "pass": 6,
+        "fail": 0
+      }
+    },
+    {
+      "name": "Executive Dashboard Frontend Regressions",
+      "cwd": "/root/atlas/apps/executive-dashboard",
+      "command": "npm test -- --run",
+      "exitCode": 0,
+      "durationMs": 5842,
+      "summary": {
+        "framework": "vitest",
+        "tests": 20,
+        "pass": 20,
+        "fail": 0
+      }
+    },
+    {
+      "name": "Broad Integration Regression",
+      "cwd": "/root/atlas/integration",
+      "command": "printf 'ELEVENLABS_API_KEY=test-local-key\\n' > .env && node --test test/*.test.js; status=$?; rm -f .env; exit $status",
+      "exitCode": 0,
+      "durationMs": 11124,
+      "summary": {
+        "framework": "node-test",
+        "tests": 493,
+        "pass": 493,
+        "fail": 0
+      }
+    }
+  ]
+}

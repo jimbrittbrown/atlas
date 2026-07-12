@@ -1,0 +1,245 @@
+{
+  "packageName": "Atlas Executive OS Mission 002 Demonstration Factory Package",
+  "missionId": "MISSION_002_BUILD_ATLAS_WEB_DEMONSTRATION_FACTORY",
+  "version": "1.0.0",
+  "architecture": {
+    "factoryName": "Atlas Web Demonstration Factory v1",
+    "operatingCompany": "Atlas Web",
+    "mission": "Produce executive-quality demonstration websites before sale requests to maximize probability of Customer #1.",
+    "objectivePriority": "Qualified leads and booked jobs over visual novelty.",
+    "projectTypes": [
+      {
+        "type": "PORTFOLIO_DEMONSTRATION",
+        "purpose": "Public capability proof using fictional businesses.",
+        "visibility": "PUBLIC",
+        "requiredComponents": [
+          "Company name",
+          "Logo",
+          "Branding system",
+          "Homepage",
+          "Landing page",
+          "Mobile version",
+          "Conversion-focused layout",
+          "Trust indicators",
+          "CTA strategy",
+          "Local SEO structure",
+          "Design decision rationale with research references"
+        ]
+      },
+      {
+        "type": "PROSPECT_DEMONSTRATION",
+        "purpose": "Private prospect-specific conversion recommendation proof.",
+        "visibility": "PRIVATE",
+        "requiredComponents": [
+          "Existing website analysis",
+          "Conversion weakness diagnosis",
+          "Redesigned homepage",
+          "Before/after comparison",
+          "Executive audit",
+          "Research-backed recommendation rationale",
+          "Estimated business impact",
+          "Confidence level by recommendation",
+          "Mandatory disclosure statement"
+        ],
+        "disclosureStatement": "Prepared by Atlas as a demonstration of our recommended improvements."
+      }
+    ]
+  },
+  "workflow": [
+    {
+      "order": 1,
+      "stage": "MISSION_INTAKE",
+      "owner": "Executive Producer",
+      "objective": "Confirm demonstration type and business outcome target.",
+      "output": "Mission brief with demonstration type classification"
+    },
+    {
+      "order": 2,
+      "stage": "PROJECT_SCOPING",
+      "owner": "Program Manager",
+      "objective": "Define conversion scope and measurable KPI assumptions.",
+      "output": "Scope charter and KPI rubric"
+    },
+    {
+      "order": 3,
+      "stage": "RESEARCH_AND_ANALYSIS",
+      "owner": "Market Research Specialist",
+      "objective": "Collect evidence and baseline website performance signals.",
+      "output": "Research reference sheet and baseline findings"
+    },
+    {
+      "order": 4,
+      "stage": "CONVERSION_STRATEGY_BLUEPRINT",
+      "owner": "Conversion Strategist",
+      "objective": "Map design changes directly to lead and booking outcomes.",
+      "output": "Conversion blueprint with CTA and trust architecture"
+    },
+    {
+      "order": 5,
+      "stage": "DEMONSTRATION_BUILD",
+      "owner": "Web Experience Specialist",
+      "objective": "Produce homepage/landing/mobile demonstration assets.",
+      "output": "Demonstration homepage, landing page, and mobile variant"
+    },
+    {
+      "order": 6,
+      "stage": "EXECUTIVE_AUDIT_AND_IMPACT_MODELING",
+      "owner": "Executive Audit Specialist",
+      "objective": "Quantify expected impact and assign confidence levels.",
+      "output": "Executive audit and business impact report"
+    },
+    {
+      "order": 7,
+      "stage": "CEO_REVIEW_PACKAGE_ASSEMBLY",
+      "owner": "Executive Operations Manager",
+      "objective": "Assemble audit, comparison, references, and decision narrative.",
+      "output": "CEO review package"
+    },
+    {
+      "order": 8,
+      "stage": "READY_FOR_SALES_HANDOFF",
+      "owner": "Sales Enablement Specialist",
+      "objective": "Prepare approved package for optional future sales use.",
+      "output": "Sales Engine handoff package (no outreach executed)"
+    }
+  ],
+  "requiredSpecialists": [
+    {
+      "specialist": "Market Research Specialist",
+      "responsibility": "Evidence collection for local SEO, conversion patterns, and industry benchmarks."
+    },
+    {
+      "specialist": "Conversion Strategist",
+      "responsibility": "Translate findings into CTA flows and trust architecture tied to lead outcomes."
+    },
+    {
+      "specialist": "Brand and Visual Systems Designer",
+      "responsibility": "Create coherent visual system that supports scanning, trust, and action."
+    },
+    {
+      "specialist": "Web Experience Specialist",
+      "responsibility": "Build homepage, landing page, and mobile variants for demonstration assets."
+    },
+    {
+      "specialist": "Technical SEO Specialist",
+      "responsibility": "Design local SEO structure and on-page intent alignment."
+    },
+    {
+      "specialist": "Executive Audit Specialist",
+      "responsibility": "Produce conversion weakness diagnosis and recommendation confidence model."
+    },
+    {
+      "specialist": "Business Impact Analyst",
+      "responsibility": "Estimate lead and booking impact ranges with confidence bands."
+    },
+    {
+      "specialist": "Executive Operations Manager",
+      "responsibility": "Assemble final package and enforce disclosure/compliance controls."
+    }
+  ],
+  "artifacts": [
+    {
+      "artifactId": "DF-ART-001",
+      "name": "Portfolio Demonstration Package",
+      "requiredFor": "PORTFOLIO_DEMONSTRATION"
+    },
+    {
+      "artifactId": "DF-ART-002",
+      "name": "Prospect Demonstration Package",
+      "requiredFor": "PROSPECT_DEMONSTRATION"
+    },
+    {
+      "artifactId": "DF-ART-003",
+      "name": "Executive Audit",
+      "requiredFor": "BOTH"
+    },
+    {
+      "artifactId": "DF-ART-004",
+      "name": "Before/After Comparison",
+      "requiredFor": "PROSPECT_DEMONSTRATION"
+    },
+    {
+      "artifactId": "DF-ART-005",
+      "name": "Research Reference Sheet",
+      "requiredFor": "BOTH"
+    },
+    {
+      "artifactId": "DF-ART-006",
+      "name": "Estimated Business Impact Report",
+      "requiredFor": "BOTH"
+    },
+    {
+      "artifactId": "DF-ART-007",
+      "name": "CEO Review Package",
+      "requiredFor": "BOTH"
+    }
+  ],
+  "executiveReviewProcess": [
+    {
+      "gate": "GATE_1_OBJECTIVE_ALIGNMENT",
+      "reviewQuestion": "Does each major recommendation connect to qualified leads or booked jobs?",
+      "passCriteria": "Every recommendation has measurable outcome linkage and KPI hypothesis."
+    },
+    {
+      "gate": "GATE_2_EVIDENCE_QUALITY",
+      "reviewQuestion": "Are recommendations supported by research or accepted conversion best practices?",
+      "passCriteria": "All major recommendations include citation or explicit best-practice rationale."
+    },
+    {
+      "gate": "GATE_3_DISCLOSURE_COMPLIANCE",
+      "reviewQuestion": "Is the demonstration clearly disclosed as Atlas-generated recommendation work?",
+      "passCriteria": "Prospect package contains required disclosure statement verbatim."
+    },
+    {
+      "gate": "GATE_4_EXECUTIVE_READINESS",
+      "reviewQuestion": "Is the package complete for CEO decision and optional Sales Engine handoff?",
+      "passCriteria": "All required artifacts present; no outreach, publishing, or contact actions taken."
+    }
+  ],
+  "futureIntegrationWithSalesEngine": {
+    "integrationStatus": "READY_FOR_FUTURE_HANDOFF",
+    "handoffTrigger": "CEO approval of demonstration package",
+    "mappedSalesEngineStages": [
+      {
+        "salesStage": "AUDIT",
+        "demonstrationArtifact": "Executive Audit",
+        "handoffValue": "Accelerates prospect understanding of conversion opportunities."
+      },
+      {
+        "salesStage": "OUTREACH",
+        "demonstrationArtifact": "Prospect Demonstration Package",
+        "handoffValue": "Provides personalized proof asset after CEO authorization."
+      },
+      {
+        "salesStage": "MEETING",
+        "demonstrationArtifact": "Before/After Comparison",
+        "handoffValue": "Anchors consultative discussion with visual and business impact evidence."
+      },
+      {
+        "salesStage": "PROPOSAL",
+        "demonstrationArtifact": "Estimated Business Impact Report",
+        "handoffValue": "Supports pricing confidence and expected ROI discussion."
+      }
+    ],
+    "restrictions": [
+      "No outreach executed by Demonstration Factory.",
+      "No publishing executed by Demonstration Factory.",
+      "No direct prospect contact executed by Demonstration Factory."
+    ]
+  },
+  "controls": {
+    "governancePolicy": "Demonstration assets are sales-enablement proofs, not represented as client delivery history.",
+    "mandatoryDisclaimer": "Prepared by Atlas as a demonstration of our recommended improvements.",
+    "prohibitedActions": [
+      "OUTREACH",
+      "PUBLISHING",
+      "PROSPECT_CONTACT"
+    ]
+  },
+  "missionGuardrails": {
+    "outreachEnabled": false,
+    "publishingEnabled": false,
+    "prospectContactEnabled": false
+  },
+  "generatedAt": "2026-07-10T21:46:32.756Z"
+}

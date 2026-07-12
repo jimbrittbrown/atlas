@@ -1,0 +1,202 @@
+{
+  "generatedAt": "2026-07-11T18:06:00.011Z",
+  "overallStatus": "PASS",
+  "validation": {
+    "checks": [
+      {
+        "name": "all endpoint calls succeeded",
+        "passed": true
+      },
+      {
+        "name": "unauthorized request rejected",
+        "passed": true
+      },
+      {
+        "name": "forbidden request rejected",
+        "passed": true
+      },
+      {
+        "name": "audit records generated",
+        "passed": true
+      },
+      {
+        "name": "snapshot retention active",
+        "passed": true
+      },
+      {
+        "name": "read-only no publish",
+        "passed": true
+      },
+      {
+        "name": "read-only no deploy",
+        "passed": true
+      },
+      {
+        "name": "read-only no approve/reject",
+        "passed": true
+      },
+      {
+        "name": "read-only no delete",
+        "passed": true
+      },
+      {
+        "name": "read-only no provider write",
+        "passed": true
+      }
+    ],
+    "testsPassed": 10,
+    "testsFailed": 0
+  },
+  "endpointResults": [
+    {
+      "endpoint": "/api/v1/dashboard",
+      "role": "CEO",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/overview",
+      "role": "EXECUTIVE",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/decisions",
+      "role": "EXECUTIVE",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/missions",
+      "role": "OPERATOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/workforce",
+      "role": "OPERATOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/customers",
+      "role": "EXECUTIVE",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/opportunities",
+      "role": "EXECUTIVE",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/providers",
+      "role": "OPERATOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/system-health",
+      "role": "OPERATOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/activity",
+      "role": "OPERATOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/alerts",
+      "role": "OPERATOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/snapshots",
+      "role": "AUDITOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/snapshots/dash_13",
+      "role": "AUDITOR",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/health",
+      "role": "READ_ONLY_SERVICE",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    },
+    {
+      "endpoint": "/api/v1/dashboard/metadata",
+      "role": "READ_ONLY_SERVICE",
+      "httpStatus": 200,
+      "success": true,
+      "errorCode": null
+    }
+  ],
+  "governance": {
+    "readOnly": true,
+    "publishExecuted": false,
+    "deployExecuted": false,
+    "approvalExecuted": false,
+    "deleteExecuted": false,
+    "providerWriteExecuted": false
+  },
+  "requiredEnvironmentVariables": [
+    "ATLAS_DASHBOARD_API_TOKEN (or role-specific token env vars)",
+    "ATLAS_DASHBOARD_API_TOKEN_CEO (optional role override)",
+    "ATLAS_DASHBOARD_API_TOKEN_EXECUTIVE (optional)",
+    "ATLAS_DASHBOARD_API_TOKEN_OPERATOR (optional)",
+    "ATLAS_DASHBOARD_API_TOKEN_AUDITOR (optional)",
+    "ATLAS_DASHBOARD_API_TOKEN_READ_ONLY_SERVICE (optional)",
+    "ATLAS_DASHBOARD_SNAPSHOT_MAX_COUNT",
+    "ATLAS_DASHBOARD_SNAPSHOT_RETENTION_DAYS",
+    "ATLAS_DASHBOARD_API_RATE_LIMIT_REQUESTS",
+    "ATLAS_DASHBOARD_API_RATE_LIMIT_WINDOW_MS"
+  ],
+  "filesCreated": [
+    "integration/src/executive/executive-dashboard-api-contracts.js",
+    "integration/src/executive/executive-dashboard-api-response.js",
+    "integration/src/executive/executive-dashboard-api-auth.js",
+    "integration/src/executive/executive-dashboard-api-authorizer.js",
+    "integration/src/executive/executive-dashboard-api-rate-limiter.js",
+    "integration/src/executive/executive-dashboard-api-audit-log.js",
+    "integration/src/executive/executive-dashboard-api-snapshot-retention.js",
+    "integration/src/executive/executive-dashboard-api-health.js",
+    "integration/src/executive/executive-dashboard-api-router.js",
+    "integration/src/executive/executive-dashboard-api-service.js",
+    "integration/test/executive-dashboard-api-v1.test.js",
+    "integration/scripts/run-executive-dashboard-api-v1.js",
+    "integration/docs/executive-dashboard-api-v1.md"
+  ],
+  "filesModified": [
+    "integration/package.json",
+    "integration/README.md"
+  ],
+  "limitations": [
+    "v1 API transport is in-process and framework-agnostic; external server mounting is future work.",
+    "Rate limiting and snapshot retention are in-memory and adapter-ready, not distributed.",
+    "Token auth is env-var based and should be migrated to managed secret storage for production."
+  ],
+  "recommendedNextAction": "Mount API service into Atlas HTTP adapter with TLS, managed secret source, and persistent distributed rate-limit/audit backends."
+}

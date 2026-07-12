@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-07-11T00:00:00.000Z",
+  "clientId": "CLIENT_001",
+  "companyResearchModule": {
+    "websiteUrl": "https://www.atlasroofingco.example",
+    "companyName": "Atlas Roofing Co"
+  },
+  "confidenceEngine": {
+    "aggregateScore": 0.84,
+    "aggregateBand": "HIGH",
+    "uncertainFields": []
+  },
+  "brandAssetPackage": {
+    "clientId": "CLIENT_001",
+    "companyName": "Atlas Roofing Co",
+    "logoAsset": {
+      "assetPath": "assets/logos/client-001.png",
+      "overwriteApproved": false
+    }
+  },
+  "assetValidation": {
+    "missingAssets": [],
+    "isComplete": true,
+    "blocked": false
+  },
+  "executiveSummary": {
+    "customizationReadinessScore": 88,
+    "readinessClassification": "READY"
+  }
+}

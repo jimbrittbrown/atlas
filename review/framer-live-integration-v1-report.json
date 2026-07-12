@@ -1,0 +1,148 @@
+{
+  "generatedAt": "2026-07-11T13:38:29.817Z",
+  "overallStatus": "PASS",
+  "stages": [
+    {
+      "id": "P1",
+      "name": "Authentication and Configuration",
+      "status": "PASS",
+      "startedAt": "2026-07-11T13:38:29.816Z",
+      "completedAt": "2026-07-11T13:38:29.817Z",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "configValid": false,
+        "issues": [
+          "FRAMER_PROJECT_URL is required.",
+          "FRAMER_API_KEY is required."
+        ]
+      }
+    },
+    {
+      "id": "P2",
+      "name": "Verify Connection and Retrieve Workspace/Projects/Sites",
+      "status": "PASS",
+      "startedAt": "2026-07-11T13:38:29.817Z",
+      "completedAt": "2026-07-11T13:38:29.817Z",
+      "warnings": [
+        "Skipped live connection due to missing config."
+      ],
+      "blockingIssues": [],
+      "output": null
+    },
+    {
+      "id": "P3",
+      "name": "Execute Read Operations",
+      "status": "PASS",
+      "startedAt": "2026-07-11T13:38:29.817Z",
+      "completedAt": "2026-07-11T13:38:29.817Z",
+      "warnings": [
+        "Skipped read operations due to missing config."
+      ],
+      "blockingIssues": [],
+      "output": null
+    },
+    {
+      "id": "P4",
+      "name": "Prepare Duplicate Workflow (Do Not Execute)",
+      "status": "PASS",
+      "startedAt": "2026-07-11T13:38:29.817Z",
+      "completedAt": "2026-07-11T13:38:29.817Z",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "executable": false,
+        "reason": "Preparation only. Execution intentionally disabled by policy.",
+        "requested": {
+          "sourceProjectId": null,
+          "duplicateName": "RidgeLine Roofing - Duplicate - Prepared"
+        },
+        "plannedSteps": [
+          "Validate source project read access",
+          "Invoke Framer duplication method when officially supported and enabled",
+          "Rename duplicate project using approved naming standard",
+          "Return duplicated project identifier and preview URL metadata"
+        ],
+        "policyRequirements": {
+          "readOnlyMustBeDisabled": true,
+          "allowProjectDuplicationFlag": "FRAMER_ALLOW_PROJECT_DUPLICATION",
+          "ceoTicketRequired": true
+        }
+      }
+    },
+    {
+      "id": "P5",
+      "name": "Website Orchestrator Integration Readiness",
+      "status": "PASS",
+      "startedAt": "2026-07-11T13:38:29.817Z",
+      "completedAt": "2026-07-11T13:38:29.817Z",
+      "warnings": [],
+      "blockingIssues": [],
+      "output": {
+        "providerInterfaceUnchanged": true,
+        "framerProviderType": "FRAMER",
+        "providerModule": "integration/src/executive/website-provider-adapters.js",
+        "adapterModule": "integration/src/executive/framer-website-adapter.js"
+      }
+    }
+  ],
+  "warnings": [
+    "Configuration incomplete. Live connection could not be attempted."
+  ],
+  "blockingIssues": [],
+  "dependencies": [
+    {
+      "name": "Framer credentials/configuration",
+      "status": "MISSING",
+      "detail": "FRAMER_PROJECT_URL is required. | FRAMER_API_KEY is required."
+    }
+  ],
+  "redactedConfig": {
+    "projectUrl": "",
+    "apiKey": "",
+    "apiKeyEnvVarName": "FRAMER_API_KEY",
+    "readOnly": true,
+    "liveMode": false,
+    "dryRun": true,
+    "allowPreviewPublish": false,
+    "allowProductionDeploy": false,
+    "allowProjectDuplication": false,
+    "maxRetries": 2,
+    "retryDelayMs": 250,
+    "requestTimeoutMs": 30000,
+    "externalAgentEnabled": true,
+    "pluginFallbackEnabled": true
+  },
+  "connectionReport": null,
+  "readOperations": {
+    "projectsReport": null,
+    "metadataReport": null,
+    "siteReport": null,
+    "previewReport": null
+  },
+  "duplicateWorkflowPreparation": {
+    "executable": false,
+    "reason": "Preparation only. Execution intentionally disabled by policy.",
+    "requested": {
+      "sourceProjectId": null,
+      "duplicateName": "RidgeLine Roofing - Duplicate - Prepared"
+    },
+    "plannedSteps": [
+      "Validate source project read access",
+      "Invoke Framer duplication method when officially supported and enabled",
+      "Rename duplicate project using approved naming standard",
+      "Return duplicated project identifier and preview URL metadata"
+    ],
+    "policyRequirements": {
+      "readOnlyMustBeDisabled": true,
+      "allowProjectDuplicationFlag": "FRAMER_ALLOW_PROJECT_DUPLICATION",
+      "ceoTicketRequired": true
+    }
+  },
+  "nextSteps": [
+    "Keep FRAMER_READ_ONLY=true until CEO explicitly approves write testing.",
+    "Keep FRAMER_ALLOW_PREVIEW_PUBLISH=false and FRAMER_ALLOW_PRODUCTION_DEPLOY=false.",
+    "After CEO approval, run controlled sandbox-only write validation in a duplicated project, never in production.",
+    "Do not execute duplicate workflow until CEO ticket authorizes duplication testing."
+  ]
+}

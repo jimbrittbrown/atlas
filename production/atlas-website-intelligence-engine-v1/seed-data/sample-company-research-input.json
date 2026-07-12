@@ -1,0 +1,55 @@
+{
+  "websiteUrl": "https://www.atlasroofingco.example",
+  "companyName": "Atlas Roofing Co",
+  "logo": {
+    "assetId": "logo-client-001",
+    "assetPath": "assets/logos/client-001.png",
+    "sourceUrl": "https://www.atlasroofingco.example/logo.png"
+  },
+  "primaryColors": ["#1b365d", "#f04e23"],
+  "contactInformation": {
+    "phone": "+1-512-555-0100",
+    "email": "hello@atlasroofingco.example",
+    "website": "https://www.atlasroofingco.example",
+    "address": "123 Main St, Austin, TX"
+  },
+  "serviceList": ["Roof Repair", "Roof Replacement", "Storm Damage Restoration", "Gutter Installation"],
+  "serviceAreas": ["Austin, TX", "Round Rock, TX", "Cedar Park, TX"],
+  "existingMessaging": "Atlas Roofing Co helps Central Texas homeowners protect what matters with rapid inspections and durable roofing systems.",
+  "certifications": ["GAF Certified", "Owens Corning Preferred Contractor"],
+  "financingOptions": ["0% APR for 12 months", "Flexible monthly payments"],
+  "existingReviews": [
+    {
+      "source": "Google",
+      "reviewer": "M. Lopez",
+      "rating": 5,
+      "quote": "Fast response and honest assessment.",
+      "reviewUrl": "https://example.com/review/1"
+    },
+    {
+      "source": "Yelp",
+      "reviewer": "J. Carter",
+      "rating": 5,
+      "quote": "Professional crew and clean finish.",
+      "reviewUrl": "https://example.com/review/2"
+    }
+  ],
+  "socialLinks": {
+    "facebook": "https://facebook.com/atlasroofingco",
+    "instagram": "https://instagram.com/atlasroofingco"
+  },
+  "images": [
+    {
+      "assetId": "img-001",
+      "assetPath": "assets/photos/roof-1.jpg",
+      "sourceUrl": "https://www.atlasroofingco.example/gallery/1",
+      "caption": "Completed roof replacement"
+    },
+    {
+      "assetId": "img-002",
+      "assetPath": "assets/photos/roof-2.jpg",
+      "sourceUrl": "https://www.atlasroofingco.example/gallery/2",
+      "caption": "Storm damage repair"
+    }
+  ]
+}

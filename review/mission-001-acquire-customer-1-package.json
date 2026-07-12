@@ -1,0 +1,2942 @@
+{
+  "mission": {
+    "id": "MISSION_001_ACQUIRE_CUSTOMER_1",
+    "approvedBusiness": "Atlas Web",
+    "ceoObjective": "Atlas Web must acquire its first paying customer. Every action should maximize the probability of obtaining Customer #1.",
+    "generatedAt": "2026-07-10T21:35:06.484Z",
+    "status": "COMPLETED_READY_FOR_CEO_APPROVAL_PRE_CONTACT"
+  },
+  "selectedMetropolitanArea": "Miami-Fort Lauderdale-West Palm Beach, FL",
+  "metropolitanAreaRationale": "This metro has one of the highest roofer employment levels in the U.S. and a high concentration of roofing jobs, with a location quotient of 2.06 and 4,990 employed roofers, indicating a dense roofing market.[4] Florida is also identified as one of the top U.S. roofing states because hurricane and hail activity drive year-round replacement demand, and insurance-claim-driven work is especially common there, which supports faster customer conversion for a roofing-focused web offer.[1][3]",
+  "prospects": [
+    {
+      "prospectId": "RW-026",
+      "companyName": "City Roofing",
+      "website": "https://www.cityroofing.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 248-2993",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 9,
+          "mobileExperience": 9,
+          "speed": 8,
+          "callsToAction": 9,
+          "reviews": 10,
+          "trustIndicators": 10,
+          "seoBasics": 9,
+          "leadGenerationQuality": 9
+        },
+        "score": 9.1,
+        "quickNotes": "Modern, branded site with clear services and content; strong CTAs for free inspection/estimate; extensive reviews across Google, Facebook, Angi, HomeAdvisor, Yelp; BBB A+ and multiple awards; solid SEO structure and location targeting; robust lead funnels via phone, forms, and MSFH positioning.[1][2][3][4][5][7][8][10]"
+      },
+      "grade": "A+",
+      "rank": 1
+    },
+    {
+      "prospectId": "RW-046",
+      "companyName": "Earl W Johnston Roofing",
+      "website": "https://www.earlwjohnstonroofing.com",
+      "city": "Hollywood",
+      "state": "FL",
+      "phone": "(954) 989-7794",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 9,
+          "mobileExperience": 9,
+          "speed": 8,
+          "callsToAction": 9,
+          "reviews": 9,
+          "trustIndicators": 9,
+          "seoBasics": 9,
+          "leadGenerationQuality": 9
+        },
+        "score": 8.88,
+        "quickNotes": "Highly developed site with strong branding, content depth and project galleries; excellent mobile experience; good performance; prominent CTAs for free estimates, inspections and financing; large review count and high ratings; strong trust via certifications, awards and associations; SEO well-structured for Hollywood and Broward roofing; robust lead gen with forms, phone tracking and potentially specials/financing offers."
+      },
+      "grade": "A+",
+      "rank": 2
+    },
+    {
+      "prospectId": "RW-003",
+      "companyName": "Best Roofing",
+      "website": "https://bestroofing.net",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 941-9111",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 9,
+          "mobileExperience": 9,
+          "speed": 8,
+          "callsToAction": 9,
+          "reviews": 9,
+          "trustIndicators": 9,
+          "seoBasics": 8,
+          "leadGenerationQuality": 9
+        },
+        "score": 8.78,
+        "quickNotes": "High-end, well-branded site with strong messaging, visible reviews/awards, multiple CTAs and forms; clearly optimized for commercial and residential lead generation."
+      },
+      "grade": "A",
+      "rank": 3
+    },
+    {
+      "prospectId": "RW-007",
+      "companyName": "T&S Roofing Systems",
+      "website": "https://www.tsroofingsystems.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 728-7867",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 9,
+          "mobileExperience": 9,
+          "speed": 8,
+          "callsToAction": 9,
+          "reviews": 9,
+          "trustIndicators": 9,
+          "seoBasics": 8,
+          "leadGenerationQuality": 9
+        },
+        "score": 8.78,
+        "quickNotes": "Well-developed, conversion-focused site with strong branding, multiple quote/inspection CTAs, robust reviews and credentials; very strong prospect."
+      },
+      "grade": "A",
+      "rank": 4
+    },
+    {
+      "prospectId": "RW-015",
+      "companyName": "Tiger Team Roofing",
+      "website": "https://tigerteamroofing.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 801-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 9,
+          "mobileExperience": 9,
+          "speed": 8,
+          "callsToAction": 9,
+          "reviews": 9,
+          "trustIndicators": 9,
+          "seoBasics": 8,
+          "leadGenerationQuality": 9
+        },
+        "score": 8.78,
+        "quickNotes": "Top-tier digital presence with strong brand, heavy use of testimonials, badges, and quote CTAs; clearly investing in marketing and conversion."
+      },
+      "grade": "A",
+      "rank": 5
+    },
+    {
+      "prospectId": "RW-017",
+      "companyName": "Advanced Roofing",
+      "website": "https://www.advancedroofinginc.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 522-6868",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 9,
+          "mobileExperience": 9,
+          "speed": 8,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 9,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 8.42,
+        "quickNotes": "Large commercial-focused roofing site with extensive content, strong credentials and multiple contact paths; more enterprise style but still solid for leads."
+      },
+      "grade": "A",
+      "rank": 6
+    },
+    {
+      "prospectId": "RW-029",
+      "companyName": "Wegner Roofing & Solar Florida",
+      "website": "https://www.wegnerroofing.com/florida",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 320-0660",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 8,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 8,
+        "quickNotes": "Franchise-style site with professional design and dedicated Florida page; responsive mobile experience; generally good performance; strong CTAs for inspections/estimates; solid multi-location review footprint; brand, licensing and warranty info as trust assets; SEO-optimized location pages; multiple lead paths (forms, calls, possibly chat)."
+      },
+      "grade": "A",
+      "rank": 7
+    },
+    {
+      "prospectId": "RW-034",
+      "companyName": "Hi Tech Roofing & Sheet Metal",
+      "website": "https://hitechroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 844-6353",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 8,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 8,
+        "quickNotes": "Commercial-leaning roofing and sheet metal site with professional design and project photos; strong mobile responsiveness; good performance; clear CTAs for bids and service calls; solid reviews, particularly commercial clients; strong trust via years in business, certifications and safety messaging; well-structured SEO for West Palm and surrounding markets; multiple lead channels including forms and direct contact."
+      },
+      "grade": "A",
+      "rank": 8
+    },
+    {
+      "prospectId": "RW-035",
+      "companyName": "Lyons Roofing",
+      "website": "https://www.lyonsroofingco.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 563-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 8,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 8,
+        "quickNotes": "Modern site with strong branding and clear residential/commercial service segmentation; good mobile UX; generally fast; persuasive CTAs for inspections and replacements; large review base across platforms; trust via licensing, insurance, and possible manufacturer certifications; solid SEO for Broward roofing terms; strong lead funnels (forms, phone tracking, possibly financing CTAs)."
+      },
+      "grade": "A",
+      "rank": 9
+    },
+    {
+      "prospectId": "RW-049",
+      "companyName": "Sunshine Roofing & Sheet Metal",
+      "website": "https://sunshineroofingfl.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 326-8200",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 8,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 8,
+        "quickNotes": "Well-structured Miami roofing and sheet metal site with professional design and strong service explanations; good mobile UX; solid speed; clear CTAs for estimates and service requests; strong review base as an established local company; trust via history, licensing and possibly manufacturer affiliations; SEO refined around Miami roofing and metal work; multiple lead channels including forms and calls."
+      },
+      "grade": "A",
+      "rank": 10
+    },
+    {
+      "prospectId": "RW-013",
+      "companyName": "Florida Quality Roofing",
+      "website": "https://www.floridaqualityroofing.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 458-6010",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.88,
+        "quickNotes": "Strong branding and content with visible awards/reviews, clear CTAs and SEO-friendly service pages; good mid–high level sophistication."
+      },
+      "grade": "B",
+      "rank": 11
+    },
+    {
+      "prospectId": "RW-018",
+      "companyName": "Latite Roofing",
+      "website": "https://latite.com",
+      "city": "Pompano Beach",
+      "state": "FL",
+      "phone": "(954) 858-2500",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 8,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.88,
+        "quickNotes": "Established brand with polished site, good use of CTAs, reviews and certifications; well-structured SEO and lead flows."
+      },
+      "grade": "B",
+      "rank": 12
+    },
+    {
+      "prospectId": "RW-006",
+      "companyName": "Garabar Roofing",
+      "website": "https://garabar.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 337-6798",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 7,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.78,
+        "quickNotes": "Professional design with clear service areas, strong CTAs, visible reviews and financing/trust markers; good lead funnels."
+      },
+      "grade": "B",
+      "rank": 13
+    },
+    {
+      "prospectId": "RW-011",
+      "companyName": "Neal Roofing & Waterproofing",
+      "website": "https://nealroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 619-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 7,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.78,
+        "quickNotes": "Clean, modern design with clear service pages, strong CTAs, reviews and licensing; geared toward efficient lead capture."
+      },
+      "grade": "B",
+      "rank": 14
+    },
+    {
+      "prospectId": "RW-022",
+      "companyName": "J&M Roofing Contractors",
+      "website": "https://www.jmroofingcontractors.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 316-8584",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 7,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.78,
+        "quickNotes": "Modern, visually strong site with prominent quote/request forms, evident reviews and badges; good lead-generation focus."
+      },
+      "grade": "B",
+      "rank": 15
+    },
+    {
+      "prospectId": "RW-023",
+      "companyName": "Perkins Roofing",
+      "website": "https://perkinsroofing.net",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 687-6521",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 7,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.78,
+        "quickNotes": "Well-presented Miami roofing site with strong CTAs, social proof and local SEO; solid mid–high tier prospect."
+      },
+      "grade": "B",
+      "rank": 16
+    },
+    {
+      "prospectId": "RW-025",
+      "companyName": "MTC Roofing",
+      "website": "https://mtcroofing.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 614-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 7,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.78,
+        "quickNotes": "Modern branding with clear service pages and strong CTAs; visible reviews and trust content, geared toward capturing new roofing inquiries."
+      },
+      "grade": "B",
+      "rank": 17
+    },
+    {
+      "prospectId": "RW-001",
+      "companyName": "Allied Roofing & Sheet Metal",
+      "website": "https://alliedroofingfl.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 485-5922",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 8,
+          "mobileExperience": 8,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 8,
+          "trustIndicators": 8,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7.54,
+        "quickNotes": "Modern, professional site with clear commercial/residential focus, strong local content and licensing shown; good CTAs and reviews presence, overall solid but not heavily conversion-optimized."
+      },
+      "grade": "B",
+      "rank": 18
+    },
+    {
+      "prospectId": "RW-045",
+      "companyName": "WeatherGuard Roofing",
+      "website": "https://weatherguardroofingfl.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 901-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 8,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 8
+        },
+        "score": 7.24,
+        "quickNotes": "Lead-gen oriented Miami roofing site with strong emergency and storm-damage CTAs; mobile UX solid; speed acceptable; multiple conversion paths including calls and forms; decent review footprint; trust via licensing and local focus; SEO tuned to Miami roofing and repairs; aggressive lead capture structure."
+      },
+      "grade": "B",
+      "rank": 19
+    },
+    {
+      "prospectId": "RW-008",
+      "companyName": "Extreme Roofing of South Florida",
+      "website": "https://www.extremeroofingmiami.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 225-1535",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Local-focused Miami roofing site with clear services, phone prominence, and basic review/trust content; decent but not sophisticated funnels."
+      },
+      "grade": "B",
+      "rank": 20
+    },
+    {
+      "prospectId": "RW-009",
+      "companyName": "Ace Pro Roofing",
+      "website": "https://www.aceproroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 855-8484",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Modern small-firm site with clear contact/quote options, basic SEO and reviews; solid foundation for lead-gen improvements."
+      },
+      "grade": "B",
+      "rank": 21
+    },
+    {
+      "prospectId": "RW-014",
+      "companyName": "A-1 Property Services Roofing",
+      "website": "https://www.a1propertyservices.net",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 912-2228",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Competent local roofing site, phone/forms accessible, some reviews and credentials; average optimization for leads."
+      },
+      "grade": "B",
+      "rank": 22
+    },
+    {
+      "prospectId": "RW-016",
+      "companyName": "Evans Roofing",
+      "website": "https://www.evansroofingcompany.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 585-6395",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Solid mid-level site, clear services, phone and form; adequate reviews/trust and SEO, good candidate for optimization."
+      },
+      "grade": "B",
+      "rank": 23
+    },
+    {
+      "prospectId": "RW-019",
+      "companyName": "Aastro Roofing Company",
+      "website": "https://www.aastroroofing.com",
+      "city": "Boca Raton",
+      "state": "FL",
+      "phone": "(561) 409-3280",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Local roofing company site with clear contact/info, some reviews and trust copy; average marketing sophistication."
+      },
+      "grade": "B",
+      "rank": 24
+    },
+    {
+      "prospectId": "RW-021",
+      "companyName": "Paul Bange Roofing",
+      "website": "https://paulbangeroofing.com",
+      "city": "Davie",
+      "state": "FL",
+      "phone": "(954) 981-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Recognized local brand with typical roofing site structure; multiple contact options and reviews, average optimization."
+      },
+      "grade": "B",
+      "rank": 25
+    },
+    {
+      "prospectId": "RW-024",
+      "companyName": "Aspen Roofing Services",
+      "website": "https://www.aspenroofingservices.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 473-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Standard service contractor site with clear navigation, contact, and some reviews/certifications; reasonable lead-gen."
+      },
+      "grade": "B",
+      "rank": 26
+    },
+    {
+      "prospectId": "RW-028",
+      "companyName": "East Coast Roofing",
+      "website": "https://eastcoastroofingfl.com",
+      "city": "Lake Worth",
+      "state": "FL",
+      "phone": "(561) 586-5655",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Clean local roofer site with clear navigation and service detail; mobile-friendly template; average page speed; multiple contact options and request-estimate CTAs; fair volume of local reviews; some licensing/insurance mentions; SEO titles and content oriented to Lake Worth/West Palm; basic quote form and phone lead flow."
+      },
+      "grade": "B",
+      "rank": 27
+    },
+    {
+      "prospectId": "RW-032",
+      "companyName": "Jupiter Roofing & Sheet Metal",
+      "website": "https://jroof.com",
+      "city": "Jupiter",
+      "state": "FL",
+      "phone": "(561) 746-4066",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Established local brand site with service and sheet metal content; mobile-friendly layout; reasonable speed; clear CTAs for estimates and service requests; good mix of reviews over time; trust indicators via history, licensing and experience; SEO targeted to Jupiter and Palm Beach County; standard quote and contact mechanisms."
+      },
+      "grade": "B",
+      "rank": 28
+    },
+    {
+      "prospectId": "RW-036",
+      "companyName": "Florida Roofing Professionals",
+      "website": "https://floridaroofingpros.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 223-2233",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Local West Palm roofing site with clear service descriptions and images; mobile-friendly but simple; typical speed; straightforward CTAs for free estimates; fair number of homeowner reviews; mentions of licensing and insurance; SEO basics oriented around Palm Beach roofing; standard quote form and phone-centric lead capture."
+      },
+      "grade": "B",
+      "rank": 29
+    },
+    {
+      "prospectId": "RW-037",
+      "companyName": "Caribbean Roofing Systems",
+      "website": "https://caribbeanroofing.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 638-7718",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Niche brand site with Caribbean positioning and clear roofing systems info; reasonable mobile UX; adequate performance; standard CTAs to call or request service; mid-level review volume; trust via specialization and experience statements; localized SEO to Miami and hurricane-resistant roofing; basic lead capture via forms and phone."
+      },
+      "grade": "B",
+      "rank": 30
+    },
+    {
+      "prospectId": "RW-038",
+      "companyName": "Precision Roofing Corp",
+      "website": "https://precisionroofingcorp.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 923-1800",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Clean corporate-style site with clear navigation and project gallery; solid mobile view; average speed; CTAs for estimates and service calls; diverse review sources; trust via years in business, licensing and possibly safety/quality certifications; content targeted to Fort Lauderdale roofing; effective but standard lead funnels."
+      },
+      "grade": "B",
+      "rank": 31
+    },
+    {
+      "prospectId": "RW-040",
+      "companyName": "Boca Raton Roofing",
+      "website": "https://bocaratonroofing.com",
+      "city": "Boca Raton",
+      "state": "FL",
+      "phone": "(561) 241-0470",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Local Boca Raton roofing site with standard brochure-style design; mobile responsive; average performance; basic CTAs for inspections and estimates; steady review base; licensing and insurance mentioned as trust; SEO pages for Boca and nearby cities; lead capture via forms and phone."
+      },
+      "grade": "B",
+      "rank": 32
+    },
+    {
+      "prospectId": "RW-041",
+      "companyName": "Colonial Roofing",
+      "website": "https://colonialroofing.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 771-8800",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Established Colonial brand site with traditional but clear design; mobile experience adequate; typical load times; standard CTAs for roofing quotes and service; good review presence; trust via years in business, licensing and potentially manufacturer partnerships; SEO targeting Fort Lauderdale and nearby areas; consistent but basic lead funnels."
+      },
+      "grade": "B",
+      "rank": 33
+    },
+    {
+      "prospectId": "RW-042",
+      "companyName": "Dura-Loc Roofing Systems",
+      "website": "https://duralocroofingfl.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 586-5650",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Product-branded roofing systems site with clear explanation of offerings; mobile-friendly; acceptable performance; CTAs for consultations and system installs; reasonable homeowner reviews; trust via system branding and licensing; SEO around West Palm and specific roofing systems; quote forms and calls for lead capture."
+      },
+      "grade": "B",
+      "rank": 34
+    },
+    {
+      "prospectId": "RW-044",
+      "companyName": "Coastal Metal Roofing",
+      "website": "https://coastalmetalroofing.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 320-7900",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Niche metal roofing site with good visuals and system descriptions; mobile-friendly layout; typical performance; clear CTAs for metal roof estimates; focused review base; trust through specialization and material details; SEO around Fort Lauderdale metal roofing; quote forms and phone leads."
+      },
+      "grade": "B",
+      "rank": 35
+    },
+    {
+      "prospectId": "RW-047",
+      "companyName": "Ocean Roofing Solutions",
+      "website": "https://oceanroofingsolutions.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 529-5555",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Clean modern local site focusing on roofing solutions; mobile-friendly; average speed; straightforward CTAs for inspections and quotes; fair local review presence; trust via licensing/insurance and clear service info; SEO basics aligned to West Palm roofing keywords; contact forms and calls for leads."
+      },
+      "grade": "B",
+      "rank": 36
+    },
+    {
+      "prospectId": "RW-048",
+      "companyName": "All Season Roofing",
+      "website": "https://allseasonroofingfl.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 320-1500",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Standard Fort Lauderdale roofer site with clear services and images; responsive design; typical load times; CTAs for free estimates and roof inspections; steady review base; trust via licensing and years of experience; SEO pages for local roof repair and replacement; basic but effective lead flow."
+      },
+      "grade": "B",
+      "rank": 37
+    },
+    {
+      "prospectId": "RW-050",
+      "companyName": "Palm Beach Roofing",
+      "website": "https://palmbeachroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 687-9955",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 7,
+        "quickNotes": "Local West Palm brand site with standard brochure-style design; mobile responsive; average performance; clear CTAs for roofing estimates; good local reviews; trust supported by years in business and licensing; basic but adequate SEO for Palm Beach roofing; phone and form-based lead capture."
+      },
+      "grade": "B",
+      "rank": 38
+    },
+    {
+      "prospectId": "RW-027",
+      "companyName": "Rainbow Roofing Master",
+      "website": "https://rainbowroofing.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 626-7474",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 7,
+          "trustIndicators": 6,
+          "seoBasics": 7,
+          "leadGenerationQuality": 7
+        },
+        "score": 6.9,
+        "quickNotes": "Decent small-business site with service pages and visuals; likely basic but functional mobile layout; standard CTAs and contact info; modest but present online reviews; limited formal trust badges; SEO basics appear covered with local focus; lead capture mainly via phone and contact form."
+      },
+      "grade": "C",
+      "rank": 39
+    },
+    {
+      "prospectId": "RW-002",
+      "companyName": "Altec Roofing",
+      "website": "https://www.altecroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 790-2200",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 7,
+          "trustIndicators": 7,
+          "seoBasics": 7,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.76,
+        "quickNotes": "Clean brochure-style site with service info and local focus; adequate mobile and SEO basics, moderate CTAs and lead capture."
+      },
+      "grade": "C",
+      "rank": 40
+    },
+    {
+      "prospectId": "RW-020",
+      "companyName": "Campany Roof Maintenance",
+      "website": "https://www.campanyroofmaintenance.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 844-8030",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 6,
+          "seoBasics": 7,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.54,
+        "quickNotes": "Niche roof maintenance positioning, adequate site quality and SEO; modest CTAs and social proof."
+      },
+      "grade": "C",
+      "rank": 41
+    },
+    {
+      "prospectId": "RW-004",
+      "companyName": "Pearl Roofing",
+      "website": "https://pearlroof.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 908-0888",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 7,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 6,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.44,
+        "quickNotes": "Simple, modern site focusing on services and contact; basic CTAs and trust elements, room to strengthen reviews and conversion paths."
+      },
+      "grade": "C",
+      "rank": 42
+    },
+    {
+      "prospectId": "RW-005",
+      "companyName": "CLS Roofing",
+      "website": "https://www.clsroofingllc.com",
+      "city": "Boynton Beach",
+      "state": "FL",
+      "phone": "(561) 207-7693",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 7,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 6,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.26,
+        "quickNotes": "Straightforward small-contractor site; acceptable usability and local focus, limited content depth and social proof."
+      },
+      "grade": "C",
+      "rank": 43
+    },
+    {
+      "prospectId": "RW-039",
+      "companyName": "Hialeah Roof Repair",
+      "website": "https://www.hialeahroofrepair.com",
+      "city": "Hialeah",
+      "state": "FL",
+      "phone": "(305) 363-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 7,
+          "reviews": 6,
+          "trustIndicators": 5,
+          "seoBasics": 6,
+          "leadGenerationQuality": 7
+        },
+        "score": 6.26,
+        "quickNotes": "Simple, highly local microsite focused on roof repair; functional but basic mobile layout; decent speed; strong repair-focused CTAs and click-to-call; modest review count; minimal formal trust indicators beyond locality; thin but focused SEO on Hialeah roof repair keywords; lead gen geared to immediate phone inquiries."
+      },
+      "grade": "C",
+      "rank": 44
+    },
+    {
+      "prospectId": "RW-012",
+      "companyName": "Agostino Roofing",
+      "website": "https://www.agostinoroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 791-7101",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 6,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.12,
+        "quickNotes": "Traditional contractor site, basic navigation and contact; moderate trust content and limited structured lead-gen."
+      },
+      "grade": "C",
+      "rank": 45
+    },
+    {
+      "prospectId": "RW-031",
+      "companyName": "Benoit Roofing",
+      "website": "https://www.benoitroofing.com",
+      "city": "Pompano Beach",
+      "state": "FL",
+      "phone": "(954) 781-6610",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 6,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.12,
+        "quickNotes": "Traditional roofer website with straightforward pages and photos; standard responsive theme; acceptable load times; limited CTAs beyond phone/email; average local reviews; some licensing/insurance mentions; basic on-page SEO for Pompano roofing; lead gen mostly via calls rather than structured conversion flow."
+      },
+      "grade": "C",
+      "rank": 46
+    },
+    {
+      "prospectId": "RW-043",
+      "companyName": "RHI Roofing",
+      "website": "https://rhiroofing.com",
+      "city": "Pompano Beach",
+      "state": "FL",
+      "phone": "(954) 971-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 6,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.12,
+        "quickNotes": "Basic small roofer site with limited design polish; standard mobile template; adequate speed; minimal CTAs beyond contact; modest reviews; some trust messaging on experience and licensing; basic local SEO targeting Pompano; lead gen mainly phone-driven."
+      },
+      "grade": "C",
+      "rank": 47
+    },
+    {
+      "prospectId": "RW-030",
+      "companyName": "Sunrise Roofing",
+      "website": "https://www.sunriseroofingllc.com",
+      "city": "Sunrise",
+      "state": "FL",
+      "phone": "(954) 749-7127",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 5,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.02,
+        "quickNotes": "Older-style small contractor site with basic content; mobile layout acceptable but not polished; speed adequate; CTAs limited to phone and simple contact form; modest review presence; few visible badges or associations; minimal but present local SEO basics; simple lead capture without strong funnels."
+      },
+      "grade": "C",
+      "rank": 48
+    },
+    {
+      "prospectId": "RW-033",
+      "companyName": "Woods Roofing",
+      "website": "https://woodsroofingfl.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 664-8199",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 6,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 6,
+          "reviews": 6,
+          "trustIndicators": 5,
+          "seoBasics": 6,
+          "leadGenerationQuality": 6
+        },
+        "score": 6.02,
+        "quickNotes": "Basic contractor site with limited pages and simple visuals; mobile is serviceable but not refined; page speed okay; minimal CTAs besides phone and contact form; moderate online reviews; few formal trust badges; some localized SEO but thin content; lead gen fairly unstructured."
+      },
+      "grade": "C",
+      "rank": 49
+    },
+    {
+      "prospectId": "RW-010",
+      "companyName": "Mike McGilvary Roofing",
+      "website": "https://www.mikemcgilvaryroofing.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 832-4668",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 5,
+          "mobileExperience": 6,
+          "speed": 7,
+          "callsToAction": 5,
+          "reviews": 5,
+          "trustIndicators": 5,
+          "seoBasics": 5,
+          "leadGenerationQuality": 5
+        },
+        "score": 5.38,
+        "quickNotes": "Older, minimal site with basic company info and phone; limited CTAs, trust content and optimization."
+      },
+      "grade": "C",
+      "rank": 50
+    },
+    {
+      "prospectId": "RW-051",
+      "companyName": "Harbor Roofing & Construction",
+      "website": "https://harborroofingfl.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 451-6000",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Could not reliably access or validate the specified Harbor Roofing & Construction Fort Lauderdale website; available results reference different Harbor Roofing entities in other locations, so scoring is set to 0 pending direct site review."
+      },
+      "grade": "C",
+      "rank": 51
+    },
+    {
+      "prospectId": "RW-052",
+      "companyName": "Summit Roofing of South Florida",
+      "website": "https://summitroofingfl.com",
+      "city": "Pompano Beach",
+      "state": "FL",
+      "phone": "(954) 781-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Summit Roofing of South Florida site could not be confirmed or loaded consistently for evaluation; all rubric categories set to 0 until the live site can be directly inspected."
+      },
+      "grade": "C",
+      "rank": 52
+    },
+    {
+      "prospectId": "RW-053",
+      "companyName": "Secure Roofing & Solar",
+      "website": "https://secureroofingandsolar.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 902-1234",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Secure Roofing & Solar website not reliably accessible for scoring; no dependable page content to assess UX, CTAs, reviews, or SEO, so prospect is zeroed out pending manual check."
+      },
+      "grade": "C",
+      "rank": 53
+    },
+    {
+      "prospectId": "RW-054",
+      "companyName": "Everguard Roofing",
+      "website": "https://everguardroofingfl.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 790-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Everguard Roofing URL could not be evaluated (possible issue with domain or hosting); all dimensions left at 0 until working site is confirmed."
+      },
+      "grade": "C",
+      "rank": 54
+    },
+    {
+      "prospectId": "RW-055",
+      "companyName": "Royal Palm Roofing",
+      "website": "https://royalpalmroofing.com",
+      "city": "Royal Palm Beach",
+      "state": "FL",
+      "phone": "(561) 790-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Royal Palm Roofing website not reliably reachable for content review; without visible pages or tools, digital performance and lead-generation quality cannot be scored."
+      },
+      "grade": "C",
+      "rank": 55
+    },
+    {
+      "prospectId": "RW-056",
+      "companyName": "Gold Coast Roofing",
+      "website": "https://goldcoastroofingfl.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 772-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Gold Coast Roofing site access was unsuccessful; no verifiable design, mobile layout, CTAs, or review integrations were available to rate, so all metrics set to 0."
+      },
+      "grade": "C",
+      "rank": 56
+    },
+    {
+      "prospectId": "RW-057",
+      "companyName": "American Premier Roofing",
+      "website": "https://americanpremierroofing.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 456-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "American Premier Roofing website not confirmed as live or accessible; with no dependable data on UX, speed, SEO, or forms, the prospect is left unscored (0s)."
+      },
+      "grade": "C",
+      "rank": 57
+    },
+    {
+      "prospectId": "RW-058",
+      "companyName": "Prestige Roofing & Construction",
+      "website": "https://prestigeroofingfl.com",
+      "city": "West Palm Beach",
+      "state": "FL",
+      "phone": "(561) 223-9900",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Prestige Roofing & Construction online presence via the provided URL could not be validated; likely a non-resolving or misconfigured domain, so all rubric items remain at 0."
+      },
+      "grade": "C",
+      "rank": 58
+    },
+    {
+      "prospectId": "RW-059",
+      "companyName": "South Florida Roofing Company",
+      "website": "https://southfloridaroofingco.com",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "phone": "(954) 320-7222",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "South Florida Roofing Company domain did not yield a stable, reviewable site; without page content or structure, digital qualification cannot be completed and is set to 0."
+      },
+      "grade": "C",
+      "rank": 59
+    },
+    {
+      "prospectId": "RW-060",
+      "companyName": "Coral Springs Roofing",
+      "website": "https://coralspringsroofing.com",
+      "city": "Coral Springs",
+      "state": "FL",
+      "phone": "(954) 320-5555",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Coral Springs Roofing site not available for inspection; no ability to rate design, responsiveness, CTAs, or lead funnels, so all scores are 0."
+      },
+      "grade": "C",
+      "rank": 60
+    },
+    {
+      "prospectId": "RW-061",
+      "companyName": "Miramar Roofing Services",
+      "website": "https://miramarroofingservices.com",
+      "city": "Miramar",
+      "state": "FL",
+      "phone": "(954) 302-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Miramar Roofing Services site could not be loaded; likely offline or incorrectly mapped, preventing assessment of any rubric category."
+      },
+      "grade": "C",
+      "rank": 61
+    },
+    {
+      "prospectId": "RW-062",
+      "companyName": "Pembroke Pines Roofing",
+      "website": "https://pembrokepinesroofing.com",
+      "city": "Pembroke Pines",
+      "state": "FL",
+      "phone": "(954) 332-6600",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Pembroke Pines Roofing domain not serving a reviewable website; no UX, content, SEO, or form data available, so prospect remains unqualified in this pass."
+      },
+      "grade": "C",
+      "rank": 62
+    },
+    {
+      "prospectId": "RW-063",
+      "companyName": "Homestead Roofing Experts",
+      "website": "https://homesteadroofingexperts.com",
+      "city": "Homestead",
+      "state": "FL",
+      "phone": "(305) 257-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Homestead Roofing Experts site is not accessible for evaluation; without verifiable pages or functionality, all rubric scores are set to 0."
+      },
+      "grade": "C",
+      "rank": 63
+    },
+    {
+      "prospectId": "RW-064",
+      "companyName": "Weston Roofing Group",
+      "website": "https://westonroofinggroup.com",
+      "city": "Weston",
+      "state": "FL",
+      "phone": "(954) 712-9900",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Weston Roofing Group URL appears not to resolve to a functioning public site; no basis to score website quality, mobile UX, or lead-generation systems."
+      },
+      "grade": "C",
+      "rank": 64
+    },
+    {
+      "prospectId": "RW-065",
+      "companyName": "Davie Roofing Solutions",
+      "website": "https://davieroofingsolutions.com",
+      "city": "Davie",
+      "state": "FL",
+      "phone": "(954) 475-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Davie Roofing Solutions domain not returning a scorable site environment; prospect requires manual URL verification before digital qualification can be done."
+      },
+      "grade": "C",
+      "rank": 65
+    },
+    {
+      "prospectId": "RW-066",
+      "companyName": "Hallandale Beach Roofing",
+      "website": "https://hallandaleroofing.com",
+      "city": "Hallandale Beach",
+      "state": "FL",
+      "phone": "(954) 320-8888",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Hallandale Beach Roofing site appears unavailable or non-functional; with no page content, all rubric scores default to 0."
+      },
+      "grade": "C",
+      "rank": 66
+    },
+    {
+      "prospectId": "RW-067",
+      "companyName": "Plantation Roofing Pros",
+      "website": "https://plantationroofingpros.com",
+      "city": "Plantation",
+      "state": "FL",
+      "phone": "(954) 472-5200",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Plantation Roofing Pros domain not serving a usable site; unable to rate UX, CTAs, or SEO, leaving all items at 0."
+      },
+      "grade": "C",
+      "rank": 67
+    },
+    {
+      "prospectId": "RW-068",
+      "companyName": "Margate Roofing Company",
+      "website": "https://margateroofingcompany.com",
+      "city": "Margate",
+      "state": "FL",
+      "phone": "(954) 366-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Margate Roofing Company URL unreachable or not hosting active content; prospect requires follow-up to confirm digital presence."
+      },
+      "grade": "C",
+      "rank": 68
+    },
+    {
+      "prospectId": "RW-069",
+      "companyName": "Delray Beach Roofing",
+      "website": "https://delraybeachroofing.com",
+      "city": "Delray Beach",
+      "state": "FL",
+      "phone": "(561) 272-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Delray Beach Roofing site not available for review; no information on design, performance, or lead-generation tools could be obtained."
+      },
+      "grade": "C",
+      "rank": 69
+    },
+    {
+      "prospectId": "RW-070",
+      "companyName": "Boynton Beach Roofing",
+      "website": "https://boyntonbeachroofing.com",
+      "city": "Boynton Beach",
+      "state": "FL",
+      "phone": "(561) 737-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Boynton Beach Roofing URL not yielding an inspectable website; all qualification metrics default to 0 pending updated domain info."
+      },
+      "grade": "C",
+      "rank": 70
+    },
+    {
+      "prospectId": "RW-071",
+      "companyName": "Lake Worth Roofing",
+      "website": "https://lakeworthroofing.com",
+      "city": "Lake Worth",
+      "state": "FL",
+      "phone": "(561) 582-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Lake Worth Roofing site could not be reliably accessed; no insights on content, CTAs, or review integrations, so scoring is not possible at this time."
+      },
+      "grade": "C",
+      "rank": 71
+    },
+    {
+      "prospectId": "RW-072",
+      "companyName": "Hollywood Roofing Experts",
+      "website": "https://hollywoodroofingexperts.com",
+      "city": "Hollywood",
+      "state": "FL",
+      "phone": "(954) 922-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Hollywood Roofing Experts domain did not present a functioning website to analyze; prospect remains unqualified on digital criteria."
+      },
+      "grade": "C",
+      "rank": 72
+    },
+    {
+      "prospectId": "RW-073",
+      "companyName": "Sunrise Roofing Experts",
+      "website": "https://sunriseroofingexperts.com",
+      "city": "Sunrise",
+      "state": "FL",
+      "phone": "(954) 748-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Sunrise Roofing Experts URL inaccessible or misconfigured; digital performance and lead-generation capabilities cannot be rated."
+      },
+      "grade": "C",
+      "rank": 73
+    },
+    {
+      "prospectId": "RW-074",
+      "companyName": "Coral Gables Roofing",
+      "website": "https://coralgablesroofing.com",
+      "city": "Coral Gables",
+      "state": "FL",
+      "phone": "(305) 444-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Coral Gables Roofing site not available for inspection; no way to evaluate UX, mobile responsiveness, or SEO fundamentals, so all scores are 0."
+      },
+      "grade": "C",
+      "rank": 74
+    },
+    {
+      "prospectId": "RW-075",
+      "companyName": "Doral Roofing Services",
+      "website": "https://doralroofingservices.com",
+      "city": "Doral",
+      "state": "FL",
+      "phone": "(305) 477-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Doral Roofing Services website could not be accessed or confirmed; until a working site is identified, this prospect receives 0 across all rubric categories."
+      },
+      "grade": "C",
+      "rank": 75
+    },
+    {
+      "prospectId": "RW-076",
+      "companyName": "Kendall Roofing Company",
+      "website": "https://kendallroofingcompany.com",
+      "city": "Miami",
+      "state": "FL",
+      "phone": "(305) 279-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Domain not resolving as a distinct local roofing brand in Miami; appears unestablished or inactive, so no meaningful digital signals to score."
+      },
+      "grade": "C",
+      "rank": 76
+    },
+    {
+      "prospectId": "RW-077",
+      "companyName": "Cutler Bay Roofing",
+      "website": "https://cutlerbayroofing.com",
+      "city": "Cutler Bay",
+      "state": "FL",
+      "phone": "(305) 234-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Site not presenting as a functioning local roofing business in Cutler Bay; no visible content, structure, or brand presence to evaluate."
+      },
+      "grade": "C",
+      "rank": 77
+    },
+    {
+      "prospectId": "RW-078",
+      "companyName": "Pinecrest Roofing Experts",
+      "website": "https://pinecrestroofingexperts.com",
+      "city": "Pinecrest",
+      "state": "FL",
+      "phone": "(305) 669-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Pinecrest Roofing Experts domain does not appear with a usable marketing site; treated as inactive for qualification."
+      },
+      "grade": "C",
+      "rank": 78
+    },
+    {
+      "prospectId": "RW-079",
+      "companyName": "North Miami Beach Roofing",
+      "website": "https://northmiamibeachroofing.com",
+      "city": "North Miami Beach",
+      "state": "FL",
+      "phone": "(305) 949-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "North Miami Beach Roofing URL not returning a clear business website; no design, content, or conversion elements visible."
+      },
+      "grade": "C",
+      "rank": 79
+    },
+    {
+      "prospectId": "RW-080",
+      "companyName": "Aventura Roofing Company",
+      "website": "https://aventuraroofingcompany.com",
+      "city": "Aventura",
+      "state": "FL",
+      "phone": "(305) 935-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Aventura Roofing Company domain not functioning as a normal contractor site; lacks pages, messaging, and visible offers."
+      },
+      "grade": "C",
+      "rank": 80
+    },
+    {
+      "prospectId": "RW-081",
+      "companyName": "Sunny Isles Roofing",
+      "website": "https://sunnyislesroofing.com",
+      "city": "Sunny Isles Beach",
+      "state": "FL",
+      "phone": "(305) 947-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Sunny Isles Roofing site not available as a conventional marketing property; appears parked/inactive so cannot be scored."
+      },
+      "grade": "C",
+      "rank": 81
+    },
+    {
+      "prospectId": "RW-082",
+      "companyName": "Lauderdale Lakes Roofing",
+      "website": "https://lauderdalelakesroofing.com",
+      "city": "Lauderdale Lakes",
+      "state": "FL",
+      "phone": "(954) 733-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Lauderdale Lakes Roofing URL does not resolve to a real contractor website; missing core content and structure."
+      },
+      "grade": "C",
+      "rank": 82
+    },
+    {
+      "prospectId": "RW-083",
+      "companyName": "Oakland Park Roofing",
+      "website": "https://oaklandparkroofing.com",
+      "city": "Oakland Park",
+      "state": "FL",
+      "phone": "(954) 563-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Oakland Park Roofing domain appears inactive or non-standard; no usable pages, navigation, or CTAs for evaluation."
+      },
+      "grade": "C",
+      "rank": 83
+    },
+    {
+      "prospectId": "RW-084",
+      "companyName": "Wilton Manors Roofing",
+      "website": "https://wiltonmanorsroofing.com",
+      "city": "Wilton Manors",
+      "state": "FL",
+      "phone": "(954) 390-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Wilton Manors Roofing site not operating with normal business content; treated as non-functional for digital qualification."
+      },
+      "grade": "C",
+      "rank": 84
+    },
+    {
+      "prospectId": "RW-085",
+      "companyName": "Pompano Beach Roofing",
+      "website": "https://pompanobeachroofing.com",
+      "city": "Pompano Beach",
+      "state": "FL",
+      "phone": "(954) 943-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Pompano Beach Roofing URL not presenting a proper roofing business site; no design, copy, or lead-gen flow to inspect."
+      },
+      "grade": "C",
+      "rank": 85
+    },
+    {
+      "prospectId": "RW-086",
+      "companyName": "Riviera Beach Roofing",
+      "website": "https://rivierabeachroofing.com",
+      "city": "Riviera Beach",
+      "state": "FL",
+      "phone": "(561) 844-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Riviera Beach Roofing domain appears parked/inactive; no visible marketing content or technical signals."
+      },
+      "grade": "C",
+      "rank": 86
+    },
+    {
+      "prospectId": "RW-087",
+      "companyName": "Greenacres Roofing",
+      "website": "https://greenacresroofing.com",
+      "city": "Greenacres",
+      "state": "FL",
+      "phone": "(561) 965-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Greenacres Roofing site not functioning as a real contractor website; cannot assess UX, SEO, or trust elements."
+      },
+      "grade": "C",
+      "rank": 87
+    },
+    {
+      "prospectId": "RW-088",
+      "companyName": "Wellington Roofing Company",
+      "website": "https://wellingtonroofingcompany.com",
+      "city": "Wellington",
+      "state": "FL",
+      "phone": "(561) 793-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Wellington Roofing Company URL not operating with live, structured content; no basis for scoring."
+      },
+      "grade": "C",
+      "rank": 88
+    },
+    {
+      "prospectId": "RW-089",
+      "companyName": "Jensen Beach Roofing",
+      "website": "https://jensenbeachroofing.com",
+      "city": "Jensen Beach",
+      "state": "FL",
+      "phone": "(772) 334-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Jensen Beach Roofing domain does not surface an active contractor site; appears unused for marketing."
+      },
+      "grade": "C",
+      "rank": 89
+    },
+    {
+      "prospectId": "RW-090",
+      "companyName": "Port St. Lucie Roofing",
+      "website": "https://portstlucieroofing.com",
+      "city": "Port St. Lucie",
+      "state": "FL",
+      "phone": "(772) 878-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Port St. Lucie Roofing URL is not a working, content-rich roofing website; considered non-qualified digitally."
+      },
+      "grade": "C",
+      "rank": 90
+    },
+    {
+      "prospectId": "RW-091",
+      "companyName": "Stuart Roofing Experts",
+      "website": "https://stuartroofingexperts.com",
+      "city": "Stuart",
+      "state": "FL",
+      "phone": "(772) 287-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Stuart Roofing Experts site not active or discoverable as a standard business property; no digital presence to rate."
+      },
+      "grade": "C",
+      "rank": 91
+    },
+    {
+      "prospectId": "RW-092",
+      "companyName": "Tequesta Roofing",
+      "website": "https://tequestaroofing.com",
+      "city": "Tequesta",
+      "state": "FL",
+      "phone": "(561) 746-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Tequesta Roofing domain appears non-functional/parked; no user experience, CTAs, or SEO signals available."
+      },
+      "grade": "C",
+      "rank": 92
+    },
+    {
+      "prospectId": "RW-093",
+      "companyName": "Lantana Roofing Solutions",
+      "website": "https://lantanaroofingsolutions.com",
+      "city": "Lantana",
+      "state": "FL",
+      "phone": "(561) 582-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Lantana Roofing Solutions URL not returning a typical contractor site; digital footprint effectively absent."
+      },
+      "grade": "C",
+      "rank": 93
+    },
+    {
+      "prospectId": "RW-094",
+      "companyName": "Hypoluxo Roofing",
+      "website": "https://hypoluxoroofing.com",
+      "city": "Hypoluxo",
+      "state": "FL",
+      "phone": "(561) 586-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Hypoluxo Roofing website not available as an operational business site; no content or structure to review."
+      },
+      "grade": "C",
+      "rank": 94
+    },
+    {
+      "prospectId": "RW-095",
+      "companyName": "Juno Beach Roofing",
+      "website": "https://junobeachroofing.com",
+      "city": "Juno Beach",
+      "state": "FL",
+      "phone": "(561) 626-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Juno Beach Roofing URL does not show a working roofing contractor site; treated as inactive for marketing qualification."
+      },
+      "grade": "C",
+      "rank": 95
+    },
+    {
+      "prospectId": "RW-096",
+      "companyName": "North Palm Beach Roofing",
+      "website": "https://northpalmbeachroofing.com",
+      "city": "North Palm Beach",
+      "state": "FL",
+      "phone": "(561) 844-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "North Palm Beach Roofing domain not operating with any visible content or UX; no digital signals to score."
+      },
+      "grade": "C",
+      "rank": 96
+    },
+    {
+      "prospectId": "RW-097",
+      "companyName": "Palm Springs Roofing",
+      "website": "https://palmspringsroofing.com",
+      "city": "Palm Springs",
+      "state": "FL",
+      "phone": "(561) 965-7663",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Palm Springs Roofing site is non-functional/absent as a marketing property; cannot be qualified."
+      },
+      "grade": "C",
+      "rank": 97
+    },
+    {
+      "prospectId": "RW-098",
+      "companyName": "South Miami Roofing",
+      "website": "https://southmiamiroofing.com",
+      "city": "South Miami",
+      "state": "FL",
+      "phone": "(305) 661-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "South Miami Roofing URL not loading as a real contractor website; no on-page experience to evaluate."
+      },
+      "grade": "C",
+      "rank": 98
+    },
+    {
+      "prospectId": "RW-099",
+      "companyName": "Miami Beach Roofing",
+      "website": "https://miamibeachroofing.com",
+      "city": "Miami Beach",
+      "state": "FL",
+      "phone": "(305) 532-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Miami Beach Roofing domain appears inactive with no live marketing content; zero measurable digital presence."
+      },
+      "grade": "C",
+      "rank": 99
+    },
+    {
+      "prospectId": "RW-100",
+      "companyName": "Key Biscayne Roofing",
+      "website": "https://keybiscayneroofing.com",
+      "city": "Key Biscayne",
+      "state": "FL",
+      "phone": "(305) 361-7777",
+      "qualification": {
+        "scores": {
+          "websiteQuality": 0,
+          "mobileExperience": 0,
+          "speed": 0,
+          "callsToAction": 0,
+          "reviews": 0,
+          "trustIndicators": 0,
+          "seoBasics": 0,
+          "leadGenerationQuality": 0
+        },
+        "score": 0,
+        "quickNotes": "Key Biscayne Roofing site not accessible as a functioning roofing business website; no UX, SEO, or trust elements available."
+      },
+      "grade": "C",
+      "rank": 100
+    }
+  ],
+  "rankings": {
+    "distribution": {
+      "A+": 2,
+      "A": 8,
+      "B": 28,
+      "C": 62
+    },
+    "rubricWeights": {
+      "websiteQuality": 0.18,
+      "mobileExperience": 0.14,
+      "speed": 0.12,
+      "callsToAction": 0.14,
+      "reviews": 0.12,
+      "trustIndicators": 0.1,
+      "seoBasics": 0.1,
+      "leadGenerationQuality": 0.1
+    },
+    "gradeRules": {
+      "A+": "score >= 8.8",
+      "A": "score >= 8.0 and < 8.8",
+      "B": "score >= 7.0 and < 8.0",
+      "C": "score < 7.0"
+    }
+  },
+  "auditMethodology": {
+    "objective": "Identify biggest opportunities to increase roofing leads for top-ranked prospects.",
+    "process": [
+      "Score every prospect against the 8 required qualification dimensions.",
+      "Prioritize A+ and A prospects for Executive Website Audit.",
+      "Identify weakest 3 dimensions per audited prospect and define quick-win lead conversion actions.",
+      "Estimate lead-impact range to support sales conversation readiness."
+    ]
+  },
+  "websiteAudits": [
+    {
+      "prospectId": "RW-026",
+      "companyName": "City Roofing",
+      "executiveSummary": "City Roofing has a A+ profile with the fastest lead lift likely from speed, website quality, mobile experience improvements.",
+      "biggestOpportunities": [
+        "Fix speed gap with conversion-focused restructuring and UX simplification.",
+        "Improve website quality performance to reduce visitor drop-off before form submission.",
+        "Upgrade mobile experience signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-046",
+      "companyName": "Earl W Johnston Roofing",
+      "executiveSummary": "Earl W Johnston Roofing has a A+ profile with the fastest lead lift likely from speed, website quality, mobile experience improvements.",
+      "biggestOpportunities": [
+        "Fix speed gap with conversion-focused restructuring and UX simplification.",
+        "Improve website quality performance to reduce visitor drop-off before form submission.",
+        "Upgrade mobile experience signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-003",
+      "companyName": "Best Roofing",
+      "executiveSummary": "Best Roofing has a A profile with the fastest lead lift likely from speed, seo basics, website quality improvements.",
+      "biggestOpportunities": [
+        "Fix speed gap with conversion-focused restructuring and UX simplification.",
+        "Improve seo basics performance to reduce visitor drop-off before form submission.",
+        "Upgrade website quality signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-007",
+      "companyName": "T&S Roofing Systems",
+      "executiveSummary": "T&S Roofing Systems has a A profile with the fastest lead lift likely from speed, seo basics, website quality improvements.",
+      "biggestOpportunities": [
+        "Fix speed gap with conversion-focused restructuring and UX simplification.",
+        "Improve seo basics performance to reduce visitor drop-off before form submission.",
+        "Upgrade website quality signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-015",
+      "companyName": "Tiger Team Roofing",
+      "executiveSummary": "Tiger Team Roofing has a A profile with the fastest lead lift likely from speed, seo basics, website quality improvements.",
+      "biggestOpportunities": [
+        "Fix speed gap with conversion-focused restructuring and UX simplification.",
+        "Improve seo basics performance to reduce visitor drop-off before form submission.",
+        "Upgrade website quality signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-017",
+      "companyName": "Advanced Roofing",
+      "executiveSummary": "Advanced Roofing has a A profile with the fastest lead lift likely from speed, calls-to-action, reviews improvements.",
+      "biggestOpportunities": [
+        "Fix speed gap with conversion-focused restructuring and UX simplification.",
+        "Improve calls-to-action performance to reduce visitor drop-off before form submission.",
+        "Upgrade reviews signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-029",
+      "companyName": "Wegner Roofing & Solar Florida",
+      "executiveSummary": "Wegner Roofing & Solar Florida has a A profile with the fastest lead lift likely from website quality, mobile experience, speed improvements.",
+      "biggestOpportunities": [
+        "Fix website quality gap with conversion-focused restructuring and UX simplification.",
+        "Improve mobile experience performance to reduce visitor drop-off before form submission.",
+        "Upgrade speed signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-034",
+      "companyName": "Hi Tech Roofing & Sheet Metal",
+      "executiveSummary": "Hi Tech Roofing & Sheet Metal has a A profile with the fastest lead lift likely from website quality, mobile experience, speed improvements.",
+      "biggestOpportunities": [
+        "Fix website quality gap with conversion-focused restructuring and UX simplification.",
+        "Improve mobile experience performance to reduce visitor drop-off before form submission.",
+        "Upgrade speed signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-035",
+      "companyName": "Lyons Roofing",
+      "executiveSummary": "Lyons Roofing has a A profile with the fastest lead lift likely from website quality, mobile experience, speed improvements.",
+      "biggestOpportunities": [
+        "Fix website quality gap with conversion-focused restructuring and UX simplification.",
+        "Improve mobile experience performance to reduce visitor drop-off before form submission.",
+        "Upgrade speed signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    },
+    {
+      "prospectId": "RW-049",
+      "companyName": "Sunshine Roofing & Sheet Metal",
+      "executiveSummary": "Sunshine Roofing & Sheet Metal has a A profile with the fastest lead lift likely from website quality, mobile experience, speed improvements.",
+      "biggestOpportunities": [
+        "Fix website quality gap with conversion-focused restructuring and UX simplification.",
+        "Improve mobile experience performance to reduce visitor drop-off before form submission.",
+        "Upgrade speed signals to increase call and quote-request confidence."
+      ],
+      "quickWins14Days": [
+        "Deploy one focused lead page with single primary CTA above the fold.",
+        "Compress and optimize media and scripts to improve first paint and interaction speed.",
+        "Add visible trust blocks: licenses, warranties, verified reviews, and project proof."
+      ],
+      "projectedLeadImpact": "Estimated +20% to +45% increase in qualified lead conversion when implemented with traffic already in place.",
+      "confidence": "MEDIUM"
+    }
+  ],
+  "flagshipOffer": {
+    "offerName": "Roofing Lead Engine Sprint (14-Day Conversion Build)",
+    "offerType": "Single flagship offer",
+    "promise": "Turn existing roofing traffic into more booked inspections and quote requests in 14 days.",
+    "scope": [
+      "1 conversion-focused landing page or homepage rebuild",
+      "Mobile-first UX and speed optimization",
+      "CTA architecture: call, quote, inspection",
+      "Trust stack integration: reviews, badges, warranties, portfolio proof",
+      "Lead form redesign and conversion tracking setup",
+      "One revision cycle and launch support"
+    ],
+    "timeline": "14 calendar days from kickoff",
+    "pricing": {
+      "model": "Fixed fee",
+      "amountUsd": 3500,
+      "optionalAddOnUsd": 750,
+      "addOn": "Call tracking and follow-up automation setup"
+    },
+    "guarantee": "If launch blockers are Atlas-owned, Atlas works until launch without additional labor fee.",
+    "whyItWins": "High urgency, low complexity, fixed scope, and immediate revenue relevance for roofing operators."
+  },
+  "outreachAssets": {
+    "personalizedEmail": [
+      {
+        "prospectId": "RW-026",
+        "companyName": "City Roofing",
+        "subject": "City Roofing: quick lead lift opportunity in Miami",
+        "body": "Hi City Roofing team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix speed gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-046",
+        "companyName": "Earl W Johnston Roofing",
+        "subject": "Earl W Johnston Roofing: quick lead lift opportunity in Hollywood",
+        "body": "Hi Earl W Johnston Roofing team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix speed gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-003",
+        "companyName": "Best Roofing",
+        "subject": "Best Roofing: quick lead lift opportunity in Fort Lauderdale",
+        "body": "Hi Best Roofing team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix speed gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-007",
+        "companyName": "T&S Roofing Systems",
+        "subject": "T&S Roofing Systems: quick lead lift opportunity in Miami",
+        "body": "Hi T&S Roofing Systems team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix speed gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-015",
+        "companyName": "Tiger Team Roofing",
+        "subject": "Tiger Team Roofing: quick lead lift opportunity in Fort Lauderdale",
+        "body": "Hi Tiger Team Roofing team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix speed gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-017",
+        "companyName": "Advanced Roofing",
+        "subject": "Advanced Roofing: quick lead lift opportunity in Fort Lauderdale",
+        "body": "Hi Advanced Roofing team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix speed gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-029",
+        "companyName": "Wegner Roofing & Solar Florida",
+        "subject": "Wegner Roofing & Solar Florida: quick lead lift opportunity in Fort Lauderdale",
+        "body": "Hi Wegner Roofing & Solar Florida team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix website quality gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-034",
+        "companyName": "Hi Tech Roofing & Sheet Metal",
+        "subject": "Hi Tech Roofing & Sheet Metal: quick lead lift opportunity in West Palm Beach",
+        "body": "Hi Hi Tech Roofing & Sheet Metal team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix website quality gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-035",
+        "companyName": "Lyons Roofing",
+        "subject": "Lyons Roofing: quick lead lift opportunity in Fort Lauderdale",
+        "body": "Hi Lyons Roofing team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix website quality gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      },
+      {
+        "prospectId": "RW-049",
+        "companyName": "Sunshine Roofing & Sheet Metal",
+        "subject": "Sunshine Roofing & Sheet Metal: quick lead lift opportunity in Miami",
+        "body": "Hi Sunshine Roofing & Sheet Metal team,\n\nI reviewed your web presence and found one high-impact opportunity: Fix website quality gap with conversion-focused restructuring and UX simplification.\nAtlas Web built a fixed-scope offer for roofing companies: Roofing Lead Engine Sprint (14-Day Conversion Build).\nIt is designed to lift quote requests from your existing traffic within 14 days.\n\nIf useful, I can share a 1-page before/after conversion plan tailored to your current site.\n\nBest,\nAtlas Web"
+      }
+    ],
+    "followUpSequence": [
+      "Day 0: Send personalized email with one concrete conversion gap and one-line value proposition.",
+      "Day 2: Follow-up with a short audit screenshot and projected lead impact range.",
+      "Day 5: Send proof-driven message with trust stack examples and fixed-price clarity.",
+      "Day 9: Final follow-up with direct CTA: 20-minute call to review implementation path."
+    ],
+    "phoneConversationGuide": [
+      "Opening: Confirm owner/marketing lead and ask permission for a 60-second relevance check.",
+      "Diagnosis: Mention one specific web conversion issue and expected business impact.",
+      "Offer: Present the single 14-day fixed-fee offer and what is included.",
+      "Risk Reversal: Emphasize fixed scope, clear timeline, and launch support commitment.",
+      "CTA: Ask for a 20-minute audit review meeting."
+    ],
+    "meetingAgenda": [
+      "5 min: Business goals and current lead flow baseline",
+      "7 min: Website conversion audit walkthrough",
+      "5 min: 14-day implementation plan and expected lead lift range",
+      "3 min: Pricing, timeline, next steps, and decision criteria"
+    ]
+  },
+  "proposalAssets": {
+    "proposal": {
+      "title": "Roofing Lead Engine Sprint (14-Day Conversion Build) Proposal",
+      "objective": "Increase qualified roofing leads from existing traffic using a fast conversion build.",
+      "deliverables": [
+        "1 conversion-focused landing page or homepage rebuild",
+        "Mobile-first UX and speed optimization",
+        "CTA architecture: call, quote, inspection",
+        "Trust stack integration: reviews, badges, warranties, portfolio proof",
+        "Lead form redesign and conversion tracking setup",
+        "One revision cycle and launch support"
+      ],
+      "acceptanceCriteria": [
+        "Primary CTA is visible above the fold on mobile and desktop.",
+        "Page speed and usability are materially improved versus baseline.",
+        "Lead capture flow is tested and conversion events are tracked."
+      ]
+    },
+    "timeline": [
+      {
+        "dayRange": "Day 1-2",
+        "milestone": "Kickoff, discovery, baseline snapshot"
+      },
+      {
+        "dayRange": "Day 3-6",
+        "milestone": "Structure, messaging, UX wireframe"
+      },
+      {
+        "dayRange": "Day 7-10",
+        "milestone": "Build, speed optimization, trust stack integration"
+      },
+      {
+        "dayRange": "Day 11-12",
+        "milestone": "QA, analytics, form and call tracking tests"
+      },
+      {
+        "dayRange": "Day 13-14",
+        "milestone": "Launch, handoff, and post-launch validation"
+      }
+    ],
+    "scope": {
+      "inScope": [
+        "1 conversion-focused landing page or homepage rebuild",
+        "Mobile-first UX and speed optimization",
+        "CTA architecture: call, quote, inspection",
+        "Trust stack integration: reviews, badges, warranties, portfolio proof",
+        "Lead form redesign and conversion tracking setup",
+        "One revision cycle and launch support"
+      ],
+      "outOfScope": [
+        "Full multi-page website redesign",
+        "Long-term SEO campaign execution",
+        "Ad spend management retainers"
+      ]
+    },
+    "pricing": {
+      "baseFeeUsd": 3500,
+      "addOnOptions": [
+        {
+          "name": "Call tracking and follow-up automation setup",
+          "feeUsd": 750
+        }
+      ],
+      "paymentTerms": "50% at kickoff, 50% at launch readiness sign-off"
+    },
+    "agreement": {
+      "term": "Single project agreement",
+      "revisionPolicy": "One revision cycle included within agreed scope.",
+      "launchDependency": "Client provides approvals, assets, and access on schedule.",
+      "confidentiality": "Mutual confidentiality over data, analytics, and implementation details."
+    }
+  },
+  "executiveRecommendation": "Proceed with Miami-Fort Lauderdale-West Palm Beach, FL as Mission 001 target market and prioritize City Roofing (RW-026) as first outreach candidate after CEO approval. Use the single flagship offer at fixed price to reduce buying friction and accelerate first-close probability. Start outbound batch in descending rank order with immediate focus on 10 A+/A prospects that have strongest revenue readiness.",
+  "missionGate": {
+    "outreachExecuted": false,
+    "ceoApprovalRequiredBeforeContact": true,
+    "nextAction": "CEO reviews and approves outreach to ranked prospects starting with top A+/A accounts."
+  },
+  "externalSpecialists": {
+    "provider": "perplexity",
+    "model": "sonar-pro",
+    "usage": {
+      "metroSelection": {
+        "completion_tokens": 125,
+        "cost": {
+          "input_tokens_cost": 0.00018,
+          "output_tokens_cost": 0.00188,
+          "request_cost": 0.006,
+          "total_cost": 0.00805
+        },
+        "prompt_tokens": 59,
+        "search_context_size": "low",
+        "total_tokens": 184
+      },
+      "prospectDiscovery": {
+        "completion_tokens": 6729,
+        "cost": {
+          "input_tokens_cost": 0.00032,
+          "output_tokens_cost": 0.10094,
+          "request_cost": 0.006,
+          "total_cost": 0.10725
+        },
+        "prompt_tokens": 106,
+        "search_context_size": "low",
+        "total_tokens": 6835
+      },
+      "qualificationBatches": [
+        {
+          "completion_tokens": 2801,
+          "cost": {
+            "input_tokens_cost": 0.00575,
+            "output_tokens_cost": 0.04202,
+            "request_cost": 0.006,
+            "total_cost": 0.05377
+          },
+          "prompt_tokens": 1917,
+          "search_context_size": "low",
+          "total_tokens": 4718
+        },
+        {
+          "completion_tokens": 3693,
+          "cost": {
+            "input_tokens_cost": 0.00578,
+            "output_tokens_cost": 0.0554,
+            "request_cost": 0.006,
+            "total_cost": 0.06717
+          },
+          "prompt_tokens": 1926,
+          "search_context_size": "low",
+          "total_tokens": 5619
+        },
+        {
+          "completion_tokens": 2981,
+          "cost": {
+            "input_tokens_cost": 0.00584,
+            "output_tokens_cost": 0.04472,
+            "request_cost": 0.006,
+            "total_cost": 0.05656
+          },
+          "prompt_tokens": 1948,
+          "search_context_size": "low",
+          "total_tokens": 4929
+        },
+        {
+          "completion_tokens": 2775,
+          "cost": {
+            "input_tokens_cost": 0.00592,
+            "output_tokens_cost": 0.04163,
+            "request_cost": 0.006,
+            "total_cost": 0.05354
+          },
+          "prompt_tokens": 1973,
+          "search_context_size": "low",
+          "total_tokens": 4748
+        }
+      ]
+    },
+    "citations": [
+      "https://roofr.com/blog/the-top-markets-for-u-s-roofing-contractors",
+      "https://roofgiants.com/how-many-commercial-roofing-contractors-are-there-in-the-us/",
+      "https://www.consumeraffairs.com/homeowners/how-many-roofing-companies-are-in-the-us.html",
+      "https://www.bls.gov/oes/2023/may/oes472181.htm",
+      "https://www.ibisworld.com/united-states/industry/roofing-contractors/198/",
+      "https://www.reddit.com/r/RoofingSales/comments/1kxb5e4/best_place_in_us_to_start_roofing_business/",
+      "https://rooflink.com/insights/roofing-industry-statistics/",
+      "https://www.freedoniagroup.com/industry-study/us-residential-roofing",
+      "https://www.facebook.com/groups/roofingindustry/posts/2415762612120744/",
+      "https://www.nrca.net/",
+      "https://alliedroofingfl.com/",
+      "https://www.altecroofing.com/",
+      "https://www.extremeroofingmiami.com/best-roofers-south-florida",
+      "https://www.clsroofingllc.com/",
+      "https://garabar.com/",
+      "https://bestroofing.net/",
+      "https://pearlroof.com/",
+      "https://www.yelp.com/search?cflt=roofing&find_loc=West+Palm+Beach,+FL",
+      "https://local.yahoo.com/roofing/article/best-roofing-companies-west-palm-beach-florida-110055951.html",
+      "https://www.instagram.com/reel/DTa2px7DqAr/",
+      "https://www.youtube.com/watch?v=G63kDDrMx8A",
+      "https://www.yelp.com/biz/allied-roofing-and-sheet-metal-fort-lauderdale-4",
+      "https://alliedroofingct.com/",
+      "https://www.bbb.org/us/ct/east-hartford/profile/roofing-contractors/allied-roofing-sheet-metal-co-inc-0111-51000595",
+      "https://www.facebook.com/AlliedRoofing/",
+      "https://www.alliedroofingpa.com/",
+      "https://rcasf.org/contractors/find-a-contractor/contractor.html?cid=279",
+      "https://www.zoominfo.com/c/allied-roofing--sheetmetal-inc/355269407",
+      "https://www.homeadvisor.com/rated.alliedroofingsheetmetalinc.156441550.html",
+      "https://www.mycityroofing.com/roofing/verification/",
+      "https://www.homeadvisor.com/rated.CityRoofingInc.27139732.html",
+      "https://www.mycityroofing.com/",
+      "https://www.linkedin.com/company/city-roofing",
+      "https://www.zoominfo.com/c/city-roofing/371929670",
+      "https://www.extremeroofingmiami.com/vs/city-roofing",
+      "https://www.facebook.com/MyCityRoofing/",
+      "https://www.yelp.com/biz/city-roofing-miami-4",
+      "https://allcityroofingrepairscorp.com/",
+      "https://www.instagram.com/mycityroofing/",
+      "https://www.tampabaychamber.com/membership/entrepreneur/harbor-roofing/",
+      "http://www.vale-roofing.com/about-harbor-roofing/",
+      "https://www.yelp.com/biz/harbor-roofing-brandon",
+      "https://www.linkedin.com/company/harbor-roofing-contracting-inc",
+      "https://www.redsroofingandconstruction.com/",
+      "https://www.donerightroofingwa.com/",
+      "https://pineandharbor.com/",
+      "https://coveredbyharbor.com/",
+      "https://www.bbb.org/us/ne/north-platte/profile/roofing-contractors/new-harbor-roofing-construction-0714-1000057923",
+      "https://www.facebook.com/HarborRoofingFL/posts/-quality-is-built-into-every-layer-of-a-harbor-roofing-roofthis-roof-showcases-w/995520110042423/",
+      "https://www.jirehroofingcontractorusainc.com/kendall-roofing-contractor",
+      "https://kendallcountyroofing.com/",
+      "https://www.kendallroofing.co.uk/",
+      "https://www.kendalqualityroofing.co.uk/",
+      "https://www.angi.com/companylist/us/fl/kendall/roofing.htm",
+      "https://www.facebook.com/kendallcountyroofing/",
+      "https://www.yelp.com/search?cflt=roofing&find_loc=Kendall,+FL",
+      "https://www.instagram.com/p/DajS7QFojb_/",
+      "https://www.youtube.com/watch?v=UwH2vVXSqCA",
+      "https://kendall-ks.proaccessroofing.com/"
+    ]
+  }
+}

@@ -1,0 +1,364 @@
+{
+  "packageName": "Atlas Sales Engine Department Package",
+  "version": "1.0.0",
+  "salesEngineArchitecture": {
+    "departmentName": "Atlas Sales Engine v1",
+    "classification": "Permanent Executive Department",
+    "mission": "Acquire customers, convert prospects, track revenue, and continuously improve sales performance for all Atlas operating companies.",
+    "firstOperatingCompany": "Atlas Web",
+    "reusableByAllCompanies": true,
+    "capabilities": [
+      "PROSPECT_DISCOVERY",
+      "PROSPECT_SCORING",
+      "WEBSITE_AUDIT_GENERATION",
+      "OUTREACH_GENERATION",
+      "CRM",
+      "MEETING_TRACKING",
+      "PROPOSAL_GENERATION",
+      "CONTRACT_GENERATION",
+      "INVOICE_GENERATION",
+      "FOLLOW_UP_SCHEDULING",
+      "WIN_LOSS_ANALYSIS",
+      "CUSTOMER_SATISFACTION_TRACKING",
+      "REFERRAL_TRACKING",
+      "REVENUE_DASHBOARD",
+      "SALES_ANALYTICS"
+    ],
+    "constitutionalAlignment": [
+      "Specialists execute; Atlas governs and measures outcomes.",
+      "Benchmarking and evidence drive specialist selection.",
+      "CEO retains final decision authority on strategic gates."
+    ]
+  },
+  "departmentResponsibilities": [
+    {
+      "responsibility": "Prospect Intelligence",
+      "scope": [
+        "Prospect Discovery",
+        "Prospect Scoring",
+        "Website Audit Generation"
+      ],
+      "outcome": "Consistent pipeline of high-probability qualified prospects."
+    },
+    {
+      "responsibility": "Conversion Operations",
+      "scope": [
+        "Outreach Generation",
+        "Meeting Tracking",
+        "Proposal Generation"
+      ],
+      "outcome": "Qualified opportunities progress to revenue conversations."
+    },
+    {
+      "responsibility": "Revenue Operations",
+      "scope": [
+        "Contract Generation",
+        "Invoice Generation",
+        "Follow-up Scheduling"
+      ],
+      "outcome": "Reduced friction from proposal to cash collection."
+    },
+    {
+      "responsibility": "Retention and Expansion",
+      "scope": [
+        "Customer Satisfaction Tracking",
+        "Referral Tracking",
+        "Repeat Business orchestration"
+      ],
+      "outcome": "Higher LTV, referrals, and repeat sales velocity."
+    },
+    {
+      "responsibility": "Executive Sales Intelligence",
+      "scope": [
+        "Win/Loss Analysis",
+        "Revenue Dashboard",
+        "Sales Analytics"
+      ],
+      "outcome": "CEO-grade visibility and continuous improvement loops."
+    }
+  ],
+  "pipeline": [
+    {
+      "order": 1,
+      "stage": "PROSPECT",
+      "entryCriteria": "Target account is identified with decision-maker signal.",
+      "exitCriteria": "Prospect record created in CRM.",
+      "owner": "Prospect Intelligence Lead"
+    },
+    {
+      "order": 2,
+      "stage": "QUALIFIED_PROSPECT",
+      "entryCriteria": "Fit score exceeds qualification threshold.",
+      "exitCriteria": "Qualification score and rationale logged.",
+      "owner": "Sales Qualification Lead"
+    },
+    {
+      "order": 3,
+      "stage": "AUDIT",
+      "entryCriteria": "Prospect has qualification evidence and contact path.",
+      "exitCriteria": "Audit output delivered and referenced in outreach.",
+      "owner": "Audit Specialist"
+    },
+    {
+      "order": 4,
+      "stage": "OUTREACH",
+      "entryCriteria": "Audit completed and outreach hypothesis approved.",
+      "exitCriteria": "Prospect response state recorded.",
+      "owner": "Outreach Specialist"
+    },
+    {
+      "order": 5,
+      "stage": "MEETING",
+      "entryCriteria": "Prospect positively engages and books conversation.",
+      "exitCriteria": "Meeting notes captured and next action assigned.",
+      "owner": "Sales Closer"
+    },
+    {
+      "order": 6,
+      "stage": "PROPOSAL",
+      "entryCriteria": "Discovery notes and offer recommendation are complete.",
+      "exitCriteria": "Proposal status set to accepted/rejected.",
+      "owner": "Revenue Operations Lead"
+    },
+    {
+      "order": 7,
+      "stage": "CLOSED_WON_OR_CLOSED_LOST",
+      "entryCriteria": "Proposal decision deadline reached.",
+      "exitCriteria": "Revenue outcome and reason code captured.",
+      "owner": "Executive Sales Manager"
+    },
+    {
+      "order": 8,
+      "stage": "PROJECT_DELIVERY",
+      "entryCriteria": "Closed Won and commercial documents completed.",
+      "exitCriteria": "Delivery handoff accepted by operating company.",
+      "owner": "Operating Company Delivery Lead"
+    },
+    {
+      "order": 9,
+      "stage": "CUSTOMER_SUCCESS",
+      "entryCriteria": "Initial delivery milestone achieved.",
+      "exitCriteria": "Satisfaction measurement completed.",
+      "owner": "Customer Success Lead"
+    },
+    {
+      "order": 10,
+      "stage": "REFERRAL",
+      "entryCriteria": "Satisfaction threshold met and referral ask triggered.",
+      "exitCriteria": "Referral accepted/declined captured.",
+      "owner": "Growth Partnerships Lead"
+    },
+    {
+      "order": 11,
+      "stage": "REPEAT_BUSINESS",
+      "entryCriteria": "Customer has active expansion opportunity.",
+      "exitCriteria": "Expansion deal opened or customer retained in nurture loop.",
+      "owner": "Account Expansion Lead"
+    }
+  ],
+  "requiredArtifacts": [
+    {
+      "artifactId": "SE-ART-001",
+      "name": "Prospect Discovery Ledger",
+      "stage": "PROSPECT"
+    },
+    {
+      "artifactId": "SE-ART-002",
+      "name": "Prospect Qualification Scorecard",
+      "stage": "QUALIFIED_PROSPECT"
+    },
+    {
+      "artifactId": "SE-ART-003",
+      "name": "Website Audit Brief",
+      "stage": "AUDIT"
+    },
+    {
+      "artifactId": "SE-ART-004",
+      "name": "Outreach Sequence Plan",
+      "stage": "OUTREACH"
+    },
+    {
+      "artifactId": "SE-ART-005",
+      "name": "Meeting Outcome Log",
+      "stage": "MEETING"
+    },
+    {
+      "artifactId": "SE-ART-006",
+      "name": "Proposal Document",
+      "stage": "PROPOSAL"
+    },
+    {
+      "artifactId": "SE-ART-007",
+      "name": "Contract Packet",
+      "stage": "CLOSED_WON_OR_CLOSED_LOST"
+    },
+    {
+      "artifactId": "SE-ART-008",
+      "name": "Invoice and Payment Record",
+      "stage": "CLOSED_WON_OR_CLOSED_LOST"
+    },
+    {
+      "artifactId": "SE-ART-009",
+      "name": "Follow-up Schedule Register",
+      "stage": "CUSTOMER_SUCCESS"
+    },
+    {
+      "artifactId": "SE-ART-010",
+      "name": "Win/Loss Review Report",
+      "stage": "CLOSED_WON_OR_CLOSED_LOST"
+    },
+    {
+      "artifactId": "SE-ART-011",
+      "name": "Customer Satisfaction Snapshot",
+      "stage": "CUSTOMER_SUCCESS"
+    },
+    {
+      "artifactId": "SE-ART-012",
+      "name": "Referral and Repeat Business Ledger",
+      "stage": "REFERRAL"
+    },
+    {
+      "artifactId": "SE-ART-013",
+      "name": "Revenue Dashboard Snapshot",
+      "stage": "REPEAT_BUSINESS"
+    },
+    {
+      "artifactId": "SE-ART-014",
+      "name": "Sales Analytics Weekly Brief",
+      "stage": "REPEAT_BUSINESS"
+    }
+  ],
+  "dashboardModel": {
+    "operatingCompany": "Atlas Web",
+    "executiveNorthStar": "Time to first reliable customer revenue",
+    "corePanels": [
+      "Pipeline Velocity",
+      "Qualification Conversion Rate",
+      "Audit-to-Meeting Conversion",
+      "Proposal Win Rate",
+      "Revenue by Stage",
+      "Cash Collection",
+      "Customer Satisfaction",
+      "Referral Rate",
+      "Repeat Business Rate"
+    ],
+    "executiveSignals": {
+      "healthy": "Pipeline conversion and margin targets met for two consecutive cycles.",
+      "attentionRequired": "Any two adjacent stage conversions below threshold for one cycle.",
+      "interventionRequired": "Revenue target miss for two cycles with declining win rate."
+    },
+    "atlasWebOnboardingStatus": "ENABLED_AS_FIRST_OPERATING_COMPANY"
+  },
+  "executiveWorkflow": [
+    {
+      "step": 1,
+      "action": "Initialize Sales Engine for operating company and set sales objectives.",
+      "owner": "Executive Sales Director",
+      "output": "Atlas Web sales mission charter"
+    },
+    {
+      "step": 2,
+      "action": "Run prospect discovery and qualification with scored prioritization.",
+      "owner": "Prospect Intelligence Lead",
+      "output": "Ranked qualified prospect queue"
+    },
+    {
+      "step": 3,
+      "action": "Generate audits and outreach plans, then execute meeting conversion loop.",
+      "owner": "Conversion Operations Lead",
+      "output": "Meeting pipeline with proposal-ready opportunities"
+    },
+    {
+      "step": 4,
+      "action": "Issue proposals, contracts, invoices, and follow-up schedules.",
+      "owner": "Revenue Operations Lead",
+      "output": "Closed Won/Closed Lost outcomes with payment status"
+    },
+    {
+      "step": 5,
+      "action": "Track customer success, referral generation, and repeat business.",
+      "owner": "Customer Success Lead",
+      "output": "Expansion-ready account set"
+    },
+    {
+      "step": 6,
+      "action": "Review revenue dashboard and sales analytics for optimization directives.",
+      "owner": "Executive Office",
+      "output": "Next-cycle sales improvement decisions"
+    }
+  ],
+  "dashboardProjection": {
+    "generatedAt": "2026-07-10T21:19:47.972Z",
+    "operatingCompany": "Atlas Web",
+    "pipelineStageCount": 11,
+    "stageHealth": [
+      {
+        "stage": "PROSPECT",
+        "owner": "Prospect Intelligence Lead",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "QUALIFIED_PROSPECT",
+        "owner": "Sales Qualification Lead",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "AUDIT",
+        "owner": "Audit Specialist",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "OUTREACH",
+        "owner": "Outreach Specialist",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "MEETING",
+        "owner": "Sales Closer",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "PROPOSAL",
+        "owner": "Revenue Operations Lead",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "CLOSED_WON_OR_CLOSED_LOST",
+        "owner": "Executive Sales Manager",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "PROJECT_DELIVERY",
+        "owner": "Operating Company Delivery Lead",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "CUSTOMER_SUCCESS",
+        "owner": "Customer Success Lead",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "REFERRAL",
+        "owner": "Growth Partnerships Lead",
+        "status": "TRACKING_ENABLED"
+      },
+      {
+        "stage": "REPEAT_BUSINESS",
+        "owner": "Account Expansion Lead",
+        "status": "TRACKING_ENABLED"
+      }
+    ],
+    "revenueSummary": {
+      "forecastRevenue": 0,
+      "collectedRevenue": 0,
+      "winRate": 0,
+      "proposalCount": 0
+    },
+    "customerSummary": {
+      "satisfactionScore": 0,
+      "referralCount": 0,
+      "repeatBusinessCount": 0
+    },
+    "executiveSignal": "INTERVENTION_REQUIRED"
+  }
+}

@@ -1,0 +1,486 @@
+{
+  "missionId": "MISSION_006_FIRST_EXTERNAL_WORKFORCE_DISCOVERY",
+  "generatedAt": "2026-07-10T22:46:46.191Z",
+  "workflowExecution": {
+    "workflow": "WORKFORCE_REGISTRY_CHECK_THEN_EXTERNAL_MARKET_DISCOVERY",
+    "hiringDecision": "MARKET_DISCOVERY_REQUIRED",
+    "championSelected": false,
+    "benchmarkExecuted": false,
+    "ceoApprovalRequiredBeforeBenchmark": true,
+    "registryUpdated": false
+  },
+  "marketDiscoveryReport": {
+    "category": "Website Generation",
+    "generatedAt": "2026-07-10T22:46:17.837Z",
+    "overallRecommendation": "For Atlas’s Website Generation category in 2026, the priority providers should be **Webflow**, **Wix Studio**, and **WordPress + Elementor** as core market leaders, with **Framer** and **Squarespace** as strong complements for design‑led and small‑business use cases. **Lovable** and **v0** are recommended as specialized AI full‑stack and code‑generation options respectively, while **Bubble** serves complex application‑plus‑website scenarios and **Typedream** targets lightweight, fast‑launch needs.",
+    "topFiveCandidates": [
+      {
+        "rank": 1,
+        "provider": "Webflow",
+        "company": "Webflow Inc.",
+        "capability": "Visual, CSS‑level website builder and CMS focused on design‑led, professional marketing sites with growing AI‑assisted capabilities.",
+        "strengths": [
+          "Widely recognized as a **design‑led, professional‑grade** builder enabling agency‑level output without writing raw CSS.[2]",
+          "Favored by SaaS companies for modern, scalable marketing websites; highlighted as a go‑to platform for large businesses with full customization and visual control.[3]",
+          "Identified as a major player in the AI‑powered website builder market, indicating significant scale and investment.[1]",
+          "Emerging AI features (AI Site Builder) for professional sites, providing a bridge between traditional visual design and AI‑assisted generation.[8]"
+        ],
+        "weaknesses": [
+          "Steeper learning curve than Wix or Squarespace, especially for non‑technical users.[2]",
+          "More complex to manage at scale without dedicated Webflow‑skilled designers or developers, which may slow adoption in non‑design‑centric organizations.[2][3]",
+          "Native app‑like or full‑stack functionality is limited compared with dedicated application builders; often requires external integrations for complex logic.[8]"
+        ],
+        "typicalUseCases": [
+          "Design‑centric SaaS and tech companies needing pixel‑precise marketing sites, landing pages, and CMS‑driven content.[3]",
+          "Agencies producing high‑end client websites with strong brand and animation requirements.[2]",
+          "Professional portfolios and creative business sites where control over layout and interactions is strategically important."
+        ],
+        "pricing": "Positioned around **$18+/month** for professional sites in 2026 AI‑builder comparison tables, with pricing scaling based on CMS items, traffic, and workspace needs.[3][8]",
+        "apiAvailability": "AVAILABLE",
+        "enterpriseReadiness": "HIGH",
+        "evidenceSources": [
+          "https://www.fahrenheitmarketing.com/services/software-development/best-free-website-builders-2026/",
+          "https://agilityportal.io/blog/best-website-builder-for-large-business-2026",
+          "https://www.nxcode.io/resources/news/best-ai-website-builder-2026",
+          "https://www.researchandmarkets.com/reports/6241469/ai-powered-website-builder-global-market-report"
+        ],
+        "overallRecommendation": "Top‑tier recommendation for Atlas where design quality, CMS flexibility, and control matter more than pure generation speed; ideal for SaaS marketing sites and agency‑grade web experiences.",
+        "recommendationScore": 9.4
+      },
+      {
+        "rank": 2,
+        "provider": "Wix Studio",
+        "company": "Wix.com Ltd.",
+        "capability": "AI‑assisted, design‑flexible website builder and hosting platform aimed at agencies and SaaS brands, with collaboration, responsive design tools, and marketing/ecommerce integrations.",
+        "strengths": [
+          "Recognized as a leading all‑around website builder with strong **AI‑generative design**, ease of use, and integrated marketing features.[2]",
+          "Positioned as a top choice for modern, scalable sites for **large businesses and SaaS companies**, with team roles and enterprise‑oriented collaboration tools.[3]",
+          "Part of the core set of platforms SaaS companies are “gravitating to” in 2026 alongside Webflow, Framer, and WordPress + Elementor.[3]",
+          "Included among major companies in the global AI‑powered website builder market, indicating scale and market presence.[1]"
+        ],
+        "weaknesses": [
+          "Advanced features and add‑ons (ecommerce, advanced marketing, apps) can increase total cost of ownership beyond headline plan prices.[2]",
+          "Design flexibility is lower than Webflow for highly custom, design‑led experiences, especially for teams wanting near‑front‑end‑developer control.[2][3]",
+          "Like many hosted builders, platform lock‑in and limited direct access to underlying infrastructure compared with self‑hosted WordPress stacks.[3]"
+        ],
+        "typicalUseCases": [
+          "Small and mid‑market businesses needing fast deployment with built‑in marketing and lead‑generation tooling.[2]",
+          "Agencies and SaaS brands requiring collaborative site management, responsive design tools, and multi‑site portfolios.[3]",
+          "AI‑assisted landing pages and brochure sites where speed and ease of use matter more than deep code‑level customization.[2]"
+        ],
+        "pricing": "Described as having a capable free tier for small businesses, with paid plans for more advanced design and marketing features; independent 2026 comparisons position Wix/Wix Studio in the ~$19+/month range for professional use, with total cost rising as add‑ons are included.[2][3]",
+        "apiAvailability": "LIMITED",
+        "enterpriseReadiness": "HIGH",
+        "evidenceSources": [
+          "https://www.fahrenheitmarketing.com/services/software-development/best-free-website-builders-2026/",
+          "https://agilityportal.io/blog/best-website-builder-for-large-business-2026",
+          "https://www.researchandmarkets.com/reports/6241469/ai-powered-website-builder-global-market-report"
+        ],
+        "overallRecommendation": "High‑priority provider for Atlas in the Website Generation category, suited for SMEs through mid‑market and agency workflows, particularly where AI‑assisted design, integrated marketing, and multi‑stakeholder collaboration are important.",
+        "recommendationScore": 9.2
+      },
+      {
+        "rank": 3,
+        "provider": "WordPress + Elementor",
+        "company": "Automattic Inc. (WordPress) + Elementor Ltd.",
+        "capability": "Self‑hosted or managed WordPress CMS combined with Elementor visual builder, offering highly extensible website generation with plugin ecosystem and optional AI tools.",
+        "strengths": [
+          "Identified as a core modern, scalable platform SaaS companies are adopting for large business websites, due to extensibility and hosting control.[3]",
+          "Combines WordPress’s massive ecosystem (plugins, themes, integrations) with Elementor’s drag‑and‑drop visual design, enabling sophisticated sites without full custom development.[3][8]",
+          "Highlighted in AI‑website‑builder guides via tools like 10Web that pair WordPress, Elementor, and AI, underlining the stack’s relevance in AI‑assisted generation.[8]"
+        ],
+        "weaknesses": [
+          "Operational complexity higher than fully hosted builders; requires management of hosting, updates, performance, and security.[3]",
+          "Quality and reliability can vary based on plugin choices and hosting providers, increasing risk for non‑technical teams.[3]",
+          "Initial setup and configuration overhead is significant compared with turnkey platforms like Wix Studio or Squarespace.[2][5]"
+        ],
+        "typicalUseCases": [
+          "Mid‑market and enterprise sites needing deep customization, custom plugins, or unique integrations.[3]",
+          "Content‑heavy sites, multi‑language portals, and SEO‑driven properties where WordPress’s ecosystem is advantageous.",
+          "Organizations that want to avoid full lock‑in to a single SaaS builder and retain control over hosting and data."
+        ],
+        "pricing": "Core WordPress is open‑source; total cost typically combines hosting (often starting a few dollars per month), premium themes/plugins, and optionally managed WordPress services. Elementor and AI‑assisted WordPress bundles like 10Web start around **$10/month** and scale with features and traffic.[3][8]",
+        "apiAvailability": "AVAILABLE",
+        "enterpriseReadiness": "HIGH",
+        "evidenceSources": [
+          "https://agilityportal.io/blog/best-website-builder-for-large-business-2026",
+          "https://www.nxcode.io/resources/news/best-ai-website-builder-2026",
+          "https://www.researchandmarkets.com/reports/6241469/ai-powered-website-builder-global-market-report"
+        ],
+        "overallRecommendation": "High‑value option for Atlas where clients need maximum extensibility, own hosting, and integration depth; best when technical resources are available to manage the stack.",
+        "recommendationScore": 9
+      },
+      {
+        "rank": 4,
+        "provider": "Framer",
+        "company": "Framer BV",
+        "capability": "Modern, component‑based website builder with strong design tooling and growing AI features for rapid marketing site and landing page generation.",
+        "strengths": [
+          "Positioned as ideal for **product‑led SaaS** and fast marketing teams, emphasizing components and AI tools for rapid iteration.[3][5]",
+          "Recognized as a top choice for **design‑obsessed teams**, providing agency‑grade output without writing CSS, similar to Webflow but with a different workflow.[2]",
+          "Independent 2026 reviews highlight Framer’s balance of modern design, speed of creation, and affordability for early‑stage teams.[5]"
+        ],
+        "weaknesses": [
+          "Less established enterprise ecosystem compared with Webflow, WordPress, or Wix, with fewer long‑standing third‑party integrations.[3][5]",
+          "Pricing can scale up quickly when adding blogs and more advanced features, increasing total cost compared to headline starting tiers.[5]",
+          "Primarily focused on marketing sites; limited native full‑stack application capabilities relative to platforms like Lovable or Bubble.[8]"
+        ],
+        "typicalUseCases": [
+          "Product‑led SaaS teams building high‑quality marketing sites, launch pages, and experiments.[3]",
+          "Design‑driven companies needing quick iteration on landing pages with modern components and AI assistance.[2][5]",
+          "Freelancers and small agencies targeting visually polished sites for tech and creative clients."
+        ],
+        "pricing": "Independent 2026 reviews report paid plans starting around **$10/month**, with more complete marketing/blog setups often in the **$27–39/month** range once blogs and additional features are added.[5]",
+        "apiAvailability": "LIMITED",
+        "enterpriseReadiness": "MEDIUM",
+        "evidenceSources": [
+          "https://agilityportal.io/blog/best-website-builder-for-large-business-2026",
+          "https://www.fahrenheitmarketing.com/services/software-development/best-free-website-builders-2026/",
+          "https://launchthedamnthing.com/blog/best-website-builders"
+        ],
+        "overallRecommendation": "Strong recommendation as a modern, AI‑assisted website generator for product‑led teams; best suited when Atlas clients prioritize design speed and contemporary visual language over deep backend control.",
+        "recommendationScore": 8.7
+      },
+      {
+        "rank": 5,
+        "provider": "Squarespace (Fluid Engine / Blueprint AI)",
+        "company": "Squarespace, Inc.",
+        "capability": "Hosted, template‑driven website builder with Fluid Engine layout and Blueprint AI tools, focused on creative and small business websites.",
+        "strengths": [
+          "Praised as the **best all‑in‑one option** for small businesses across many industries, balancing design quality, simplicity, and bundled features.[5]",
+          "Identified in AI‑builder comparisons as one of the main traditional marketing site builders with emerging AI capabilities (Blueprint AI).*[8]",
+          "Widely recommended in 2026 guides for small businesses, bloggers, and creatives seeking low‑maintenance, visually polished sites.[5][7]"
+        ],
+        "weaknesses": [
+          "Less granular design control than Webflow and Framer for advanced interactions or highly custom layouts.[2][5]",
+          "Limited extensibility compared with WordPress + Elementor; complex integrations often require external tools or custom code injections.[3][5]",
+          "Primarily focused on marketing, portfolio, and simple commerce; not intended for full‑stack web app development.[8]"
+        ],
+        "typicalUseCases": [
+          "Small businesses and solo professionals needing fast, attractive sites with minimal configuration.[5]",
+          "Creative businesses (photographers, designers, studios) requiring strong templates and visual consistency.[5][8]",
+          "Basic ecommerce and content sites where bundled hosting, domains, and simple marketing tools are sufficient."
+        ],
+        "pricing": "Independent 2026 comparison notes plans starting around **$19/month (billed annually)**, with higher tiers for ecommerce and advanced features.[5][8]",
+        "apiAvailability": "LIMITED",
+        "enterpriseReadiness": "MEDIUM",
+        "evidenceSources": [
+          "https://launchthedamnthing.com/blog/best-website-builders",
+          "https://www.nxcode.io/resources/news/best-ai-website-builder-2026",
+          "https://www.youtube.com/watch?v=rjiA5-INy-4"
+        ],
+        "overallRecommendation": "Recommended for Atlas when targeting creative or small‑business segments that value simplicity and aesthetics over deep customization or complex integrations.",
+        "recommendationScore": 8.3
+      }
+    ],
+    "evidenceSources": [
+      "https://www.fahrenheitmarketing.com/services/software-development/best-free-website-builders-2026/",
+      "https://agilityportal.io/blog/best-website-builder-for-large-business-2026",
+      "https://www.nxcode.io/resources/news/best-ai-website-builder-2026",
+      "https://www.researchandmarkets.com/reports/6241469/ai-powered-website-builder-global-market-report",
+      "https://launchthedamnthing.com/blog/best-website-builders",
+      "https://www.youtube.com/watch?v=rjiA5-INy-4"
+    ]
+  },
+  "candidateComparisonMatrix": {
+    "matrix": [
+      {
+        "rank": 1,
+        "provider": "Webflow",
+        "company": "Webflow Inc.",
+        "overallQuality": 9,
+        "visualDesignCapability": 10,
+        "conversionCapability": 9,
+        "marketingWebsiteQuality": 9,
+        "cmsCapability": 10,
+        "responsiveDesign": 9,
+        "speed": 8,
+        "aiGenerationQuality": 8,
+        "editingWorkflow": 7,
+        "enterpriseReadiness": 9,
+        "apiAvailability": 9,
+        "costEfficiency": 7,
+        "longTermViability": 9,
+        "communityAdoption": 9,
+        "estimatedCostBand": "$14–$60+/month SaaS hosting; higher on Enterprise",
+        "strengths": [
+          "Best-in-class visual design flexibility and interactions for custom marketing sites, comparable to a visual development environment with CSS-level control[2][6].",
+          "Very strong CMS capability for complex content structures, multi-type collections, and large publishing sites; recommended for blogs and content-heavy corporate sites[2][6].",
+          "Optimized for scale and team workflows: structured CMS, collaboration, localization and faster marketing execution cited as reasons fast-growing companies move toward Webflow[5].",
+          "Enterprise offering with SOC 2 Type II and security posture suitable for regulated industries like finance and healthcare[6].",
+          "Automatic asset compression and CSS/JS minification out of the box, helping performance without plugins[6].",
+          "Widely adopted in agency and SaaS marketing ecosystems; commonly recommended for advanced marketing websites and SEO-friendly builds[2][3][5][6]."
+        ],
+        "weaknesses": [
+          "Steeper learning curve than simpler builders (rated as steep vs Wix/Squarespace in 2026 comparisons)[4].",
+          "Higher total cost of ownership vs pure low-cost WordPress/Elementor hosting, especially at scale or on Webflow Enterprise[2][4][6].",
+          "Less suited to ultra-rapid disposable landing pages when handover simplicity and minimal CMS needs matter, where Framer or Wix Studio can be more efficient[2][6].",
+          "Closed SaaS hosting model makes deep back-end customization and certain infrastructure choices less flexible than open-source WordPress stacks[2][5][6]."
+        ],
+        "evidenceSources": [
+          "https://www.we-optimizz.com/post/framer-vs-webflow-wordpress-wix",
+          "https://www.gemeosagency.com/en/blog/webflow-vs-framer-which-no-code-tool-to-choose",
+          "https://app.webjourney.pro/blog/web-builders-comparison-2026",
+          "https://www.youtube.com/watch?v=LvOZeFblpXg",
+          "https://www.reddit.com/r/webdesign/comments/1pmcn3u/wordpress_wix_studio_squarespace_showit_framer_or/"
+        ],
+        "weightedScore": 8.71
+      },
+      {
+        "rank": 2,
+        "provider": "WordPress + Elementor",
+        "company": "Automattic Inc. (WordPress) + Elementor Ltd.",
+        "overallQuality": 8,
+        "visualDesignCapability": 9,
+        "conversionCapability": 8,
+        "marketingWebsiteQuality": 8,
+        "cmsCapability": 10,
+        "responsiveDesign": 8,
+        "speed": 7,
+        "aiGenerationQuality": 7,
+        "editingWorkflow": 7,
+        "enterpriseReadiness": 8,
+        "apiAvailability": 10,
+        "costEfficiency": 9,
+        "longTermViability": 10,
+        "communityAdoption": 10,
+        "estimatedCostBand": "$5–$50+/month hosting + $49+/year Elementor Pro",
+        "strengths": [
+          "WordPress provides the most flexible SEO architecture and plugin ecosystem among the compared tools, recommended for large publishing sites (200+ posts) and complex integrations[2].",
+          "Elementor brings near pixel-level design control and Webflow-like flexibility inside WordPress, allowing advanced visual design while retaining open-source benefits[10][1].",
+          "Extremely strong CMS: WordPress is recommended when complex plugin integrations and large content volumes are primary needs[2].",
+          "Highly cost-efficient at scale due to commodity hosting and extensive free/open-source options, especially compared with fully managed SaaS builders[2][4][10].",
+          "Largest community adoption and long-term viability among all website platforms; widely used across blogging, marketing, and enterprise stacks[2][4][10].",
+          "Rich REST API and plugin ecosystem give maximum extensibility and integration options, including headless and custom back-end architectures[2][4][10]."
+        ],
+        "weaknesses": [
+          "Learning curve and operational complexity are higher; plugin management and performance tuning can slow teams compared with integrated SaaS builders[4][5][6].",
+          "Performance and security depend heavily on hosting quality and plugin choices; plugin chaos and maintenance burden are common critiques[5].",
+          "Editing workflow is less streamlined for non-technical marketers compared with all-in-one SaaS builders like Wix Studio or Webflow[2][4][5].",
+          "Design and responsive controls require careful configuration across themes, Elementor, and plugins, which can increase build and QA time[4][10]."
+        ],
+        "evidenceSources": [
+          "https://www.we-optimizz.com/post/framer-vs-webflow-wordpress-wix",
+          "https://app.webjourney.pro/blog/web-builders-comparison-2026",
+          "https://scribehow.com/o/dZVTvwjWSNin1kHBXFesFg/page/8_Best_Webflow_Alternatives_in_2026_Framer_Wix_Squarespace_and_More_Compared__ZjluUUhITfavzK226CGFyA",
+          "https://www.youtube.com/watch?v=oF8YsLuaNy0",
+          "https://www.youtube.com/watch?v=LvOZeFblpXg"
+        ],
+        "weightedScore": 8.5
+      },
+      {
+        "rank": 3,
+        "provider": "Wix Studio",
+        "company": "Wix.com Ltd.",
+        "overallQuality": 8,
+        "visualDesignCapability": 9,
+        "conversionCapability": 8,
+        "marketingWebsiteQuality": 8,
+        "cmsCapability": 7,
+        "responsiveDesign": 9,
+        "speed": 7,
+        "aiGenerationQuality": 9,
+        "editingWorkflow": 9,
+        "enterpriseReadiness": 7,
+        "apiAvailability": 8,
+        "costEfficiency": 8,
+        "longTermViability": 9,
+        "communityAdoption": 8,
+        "estimatedCostBand": "$17–$40+/month typical; agency workspaces higher",
+        "strengths": [
+          "Designed specifically for professional web creators and agencies, offering pro-grade creation, multi-site management and built-in business tools (CRM, bookings, events, automations)[8].",
+          "Design flexibility comparable to Webflow with advanced responsive controls, custom CSS, Velo dev platform, Wix Blocks and headless APIs[8].",
+          "Closed but highly integrated ecosystem that reduces operational friction compared with patchwork plugin stacks; positioned as best fit for most advanced client work[8].",
+          "Beginner-friendly drag-and-drop heritage from Wix with strong AI assist for layout and generation, improving speed to launch[1][4][8].",
+          "Strong for client-managed business websites and local service businesses, prioritizing ease of maintenance and low overhead[2]."
+        ],
+        "weaknesses": [
+          "SEO and performance generally rated lower than fully tuned Webflow or WordPress installations; Wix as a whole often scored mid-to-high but not best-in-class for performance/SEO[1][4].",
+          "CMS and content modeling less flexible than Webflow or WordPress for very complex publishing architectures[2].",
+          "Closed ecosystem and proprietary hosting can limit very advanced custom infrastructure, making it less attractive for some developer-led teams[5][8].",
+          "Enterprise-grade compliance and extensibility are not as prominently positioned as Webflow Enterprise or large WordPress enterprise stacks[2][5][8]."
+        ],
+        "evidenceSources": [
+          "https://www.wix.com/blog/webflow-alternatives",
+          "https://www.we-optimizz.com/post/framer-vs-webflow-wordpress-wix",
+          "https://app.webjourney.pro/blog/web-builders-comparison-2026",
+          "https://www.youtube.com/watch?v=oF8YsLuaNy0",
+          "https://www.youtube.com/watch?v=LvOZeFblpXg"
+        ],
+        "weightedScore": 8.14
+      },
+      {
+        "rank": 4,
+        "provider": "Framer",
+        "company": "Framer BV",
+        "overallQuality": 8,
+        "visualDesignCapability": 9,
+        "conversionCapability": 8,
+        "marketingWebsiteQuality": 9,
+        "cmsCapability": 7,
+        "responsiveDesign": 8,
+        "speed": 9,
+        "aiGenerationQuality": 8,
+        "editingWorkflow": 9,
+        "enterpriseReadiness": 6,
+        "apiAvailability": 7,
+        "costEfficiency": 8,
+        "longTermViability": 8,
+        "communityAdoption": 7,
+        "estimatedCostBand": "$10–$40+/month SaaS hosting",
+        "strengths": [
+          "Design-first builder with strong focus on speed, animations and landing page creation, with an easier learning curve for designers compared with Webflow[1][2][6].",
+          "Faster to launch and easier to manage for design-led brands that prioritize visual quality and speed, especially for fast-launch marketing sites and SaaS landing pages[2][6].",
+          "Feels closer to a no-code tool for designers, often described as similar to working in Figma for motion-heavy marketing pages[2][6].",
+          "Hosting, CMS functionality and core SEO controls are bundled, giving a simple stack for small teams and short-lived campaigns[2][6].",
+          "Often chosen when brand expression, motion design and launch speed are the main commercial drivers[2][6]."
+        ],
+        "weaknesses": [
+          "Less powerful than Webflow for complex CMS structures, corporate sites with many pages, and native e-commerce with sizable product catalogs[2][6].",
+          "Scaling limitations noted for structured, large, and long-lived content; not optimized for highly complex developer workflows compared with Webflow or WordPress[5][6].",
+          "Default analytics scripts and some implementation choices increase initial page weight and can affect performance tuning for very demanding SEO setups[6].",
+          "Enterprise readiness, compliance and advanced governance features lag behind Webflow Enterprise and mature WordPress enterprise stacks[5][6].",
+          "Community size and third-party ecosystem are smaller than WordPress and Webflow, limiting advanced integration options[2][4][6]."
+        ],
+        "evidenceSources": [
+          "https://www.we-optimizz.com/post/framer-vs-webflow-wordpress-wix",
+          "https://www.gemeosagency.com/en/blog/webflow-vs-framer-which-no-code-tool-to-choose",
+          "https://app.webjourney.pro/blog/web-builders-comparison-2026",
+          "https://www.youtube.com/watch?v=oF8YsLuaNy0",
+          "https://www.youtube.com/watch?v=LvOZeFblpXg"
+        ],
+        "weightedScore": 7.93
+      },
+      {
+        "rank": 5,
+        "provider": "Squarespace (Fluid Engine / Blueprint AI)",
+        "company": "Squarespace, Inc.",
+        "overallQuality": 8,
+        "visualDesignCapability": 8,
+        "conversionCapability": 7,
+        "marketingWebsiteQuality": 8,
+        "cmsCapability": 7,
+        "responsiveDesign": 8,
+        "speed": 7,
+        "aiGenerationQuality": 8,
+        "editingWorkflow": 8,
+        "enterpriseReadiness": 6,
+        "apiAvailability": 6,
+        "costEfficiency": 8,
+        "longTermViability": 9,
+        "communityAdoption": 8,
+        "estimatedCostBand": "$16–$40+/month SaaS hosting",
+        "strengths": [
+          "Best known for premium templates, polished design and simplicity for creatives and small brands; strong design-driven sites and light commerce[1][4][8].",
+          "Fluid Engine layout system and Blueprint AI are positioned to deliver structured but flexible visual design with AI-assisted starting points for pages[8][9].",
+          "Rated medium learning curve and fast launch in 2026 comparisons; a solid choice for portfolios, creatives and content-first sites with limited technical resources[4][9].",
+          "Provides an integrated all-in-one SaaS experience with hosting, templates, commerce, and marketing tools that minimize maintenance overhead[4][8].",
+          "Design structure is more opinionated than Webflow, helping non-designers achieve consistent layouts without deep CSS knowledge[4][8]."
+        ],
+        "weaknesses": [
+          "Design flexibility is high but more structured than Webflow, making it less suitable for fully bespoke, system-level design and complex interactions[8][9].",
+          "CMS depth and extensibility lag behind WordPress and Webflow for large, complex publishing sites or intricate data models[2][4][9].",
+          "Performance and SEO are solid but not generally highlighted as top-tier compared with highly optimized Webflow or WordPress setups[1][4][9].",
+          "API and developer extensibility options are limited compared with Velo/Wix Studio, Webflow APIs, or WordPress' extensive plugin and headless ecosystem[2][4][8].",
+          "Enterprise readiness and governance features are relatively basic versus Webflow Enterprise or specialized WordPress enterprise stacks[5][9]."
+        ],
+        "evidenceSources": [
+          "https://app.webjourney.pro/blog/web-builders-comparison-2026",
+          "https://www.youtube.com/watch?v=oF8YsLuaNy0",
+          "https://www.wix.com/blog/webflow-alternatives",
+          "https://www.saasworthy.com/compare/wix-vs-squarespace-vs-framer-x-vs-webflow?pIds=99,498,1051,1858",
+          "https://frenchydigital.com/blog/wix-vs-squarespace-vs-framer-interactive-website-builders-2026"
+        ],
+        "weightedScore": 7.57
+      }
+    ],
+    "matrixNote": null
+  },
+  "benchmarkRecommendation": {
+    "status": "PENDING_CEO_APPROVAL",
+    "benchmarkCandidates": [
+      {
+        "rank": 1,
+        "provider": "Webflow",
+        "company": "Webflow Inc.",
+        "rationale": "Top‑tier recommendation for Atlas where design quality, CMS flexibility, and control matter more than pure generation speed; ideal for SaaS marketing sites and agency‑grade web experiences."
+      },
+      {
+        "rank": 2,
+        "provider": "Wix Studio",
+        "company": "Wix.com Ltd.",
+        "rationale": "High‑priority provider for Atlas in the Website Generation category, suited for SMEs through mid‑market and agency workflows, particularly where AI‑assisted design, integrated marketing, and multi‑stakeholder collaboration are important."
+      },
+      {
+        "rank": 3,
+        "provider": "WordPress + Elementor",
+        "company": "Automattic Inc. (WordPress) + Elementor Ltd.",
+        "rationale": "High‑value option for Atlas where clients need maximum extensibility, own hosting, and integration depth; best when technical resources are available to manage the stack."
+      }
+    ],
+    "selectionPolicy": "Do not assign champion before benchmark completion and CEO approval."
+  },
+  "estimatedBenchmarkCost": {
+    "assumptions": [
+      "Benchmark run includes one production-grade marketing website test build per provider.",
+      "Includes setup, QA review, performance measurement, and executive scoring.",
+      "No procurement commitments are made before CEO approval."
+    ],
+    "estimatedBenchmarkCostUsd": {
+      "perProvider": 1500,
+      "providerCount": 3,
+      "total": 4500
+    },
+    "estimatedBenchmarkTime": {
+      "perProviderBusinessDays": 3,
+      "totalBusinessDays": 9,
+      "totalCalendarWeeks": 1.8
+    }
+  },
+  "estimatedBenchmarkTime": {
+    "assumptions": [
+      "Benchmark run includes one production-grade marketing website test build per provider.",
+      "Includes setup, QA review, performance measurement, and executive scoring.",
+      "No procurement commitments are made before CEO approval."
+    ],
+    "estimatedBenchmarkCostUsd": {
+      "perProvider": 1500,
+      "providerCount": 3,
+      "total": 4500
+    },
+    "estimatedBenchmarkTime": {
+      "perProviderBusinessDays": 3,
+      "totalBusinessDays": 9,
+      "totalCalendarWeeks": 1.8
+    }
+  },
+  "ceoRecommendation": "Approve benchmark execution for the top 3 candidates. Do not assign a champion until benchmark results are complete and reviewed.",
+  "researchMetadata": {
+    "provider": "perplexity",
+    "model": "sonar-pro",
+    "citations": [
+      "https://www.youtube.com/watch?v=oF8YsLuaNy0",
+      "https://www.we-optimizz.com/post/framer-vs-webflow-wordpress-wix",
+      "https://www.reddit.com/r/webdesign/comments/1pmcn3u/wordpress_wix_studio_squarespace_showit_framer_or/",
+      "https://app.webjourney.pro/blog/web-builders-comparison-2026",
+      "https://www.youtube.com/watch?v=LvOZeFblpXg",
+      "https://www.gemeosagency.com/en/blog/webflow-vs-framer-which-no-code-tool-to-choose",
+      "https://www.saasworthy.com/compare/wix-vs-squarespace-vs-framer-x-vs-webflow?pIds=99,498,1051,1858",
+      "https://www.wix.com/blog/webflow-alternatives",
+      "https://frenchydigital.com/blog/wix-vs-squarespace-vs-framer-interactive-website-builders-2026",
+      "https://scribehow.com/o/dZVTvwjWSNin1kHBXFesFg/page/8_Best_Webflow_Alternatives_in_2026_Framer_Wix_Squarespace_and_More_Compared__ZjluUUhITfavzK226CGFyA"
+    ],
+    "usage": {
+      "completion_tokens": 3119,
+      "cost": {
+        "input_tokens_cost": 0.00089,
+        "output_tokens_cost": 0.04679,
+        "request_cost": 0.006,
+        "total_cost": 0.05368
+      },
+      "prompt_tokens": 297,
+      "search_context_size": "low",
+      "total_tokens": 3416
+    }
+  }
+}

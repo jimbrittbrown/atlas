@@ -1,0 +1,41 @@
+{
+  "registryId": "ATLAS_TEMPLATE_REGISTRY_V1",
+  "owner": "Atlas Website Production System",
+  "templates": [
+    {
+      "templateId": "ROOFING_V1",
+      "templateFamily": "SERVICE_BUSINESS",
+      "displayName": "Roofing v1",
+      "industry": "Roofing",
+      "status": "APPROVED",
+      "activeVersion": "1.0.0",
+      "tags": ["roofing", "lead-generation", "local-service"],
+      "createdAt": "2026-07-11T00:00:00.000Z",
+      "updatedAt": "2026-07-11T00:00:00.000Z",
+      "versionHistory": [
+        {
+          "version": "1.0.0",
+          "approvedAt": "2026-07-11T00:00:00.000Z",
+          "approvedBy": "Executive Producer",
+          "releaseNotes": "Initial approved demonstration template for roofing clients.",
+          "templatePath": "templates/roofing/v1",
+          "requiredPages": [
+            "home",
+            "services",
+            "about",
+            "reviews",
+            "financing",
+            "contact"
+          ],
+          "status": "APPROVED",
+          "layoutLockHash": "roofing-v1-layout-lock-001",
+          "metadata": {
+            "ctaPrimary": "Request Inspection",
+            "supportsFinancing": true,
+            "supportsLicenses": true
+          }
+        }
+      ]
+    }
+  ]
+}

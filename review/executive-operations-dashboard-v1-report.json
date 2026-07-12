@@ -1,0 +1,1471 @@
+{
+  "generatedAt": "2026-07-11T17:27:07.363Z",
+  "overallStatus": "PASS",
+  "validation": {
+    "checks": [
+      {
+        "name": "snapshot generated",
+        "passed": true
+      },
+      {
+        "name": "all sections present",
+        "passed": true
+      },
+      {
+        "name": "decision center populated",
+        "passed": true
+      },
+      {
+        "name": "provider health populated",
+        "passed": true
+      },
+      {
+        "name": "alerts generated",
+        "passed": true
+      },
+      {
+        "name": "read-only governance flag",
+        "passed": true
+      },
+      {
+        "name": "no publish executed",
+        "passed": true
+      },
+      {
+        "name": "no deploy executed",
+        "passed": true
+      },
+      {
+        "name": "no approve/reject executed",
+        "passed": true
+      },
+      {
+        "name": "no destructive delete executed",
+        "passed": true
+      }
+    ],
+    "testsPassed": 10,
+    "testsFailed": 0
+  },
+  "snapshot": {
+    "executiveOverview": {
+      "totalCustomers": 2,
+      "totalMissions": 2,
+      "activeMissions": 0,
+      "queuedMissions": 0,
+      "completedMissions": 0,
+      "failedMissions": 0,
+      "blockedMissions": 1,
+      "missionsAwaitingCeoReview": 1,
+      "proposalsAwaitingCeoDecision": 1,
+      "currentPortfolioValue": 160,
+      "averageConfidenceScore": 0.715,
+      "averageRiskScore": 0.56,
+      "systemHealthSummary": "ATTENTION_REQUIRED",
+      "generatedTimestamp": "2026-07-11T17:27:07.359Z",
+      "dataAvailability": "AVAILABLE"
+    },
+    "ceoDecisionCenter": {
+      "totalItems": 3,
+      "items": [
+        {
+          "decisionId": "decision_item_62ea3e96-76c5-44c3-86a9-0674179c06bb",
+          "relatedCustomer": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "relatedMission": null,
+          "decisionType": "PROPOSAL_CONVERSION_APPROVAL",
+          "recommendation": "CONVERT_TO_MISSION_CONTROL",
+          "confidence": "HIGH",
+          "risk": 0.3,
+          "estimatedCost": 80000,
+          "expectedValue": 90,
+          "urgency": 85,
+          "age": 0,
+          "blockingIssues": [],
+          "requiredCeoAction": "AUTHORIZE_CONVERSION",
+          "sourceReportPath": "review/executive-planning-system-v1-report.json",
+          "metadata": {
+            "proposalId": "prop_b052a100-5516-4a26-9911-7100f8e1d19e",
+            "proposalStatus": "APPROVED"
+          }
+        },
+        {
+          "decisionId": "decision_item_aea4ee2f-a7c8-4c37-81d5-7a2ddfc400ed",
+          "relatedCustomer": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "relatedMission": null,
+          "decisionType": "CEO_GOVERNANCE_APPROVAL",
+          "recommendation": "REVISION_REQUIRED",
+          "confidence": "LOW",
+          "risk": 0.82,
+          "estimatedCost": 350000,
+          "expectedValue": 70,
+          "urgency": 60,
+          "age": 0,
+          "blockingIssues": [
+            "High-cost mission exceeds threshold.",
+            "High-risk mission requires CEO approval."
+          ],
+          "requiredCeoAction": "APPROVE_OR_REJECT",
+          "sourceReportPath": "review/executive-planning-system-v1-report.json",
+          "metadata": {
+            "proposalId": "prop_68952f94-9167-4507-be3e-5b81661060f0",
+            "proposalStatus": "REVISION_REQUIRED"
+          }
+        },
+        {
+          "decisionId": "decision_item_b76be485-9ff7-4c77-94e7-b3a38e11d0d5",
+          "relatedCustomer": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "relatedMission": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+          "decisionType": "EXECUTIVE_REVIEW_PACKAGE",
+          "recommendation": "REVIEW_PACKAGE_AND_DECIDE_NEXT_PHASE",
+          "confidence": null,
+          "risk": null,
+          "estimatedCost": null,
+          "expectedValue": null,
+          "urgency": null,
+          "age": 0,
+          "blockingIssues": [],
+          "requiredCeoAction": "REVIEW_AND_DECIDE",
+          "sourceReportPath": "review/website-executive-review-package-v1-report.json",
+          "metadata": {
+            "missionId": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+            "missionType": "WEBSITE_BUILD"
+          }
+        }
+      ]
+    },
+    "missionControl": {
+      "totalMissions": 2,
+      "records": [
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "customer": "Atlas Academy",
+          "missionType": "LEARNING_ACADEMY",
+          "currentState": "BLOCKED",
+          "currentStage": "COMPANY_RESEARCH",
+          "completionPercentage": 20,
+          "assignedWorkers": [
+            "WEBSITE_DIVISION"
+          ],
+          "priority": "UNSPECIFIED",
+          "confidence": null,
+          "risk": null,
+          "estimatedCompletion": null,
+          "lastActivity": "2026-06-05T17:27:07.346Z",
+          "warnings": [],
+          "blockingIssues": [
+            "Missing research capability specialist."
+          ],
+          "linkedProposal": null,
+          "linkedExecutiveReviewPackage": null,
+          "ceoReviewStatus": "NOT_REQUIRED"
+        },
+        {
+          "missionId": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+          "customer": "North Ridge HVAC",
+          "missionType": "WEBSITE_BUILD",
+          "currentState": "AWAITING_EXECUTIVE_REVIEW",
+          "currentStage": "SANDBOX_PROJECT_UPSERT",
+          "completionPercentage": 100,
+          "assignedWorkers": [
+            "WEBSITE_DIVISION"
+          ],
+          "priority": "UNSPECIFIED",
+          "confidence": null,
+          "risk": null,
+          "estimatedCompletion": null,
+          "lastActivity": "2026-07-11T17:27:07.346Z",
+          "warnings": [],
+          "blockingIssues": [],
+          "linkedProposal": null,
+          "linkedExecutiveReviewPackage": null,
+          "ceoReviewStatus": "REQUIRES_CEO_REVIEW"
+        }
+      ],
+      "filteredRecords": [
+        {
+          "missionId": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+          "customer": "North Ridge HVAC",
+          "missionType": "WEBSITE_BUILD",
+          "currentState": "AWAITING_EXECUTIVE_REVIEW",
+          "currentStage": "SANDBOX_PROJECT_UPSERT",
+          "completionPercentage": 100,
+          "assignedWorkers": [
+            "WEBSITE_DIVISION"
+          ],
+          "priority": "UNSPECIFIED",
+          "confidence": null,
+          "risk": null,
+          "estimatedCompletion": null,
+          "lastActivity": "2026-07-11T17:27:07.346Z",
+          "warnings": [],
+          "blockingIssues": [],
+          "linkedProposal": null,
+          "linkedExecutiveReviewPackage": null,
+          "ceoReviewStatus": "REQUIRES_CEO_REVIEW"
+        }
+      ]
+    },
+    "workforce": {
+      "status": "AVAILABLE",
+      "totalWorkers": 7,
+      "activeWorkers": 1,
+      "idleWorkers": 6,
+      "unavailableWorkers": 0,
+      "blockedWorkers": 0,
+      "utilization": 14.29,
+      "workload": [
+        {
+          "workerId": "wrk_e06f819e-c19f-4f86-aad5-6cf996377c71",
+          "workerName": "Company Research Specialist",
+          "specialty": "COMPANY_RESEARCH_SPECIALIST",
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "COMPANY_RESEARCH"
+        }
+      ],
+      "activeAssignments": [
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "COMPANY_RESEARCH",
+          "workerId": "wrk_e06f819e-c19f-4f86-aad5-6cf996377c71",
+          "workerName": "Company Research Specialist",
+          "specialty": "COMPANY_RESEARCH_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        }
+      ],
+      "pendingAssignments": [
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "BRAND_PACKAGE_GENERATION",
+          "workerId": "wrk_7aca4acb-7510-4337-b269-4addc926bd7c",
+          "workerName": "Brand Strategy Specialist",
+          "specialty": "BRAND_STRATEGY_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "BRAND_PACKAGE_GENERATION",
+          "workerId": "wrk_0127f180-f36d-4e42-9166-38b3594f5139",
+          "workerName": "Messaging Specialist",
+          "specialty": "MESSAGING_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "TEMPLATE_SELECTION",
+          "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+          "workerName": "Website Architect",
+          "specialty": "WEBSITE_ARCHITECT",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "CUSTOMIZATION_PACKAGE_GENERATION",
+          "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+          "workerName": "Website Architect",
+          "specialty": "WEBSITE_ARCHITECT",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "WEBSITE_PRODUCTION_CUSTOMIZATION",
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "workerName": "Framer Production Specialist",
+          "specialty": "FRAMER_PRODUCTION_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "FRAMER_BUILD_INSTRUCTION_GENERATION",
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "workerName": "Framer Production Specialist",
+          "specialty": "FRAMER_PRODUCTION_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "SANDBOX_PROJECT_UPSERT",
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "workerName": "Framer Production Specialist",
+          "specialty": "FRAMER_PRODUCTION_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "stageId": "SANDBOX_PROJECT_UPSERT",
+          "workerId": "wrk_e3a07980-e7c5-439e-abce-267546c4d418",
+          "workerName": "QA Specialist",
+          "specialty": "QA_SPECIALIST",
+          "assignedAt": "2026-07-11T17:27:07.346Z"
+        }
+      ],
+      "capabilityCoverage": [
+        {
+          "capability": "COMPANY_RESEARCH",
+          "workerCount": 1,
+          "availableNow": 0
+        },
+        {
+          "capability": "BRAND_PACKAGE_GENERATION",
+          "workerCount": 2,
+          "availableNow": 2
+        },
+        {
+          "capability": "TEMPLATE_SELECTION",
+          "workerCount": 1,
+          "availableNow": 1
+        },
+        {
+          "capability": "CUSTOMIZATION_PACKAGE_GENERATION",
+          "workerCount": 1,
+          "availableNow": 1
+        },
+        {
+          "capability": "WEBSITE_PRODUCTION_CUSTOMIZATION",
+          "workerCount": 1,
+          "availableNow": 1
+        },
+        {
+          "capability": "FRAMER_BUILD_INSTRUCTION_GENERATION",
+          "workerCount": 1,
+          "availableNow": 1
+        },
+        {
+          "capability": "SANDBOX_PROJECT_UPSERT",
+          "workerCount": 2,
+          "availableNow": 2
+        },
+        {
+          "capability": "EXECUTIVE_PACKAGE_REVIEW",
+          "workerCount": 1,
+          "availableNow": 1
+        }
+      ],
+      "capabilityGaps": [],
+      "estimatedNextAvailability": [
+        {
+          "capability": "COMPANY_RESEARCH",
+          "availabilityStatus": "AFTER_ACTIVE_ASSIGNMENTS"
+        },
+        {
+          "capability": "BRAND_PACKAGE_GENERATION",
+          "availabilityStatus": "NOW"
+        },
+        {
+          "capability": "TEMPLATE_SELECTION",
+          "availabilityStatus": "NOW"
+        },
+        {
+          "capability": "CUSTOMIZATION_PACKAGE_GENERATION",
+          "availabilityStatus": "NOW"
+        },
+        {
+          "capability": "WEBSITE_PRODUCTION_CUSTOMIZATION",
+          "availabilityStatus": "NOW"
+        },
+        {
+          "capability": "FRAMER_BUILD_INSTRUCTION_GENERATION",
+          "availabilityStatus": "NOW"
+        },
+        {
+          "capability": "SANDBOX_PROJECT_UPSERT",
+          "availabilityStatus": "NOW"
+        },
+        {
+          "capability": "EXECUTIVE_PACKAGE_REVIEW",
+          "availabilityStatus": "NOW"
+        }
+      ],
+      "reassignmentRecommendations": [],
+      "workerDetails": [
+        {
+          "workerId": "wrk_e06f819e-c19f-4f86-aad5-6cf996377c71",
+          "workerName": "Company Research Specialist",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "COMPANY_RESEARCH_SPECIALIST",
+          "capabilities": [
+            "COMPANY_RESEARCH"
+          ],
+          "status": "BUSY",
+          "currentMission": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "currentStage": "COMPANY_RESEARCH",
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.345Z"
+        },
+        {
+          "workerId": "wrk_7aca4acb-7510-4337-b269-4addc926bd7c",
+          "workerName": "Brand Strategy Specialist",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "BRAND_STRATEGY_SPECIALIST",
+          "capabilities": [
+            "BRAND_PACKAGE_GENERATION"
+          ],
+          "status": "IDLE",
+          "currentMission": null,
+          "currentStage": null,
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "workerId": "wrk_0127f180-f36d-4e42-9166-38b3594f5139",
+          "workerName": "Messaging Specialist",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "MESSAGING_SPECIALIST",
+          "capabilities": [
+            "BRAND_PACKAGE_GENERATION"
+          ],
+          "status": "IDLE",
+          "currentMission": null,
+          "currentStage": null,
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+          "workerName": "Website Architect",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "WEBSITE_ARCHITECT",
+          "capabilities": [
+            "TEMPLATE_SELECTION",
+            "CUSTOMIZATION_PACKAGE_GENERATION"
+          ],
+          "status": "IDLE",
+          "currentMission": null,
+          "currentStage": null,
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "workerName": "Framer Production Specialist",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "FRAMER_PRODUCTION_SPECIALIST",
+          "capabilities": [
+            "WEBSITE_PRODUCTION_CUSTOMIZATION",
+            "FRAMER_BUILD_INSTRUCTION_GENERATION",
+            "SANDBOX_PROJECT_UPSERT"
+          ],
+          "status": "IDLE",
+          "currentMission": null,
+          "currentStage": null,
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "workerId": "wrk_e3a07980-e7c5-439e-abce-267546c4d418",
+          "workerName": "QA Specialist",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "QA_SPECIALIST",
+          "capabilities": [
+            "SANDBOX_PROJECT_UPSERT"
+          ],
+          "status": "IDLE",
+          "currentMission": null,
+          "currentStage": null,
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.346Z"
+        },
+        {
+          "workerId": "wrk_2b98cab7-63a4-438a-8a95-ccab2d1893b2",
+          "workerName": "Executive Package Specialist",
+          "division": "WEBSITE_DIVISION",
+          "specialty": "EXECUTIVE_PACKAGE_SPECIALIST",
+          "capabilities": [
+            "EXECUTIVE_PACKAGE_REVIEW"
+          ],
+          "status": "IDLE",
+          "currentMission": null,
+          "currentStage": null,
+          "lastUpdated": "2026-07-11T17:27:07.346Z",
+          "createdAt": "2026-07-11T17:27:07.346Z"
+        }
+      ]
+    },
+    "customerPipeline": {
+      "status": "AVAILABLE",
+      "totalCustomers": 2,
+      "activeCustomers": 0,
+      "prospects": 0,
+      "customersWithActiveMissions": 0,
+      "customersAwaitingExecutiveReview": 1,
+      "proposedProjectValue": 0,
+      "approvedProjectValue": 90,
+      "deferredProjectValue": 0,
+      "rejectedProjectValue": 0,
+      "completedProjectValue": 0,
+      "financialValuesNote": "Values represent proposal-level expected business value estimates, not recognized revenue.",
+      "customerActivityFeed": [
+        {
+          "timestamp": "2026-07-11T17:27:07.347Z",
+          "type": "MISSION_BLOCKED",
+          "details": {
+            "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+            "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d"
+          }
+        },
+        {
+          "timestamp": "2026-07-11T17:27:07.347Z",
+          "type": "MISSION_CREATED",
+          "details": {
+            "missionId": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+            "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4"
+          }
+        },
+        {
+          "timestamp": "2026-07-11T17:27:07.347Z",
+          "type": "CUSTOMER_CREATED",
+          "details": {
+            "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+            "companyName": "North Ridge HVAC"
+          }
+        }
+      ]
+    },
+    "opportunityPortfolio": {
+      "status": "AVAILABLE",
+      "totalProposals": 2,
+      "rows": [
+        {
+          "proposalId": "prop_b052a100-5516-4a26-9911-7100f8e1d19e",
+          "title": "Website Build Q3",
+          "missionType": "WEBSITE_BUILD",
+          "sourceType": "CUSTOMER",
+          "status": "APPROVED",
+          "strategicAlignment": 0.7,
+          "expectedBusinessValue": 90,
+          "urgency": 85,
+          "feasibility": 0.8322,
+          "resourceReadiness": 0.5,
+          "dependencyReadiness": 1,
+          "risk": 0.3,
+          "costEstimate": 80000,
+          "effortEstimate": 30,
+          "timeToValue": 0.8687,
+          "priorityBand": "HIGH",
+          "recommendedExecutionOrder": 21,
+          "recommendedMissionType": "WEBSITE_BUILD",
+          "recommendedCapabilities": [
+            "COMPANY_RESEARCH",
+            "BRAND_PACKAGE_GENERATION"
+          ],
+          "recommendedResources": [
+            {
+              "workerId": "wrk_7aca4acb-7510-4337-b269-4addc926bd7c",
+              "workerName": "Brand Strategy Specialist",
+              "specialty": "BRAND_STRATEGY_SPECIALIST"
+            },
+            {
+              "workerId": "wrk_0127f180-f36d-4e42-9166-38b3594f5139",
+              "workerName": "Messaging Specialist",
+              "specialty": "MESSAGING_SPECIALIST"
+            },
+            {
+              "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+              "workerName": "Website Architect",
+              "specialty": "WEBSITE_ARCHITECT"
+            },
+            {
+              "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+              "workerName": "Framer Production Specialist",
+              "specialty": "FRAMER_PRODUCTION_SPECIALIST"
+            },
+            {
+              "workerId": "wrk_e3a07980-e7c5-439e-abce-267546c4d418",
+              "workerName": "QA Specialist",
+              "specialty": "QA_SPECIALIST"
+            }
+          ],
+          "conflicts": {
+            "blockingIssues": [],
+            "dependencyConflicts": []
+          },
+          "assumptions": [
+            "Scores use deterministic normalized weighting model v1.",
+            "Resource availability is based on current Workforce Director snapshot."
+          ],
+          "warnings": [],
+          "executiveDecisionStatus": "APPROVE",
+          "conversionStatus": "NOT_CONVERTED",
+          "linkedMissionId": null,
+          "confidence": 0.85,
+          "overallScore": 0.7938
+        },
+        {
+          "proposalId": "prop_68952f94-9167-4507-be3e-5b81661060f0",
+          "title": "Atlas Documentary Launch",
+          "missionType": "DOCUMENTARY",
+          "sourceType": "CEO",
+          "status": "REVISION_REQUIRED",
+          "strategicAlignment": 0.7,
+          "expectedBusinessValue": 70,
+          "urgency": 60,
+          "feasibility": 0.5571,
+          "resourceReadiness": 0,
+          "dependencyReadiness": 1,
+          "risk": 0.82,
+          "costEstimate": 350000,
+          "effortEstimate": 65,
+          "timeToValue": 0.6499,
+          "priorityBand": "HOLD",
+          "recommendedExecutionOrder": 44,
+          "recommendedMissionType": "DOCUMENTARY",
+          "recommendedCapabilities": [
+            "RESEARCH",
+            "MESSAGING"
+          ],
+          "recommendedResources": [
+            {
+              "workerId": "wrk_7aca4acb-7510-4337-b269-4addc926bd7c",
+              "workerName": "Brand Strategy Specialist",
+              "specialty": "BRAND_STRATEGY_SPECIALIST"
+            },
+            {
+              "workerId": "wrk_0127f180-f36d-4e42-9166-38b3594f5139",
+              "workerName": "Messaging Specialist",
+              "specialty": "MESSAGING_SPECIALIST"
+            },
+            {
+              "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+              "workerName": "Website Architect",
+              "specialty": "WEBSITE_ARCHITECT"
+            },
+            {
+              "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+              "workerName": "Framer Production Specialist",
+              "specialty": "FRAMER_PRODUCTION_SPECIALIST"
+            },
+            {
+              "workerId": "wrk_e3a07980-e7c5-439e-abce-267546c4d418",
+              "workerName": "QA Specialist",
+              "specialty": "QA_SPECIALIST"
+            }
+          ],
+          "conflicts": {
+            "blockingIssues": [
+              "Required capabilities are not sufficiently available."
+            ],
+            "dependencyConflicts": []
+          },
+          "assumptions": [
+            "Scores use deterministic normalized weighting model v1.",
+            "Resource availability is based on current Workforce Director snapshot."
+          ],
+          "warnings": [
+            "Risk profile is elevated and requires mitigation plan."
+          ],
+          "executiveDecisionStatus": "REVISION_REQUIRED",
+          "conversionStatus": "NOT_CONVERTED",
+          "linkedMissionId": null,
+          "confidence": 0.58,
+          "overallScore": 0.5561
+        }
+      ],
+      "ranking": [
+        {
+          "proposalId": "prop_b052a100-5516-4a26-9911-7100f8e1d19e",
+          "rank": 1,
+          "priorityBand": "HIGH",
+          "score": 0.7938
+        },
+        {
+          "proposalId": "prop_68952f94-9167-4507-be3e-5b81661060f0",
+          "rank": 2,
+          "priorityBand": "HOLD",
+          "score": 0.5561
+        }
+      ]
+    },
+    "providerHealth": {
+      "status": "PARTIAL",
+      "providers": [
+        {
+          "providerName": "Framer",
+          "configuredStatus": "AVAILABLE",
+          "authenticationStatus": "AVAILABLE",
+          "connectionStatus": "AVAILABLE",
+          "readCapabilityStatus": "AVAILABLE",
+          "writeCapabilityStatus": "PARTIAL",
+          "lastSuccessfulCheck": "2026-07-11T17:27:07.358Z",
+          "lastFailure": null,
+          "warnings": [
+            "Write operations remain governance-gated and disabled from dashboard."
+          ],
+          "blockingIssues": [],
+          "capabilityLimitations": [
+            "No publish/deploy from dashboard read model."
+          ]
+        },
+        {
+          "providerName": "Google",
+          "configuredStatus": "NOT_CONFIGURED",
+          "authenticationStatus": "NOT_CONFIGURED",
+          "connectionStatus": "NOT_CONFIGURED",
+          "readCapabilityStatus": "NOT_CONFIGURED",
+          "writeCapabilityStatus": "NOT_CONFIGURED",
+          "lastSuccessfulCheck": null,
+          "lastFailure": null,
+          "warnings": [
+            "Provider telemetry not configured in dashboard adapter."
+          ],
+          "blockingIssues": [],
+          "capabilityLimitations": []
+        },
+        {
+          "providerName": "YouTube",
+          "configuredStatus": "NOT_CONFIGURED",
+          "authenticationStatus": "NOT_CONFIGURED",
+          "connectionStatus": "NOT_CONFIGURED",
+          "readCapabilityStatus": "NOT_CONFIGURED",
+          "writeCapabilityStatus": "NOT_CONFIGURED",
+          "lastSuccessfulCheck": null,
+          "lastFailure": null,
+          "warnings": [
+            "Provider not configured in this environment."
+          ],
+          "blockingIssues": [],
+          "capabilityLimitations": []
+        },
+        {
+          "providerName": "Gemini",
+          "configuredStatus": "NOT_CONFIGURED",
+          "authenticationStatus": "NOT_CONFIGURED",
+          "connectionStatus": "NOT_CONFIGURED",
+          "readCapabilityStatus": "NOT_CONFIGURED",
+          "writeCapabilityStatus": "NOT_CONFIGURED",
+          "lastSuccessfulCheck": null,
+          "lastFailure": null,
+          "warnings": [
+            "Provider telemetry not configured in dashboard adapter."
+          ],
+          "blockingIssues": [],
+          "capabilityLimitations": []
+        },
+        {
+          "providerName": "ElevenLabs",
+          "configuredStatus": "NOT_CONFIGURED",
+          "authenticationStatus": "NOT_CONFIGURED",
+          "connectionStatus": "NOT_CONFIGURED",
+          "readCapabilityStatus": "NOT_CONFIGURED",
+          "writeCapabilityStatus": "NOT_CONFIGURED",
+          "lastSuccessfulCheck": null,
+          "lastFailure": null,
+          "warnings": [
+            "Provider telemetry not configured in dashboard adapter."
+          ],
+          "blockingIssues": [],
+          "capabilityLimitations": []
+        }
+      ]
+    },
+    "systemHealth": {
+      "status": "PARTIAL",
+      "records": [
+        {
+          "component": "Atlas runtime",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "Node.js runtime"
+          ],
+          "readinessScore": 0.9,
+          "recommendedAction": "Continue runtime telemetry expansion."
+        },
+        {
+          "component": "Mission Control",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "Customer Intake",
+            "Mission Registry",
+            "Workforce Director"
+          ],
+          "readinessScore": 0.9,
+          "recommendedAction": "Keep read-only dashboard bridge."
+        },
+        {
+          "component": "Customer Intake",
+          "status": "PARTIAL",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [
+            "Intake engine not connected directly."
+          ],
+          "errors": [],
+          "dependencies": [
+            "Customer Registry",
+            "Mission Registry"
+          ],
+          "readinessScore": 0.5,
+          "recommendedAction": "Attach intake telemetry adapter."
+        },
+        {
+          "component": "Mission Registry",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "Mission Control"
+          ],
+          "readinessScore": 0.92,
+          "recommendedAction": "Track mission-state cardinality."
+        },
+        {
+          "component": "Workforce Director",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "Workforce Registry"
+          ],
+          "readinessScore": 0.9,
+          "recommendedAction": "Expand capability gap monitoring."
+        },
+        {
+          "component": "Executive Planning",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "Mission Portfolio Registry",
+            "Planning Engine"
+          ],
+          "readinessScore": 0.89,
+          "recommendedAction": "Continue proposal telemetry capture."
+        },
+        {
+          "component": "Website Builder",
+          "status": "PARTIAL",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [
+            "Website builder manager not connected."
+          ],
+          "errors": [],
+          "dependencies": [
+            "Website Orchestrator",
+            "Provider Adapter"
+          ],
+          "readinessScore": 0.5,
+          "recommendedAction": "Wire builder telemetry adapter."
+        },
+        {
+          "component": "Framer integration",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [
+            "Write operations remain governance-gated and disabled from dashboard."
+          ],
+          "errors": [],
+          "dependencies": [
+            "framer-api",
+            "Framer auth config"
+          ],
+          "readinessScore": 0.9,
+          "recommendedAction": "Run periodic read capability checks."
+        },
+        {
+          "component": "Reporting system",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "review artifact outputs"
+          ],
+          "readinessScore": 0.85,
+          "recommendedAction": "Add report freshness monitor."
+        },
+        {
+          "component": "Governance system",
+          "status": "AVAILABLE",
+          "lastChecked": "2026-07-11T17:27:07.361Z",
+          "warnings": [],
+          "errors": [],
+          "dependencies": [
+            "CEO approval gates",
+            "Mission Conversion governance"
+          ],
+          "readinessScore": 0.9,
+          "recommendedAction": "Maintain read-only dashboard contract boundaries."
+        }
+      ]
+    },
+    "activityFeed": {
+      "totalEvents": 24,
+      "events": [
+        {
+          "eventId": "evt_prop_prop_b052a100-5516-4a26-9911-7100f8e1d19e_STATUS_TRANSITION_2026-07-11T17:27:07.358Z",
+          "timestamp": "2026-07-11T17:27:07.358Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "STATUS_TRANSITION",
+          "description": "Proposal prop_b052a100-5516-4a26-9911-7100f8e1d19e audit: STATUS_TRANSITION",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": "Review proposal status progression."
+        },
+        {
+          "eventId": "evt_prop_prop_b052a100-5516-4a26-9911-7100f8e1d19e_DECISION_ADDED_2026-07-11T17:27:07.358Z",
+          "timestamp": "2026-07-11T17:27:07.358Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "DECISION_ADDED",
+          "description": "Proposal prop_b052a100-5516-4a26-9911-7100f8e1d19e audit: DECISION_ADDED",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_prop_prop_68952f94-9167-4507-be3e-5b81661060f0_STATUS_TRANSITION_2026-07-11T17:27:07.358Z",
+          "timestamp": "2026-07-11T17:27:07.358Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "STATUS_TRANSITION",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 audit: STATUS_TRANSITION",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": "Review proposal status progression."
+        },
+        {
+          "eventId": "evt_prop_prop_68952f94-9167-4507-be3e-5b81661060f0_DECISION_ADDED_2026-07-11T17:27:07.358Z",
+          "timestamp": "2026-07-11T17:27:07.358Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "DECISION_ADDED",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 audit: DECISION_ADDED",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_prop_prop_b052a100-5516-4a26-9911-7100f8e1d19e_PRIORITIZATION_ADDED_2026-07-11T17:27:07.357Z",
+          "timestamp": "2026-07-11T17:27:07.357Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "PRIORITIZATION_ADDED",
+          "description": "Proposal prop_b052a100-5516-4a26-9911-7100f8e1d19e audit: PRIORITIZATION_ADDED",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_prop_prop_68952f94-9167-4507-be3e-5b81661060f0_EVALUATION_ADDED_2026-07-11T17:27:07.357Z",
+          "timestamp": "2026-07-11T17:27:07.357Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "EVALUATION_ADDED",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 audit: EVALUATION_ADDED",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_prop_prop_68952f94-9167-4507-be3e-5b81661060f0_PRIORITIZATION_ADDED_2026-07-11T17:27:07.357Z",
+          "timestamp": "2026-07-11T17:27:07.357Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "PRIORITIZATION_ADDED",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 audit: PRIORITIZATION_ADDED",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_prop_prop_b052a100-5516-4a26-9911-7100f8e1d19e_EVALUATION_ADDED_2026-07-11T17:27:07.356Z",
+          "timestamp": "2026-07-11T17:27:07.356Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "EVALUATION_ADDED",
+          "description": "Proposal prop_b052a100-5516-4a26-9911-7100f8e1d19e audit: EVALUATION_ADDED",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_prop_prop_b052a100-5516-4a26-9911-7100f8e1d19e_STATUS_TRANSITION_2026-07-11T17:27:07.355Z",
+          "timestamp": "2026-07-11T17:27:07.355Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "STATUS_TRANSITION",
+          "description": "Proposal prop_b052a100-5516-4a26-9911-7100f8e1d19e audit: STATUS_TRANSITION",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": "Review proposal status progression."
+        },
+        {
+          "eventId": "evt_prop_prop_68952f94-9167-4507-be3e-5b81661060f0_STATUS_TRANSITION_2026-07-11T17:27:07.355Z",
+          "timestamp": "2026-07-11T17:27:07.355Z",
+          "severity": "INFO",
+          "category": "EXECUTIVE_PLANNING",
+          "title": "STATUS_TRANSITION",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 audit: STATUS_TRANSITION",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "ExecutivePlanningSystem",
+          "relatedReport": "review/executive-planning-system-v1-report.json",
+          "recommendedAction": "Review proposal status progression."
+        },
+        {
+          "eventId": "evt_intake_2026-07-11T17:27:07.347Z_CUSTOMER_CREATED",
+          "timestamp": "2026-07-11T17:27:07.347Z",
+          "severity": "INFO",
+          "category": "CUSTOMER_INTAKE",
+          "title": "CUSTOMER_CREATED",
+          "description": "Mission control intake event: CUSTOMER_CREATED",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": null,
+          "workerId": null,
+          "sourceSystem": "CustomerIntakeMissionControl",
+          "relatedReport": "review/customer-intake-mission-control-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_intake_2026-07-11T17:27:07.347Z_MISSION_CREATED",
+          "timestamp": "2026-07-11T17:27:07.347Z",
+          "severity": "INFO",
+          "category": "CUSTOMER_INTAKE",
+          "title": "MISSION_CREATED",
+          "description": "Mission control intake event: MISSION_CREATED",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+          "workerId": null,
+          "sourceSystem": "CustomerIntakeMissionControl",
+          "relatedReport": "review/customer-intake-mission-control-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_intake_2026-07-11T17:27:07.347Z_MISSION_BLOCKED",
+          "timestamp": "2026-07-11T17:27:07.347Z",
+          "severity": "HIGH",
+          "category": "CUSTOMER_INTAKE",
+          "title": "MISSION_BLOCKED",
+          "description": "Mission control intake event: MISSION_BLOCKED",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": null,
+          "sourceSystem": "CustomerIntakeMissionControl",
+          "relatedReport": "review/customer-intake-mission-control-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_mission_mis_e3cc7244-2665-48ee-894f-b574098921a0",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "MISSION_CONTROL",
+          "title": "Mission AWAITING_EXECUTIVE_REVIEW",
+          "description": "Mission mis_e3cc7244-2665-48ee-894f-b574098921a0 currently in stage SANDBOX_PROJECT_UPSERT.",
+          "customerId": "cus_264a17d9-adf3-464a-b61d-a7976070ceb4",
+          "missionId": "mis_e3cc7244-2665-48ee-894f-b574098921a0",
+          "workerId": null,
+          "sourceSystem": "MissionRegistry",
+          "relatedReport": null,
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_e06f819e-c19f-4f86-aad5-6cf996377c71_COMPANY_RESEARCH",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Company Research Specialist assigned to stage COMPANY_RESEARCH.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_e06f819e-c19f-4f86-aad5-6cf996377c71",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_7aca4acb-7510-4337-b269-4addc926bd7c_BRAND_PACKAGE_GENERATION",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Brand Strategy Specialist assigned to stage BRAND_PACKAGE_GENERATION.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_7aca4acb-7510-4337-b269-4addc926bd7c",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_0127f180-f36d-4e42-9166-38b3594f5139_BRAND_PACKAGE_GENERATION",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Messaging Specialist assigned to stage BRAND_PACKAGE_GENERATION.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_0127f180-f36d-4e42-9166-38b3594f5139",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_f5491817-066e-4384-8953-75e15ac3be14_TEMPLATE_SELECTION",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Website Architect assigned to stage TEMPLATE_SELECTION.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_f5491817-066e-4384-8953-75e15ac3be14_CUSTOMIZATION_PACKAGE_GENERATION",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Website Architect assigned to stage CUSTOMIZATION_PACKAGE_GENERATION.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_f5491817-066e-4384-8953-75e15ac3be14",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_5755af68-0967-4e30-b9b7-45996b83fe03_WEBSITE_PRODUCTION_CUSTOMIZATION",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Framer Production Specialist assigned to stage WEBSITE_PRODUCTION_CUSTOMIZATION.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_5755af68-0967-4e30-b9b7-45996b83fe03_FRAMER_BUILD_INSTRUCTION_GENERATION",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Framer Production Specialist assigned to stage FRAMER_BUILD_INSTRUCTION_GENERATION.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_5755af68-0967-4e30-b9b7-45996b83fe03_SANDBOX_PROJECT_UPSERT",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "Framer Production Specialist assigned to stage SANDBOX_PROJECT_UPSERT.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_5755af68-0967-4e30-b9b7-45996b83fe03",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_workforce_wrk_e3a07980-e7c5-439e-abce-267546c4d418_SANDBOX_PROJECT_UPSERT",
+          "timestamp": "2026-07-11T17:27:07.346Z",
+          "severity": "INFO",
+          "category": "WORKFORCE",
+          "title": "Worker Assignment",
+          "description": "QA Specialist assigned to stage SANDBOX_PROJECT_UPSERT.",
+          "customerId": null,
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": "wrk_e3a07980-e7c5-439e-abce-267546c4d418",
+          "sourceSystem": "WorkforceDirector",
+          "relatedReport": "review/workforce-director-v1-report.json",
+          "recommendedAction": null
+        },
+        {
+          "eventId": "evt_mission_mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "timestamp": "2026-06-05T17:27:07.346Z",
+          "severity": "HIGH",
+          "category": "MISSION_CONTROL",
+          "title": "Mission BLOCKED",
+          "description": "Mission mis_a8767866-978d-4595-a8c6-18dd05854b05 currently in stage COMPANY_RESEARCH.",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "workerId": null,
+          "sourceSystem": "MissionRegistry",
+          "relatedReport": null,
+          "recommendedAction": "Unblock mission dependencies."
+        }
+      ]
+    },
+    "alerts": {
+      "totalAlerts": 5,
+      "bySeverity": {
+        "INFO": 1,
+        "WARNING": 2,
+        "HIGH": 2,
+        "CRITICAL": 0
+      },
+      "alerts": [
+        {
+          "alertId": "alert_5e9d5aae-64c4-46d1-ad77-b98d1a11af23",
+          "category": "blocked missions",
+          "severity": "HIGH",
+          "title": "Blocked mission",
+          "description": "Mission mis_a8767866-978d-4595-a8c6-18dd05854b05 is blocked at stage COMPANY_RESEARCH.",
+          "sourceSystem": "MissionRegistry",
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "relatedEventId": null,
+          "recommendedAction": "Resolve blocking issues and retry stage.",
+          "timestamp": "2026-07-11T17:27:07.362Z"
+        },
+        {
+          "alertId": "alert_fa77c385-a6b2-4d04-aaef-571c0395ddd3",
+          "category": "overdue missions",
+          "severity": "WARNING",
+          "title": "Overdue mission",
+          "description": "Mission mis_a8767866-978d-4595-a8c6-18dd05854b05 has been active for 36.0 days.",
+          "sourceSystem": "MissionRegistry",
+          "missionId": "mis_a8767866-978d-4595-a8c6-18dd05854b05",
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "relatedEventId": null,
+          "recommendedAction": "Review timeline and reassignment options.",
+          "timestamp": "2026-07-11T17:27:07.362Z"
+        },
+        {
+          "alertId": "alert_97e0fa80-8d1b-4e3f-ae1c-b99669119f12",
+          "category": "high-risk proposals",
+          "severity": "HIGH",
+          "title": "High-risk proposal",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 risk score is 0.82.",
+          "sourceSystem": "ExecutivePlanningSystem",
+          "missionId": null,
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "relatedEventId": null,
+          "recommendedAction": "Require mitigation plan before approval.",
+          "timestamp": "2026-07-11T17:27:07.362Z"
+        },
+        {
+          "alertId": "alert_f0659c6b-c5fd-431b-9bf4-96ba3959fd58",
+          "category": "unresolved dependencies",
+          "severity": "WARNING",
+          "title": "Proposal blocking issues",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 has unresolved blocking issues.",
+          "sourceSystem": "ExecutivePlanningSystem",
+          "missionId": null,
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "relatedEventId": null,
+          "recommendedAction": "Resolve dependency and capability blockers.",
+          "timestamp": "2026-07-11T17:27:07.362Z"
+        },
+        {
+          "alertId": "alert_69dc2c88-c24c-4fd4-8389-7a50ae869af0",
+          "category": "missions awaiting CEO action",
+          "severity": "INFO",
+          "title": "Proposal awaiting executive action",
+          "description": "Proposal prop_68952f94-9167-4507-be3e-5b81661060f0 requires CEO decision flow.",
+          "sourceSystem": "ExecutivePlanningSystem",
+          "missionId": null,
+          "customerId": "cus_f607ce04-5716-4477-91c6-3d2545a5cd5d",
+          "relatedEventId": null,
+          "recommendedAction": "Review in CEO Decision Center.",
+          "timestamp": "2026-07-11T17:27:07.362Z"
+        }
+      ]
+    },
+    "generatedAt": "2026-07-11T17:27:07.362Z",
+    "dataFreshness": [
+      {
+        "section": "executiveOverview",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "ceoDecisionCenter",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "missionControl",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "workforce",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "customerPipeline",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "opportunityPortfolio",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "providerHealth",
+        "status": "PARTIAL",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "systemHealth",
+        "status": "PARTIAL",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "activityFeed",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      },
+      {
+        "section": "alerts",
+        "status": "AVAILABLE",
+        "checkedAt": "2026-07-11T17:27:07.362Z",
+        "notes": []
+      }
+    ],
+    "missingData": [],
+    "limitations": [
+      "Dashboard is read-only and does not execute approvals, publishing, deployment, or writes.",
+      "Provider health uses adapter-fed telemetry and honest NOT_CONFIGURED/NOT_CONNECTED states when unavailable.",
+      "Financial metrics represent estimated proposal value, not recognized revenue."
+    ],
+    "recommendedExecutiveActions": [
+      {
+        "action": "AUTHORIZE_CONVERSION",
+        "reason": "CONVERT_TO_MISSION_CONTROL",
+        "decisionId": "decision_item_62ea3e96-76c5-44c3-86a9-0674179c06bb"
+      },
+      {
+        "action": "APPROVE_OR_REJECT",
+        "reason": "REVISION_REQUIRED",
+        "decisionId": "decision_item_aea4ee2f-a7c8-4c37-81d5-7a2ddfc400ed"
+      },
+      {
+        "action": "REVIEW_AND_DECIDE",
+        "reason": "REVIEW_PACKAGE_AND_DECIDE_NEXT_PHASE",
+        "decisionId": "decision_item_b76be485-9ff7-4c77-94e7-b3a38e11d0d5"
+      },
+      {
+        "action": "Resolve blocking issues and retry stage.",
+        "reason": "Blocked mission",
+        "alertId": "alert_5e9d5aae-64c4-46d1-ad77-b98d1a11af23"
+      },
+      {
+        "action": "Review timeline and reassignment options.",
+        "reason": "Overdue mission",
+        "alertId": "alert_fa77c385-a6b2-4d04-aaef-571c0395ddd3"
+      },
+      {
+        "action": "Require mitigation plan before approval.",
+        "reason": "High-risk proposal",
+        "alertId": "alert_97e0fa80-8d1b-4e3f-ae1c-b99669119f12"
+      },
+      {
+        "action": "Resolve dependency and capability blockers.",
+        "reason": "Proposal blocking issues",
+        "alertId": "alert_f0659c6b-c5fd-431b-9bf4-96ba3959fd58"
+      },
+      {
+        "action": "Review in CEO Decision Center.",
+        "reason": "Proposal awaiting executive action",
+        "alertId": "alert_69dc2c88-c24c-4fd4-8389-7a50ae869af0"
+      }
+    ],
+    "dashboardStatus": "AVAILABLE",
+    "governance": {
+      "readOnly": true,
+      "writeOperationsExecuted": false,
+      "publishOperationsExecuted": false,
+      "deploymentOperationsExecuted": false,
+      "destructiveOperationsExecuted": false
+    }
+  },
+  "governance": {
+    "readOnly": true,
+    "publishOperationsExecuted": false,
+    "deploymentOperationsExecuted": false,
+    "approvalCommandsExecuted": false,
+    "destructiveOperationsExecuted": false
+  },
+  "filesCreated": [
+    "integration/src/executive/executive-operations-dashboard-contracts.js",
+    "integration/src/executive/executive-overview-model.js",
+    "integration/src/executive/ceo-decision-center-model.js",
+    "integration/src/executive/mission-control-dashboard-view-model.js",
+    "integration/src/executive/executive-workforce-view-model.js",
+    "integration/src/executive/customer-pipeline-dashboard-model.js",
+    "integration/src/executive/opportunity-portfolio-dashboard-model.js",
+    "integration/src/executive/provider-health-dashboard-model.js",
+    "integration/src/executive/atlas-system-health-model.js",
+    "integration/src/executive/executive-activity-feed-model.js",
+    "integration/src/executive/executive-alerts-model.js",
+    "integration/src/executive/dashboard-snapshot-registry.js",
+    "integration/src/executive/executive-operations-dashboard-response-model.js",
+    "integration/src/executive/executive-operations-dashboard-manager.js",
+    "integration/src/executive/executive-operations-dashboard.js",
+    "integration/test/executive-operations-dashboard-v1.test.js",
+    "integration/scripts/run-executive-operations-dashboard-v1.js",
+    "integration/docs/executive-operations-dashboard-v1.md"
+  ],
+  "filesModified": [
+    "integration/package.json",
+    "integration/README.md"
+  ],
+  "remainingLimitations": [
+    "Provider health for non-Framer providers remains adapter-driven and may be NOT_CONFIGURED in environments without credentials.",
+    "Revenue values are proposal-value estimates and are not accounting-ledger integrated.",
+    "Some mission-level risk/confidence fields are inferred from linked proposal evaluations where direct mission telemetry is unavailable."
+  ],
+  "recommendedNextAction": "Implement authenticated read-only API endpoints and role-scoped access controls for dashboard snapshot retrieval."
+}

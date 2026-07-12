@@ -1,0 +1,443 @@
+{
+  "cycleId": "ops_cycle_1783798336366",
+  "state": "COMPLETED",
+  "startedAt": "2026-07-11T19:32:16.366Z",
+  "completedAt": "2026-07-11T19:32:16.373Z",
+  "durationMs": 7,
+  "findings": [
+    {
+      "findingId": "ops_finding_19729ca5-1dcb-47c1-915c-85721b2687b4",
+      "type": "CUSTOMER_INTAKE_GAP",
+      "title": "Customer without routed mission",
+      "summary": "Customer cus_61235351-7169-4d5b-a8fb-602619895413 has no mission record yet.",
+      "sourceSystem": "CustomerRegistry",
+      "customerId": "cus_61235351-7169-4d5b-a8fb-602619895413",
+      "missionId": null,
+      "metadata": {
+        "companyName": "Operations Cycle Demo"
+      },
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": null,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 55,
+      "missionUrgency": 35,
+      "operationalRisk": 0.25,
+      "confidenceScore": 0.7
+    },
+    {
+      "findingId": "ops_finding_84e957cd-c9a0-42cf-9800-fba37825f09b",
+      "type": "BLOCKED_MISSION",
+      "title": "Blocked mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "summary": "Mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20 is blocked at COMPANY_RESEARCH.",
+      "sourceSystem": "MissionRegistry",
+      "customerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "missionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "metadata": {
+        "missionType": "WEBSITE_BUILD",
+        "currentStage": "COMPANY_RESEARCH"
+      },
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": 0,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 80,
+      "missionUrgency": 75,
+      "operationalRisk": 0.7,
+      "confidenceScore": 0.7
+    },
+    {
+      "findingId": "ops_finding_8054be12-4ce1-4bb3-9a35-6a5d5bfd83e1",
+      "type": "MISSING_TELEMETRY",
+      "title": "Missing telemetry detected",
+      "summary": "Provider health adapter returned no live statuses.",
+      "sourceSystem": "ExecutiveOperationsDashboard",
+      "customerId": null,
+      "missionId": null,
+      "metadata": {},
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": null,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 25,
+      "missionUrgency": 30,
+      "operationalRisk": 0.4,
+      "confidenceScore": 0.7
+    },
+    {
+      "findingId": "ops_finding_f76a330b-0410-44c7-9042-ff058a1c27e7",
+      "type": "SYSTEM_HEALTH_WARNING",
+      "title": "Blocked mission",
+      "summary": "Mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20 is blocked at stage COMPANY_RESEARCH.",
+      "sourceSystem": "MissionRegistry",
+      "customerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "missionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "metadata": {},
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": null,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 45,
+      "missionUrgency": 45,
+      "operationalRisk": 0.75,
+      "confidenceScore": 0.7
+    }
+  ],
+  "priorities": [
+    {
+      "findingId": "ops_finding_84e957cd-c9a0-42cf-9800-fba37825f09b",
+      "type": "BLOCKED_MISSION",
+      "title": "Blocked mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "summary": "Mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20 is blocked at COMPANY_RESEARCH.",
+      "sourceSystem": "MissionRegistry",
+      "customerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "missionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "metadata": {
+        "missionType": "WEBSITE_BUILD",
+        "currentStage": "COMPANY_RESEARCH"
+      },
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": 0,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 80,
+      "missionUrgency": 75,
+      "operationalRisk": 0.7,
+      "confidenceScore": 0.7,
+      "priorityScore": 39.95,
+      "priorityBand": "LOW",
+      "urgencyBand": "DEFER",
+      "explanation": "Score=39.95 from customer impact 80, urgency 75, risk 70.00, recovery probability 0.00.",
+      "recommendedHandlingOrder": 1
+    },
+    {
+      "findingId": "ops_finding_f76a330b-0410-44c7-9042-ff058a1c27e7",
+      "type": "SYSTEM_HEALTH_WARNING",
+      "title": "Blocked mission",
+      "summary": "Mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20 is blocked at stage COMPANY_RESEARCH.",
+      "sourceSystem": "MissionRegistry",
+      "customerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "missionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "metadata": {},
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": null,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 45,
+      "missionUrgency": 45,
+      "operationalRisk": 0.75,
+      "confidenceScore": 0.7,
+      "priorityScore": 28.65,
+      "priorityBand": "LOW",
+      "urgencyBand": "DEFER",
+      "explanation": "Score=28.65 from customer impact 45, urgency 45, risk 75.00, recovery probability 0.00.",
+      "recommendedHandlingOrder": 2
+    },
+    {
+      "findingId": "ops_finding_19729ca5-1dcb-47c1-915c-85721b2687b4",
+      "type": "CUSTOMER_INTAKE_GAP",
+      "title": "Customer without routed mission",
+      "summary": "Customer cus_61235351-7169-4d5b-a8fb-602619895413 has no mission record yet.",
+      "sourceSystem": "CustomerRegistry",
+      "customerId": "cus_61235351-7169-4d5b-a8fb-602619895413",
+      "missionId": null,
+      "metadata": {
+        "companyName": "Operations Cycle Demo"
+      },
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": null,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 55,
+      "missionUrgency": 35,
+      "operationalRisk": 0.25,
+      "confidenceScore": 0.7,
+      "priorityScore": 20.95,
+      "priorityBand": "LOW",
+      "urgencyBand": "DEFER",
+      "explanation": "Score=20.95 from customer impact 55, urgency 35, risk 25.00, recovery probability 0.00.",
+      "recommendedHandlingOrder": 3
+    },
+    {
+      "findingId": "ops_finding_8054be12-4ce1-4bb3-9a35-6a5d5bfd83e1",
+      "type": "MISSING_TELEMETRY",
+      "title": "Missing telemetry detected",
+      "summary": "Provider health adapter returned no live statuses.",
+      "sourceSystem": "ExecutiveOperationsDashboard",
+      "customerId": null,
+      "missionId": null,
+      "metadata": {},
+      "estimatedBusinessValue": null,
+      "estimatedRecoveryProbability": null,
+      "blockedDurationHours": null,
+      "deadlineHoursRemaining": null,
+      "customerImpact": 25,
+      "missionUrgency": 30,
+      "operationalRisk": 0.4,
+      "confidenceScore": 0.7,
+      "priorityScore": 16.5,
+      "priorityBand": "LOW",
+      "urgencyBand": "DEFER",
+      "explanation": "Score=16.5 from customer impact 25, urgency 30, risk 40.00, recovery probability 0.00.",
+      "recommendedHandlingOrder": 4
+    }
+  ],
+  "safeActionsConsidered": [
+    {
+      "actionId": "ops_action_439aa929-4484-4b75-bb1f-db17534483c1",
+      "actionType": "REFRESH_DASHBOARD_SNAPSHOT",
+      "missionId": null,
+      "customerId": null,
+      "requestedRole": "VIEWER",
+      "reason": "Refresh executive dashboard snapshot for latest operational visibility.",
+      "reversible": true,
+      "metadata": {}
+    },
+    {
+      "actionId": "ops_action_1ce058d1-0b2e-4ca5-9707-b54eea688c87",
+      "actionType": "REFRESH_PROVIDER_HEALTH",
+      "missionId": null,
+      "customerId": null,
+      "requestedRole": "VIEWER",
+      "reason": "Refresh provider-health telemetry for current cycle.",
+      "reversible": true,
+      "metadata": {}
+    },
+    {
+      "actionId": "ops_action_c177ffc8-66ac-44ef-b12a-299bdaedb0e5",
+      "actionType": "REASSIGN_WORKER",
+      "missionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "customerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "requestedRole": "EXECUTIVE",
+      "reason": "Attempt reversible reassignment after blocked mission detection.",
+      "reversible": true,
+      "metadata": {
+        "missionType": "WEBSITE_BUILD",
+        "currentStage": "COMPANY_RESEARCH"
+      }
+    }
+  ],
+  "safeActionsExecuted": [
+    {
+      "actionId": "ops_action_439aa929-4484-4b75-bb1f-db17534483c1",
+      "actionType": "REFRESH_DASHBOARD_SNAPSHOT",
+      "missionId": null,
+      "customerId": null,
+      "requestedRole": "VIEWER",
+      "reason": "Refresh executive dashboard snapshot for latest operational visibility.",
+      "reversible": true,
+      "metadata": {},
+      "output": {
+        "snapshotRefreshed": true
+      }
+    },
+    {
+      "actionId": "ops_action_1ce058d1-0b2e-4ca5-9707-b54eea688c87",
+      "actionType": "REFRESH_PROVIDER_HEALTH",
+      "missionId": null,
+      "customerId": null,
+      "requestedRole": "VIEWER",
+      "reason": "Refresh provider-health telemetry for current cycle.",
+      "reversible": true,
+      "metadata": {},
+      "output": {
+        "providerHealthRefreshed": true
+      }
+    },
+    {
+      "actionId": "ops_action_c177ffc8-66ac-44ef-b12a-299bdaedb0e5",
+      "actionType": "REASSIGN_WORKER",
+      "missionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "customerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "requestedRole": "EXECUTIVE",
+      "reason": "Attempt reversible reassignment after blocked mission detection.",
+      "reversible": true,
+      "metadata": {
+        "missionType": "WEBSITE_BUILD",
+        "currentStage": "COMPANY_RESEARCH"
+      },
+      "output": {
+        "recovered": true,
+        "reason": null,
+        "reassignedWorkers": [
+          {
+            "workerId": "wrk_23a099a1-ca38-4b14-82d5-f824b2522dbd",
+            "workerName": "Company Research Specialist",
+            "division": "WEBSITE_DIVISION",
+            "specialty": "COMPANY_RESEARCH_SPECIALIST",
+            "capabilities": [
+              "COMPANY_RESEARCH"
+            ],
+            "status": "IDLE",
+            "currentMission": null,
+            "currentStage": null,
+            "lastUpdated": "2026-07-11T19:32:16.366Z",
+            "createdAt": "2026-07-11T19:32:16.347Z"
+          }
+        ],
+        "unavailableSpecialties": []
+      }
+    }
+  ],
+  "actionsBlockedByGovernance": [],
+  "ceoDecisionsRequired": [],
+  "warnings": [],
+  "errors": [],
+  "dataFreshness": [
+    {
+      "section": "executiveOverview",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "ceoDecisionCenter",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "missionOrchestrator",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "operationsLoop",
+      "status": "PARTIAL",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "missionControl",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "workforce",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "customerPipeline",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "opportunityPortfolio",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "providerHealth",
+      "status": "PARTIAL",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "systemHealth",
+      "status": "PARTIAL",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "activityFeed",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    },
+    {
+      "section": "alerts",
+      "status": "AVAILABLE",
+      "checkedAt": "2026-07-11T19:32:16.371Z",
+      "notes": []
+    }
+  ],
+  "nextRecommendedWakeTime": "2026-07-11T19:37:16.373Z",
+  "activeAlerts": [
+    {
+      "alertId": "ops_alert_df8554c4-505d-4150-8a69-96663feb32cc",
+      "type": "MISSION_STALLED",
+      "severity": "INFO",
+      "title": "Blocked mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "summary": "Mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20 is blocked at COMPANY_RESEARCH.",
+      "sourceSystem": "MissionRegistry",
+      "relatedCustomerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "relatedMissionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "firstDetectedAt": "2026-07-11T19:32:16.373Z",
+      "lastDetectedAt": "2026-07-11T19:32:16.373Z",
+      "occurrenceCount": 1,
+      "status": "ACTIVE",
+      "acknowledgmentRequired": false,
+      "recommendedCeoAction": null,
+      "evidence": [
+        "Score=39.95 from customer impact 80, urgency 75, risk 70.00, recovery probability 0.00."
+      ],
+      "correlationId": "ops_finding_84e957cd-c9a0-42cf-9800-fba37825f09b"
+    },
+    {
+      "alertId": "ops_alert_28c5939e-9b19-472e-a7d3-077f80151770",
+      "type": "SYSTEM_HEALTH_DEGRADATION",
+      "severity": "INFO",
+      "title": "Blocked mission",
+      "summary": "Mission mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20 is blocked at stage COMPANY_RESEARCH.",
+      "sourceSystem": "MissionRegistry",
+      "relatedCustomerId": "cus_846f606d-a687-41a0-9e53-e01df6d3c11c",
+      "relatedMissionId": "mis_f8e9eaea-1f60-4095-91e7-15b9f2bdec20",
+      "firstDetectedAt": "2026-07-11T19:32:16.373Z",
+      "lastDetectedAt": "2026-07-11T19:32:16.373Z",
+      "occurrenceCount": 1,
+      "status": "ACTIVE",
+      "acknowledgmentRequired": false,
+      "recommendedCeoAction": null,
+      "evidence": [
+        "Score=28.65 from customer impact 45, urgency 45, risk 75.00, recovery probability 0.00."
+      ],
+      "correlationId": "ops_finding_f76a330b-0410-44c7-9042-ff058a1c27e7"
+    },
+    {
+      "alertId": "ops_alert_43e996eb-7288-4701-9368-76e3ee45dbc5",
+      "type": "CUSTOMER_INTAKE_PROBLEM",
+      "severity": "INFO",
+      "title": "Customer without routed mission",
+      "summary": "Customer cus_61235351-7169-4d5b-a8fb-602619895413 has no mission record yet.",
+      "sourceSystem": "CustomerRegistry",
+      "relatedCustomerId": "cus_61235351-7169-4d5b-a8fb-602619895413",
+      "relatedMissionId": null,
+      "firstDetectedAt": "2026-07-11T19:32:16.373Z",
+      "lastDetectedAt": "2026-07-11T19:32:16.373Z",
+      "occurrenceCount": 1,
+      "status": "ACTIVE",
+      "acknowledgmentRequired": false,
+      "recommendedCeoAction": null,
+      "evidence": [
+        "Score=20.95 from customer impact 55, urgency 35, risk 25.00, recovery probability 0.00."
+      ],
+      "correlationId": "ops_finding_19729ca5-1dcb-47c1-915c-85721b2687b4"
+    },
+    {
+      "alertId": "ops_alert_f55f0afd-703d-4d14-8278-7bf2976d8e20",
+      "type": "MISSING_REQUIRED_DATA",
+      "severity": "INFO",
+      "title": "Missing telemetry detected",
+      "summary": "Provider health adapter returned no live statuses.",
+      "sourceSystem": "ExecutiveOperationsDashboard",
+      "relatedCustomerId": null,
+      "relatedMissionId": null,
+      "firstDetectedAt": "2026-07-11T19:32:16.373Z",
+      "lastDetectedAt": "2026-07-11T19:32:16.373Z",
+      "occurrenceCount": 1,
+      "status": "ACTIVE",
+      "acknowledgmentRequired": false,
+      "recommendedCeoAction": null,
+      "evidence": [
+        "Score=16.5 from customer impact 25, urgency 30, risk 40.00, recovery probability 0.00."
+      ],
+      "correlationId": "ops_finding_8054be12-4ce1-4bb3-9a35-6a5d5bfd83e1"
+    }
+  ]
+}
