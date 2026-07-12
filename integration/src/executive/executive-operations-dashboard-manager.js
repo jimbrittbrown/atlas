@@ -398,6 +398,19 @@ export class ExecutiveOperationsDashboardManager {
       projectionIds.add(websiteProductionProjection.projectionId);
     }
 
+    const notificationObservabilityProjectionEnvelope = this.readProjection({
+      providerId: 'notification.observability.provider',
+      required: false,
+      missingData
+    });
+
+    if (notificationObservabilityProjectionEnvelope?.projectionId) {
+      if (projectionIds.has(notificationObservabilityProjectionEnvelope.projectionId)) {
+        throw new Error(`Duplicate projection identifier detected: ${notificationObservabilityProjectionEnvelope.projectionId}`);
+      }
+      projectionIds.add(notificationObservabilityProjectionEnvelope.projectionId);
+    }
+
     const customerPortalProjectionEnvelope = this.readProjection({
       providerId: 'customer.portal.provider',
       required: false,
@@ -461,6 +474,33 @@ export class ExecutiveOperationsDashboardManager {
       totalReviews: 0,
       awaitingCeoApproval: 0,
       records: []
+    };
+
+    const notificationObservability = notificationObservabilityProjectionEnvelope?.payload ?? {
+      status: DataAvailabilityStatuses.PARTIAL,
+      readOnly: true,
+      projectionInventory: [],
+      freshness: {},
+      deliveryHealth: null,
+      providerHealth: null,
+      queueHealth: null,
+      reliability: null,
+      governance: null,
+      templateHealth: null,
+      operationalIncidents: { total: 0, records: [] },
+      customerHealthFoundation: {
+        internalOnly: true,
+        websiteNotificationHistory: [],
+        deliverySuccess: { total: 0, delivered: 0, failures: 0, successRate: 0 },
+        customerCommunicationHealth: { status: 'UNKNOWN', governanceRiskSignals: 0 },
+        recentRecommendations: [],
+        unresolvedIncidents: 0,
+        notificationTrends: [],
+        futureUseCases: [
+          'Atlas Website Care Reports',
+          'Atlas Business Health Reports'
+        ]
+      }
     };
 
     const customerPortalProjection = customerPortalProjectionEnvelope?.payload ?? {
@@ -554,6 +594,7 @@ export class ExecutiveOperationsDashboardManager {
       createDataFreshnessRecord({ section: 'missionOrchestrator', status: missionOrchestrator.status ?? DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
       createDataFreshnessRecord({ section: 'operationsLoop', status: operationsTelemetryProjection.status ?? DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
       createDataFreshnessRecord({ section: 'websiteProduction', status: websiteProductionProjection?.status ?? websiteProduction?.status ?? DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
+      createDataFreshnessRecord({ section: 'notificationObservability', status: notificationObservabilityProjectionEnvelope?.status ?? notificationObservability?.status ?? DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
       createDataFreshnessRecord({ section: 'websiteBusinessLaunch', status: websiteBusinessLaunch?.status ?? DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
       createDataFreshnessRecord({ section: 'missionControl', status: context.missions.length > 0 ? DataAvailabilityStatuses.AVAILABLE : DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
       createDataFreshnessRecord({ section: 'workforce', status: workforce.status ?? DataAvailabilityStatuses.PARTIAL }, { now: this.now }),
@@ -600,6 +641,7 @@ export class ExecutiveOperationsDashboardManager {
       missionOrchestrator,
       operationsLoop,
       websiteProduction,
+      notificationObservability,
       websiteBusinessLaunch,
       missionControl: filteredMissionControl,
       workforce,
