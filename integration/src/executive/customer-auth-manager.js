@@ -5,6 +5,7 @@ import { normalizeEmail, IdentityErrorCodes, IdentityProviderStatuses } from './
 import { getMetaMap, setMetaValue } from '../storage/provider-backed-state.js';
 import { CustomerOidcAuthTransactionStore } from './customer-oidc-auth-transaction-store.js';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
+import { SecurityEnvelopeCrypto } from './security-envelope-crypto.js';
 
 function nowIso(nowFn) {
   return nowFn?.() ?? new Date().toISOString();
@@ -20,6 +21,10 @@ function nowMs(nowFn) {
 
 function toBase64Url(buffer) {
   return Buffer.from(buffer).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function stableHash(value) {
+  return createHash('sha256').update(String(value ?? ''), 'utf8').digest('hex').slice(0, 16);
 }
 
 function genericAuthFailure() {
@@ -109,7 +114,12 @@ export class CustomerAuthManager {
     this.oidcTransactionStore = new CustomerOidcAuthTransactionStore({
       storageProvider: this.storageProvider,
       now: this.now,
+      verifierCipher: new SecurityEnvelopeCrypto(),
       namespace: `${namespace}.oidc-transactions`
+    });
+
+    this.identityProvider.setTelemetryRecorder?.((eventName, details = {}) => {
+      this.recordProviderTelemetry(eventName, details.providerType ?? this.providerSelection.type);
     });
   }
 
@@ -210,6 +220,32 @@ export class CustomerAuthManager {
     } catch {
       // Audit should never block auth flow.
     }
+  }
+
+  recordProviderTelemetry(eventName, providerType = this.providerSelection.type) {
+    const event = String(eventName ?? '').trim();
+    const provider = String(providerType ?? this.providerSelection.type ?? 'unknown').trim().toLowerCase() || 'unknown';
+    if (!event) return;
+    this.incrementMetric(`securityTelemetry.${event}.total`, 1);
+    this.incrementMetric(`securityTelemetry.${event}.provider.${provider}`, 1);
+  }
+
+  buildSecurityTelemetrySnapshot() {
+    const metric = (name) => Number(this.authMetrics.get(`securityTelemetry.${name}.total`) ?? 0);
+    const loginSuccess = metric('login_success');
+    const loginAttempts = metric('login_attempt');
+    const loginSuccessRate = loginAttempts > 0 ? Number((loginSuccess / loginAttempts).toFixed(4)) : 0;
+    return {
+      loginSuccessRate,
+      callbackFailures: metric('callback_failure'),
+      refreshFailures: metric('refresh_failure'),
+      jwksRefreshCount: metric('jwks_refresh'),
+      unknownKidEvents: metric('unknown_kid'),
+      replayAttempts: metric('replay_attempt'),
+      nonceFailures: metric('nonce_failure'),
+      providerOutages: metric('provider_outage'),
+      logoutFailures: metric('logout_failure')
+    };
   }
 
   getProviderCapabilities() {
@@ -415,11 +451,13 @@ export class CustomerAuthManager {
     if (this.providerBlocked()) return this.rejectBlockedProvider();
 
     const normalizedEmail = normalizeEmail(email);
+    this.recordProviderTelemetry('login_attempt');
 
     const loginResult = this.identityProvider.login({ email: normalizedEmail, password });
     if (!loginResult.ok) {
       this.incrementLoginFailure(normalizedEmail);
       this.incrementMetric('loginFailed', 1);
+      this.recordProviderTelemetry('login_failure');
       const code = loginResult.error?.code;
 
       if (code === IdentityErrorCodes.EMAIL_NOT_VERIFIED) {
@@ -476,6 +514,7 @@ export class CustomerAuthManager {
       metadata: {}
     });
     this.incrementMetric('loginSuccessful', 1);
+    this.recordProviderTelemetry('login_success');
 
     return {
       accepted: true,
@@ -512,6 +551,11 @@ export class CustomerAuthManager {
 
     const requestedProvider = String(provider ?? 'oidc').trim().toLowerCase();
     if (requestedProvider !== String(this.providerSelection.type ?? '').trim().toLowerCase()) {
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'PROVIDER_MISMATCH'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 409,
@@ -522,6 +566,11 @@ export class CustomerAuthManager {
     }
 
     if (requestedProvider !== 'oidc') {
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'INVALID_REQUEST'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 400,
@@ -560,6 +609,11 @@ export class CustomerAuthManager {
     });
 
     if (!transaction.ok) {
+      this.recordAuditEvent('auth_start', {
+        providerType: requestedProvider,
+        outcome: 'FAILED',
+        code: transaction.code
+      });
       return {
         accepted: false,
         status: transaction.code === 'CONFLICT' ? 409 : 400,
@@ -582,6 +636,12 @@ export class CustomerAuthManager {
 
     if (!providerResult || !providerResult.ok) {
       this.oidcTransactionStore.cancelTransaction({ state: resolvedState });
+      this.recordAuditEvent('auth_start', {
+        providerType: requestedProvider,
+        outcome: 'FAILED',
+        code: providerResult?.error?.code ?? 'PROVIDER_UNAVAILABLE'
+      });
+      this.recordProviderTelemetry('provider_outage');
       return {
         accepted: false,
         status: 503,
@@ -592,6 +652,14 @@ export class CustomerAuthManager {
         }
       };
     }
+
+    this.recordAuditEvent('auth_start', {
+      providerType: requestedProvider,
+      outcome: 'STARTED',
+      stateHash: stableHash(resolvedState),
+      nonceHash: stableHash(resolvedNonce),
+      transactionId: transaction.data.transactionId
+    });
 
     return {
       accepted: true,
@@ -646,6 +714,11 @@ export class CustomerAuthManager {
     const normalizedCode = String(code ?? '').trim();
     const normalizedRedirect = String(redirectUri ?? '').trim();
     if (!normalizedState || !normalizedCode) {
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        reason: 'CALLBACK_INPUT_INVALID'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 400,
@@ -654,6 +727,13 @@ export class CustomerAuthManager {
         data: null
       };
     }
+
+    this.recordAuditEvent('callback_received', {
+      providerType: requestedProvider,
+      stateHash: stableHash(normalizedState),
+      codeHash: stableHash(normalizedCode)
+    });
+    this.recordProviderTelemetry('login_attempt');
 
     const reserved = this.oidcTransactionStore.reserveTransaction({
       state: normalizedState,
@@ -666,12 +746,25 @@ export class CustomerAuthManager {
       INVALID_REQUEST: 400,
       NOT_FOUND: 404,
       TOKEN_EXPIRED: 409,
+      TOKEN_INVALID: 401,
       INVALID_STATE: 409,
       PROVIDER_MISMATCH: 409,
       PERSISTENCE_FAILURE: 500
     };
 
     if (!reserved.ok) {
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: reserved.code
+      });
+      this.recordProviderTelemetry('callback_failure');
+      if (reserved.code === 'INVALID_STATE') {
+        this.recordAuditEvent('replay_detected', {
+          providerType: requestedProvider,
+          stateHash: stableHash(normalizedState)
+        });
+        this.recordProviderTelemetry('replay_attempt');
+      }
       return {
         accepted: false,
         status: statusByCode[reserved.code] ?? 400,
@@ -705,6 +798,10 @@ export class CustomerAuthManager {
       const retryable = providerCode === IdentityErrorCodes.PROVIDER_UNAVAILABLE;
       const settle = retryable ? releaseReservation() : commitReservation('CALLBACK_FAILED');
       if (!settle?.ok) {
+        this.recordAuditEvent('callback_validation_failed', {
+          providerType: requestedProvider,
+          code: 'PERSISTENCE_FAILURE'
+        });
         return {
           accepted: false,
           status: 500,
@@ -712,6 +809,39 @@ export class CustomerAuthManager {
           reason: 'Failed to persist callback transaction state.',
           data: null
         };
+      }
+
+      this.recordAuditEvent('token_exchange_failed', {
+        providerType: requestedProvider,
+        code: providerCode
+      });
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: providerCode
+      });
+      this.recordProviderTelemetry('callback_failure');
+      if (providerCode === IdentityErrorCodes.PROVIDER_UNAVAILABLE || providerCode === IdentityErrorCodes.PROVIDER_TIMEOUT) {
+        this.recordAuditEvent('provider_outage_detected', {
+          providerType: requestedProvider,
+          code: providerCode
+        });
+        this.recordProviderTelemetry('provider_outage');
+      }
+
+      const validationReason = String(providerResult?.error?.details?.reason ?? '').trim().toUpperCase();
+      if (validationReason === 'NONCE_MISMATCH' || validationReason === 'NONCE_MISSING') {
+        this.recordAuditEvent('nonce_mismatch_detected', {
+          providerType: requestedProvider,
+          stateHash: stableHash(normalizedState)
+        });
+        this.recordProviderTelemetry('nonce_failure');
+      }
+      if (validationReason === 'STATE_MISMATCH' || validationReason === 'STATE_MISSING') {
+        this.recordAuditEvent('replay_detected', {
+          providerType: requestedProvider,
+          stateHash: stableHash(normalizedState)
+        });
+        this.recordProviderTelemetry('replay_attempt');
       }
 
       return {
@@ -727,6 +857,10 @@ export class CustomerAuthManager {
     }
 
     const claims = providerResult.data?.claims ?? {};
+    this.recordAuditEvent('token_verified', {
+      providerType: requestedProvider,
+      providerUserIdHash: stableHash(providerResult.data?.providerUserId ?? claims.sub ?? '')
+    });
     const providerUserId = String(providerResult.data?.providerUserId ?? claims.sub ?? '').trim();
     const normalizedEmail = normalizeEmail(providerResult.data?.email ?? claims.email ?? '');
     const emailVerified = Boolean(providerResult.data?.emailVerified ?? claims.email_verified ?? false);
@@ -742,6 +876,11 @@ export class CustomerAuthManager {
           data: null
         };
       }
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'TOKEN_INVALID'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 401,
@@ -767,6 +906,11 @@ export class CustomerAuthManager {
           data: null
         };
       }
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'PROVIDER_MISMATCH'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 409,
@@ -797,6 +941,11 @@ export class CustomerAuthManager {
           data: null
         };
       }
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'NOT_FOUND'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 404,
@@ -829,6 +978,11 @@ export class CustomerAuthManager {
           data: null
         };
       }
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'PERSISTENCE_FAILURE'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 500,
@@ -864,6 +1018,11 @@ export class CustomerAuthManager {
           data: null
         };
       }
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: lifecycle.code
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 403,
@@ -894,6 +1053,11 @@ export class CustomerAuthManager {
           data: null
         };
       }
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'SESSION_CREATION_FAILED'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 500,
@@ -908,6 +1072,11 @@ export class CustomerAuthManager {
     const consumed = commitReservation('CALLBACK_COMPLETED');
     if (!consumed.ok) {
       this.sessionManager.revokeSession({ sessionId: session.session.sessionId, reason: 'CALLBACK_TRANSACTION_COMMIT_FAILED' });
+      this.recordAuditEvent('callback_validation_failed', {
+        providerType: requestedProvider,
+        code: 'PERSISTENCE_FAILURE'
+      });
+      this.recordProviderTelemetry('callback_failure');
       return {
         accepted: false,
         status: 500,
@@ -918,6 +1087,12 @@ export class CustomerAuthManager {
     }
 
     this.incrementMetric('loginSuccessful', 1);
+    this.recordProviderTelemetry('login_success');
+    this.recordAuditEvent('atlas_session_issued', {
+      providerType: requestedProvider,
+      customerId: effectiveCustomer.customerId,
+      sessionId: session.session.sessionId
+    });
     this.persistProviderSession(effectiveCustomer.customerId, {
       providerType: this.providerSelection.type,
       providerUserId,
@@ -953,6 +1128,13 @@ export class CustomerAuthManager {
     });
 
     if (!consumed.ok) {
+      if (consumed.code === 'INVALID_STATE') {
+        this.recordAuditEvent('replay_detected', {
+          providerType: provider,
+          stateHash: stableHash(state)
+        });
+        this.recordProviderTelemetry('replay_attempt', provider);
+      }
       const statusByCode = {
         INVALID_REQUEST: 400,
         NOT_FOUND: 404,
@@ -1071,6 +1253,15 @@ export class CustomerAuthManager {
     });
 
     if (!federated || !federated.ok) {
+      this.recordProviderTelemetry('logout_failure');
+      if (federated?.error?.code === IdentityErrorCodes.PROVIDER_UNAVAILABLE || federated?.error?.code === IdentityErrorCodes.PROVIDER_TIMEOUT) {
+        this.recordAuditEvent('provider_outage_detected', {
+          customerId: validation.session.customerId,
+          sessionId: validation.session.sessionId,
+          code: federated?.error?.code
+        });
+        this.recordProviderTelemetry('provider_outage');
+      }
       this.recordAuditEvent('federated_logout_failed', {
         customerId: validation.session.customerId,
         sessionId: validation.session.sessionId,
@@ -1206,6 +1397,16 @@ export class CustomerAuthManager {
         providerType: this.providerSelection.type,
         code
       });
+      this.recordProviderTelemetry('refresh_failure');
+      if (code === IdentityErrorCodes.PROVIDER_UNAVAILABLE || code === IdentityErrorCodes.PROVIDER_TIMEOUT) {
+        this.recordAuditEvent('provider_outage_detected', {
+          customerId: validation.session.customerId,
+          sessionId: validation.session.sessionId,
+          providerType: this.providerSelection.type,
+          code
+        });
+        this.recordProviderTelemetry('provider_outage');
+      }
 
       const revokeCodes = new Set([
         IdentityErrorCodes.TOKEN_EXPIRED,
@@ -1251,6 +1452,7 @@ export class CustomerAuthManager {
         sessionId: validation.session.sessionId,
         code: 'SESSION_REFRESH_FAILED'
       });
+      this.recordProviderTelemetry('refresh_failure');
       this.incrementMetric('sessionRefreshFailed', 1);
       return {
         accepted: false,
@@ -1414,6 +1616,7 @@ export class CustomerAuthManager {
         csrfMalformed: Number(this.authMetrics.get('csrfMalformed') ?? 0),
         protectedRequestDenied: Number(this.authMetrics.get('protectedRequestDenied') ?? 0)
       },
+      securityTelemetry: this.buildSecurityTelemetrySnapshot(),
       suspendedCount,
       disabledCount,
       archivedCount,

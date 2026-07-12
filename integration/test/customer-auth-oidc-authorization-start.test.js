@@ -85,6 +85,11 @@ test('successful transaction creation', async () => {
     assert.equal(started.data.authorizationUrl.includes('nonce='), true);
     assert.equal(started.data.authorizationUrl.includes('code_challenge='), true);
     assert.equal(started.data.expiresAt, '2026-01-01T00:10:00.000Z');
+
+    const stored = manager.oidcTransactionStore.records.get(started.data.state);
+    assert.equal('pkceVerifier' in stored, false);
+    assert.equal(typeof stored.pkceVerifierEnvelope?.ciphertext, 'string');
+    assert.equal(typeof stored.pkceVerifierEnvelope?.keyVersion, 'string');
   });
 });
 

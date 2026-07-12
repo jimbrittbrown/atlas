@@ -1,5 +1,6 @@
 import { loadRecordMap, upsertRecord, deleteRecord } from '../storage/provider-backed-state.js';
 import { randomUUID } from 'node:crypto';
+import { SecurityEnvelopeCrypto } from './security-envelope-crypto.js';
 
 function nowMs(nowFn) {
   const value = nowFn?.();
@@ -32,7 +33,8 @@ export class CustomerOidcAuthTransactionStore {
     storageProvider,
     now,
     namespace = 'executive.customer-auth.oidc-transactions',
-    defaultTtlMs = 10 * 60 * 1000
+    defaultTtlMs = 10 * 60 * 1000,
+    verifierCipher = null
   } = {}) {
     this.storageProvider = storageProvider ?? null;
     this.now = now;
@@ -40,7 +42,57 @@ export class CustomerOidcAuthTransactionStore {
     this.defaultTtlMs = Number.isFinite(Number(defaultTtlMs)) && Number(defaultTtlMs) > 0
       ? Number(defaultTtlMs)
       : 10 * 60 * 1000;
+    this.verifierCipher = verifierCipher ?? new SecurityEnvelopeCrypto();
     this.records = loadRecordMap({ provider: this.storageProvider, namespace: this.namespace });
+  }
+
+  encryptPkceVerifier({ state, pkceVerifier } = {}) {
+    return this.verifierCipher.encryptString(String(pkceVerifier), {
+      aad: `oidc_txn:${String(state ?? '').trim()}`
+    });
+  }
+
+  decryptPkceVerifier({ state, envelope } = {}) {
+    return this.verifierCipher.decryptString(envelope, {
+      aad: `oidc_txn:${String(state ?? '').trim()}`
+    });
+  }
+
+  materializeRecord(record) {
+    if (!record || typeof record !== 'object') {
+      return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction record is missing or malformed.', data: null };
+    }
+
+    if (record.pkceVerifierEnvelope && typeof record.pkceVerifierEnvelope === 'object') {
+      try {
+        const pkceVerifier = this.decryptPkceVerifier({ state: record.state, envelope: record.pkceVerifierEnvelope });
+        return {
+          ok: true,
+          code: 'OK',
+          reason: null,
+          data: {
+            ...record,
+            pkceVerifier,
+            pkceVerifierEnvelope: record.pkceVerifierEnvelope,
+            pkceVerifierCiphertext: true
+          }
+        };
+      } catch {
+        return {
+          ok: false,
+          code: 'TOKEN_INVALID',
+          reason: 'OIDC transaction verifier decryption failed.',
+          data: null
+        };
+      }
+    }
+
+    return {
+      ok: false,
+      code: 'TOKEN_INVALID',
+      reason: 'OIDC transaction verifier envelope is missing.',
+      data: null
+    };
   }
 
   persistRecord(key, value) {
@@ -92,11 +144,18 @@ export class CustomerOidcAuthTransactionStore {
     const createdAtIso = Number.isFinite(createdMs) ? new Date(createdMs).toISOString() : nowIso(this.now);
     const expiresAtIso = new Date((Number.isFinite(createdMs) ? createdMs : nowMs(this.now)) + ttl).toISOString();
 
+    let pkceVerifierEnvelope;
+    try {
+      pkceVerifierEnvelope = this.encryptPkceVerifier({ state: key, pkceVerifier });
+    } catch {
+      return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to encrypt PKCE verifier.', data: null };
+    }
+
     const record = {
       transactionId: transactionId ?? `oidc_txn_${key}`,
       state: key,
       nonce: String(nonce),
-      pkceVerifier: String(pkceVerifier),
+      pkceVerifierEnvelope,
       providerType: String(providerType),
       redirectUri: String(redirectUri),
       portalRedirectUri: isText(portalRedirectUri) ? String(portalRedirectUri) : null,
@@ -137,6 +196,11 @@ export class CustomerOidcAuthTransactionStore {
       return { ok: false, code: 'INVALID_STATE', reason: 'OIDC transaction has already been consumed.', data: null };
     }
 
+    const materialized = this.materializeRecord(record);
+    if (!materialized.ok) {
+      return materialized;
+    }
+
     if (isText(providerType) && String(record.providerType) !== String(providerType)) {
       return { ok: false, code: 'PROVIDER_MISMATCH', reason: 'OIDC provider does not match transaction.', data: null };
     }
@@ -165,7 +229,16 @@ export class CustomerOidcAuthTransactionStore {
     };
     try {
       this.persistRecord(key, reserved);
-      return { ok: true, code: 'OK', reason: null, data: reserved };
+      return {
+        ok: true,
+        code: 'OK',
+        reason: null,
+        data: {
+          ...reserved,
+          pkceVerifier: materialized.data.pkceVerifier,
+          pkceVerifierCiphertext: true
+        }
+      };
     } catch {
       return { ok: false, code: 'PERSISTENCE_FAILURE', reason: 'Failed to reserve OIDC transaction.', data: null };
     }

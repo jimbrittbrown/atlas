@@ -123,6 +123,7 @@ export class OidcIdentityProviderAdapter {
     logger,
     config = {},
     now,
+    telemetryRecorder = null,
     discoverySoftTtlMs = 10 * 60 * 1000,
     discoveryHardTtlMs = 24 * 60 * 60 * 1000,
     jwksSoftTtlMs = 10 * 60 * 1000,
@@ -146,8 +147,24 @@ export class OidcIdentityProviderAdapter {
       audience: config.audience ?? process.env.ATLAS_IDENTITY_OIDC_AUDIENCE ?? '',
       managementToken: config.managementToken ?? process.env.ATLAS_IDENTITY_OIDC_MANAGEMENT_TOKEN ?? ''
     };
+    this.telemetryRecorder = typeof telemetryRecorder === 'function' ? telemetryRecorder : null;
     this.discoveryCache = new Map();
     this.jwksCache = new Map();
+  }
+
+  setTelemetryRecorder(recorder) {
+    this.telemetryRecorder = typeof recorder === 'function' ? recorder : null;
+  }
+
+  recordTelemetry(eventName, details = {}) {
+    try {
+      this.telemetryRecorder?.(String(eventName ?? '').trim(), {
+        providerType: 'oidc',
+        ...details
+      });
+    } catch {
+      // Telemetry must not interrupt auth flow.
+    }
   }
 
   getProviderName() {
@@ -176,7 +193,7 @@ export class OidcIdentityProviderAdapter {
       connectivity: IdentityProviderStatuses.CONNECTED,
       warnings: [
         'OIDC adapter is partial and not production-complete.',
-        'Cryptographic validation is available; callback exchange, refresh, and logout federation are not implemented yet.'
+        'Cryptographic validation, callback exchange, refresh, and logout federation are available behind controlled rollout.'
       ]
     };
   }
@@ -677,6 +694,10 @@ export class OidcIdentityProviderAdapter {
         return this.success({ metadata: cached.metadata, cache: { hit: true, stale: true, ageMs: cachedValidity.ageMs } });
       }
 
+      this.recordTelemetry('provider_outage', {
+        stage: 'discovery'
+      });
+
       return this.failure({
         code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
         message: 'OIDC discovery failed or returned invalid metadata.',
@@ -726,6 +747,10 @@ export class OidcIdentityProviderAdapter {
     };
 
     this.jwksCache.set(issuer, cacheRecord);
+    this.recordTelemetry('jwks_refresh', {
+      stage: 'jwks_fetch',
+      keyCount: byKid.size
+    });
     return cacheRecord;
   }
 
@@ -775,6 +800,11 @@ export class OidcIdentityProviderAdapter {
         return this.success({ key: staleKey, cache: { hit: true, stale: true, refreshed: true } });
       }
 
+      this.recordTelemetry('unknown_kid', {
+        kid,
+        issuer
+      });
+
       return this.failure({
         code: IdentityErrorCodes.TOKEN_INVALID,
         message: 'Signing key not found after JWKS refresh.',
@@ -791,6 +821,10 @@ export class OidcIdentityProviderAdapter {
         });
         return this.success({ key: staleKey, cache: { hit: true, stale: true, refreshed: false } });
       }
+
+      this.recordTelemetry('provider_outage', {
+        stage: 'jwks_resolution'
+      });
 
       return this.failure({
         code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
