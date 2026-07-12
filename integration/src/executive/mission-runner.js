@@ -9,6 +9,10 @@ import { ImageWorker } from '../production/image-worker.js';
 import { VideoWorker } from '../production/video-worker.js';
 import { QualityReviewEngine } from '../production/quality-review-engine.js';
 import { PublishingWorker } from '../production/publishing-worker.js';
+import { ElevenLabsVoiceService } from '../services/voice-service.js';
+import { GoogleImagenService } from '../services/image-service.js';
+import { GoogleVideoAssemblyService } from '../services/video-service.js';
+import { MissionRuntimeOrchestrator } from '../runtime/mission-runtime-orchestrator.js';
 
 export class MissionRunner {
   constructor({
@@ -19,7 +23,8 @@ export class MissionRunner {
     programManager,
     workers,
     qualityReviewEngine,
-    publishingWorker
+    publishingWorker,
+    missionRuntimeOrchestrator
   } = {}) {
     this.enterpriseKnowledgeLibrary = enterpriseKnowledgeLibrary ?? new EnterpriseKnowledgeLibrary();
     this.businessEvaluationApplication = businessEvaluationApplication ?? null;
@@ -28,18 +33,32 @@ export class MissionRunner {
     this.programManager = programManager ?? new ProgramManager();
     this.workers = workers ?? {
       scriptWorker: new YouTubeScriptWorker(),
-      voiceWorker: new VoiceWorker({ programManager: this.programManager }),
-      imageWorker: new ImageWorker({ programManager: this.programManager }),
-      videoWorker: new VideoWorker({ programManager: this.programManager })
+      voiceWorker: new VoiceWorker({
+        programManager: this.programManager,
+        voiceService: new ElevenLabsVoiceService({ configurationService: this.configurationService })
+      }),
+      imageWorker: new ImageWorker({
+        programManager: this.programManager,
+        imageService: new GoogleImagenService({ configurationService: this.configurationService })
+      }),
+      videoWorker: new VideoWorker({
+        programManager: this.programManager,
+        videoService: new GoogleVideoAssemblyService({ configurationService: this.configurationService })
+      })
     };
     this.qualityReviewEngine = qualityReviewEngine ?? new QualityReviewEngine();
     this.publishingWorker = publishingWorker ?? new PublishingWorker({ programManager: this.programManager });
+    this.missionRuntimeOrchestrator = missionRuntimeOrchestrator ?? new MissionRuntimeOrchestrator({
+      launchPlanGenerator: this.businessLaunchPlanGenerator,
+      executionPlanGenerator: this.businessExecutionPlanGenerator,
+      workers: this.workers,
+      qualityReviewEngine: this.qualityReviewEngine,
+      publishingWorker: this.publishingWorker
+    });
   }
 
   async runMission({ playbookId, businessRequest = {} } = {}) {
-    if (!this.businessEvaluationApplication || typeof this.businessEvaluationApplication.evaluateBusinessOpportunity !== 'function') {
-      throw new Error('MissionRunner requires a BusinessEvaluationApplication instance.');
-    }
+    this.validateMissionRequest({ playbookId, businessRequest });
 
     const playbook = this.enterpriseKnowledgeLibrary.getPlaybook(playbookId);
 
@@ -58,40 +77,21 @@ export class MissionRunner {
     const executionPlan = this.businessExecutionPlanGenerator.generate(launchPlan);
 
     this.programManager.assignTasks(executionPlan, 'MISSION-RUNNER');
-    const { scriptResult, voiceResult, imageResult, videoResult } = await this.runWorkerPipeline({
+    const runtimeRequest = this.buildRuntimeRequest({
       missionId,
-      playbook,
       businessRequest,
-      decisionPackage
-    });
-
-    const qualityReview = this.qualityReviewEngine.review({
-      script: scriptResult.script,
-      voiceOutput: voiceResult.audioFile,
-      imageOutputs: imageResult.imageFiles,
-      videoOutput: videoResult.videoFile,
-      metadata: {
-        missionId,
-        playbookId,
-        decisionRecommendation: decisionPackage.recommendation ?? 'UNKNOWN'
+      decisionPackage,
+      playbook,
+      objective: executiveMission.objective,
+      plan: {
+        launchPlan,
+        executionPlan
       }
     });
+    const runtimeResult = await this.missionRuntimeOrchestrator.runMission(runtimeRequest);
 
-    const publishingAssignment = this.createAssignment({
-      assignmentId: `${missionId}-PUBLISH`,
-      workerId: 'PUBLISHING-WORKER-001',
-      taskId: 'TASK-PUBLISH',
-      metadata: {
-        videoAsset: videoResult.videoFile,
-        thumbnailAsset: imageResult.imageFiles?.[0] ?? null,
-        title: scriptResult.scriptTitle ?? `${playbook.title} Mission Output`,
-        description: businessRequest.objective ?? playbook.objective,
-        tags: [playbook.playbookId, missionId.toLowerCase()],
-        targetPlatform: businessRequest.targetPlatform ?? 'youtube',
-        scheduledPublishTime: businessRequest.scheduledPublishTime ?? 'SCHEDULED_PUBLISH_TIME_PLACEHOLDER'
-      }
-    });
-    const publishingResult = await this.publishingWorker.execute(publishingAssignment);
+    const qualityReview = runtimeResult.runtimeContext.artifacts.qualityReview;
+    const publishingResult = runtimeResult.runtimeContext.artifacts.publishing;
 
     const progressReport = this.programManager.generateExecutiveProgressReport({ tasks: this.programManager.assignments });
     const status = this.resolveMissionStatus({ qualityReview, publishingResult });
@@ -105,13 +105,59 @@ export class MissionRunner {
       progressReport,
       qualityReview,
       publishingResult,
+      runtimeResult,
       executiveSummary: this.buildExecutiveSummary({
         status,
         missionId,
         decisionPackage,
         qualityReview,
-        publishingResult
+        publishingResult,
+        runtimeResult
       })
+    };
+  }
+
+  validateMissionRequest({ playbookId, businessRequest }) {
+    if (!this.businessEvaluationApplication || typeof this.businessEvaluationApplication.evaluateBusinessOpportunity !== 'function') {
+      throw new Error('MissionRunner requires a BusinessEvaluationApplication instance.');
+    }
+
+    if (typeof playbookId !== 'string' || playbookId.trim().length === 0) {
+      throw new Error('MissionRunner requires playbookId.');
+    }
+
+    if (!businessRequest || typeof businessRequest !== 'object') {
+      throw new Error('MissionRunner requires businessRequest as an object.');
+    }
+  }
+
+  buildRuntimeRequest({ missionId, businessRequest, decisionPackage, playbook, objective, plan }) {
+    return {
+      missionId,
+      requestId: businessRequest.id ?? missionId,
+      businessId: businessRequest.businessId ?? 'SYSTEM_INTERNAL',
+      businessName: businessRequest.businessName ?? decisionPackage.businessName ?? playbook.title,
+      objective,
+      topic: businessRequest.topic ?? decisionPackage.businessName ?? playbook.title,
+      audience: businessRequest.audience ?? 'General Audience',
+      targetLength: businessRequest.targetLength ?? 900,
+      style: businessRequest.style ?? 'Cinematic Horror',
+      voiceStyle: businessRequest.voiceStyle ?? 'Cinematic Horror',
+      language: businessRequest.language ?? 'en-US',
+      targetDuration: businessRequest.targetDuration ?? 60,
+      sceneDescription: businessRequest.sceneDescription ?? 'Primary promotional scene',
+      artStyle: businessRequest.artStyle ?? 'Cinematic Illustration',
+      imageCount: businessRequest.imageCount ?? 3,
+      targetFormat: businessRequest.targetFormat ?? 'mp4',
+      targetResolution: businessRequest.targetResolution ?? '1920x1080',
+      targetPlatform: businessRequest.targetPlatform ?? 'youtube',
+      categoryId: businessRequest.categoryId ?? '22',
+      publishTime: businessRequest.publishTime ?? null,
+      scheduledPublishTime: businessRequest.scheduledPublishTime ?? 'SCHEDULED_PUBLISH_TIME_PLACEHOLDER',
+      publishingMode: businessRequest.runtimePolicy?.publishingMode ?? 'NONE',
+      stopAfterReleaseCandidate: businessRequest.runtimePolicy?.stopAfterReleaseCandidate ?? false,
+      decisionPackage,
+      plan
     };
   }
 
@@ -201,19 +247,45 @@ export class MissionRunner {
   }
 
   resolveMissionStatus({ qualityReview, publishingResult }) {
+    if (publishingResult?.status === 'STOPPED_AFTER_RELEASE_CANDIDATE') {
+      return 'RELEASE_CANDIDATE_CREATED';
+    }
+
     if (!qualityReview.passed) {
       return 'QUALITY_BLOCKED';
     }
 
-    if (publishingResult.publishStatus !== 'SCHEDULED') {
+    if (String(publishingResult.publishStatus ?? '').toUpperCase().trim() === 'NOT_REQUESTED') {
+      return 'MISSION_COMPLETED';
+    }
+
+    const publishStatus = String(publishingResult.publishStatus ?? '').toUpperCase().trim();
+
+    if (!(publishStatus === 'SCHEDULED' || publishStatus.startsWith('PUBLISHED'))) {
       return 'PUBLISHING_BLOCKED';
     }
 
     return 'MISSION_COMPLETED';
   }
 
-  buildExecutiveSummary({ status, missionId, decisionPackage, qualityReview, publishingResult }) {
-    return `${missionId} is ${status}. Recommendation: ${decisionPackage.recommendation ?? 'NO_RECOMMENDATION'}. Quality passed: ${qualityReview.passed}. Publishing: ${publishingResult.publishStatus}.`;
+  buildExecutiveSummary({ status, missionId, decisionPackage, qualityReview, publishingResult, runtimeResult }) {
+    const artifacts = runtimeResult?.runtimeContext?.artifacts ?? {};
+    const inventory = artifacts.releaseCandidatePackage?.assetInventory ?? {};
+    const videoPath = inventory.videoOutput ?? artifacts.video?.videoFile ?? 'UNAVAILABLE';
+    const audioPath = inventory.voiceOutput ?? artifacts.voice?.audioFile ?? 'UNAVAILABLE';
+    const imagePaths = Array.isArray(inventory.imageOutputs) && inventory.imageOutputs.length > 0
+      ? inventory.imageOutputs
+      : (Array.isArray(artifacts.images?.imageFiles) ? artifacts.images.imageFiles : []);
+    const executiveReportPath = artifacts.executiveReportPath ?? 'UNAVAILABLE';
+    const releaseCandidatePackagePath = artifacts.releaseCandidatePackagePath ?? 'UNAVAILABLE';
+
+    const summary = `${missionId} is ${status}. Recommendation: ${decisionPackage.recommendation ?? 'NO_RECOMMENDATION'}. Quality passed: ${qualityReview.passed}. Publishing: ${publishingResult.publishStatus}. Video ID: ${publishingResult.videoId ?? 'UNAVAILABLE'}.`;
+
+    if (!artifacts.releaseCandidatePackage) {
+      return summary;
+    }
+
+    return `${summary} Artifact paths: mp4=${videoPath}; audio=${audioPath}; images=${imagePaths.length > 0 ? imagePaths.join(', ') : 'UNAVAILABLE'}; executiveReport=${executiveReportPath}; releaseCandidatePackage=${releaseCandidatePackagePath}.`;
   }
 
   buildMissionId(playbookId, businessRequest) {

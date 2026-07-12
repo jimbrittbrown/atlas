@@ -3,6 +3,34 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "framer:validate-startup": "node scripts/validate-framer-startup-config-v1.js",
+    "framer:test-readonly-live": "node scripts/run-framer-readonly-connection-test-v1.js",
+    "framer:capability-report-v2": "node scripts/run-framer-read-engine-v2-capability-report.js",
+    "website:builder-mission-v1": "node scripts/run-website-builder-mission-v1.js",
+    "website:demonstration-mission-v1": "node scripts/run-website-demonstration-mission-v1.js",
+    "website:executive-review-package-v1": "node scripts/run-website-executive-review-package-v1.js",
+    "customer-intake:mission-control-v1": "node scripts/run-customer-intake-mission-control-v1.js",
+    "workforce:director-v1": "node scripts/run-workforce-director-v1.js",
+    "executive-planning:system-v1": "node scripts/run-executive-planning-system-v1.js",
+    "executive:operations-dashboard-v1": "node scripts/run-executive-operations-dashboard-v1.js",
+    "executive:dashboard-api-v1": "node scripts/run-executive-dashboard-api-v1.js",
+    "executive:ceo-decision-center-v1": "node scripts/run-ceo-decision-center-v1.js",
+    "executive:mission-orchestrator-v1": "node scripts/run-executive-mission-orchestrator-v1.js",
+    "executive:mission-control-api-v1": "node scripts/run-executive-mission-control-api-v1.js",
+    "executive:operations-cycle-v1:dry-run": "ATLAS_OPERATIONS_LOOP_DRY_RUN=true node scripts/run-executive-operations-cycle-v1.js",
+    "executive:operations-cycle-v1:live": "ATLAS_OPERATIONS_LOOP_DRY_RUN=false node scripts/run-executive-operations-cycle-v1.js",
+    "executive:operations-loop-v1": "node scripts/run-executive-operations-loop-v1.js",
+    "executive:operations-loop:v1:validate": "node scripts/run-executive-operations-loop-v1-validation.js",
+    "executive:persistent-operations:phase2:validate": "node scripts/run-persistent-operations-phase2-validation.js",
+    "executive:website-production-manager:v1:validate": "node scripts/run-website-production-manager-v1-validation.js",
+    "executive:website-production-execution-pipeline:v1:validate": "node scripts/run-website-production-execution-pipeline-v1-validation.js",
+    "executive:website-business-launch-stack:v1:validate": "node scripts/run-website-business-launch-stack-v1-validation.js",
+    "executive:customer-portal:v1:validate": "node scripts/run-customer-portal-v1-validation.js",
+    "executive:customer-identity-secure-session:v1:validate": "node scripts/run-customer-identity-secure-session-v1-validation.js"
+  },
+  "dependencies": {
+    "framer-api": "^0.1.22",
+    "pg": "^8.22.0"
   }
 }

@@ -138,7 +138,10 @@ export class ProductionAdapter {
           attempt,
           errorCode: normalizedError.code,
           retriable: normalizedError.retriable,
-          willRetry: shouldRetry
+          willRetry: shouldRetry,
+          status: normalizedError.status ?? null,
+          providerError: normalizedError.providerError ?? null,
+          providerResponseBody: normalizedError.providerResponseBody ?? null
         });
 
         if (shouldRetry) {
@@ -307,6 +310,9 @@ export class ProductionAdapter {
         timeout: false,
         status,
         retryAfterMs: this.resolveRetryAfterMs(error),
+        providerResponseBody: error?.providerResponseBody ?? null,
+        providerResponseJson: error?.providerResponseJson ?? null,
+        providerError: error?.providerError ?? null,
         providerId: context.providerId ?? this.providerId,
         operation: context.operation ?? 'execute',
         attempt: context.attempt ?? 1
@@ -321,6 +327,26 @@ export class ProductionAdapter {
         timeout: false,
         status,
         retryAfterMs: null,
+        providerResponseBody: error?.providerResponseBody ?? null,
+        providerResponseJson: error?.providerResponseJson ?? null,
+        providerError: error?.providerError ?? null,
+        providerId: context.providerId ?? this.providerId,
+        operation: context.operation ?? 'execute',
+        attempt: context.attempt ?? 1
+      };
+    }
+
+    if (status >= 400 && status <= 499) {
+      return {
+        code: `HTTP_${status}`,
+        message: error.message ?? `Provider request failed with status ${status}.`,
+        retriable: false,
+        timeout: false,
+        status,
+        retryAfterMs: null,
+        providerResponseBody: error?.providerResponseBody ?? null,
+        providerResponseJson: error?.providerResponseJson ?? null,
+        providerError: error?.providerError ?? null,
         providerId: context.providerId ?? this.providerId,
         operation: context.operation ?? 'execute',
         attempt: context.attempt ?? 1
