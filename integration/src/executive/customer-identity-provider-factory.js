@@ -29,7 +29,7 @@ export function createCustomerIdentityProvider({
       warnings.push('OIDC provider selected but not configured.');
     }
     if (!oidcExperimentalEnabled) {
-      warnings.push('OIDC provider is foundation-only; set ATLAS_IDENTITY_OIDC_EXPERIMENTAL_ENABLE=true only for controlled testing.');
+      warnings.push('OIDC provider is partial and gated; set ATLAS_IDENTITY_OIDC_EXPERIMENTAL_ENABLE=true only for controlled testing.');
     }
 
     return {
