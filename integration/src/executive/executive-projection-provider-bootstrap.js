@@ -1,5 +1,6 @@
 import { DataAvailabilityStatuses } from './executive-operations-dashboard-contracts.js';
 import { ExecutiveProjectionProviderRegistry } from './executive-projection-provider-registry.js';
+import { NotificationObservabilityProjectionProvider } from './notification-observability-projection-provider.js';
 
 function isoNow(nowFn) {
   return nowFn?.() ?? new Date().toISOString();
@@ -47,6 +48,13 @@ export function createExecutiveProjectionProviderRegistry({
   operationsTelemetryAggregator,
   websiteProductionManager,
   customerPortalManager,
+  notificationObservabilityProvider = null,
+  notificationDeliveryCore = null,
+  notificationReliabilitySubsystem = null,
+  notificationGovernanceIntegration = null,
+  notificationTemplateDomain = null,
+  notificationEmailDispatcherBridge = null,
+  notificationWebhookDispatcherBridge = null,
   now,
   logger,
   providers = []
@@ -184,6 +192,23 @@ export function createExecutiveProjectionProviderRegistry({
       }, { now });
     }
   });
+
+  const resolvedNotificationProvider = notificationObservabilityProvider
+    ?? ((notificationDeliveryCore && notificationReliabilitySubsystem && notificationGovernanceIntegration && notificationTemplateDomain)
+      ? new NotificationObservabilityProjectionProvider({
+        deliveryCore: notificationDeliveryCore,
+        reliabilitySubsystem: notificationReliabilitySubsystem,
+        governanceIntegration: notificationGovernanceIntegration,
+        templateDomain: notificationTemplateDomain,
+        emailDispatcherBridge: notificationEmailDispatcherBridge,
+        webhookDispatcherBridge: notificationWebhookDispatcherBridge,
+        now
+      })
+      : null);
+
+  if (resolvedNotificationProvider && typeof resolvedNotificationProvider.createProviderContract === 'function') {
+    registry.registerProvider(resolvedNotificationProvider.createProviderContract({ required: false }));
+  }
 
   registry.registerProviders(providers);
 
