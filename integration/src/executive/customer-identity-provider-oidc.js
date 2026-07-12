@@ -70,6 +70,13 @@ function hasText(value) {
   return String(value ?? '').trim().length > 0;
 }
 
+function toScopeText(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item ?? '').trim()).filter(Boolean).join(' ');
+  }
+  return String(value ?? '').trim();
+}
+
 export class OidcIdentityProviderAdapter {
   constructor({
     fetchImpl = globalThis.fetch,
@@ -132,6 +139,73 @@ export class OidcIdentityProviderAdapter {
         'Cryptographic validation is available; callback exchange, refresh, and logout federation are not implemented yet.'
       ]
     };
+  }
+
+  async startAuthorization({
+    state,
+    nonce,
+    redirectUri,
+    pkceChallenge,
+    pkceMethod = 'S256',
+    scope = 'openid profile email',
+    prompt = null,
+    loginHint = null,
+    additionalParams = {}
+  } = {}) {
+    if (!this.isConfigured()) return this.notConfiguredResult();
+    if (!hasText(state) || !hasText(nonce) || !hasText(redirectUri) || !hasText(pkceChallenge)) {
+      return this.failure({
+        code: IdentityErrorCodes.INVALID_REQUEST,
+        message: 'OIDC authorization start requires state, nonce, redirect URI, and PKCE challenge.',
+        details: { reason: 'AUTH_START_INPUT_INVALID' }
+      });
+    }
+
+    const discovery = await this.discoverProviderMetadata();
+    if (!discovery.ok) return discovery;
+
+    const authorizationEndpoint = String(discovery.data?.metadata?.authorization_endpoint ?? '').trim();
+    if (!authorizationEndpoint) {
+      return this.failure({
+        code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+        message: 'OIDC discovery metadata is missing authorization endpoint.',
+        details: { reason: 'AUTHORIZATION_ENDPOINT_MISSING' }
+      });
+    }
+
+    const query = new URLSearchParams({
+      response_type: 'code',
+      client_id: this.config.clientId,
+      redirect_uri: String(redirectUri),
+      scope: toScopeText(scope) || 'openid profile email',
+      state: String(state),
+      nonce: String(nonce),
+      code_challenge: String(pkceChallenge),
+      code_challenge_method: String(pkceMethod || 'S256')
+    });
+
+    if (hasText(this.config.audience)) {
+      query.set('audience', String(this.config.audience));
+    }
+    if (hasText(prompt)) {
+      query.set('prompt', String(prompt));
+    }
+    if (hasText(loginHint)) {
+      query.set('login_hint', String(loginHint));
+    }
+
+    Object.entries(additionalParams ?? {}).forEach(([key, value]) => {
+      if (!hasText(key) || value == null) return;
+      query.set(String(key), String(value));
+    });
+
+    return this.success({
+      authorizationEndpoint,
+      authorizationUrl: `${authorizationEndpoint}?${query.toString()}`,
+      state: String(state),
+      nonce: String(nonce),
+      pkceMethod: String(pkceMethod || 'S256')
+    });
   }
 
   failure({ code = IdentityErrorCodes.PROVIDER_UNAVAILABLE, message = 'OIDC operation failed.', details = null } = {}) {

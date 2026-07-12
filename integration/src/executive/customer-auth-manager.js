@@ -3,9 +3,23 @@ import { CustomerSessionManager } from './customer-session-manager.js';
 import { CustomerStatuses } from './customer-intake-mission-control-contracts.js';
 import { normalizeEmail, IdentityErrorCodes, IdentityProviderStatuses } from './customer-identity-provider-contracts.js';
 import { getMetaMap, setMetaValue } from '../storage/provider-backed-state.js';
+import { CustomerOidcAuthTransactionStore } from './customer-oidc-auth-transaction-store.js';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 
 function nowIso(nowFn) {
   return nowFn?.() ?? new Date().toISOString();
+}
+
+function nowMs(nowFn) {
+  const value = nowFn?.();
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  const parsed = Date.parse(String(value ?? ''));
+  if (Number.isFinite(parsed)) return parsed;
+  return Date.now();
+}
+
+function toBase64Url(buffer) {
+  return Buffer.from(buffer).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
 function genericAuthFailure() {
@@ -91,6 +105,27 @@ export class CustomerAuthManager {
       logger: this.logger,
       namespace: `${namespace}.sessions`
     });
+    this.oidcTransactionStore = new CustomerOidcAuthTransactionStore({
+      storageProvider: this.storageProvider,
+      now: this.now,
+      namespace: `${namespace}.oidc-transactions`
+    });
+  }
+
+  generateOidcState() {
+    return `oidc_state_${toBase64Url(randomBytes(18))}`;
+  }
+
+  generateOidcNonce() {
+    return `oidc_nonce_${toBase64Url(randomBytes(18))}`;
+  }
+
+  generatePkceVerifier() {
+    return toBase64Url(randomBytes(48));
+  }
+
+  createPkceChallenge(verifier) {
+    return toBase64Url(createHash('sha256').update(String(verifier), 'utf8').digest());
   }
 
   providerBlocked() {
@@ -435,6 +470,152 @@ export class CustomerAuthManager {
     };
   }
 
+  async startOidcAuthorization({
+    redirectUri,
+    scope = 'openid profile email',
+    prompt = null,
+    loginHint = null,
+    expiresInMs = null,
+    provider = 'oidc',
+    state = null,
+    nonce = null
+  } = {}) {
+    if (this.providerBlocked()) return this.rejectBlockedProvider();
+
+    const requestedProvider = String(provider ?? 'oidc').trim().toLowerCase();
+    if (requestedProvider !== String(this.providerSelection.type ?? '').trim().toLowerCase()) {
+      return {
+        accepted: false,
+        status: 409,
+        code: 'PROVIDER_MISMATCH',
+        reason: 'Requested provider does not match configured authentication provider.',
+        data: null
+      };
+    }
+
+    if (requestedProvider !== 'oidc') {
+      return {
+        accepted: false,
+        status: 400,
+        code: 'INVALID_REQUEST',
+        reason: 'Authorization-start flow is only available for OIDC provider.',
+        data: null
+      };
+    }
+
+    const redirect = String(redirectUri ?? '').trim();
+    if (!redirect) {
+      return {
+        accepted: false,
+        status: 400,
+        code: 'INVALID_REQUEST',
+        reason: 'redirectUri is required.',
+        data: null
+      };
+    }
+
+    const resolvedState = String(state ?? this.generateOidcState()).trim();
+    const resolvedNonce = String(nonce ?? this.generateOidcNonce()).trim();
+    const pkceVerifier = this.generatePkceVerifier();
+    const pkceChallenge = this.createPkceChallenge(pkceVerifier);
+
+    const transaction = this.oidcTransactionStore.createTransaction({
+      state: resolvedState,
+      nonce: resolvedNonce,
+      pkceVerifier,
+      providerType: requestedProvider,
+      redirectUri: redirect,
+      transactionId: `oidc_txn_${randomUUID()}`,
+      createdAt: new Date(nowMs(this.now)).toISOString(),
+      ttlMs: expiresInMs
+    });
+
+    if (!transaction.ok) {
+      return {
+        accepted: false,
+        status: transaction.code === 'CONFLICT' ? 409 : 400,
+        code: transaction.code,
+        reason: transaction.reason,
+        data: null
+      };
+    }
+
+    const providerResult = await this.identityProvider.startAuthorization?.({
+      state: resolvedState,
+      nonce: resolvedNonce,
+      redirectUri: redirect,
+      pkceChallenge,
+      pkceMethod: 'S256',
+      scope,
+      prompt,
+      loginHint
+    });
+
+    if (!providerResult || !providerResult.ok) {
+      this.oidcTransactionStore.cancelTransaction({ state: resolvedState });
+      return {
+        accepted: false,
+        status: 503,
+        code: providerResult?.error?.code ?? 'PROVIDER_UNAVAILABLE',
+        reason: providerResult?.error?.message ?? 'Unable to initialize OIDC authorization.',
+        data: {
+          providerStatus: providerResult?.providerStatus ?? this.identityProvider.getStatus?.() ?? null
+        }
+      };
+    }
+
+    return {
+      accepted: true,
+      status: 200,
+      code: 'OK',
+      reason: null,
+      data: {
+        provider: requestedProvider,
+        transactionId: transaction.data.transactionId,
+        state: transaction.data.state,
+        nonce: transaction.data.nonce,
+        redirectUri: transaction.data.redirectUri,
+        expiresAt: transaction.data.expiresAt,
+        authorizationUrl: providerResult.data.authorizationUrl,
+        authorizationEndpoint: providerResult.data.authorizationEndpoint,
+        codeChallengeMethod: providerResult.data.pkceMethod ?? 'S256'
+      }
+    };
+  }
+
+  consumeOidcAuthorizationTransaction({ state, provider = 'oidc', redirectUri = null } = {}) {
+    const consumed = this.oidcTransactionStore.consumeTransaction({
+      state,
+      providerType: provider,
+      redirectUri
+    });
+
+    if (!consumed.ok) {
+      const statusByCode = {
+        INVALID_REQUEST: 400,
+        NOT_FOUND: 404,
+        INVALID_STATE: 409,
+        TOKEN_EXPIRED: 409,
+        PROVIDER_MISMATCH: 409
+      };
+      return {
+        accepted: false,
+        status: statusByCode[consumed.code] ?? 400,
+        code: consumed.code,
+        reason: consumed.reason,
+        data: null
+      };
+    }
+
+    return {
+      accepted: true,
+      status: 200,
+      code: 'OK',
+      reason: null,
+      data: consumed.data
+    };
+  }
+
   authenticateSession({ sessionToken, customerId = null } = {}) {
     const validation = this.sessionManager.validateSessionToken(sessionToken, { customerId });
     if (!validation.valid || !validation.session) {
@@ -669,6 +850,7 @@ export class CustomerAuthManager {
       suspendedCount,
       disabledCount,
       archivedCount,
+      oidcTransactions: this.oidcTransactionStore.getStats(),
       generatedAt: nowIso(this.now)
     };
   }

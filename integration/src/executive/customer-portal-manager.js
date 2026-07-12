@@ -295,6 +295,19 @@ export class CustomerPortalManager {
     return this.authManager.getCurrentSession({ sessionToken });
   }
 
+  async startOidcAuthorization(input = {}) {
+    return this.authManager.startOidcAuthorization({
+      redirectUri: input.redirectUri,
+      scope: input.scope ?? 'openid profile email',
+      prompt: input.prompt ?? null,
+      loginHint: input.loginHint ?? null,
+      expiresInMs: input.expiresInMs ?? null,
+      provider: input.provider ?? 'oidc',
+      state: input.state ?? null,
+      nonce: input.nonce ?? null
+    });
+  }
+
   requestPasswordReset({ email } = {}) {
     return this.authManager.requestPasswordReset({ email });
   }

@@ -431,6 +431,7 @@ function customerRouteSecurityPolicy({ routePath, method }) {
   const publicMutationRoutes = new Set([
     'POST:/api/v1/customer/register',
     'POST:/api/v1/customer/login',
+    'POST:/api/v1/customer/auth/oidc/start',
     'POST:/api/v1/customer/password-reset/request',
     'POST:/api/v1/customer/password-reset/complete'
   ]);
@@ -521,6 +522,7 @@ function isPublicCustomerRoute(routePath, method) {
   return [
     '/api/v1/customer/register',
     '/api/v1/customer/login',
+    '/api/v1/customer/auth/oidc/start',
     '/api/v1/customer/password-reset/request',
     '/api/v1/customer/password-reset/complete'
   ].includes(routePath);
@@ -1383,6 +1385,26 @@ export class ExecutiveDashboardApiService {
           data: this.sanitizeCustomerAuthPayload(login.data),
           responseHeaders: appendSetCookieHeaders(null, setCookie, csrfCookie)
         });
+      }
+
+      if (routePath === '/api/v1/customer/auth/oidc/start' && method === 'POST') {
+        const started = await this.customerPortalApi.startOidcAuthorization({ body });
+        if (!started.accepted) {
+          const codeByStartCode = {
+            PROVIDER_NOT_CONFIGURED: ApiErrorCodes.DATA_UNAVAILABLE,
+            PROVIDER_UNAVAILABLE: ApiErrorCodes.DATA_UNAVAILABLE,
+            PROVIDER_MISMATCH: ApiErrorCodes.FORBIDDEN,
+            CONFLICT: ApiErrorCodes.CONFLICT
+          };
+          return this.normalizeError({
+            requestId,
+            code: codeByStartCode[started.code] ?? ApiErrorCodes.INVALID_REQUEST,
+            message: started.reason,
+            status: started.status
+          });
+        }
+
+        return buildSuccess({ data: started.data });
       }
 
       if (routePath === '/api/v1/customer/logout' && method === 'POST') {

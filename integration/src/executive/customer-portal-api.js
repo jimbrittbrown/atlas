@@ -134,6 +134,19 @@ export class CustomerPortalApi {
     return this.manager.getCurrentSession({ sessionToken });
   }
 
+  async startOidcAuthorization({ body = {} } = {}) {
+    return this.manager.startOidcAuthorization({
+      redirectUri: body.redirectUri,
+      scope: body.scope,
+      prompt: body.prompt ?? null,
+      loginHint: body.loginHint ?? null,
+      expiresInMs: body.expiresInMs,
+      provider: body.provider ?? 'oidc',
+      state: body.state ?? null,
+      nonce: body.nonce ?? null
+    });
+  }
+
   requestPasswordReset({ body = {} } = {}) {
     return this.manager.requestPasswordReset({ email: body.email });
   }
