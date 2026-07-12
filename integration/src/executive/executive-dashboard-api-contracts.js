@@ -98,6 +98,8 @@ export const RolePermissions = Object.freeze({
     'customer:revision:create',
     'customer:completion:approve',
     'customer:downloads:get',
+    'customer:downloads:issue',
+    'customer:downloads:redeem',
     'dashboard:health',
     'dashboard:metadata'
   ],
@@ -135,6 +137,8 @@ export const RouteDefinitions = Object.freeze([
   { method: 'POST', path: '/api/v1/customer/revision', permission: 'customer:revision:create' },
   { method: 'POST', path: '/api/v1/customer/project/:id/approve', permission: 'customer:completion:approve' },
   { method: 'GET', path: '/api/v1/customer/downloads/:id', permission: 'customer:downloads:get' },
+  { method: 'POST', path: '/api/v1/customer/downloads/:id/authorize', permission: 'customer:downloads:issue' },
+  { method: 'POST', path: '/api/v1/customer/downloads/redeem', permission: 'customer:downloads:redeem' },
   { method: 'POST', path: '/api/v1/mission-control/:missionId/retry', permission: 'mission-control:command:retry' },
   { method: 'POST', path: '/api/v1/mission-control/:missionId/resume', permission: 'mission-control:command:resume' },
   { method: 'POST', path: '/api/v1/mission-control/:missionId/rollback', permission: 'mission-control:command:rollback' },

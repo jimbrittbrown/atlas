@@ -1679,6 +1679,52 @@ export class ExecutiveDashboardApiService {
         return buildSuccess({ data: downloads.data });
       }
 
+      if (routePath === '/api/v1/customer/downloads/:id/authorize' && method === 'POST') {
+        const customerContext = resolveCustomerContext({ headers, auth: gate.auth });
+        const authorization = this.customerPortalApi.issueDownloadAuthorization({
+          customerId: customerContext.customerId,
+          projectId: resolved.params.id,
+          requestedBy: customerContext.requestedBy,
+          body
+        });
+
+        if (!authorization.found) {
+          const code = authorization.code === 'FORBIDDEN'
+            ? ApiErrorCodes.FORBIDDEN
+            : (authorization.code === 'NOT_FOUND' ? ApiErrorCodes.NOT_FOUND : ApiErrorCodes.INVALID_REQUEST);
+          return this.normalizeError({
+            requestId,
+            code,
+            message: authorization.reason,
+            status: authorization.status
+          });
+        }
+
+        return buildSuccess({ data: authorization.data });
+      }
+
+      if (routePath === '/api/v1/customer/downloads/redeem' && method === 'POST') {
+        const customerContext = resolveCustomerContext({ headers, auth: gate.auth });
+        const redemption = this.customerPortalApi.redeemDownloadAuthorization({
+          customerId: customerContext.customerId,
+          body
+        });
+
+        if (!redemption.found) {
+          const code = redemption.code === 'FORBIDDEN'
+            ? ApiErrorCodes.FORBIDDEN
+            : (redemption.code === 'NOT_FOUND' ? ApiErrorCodes.NOT_FOUND : (redemption.code === 'UNAUTHORIZED' ? ApiErrorCodes.UNAUTHORIZED : ApiErrorCodes.INVALID_REQUEST));
+          return this.normalizeError({
+            requestId,
+            code,
+            message: redemption.reason,
+            status: redemption.status
+          });
+        }
+
+        return buildSuccess({ data: redemption.data });
+      }
+
       if (routePath === '/api/v1/mission-control/:missionId' && method === 'GET') {
         const dependencyError = this.ensureServiceDependency({
           requestId,

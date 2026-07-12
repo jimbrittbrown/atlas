@@ -11,6 +11,7 @@ import {
 } from './customer-portal-contracts.js';
 import { CustomerAuthManager } from './customer-auth-manager.js';
 import { PaymentManager } from './payment-manager.js';
+import { SignedArtifactDeliveryManager } from './signed-artifact-delivery-manager.js';
 import { MissionExecutiveStatuses } from './customer-intake-mission-control-contracts.js';
 import { DataAvailabilityStatuses } from './executive-operations-dashboard-contracts.js';
 import { getMetaMap, setMetaValue } from '../storage/provider-backed-state.js';
@@ -41,7 +42,8 @@ function mapMissionToProject(
   requestRecord = null,
   revisionRecords = [],
   productionReview = null,
-  paymentHistory = []
+  paymentHistory = [],
+  downloads = []
 ) {
   const workers = toArray(workforceDashboard?.currentWorkload)
     .filter((item) => item.missionId === mission.missionId)
@@ -121,7 +123,7 @@ function mapMissionToProject(
       successfulPayments: paymentHistory.filter((payment) => String(payment.status ?? '').toUpperCase() === 'SUCCEEDED').length,
       pendingPayments: paymentHistory.filter((payment) => String(payment.status ?? '').toUpperCase() === 'CHECKOUT_PENDING').length
     },
-    downloadDeliverables: toArray(requestRecord?.downloadDeliverables)
+    downloadDeliverables: toArray(downloads.length > 0 ? downloads : requestRecord?.downloadDeliverables)
   };
 }
 
@@ -155,6 +157,13 @@ export class CustomerPortalManager {
     });
     this.paymentManager = paymentManager ?? new PaymentManager({
       missionControl: this.missionControl,
+      storageProvider: this.storageProvider,
+      now: this.now,
+      logger: this.logger
+    });
+    this.artifactDeliveryManager = new SignedArtifactDeliveryManager({
+      missionControl: this.missionControl,
+      websiteProductionManager: this.websiteProductionManager,
       storageProvider: this.storageProvider,
       now: this.now,
       logger: this.logger
@@ -413,14 +422,19 @@ export class CustomerPortalManager {
       };
     }
 
-    const customerCreation = this.missionControl.customerRegistry.createCustomer({
-      companyName: request.businessName,
-      contactName: request.contactName,
-      email: request.email,
-      phone: request.phone,
-      website: request.websiteUrl ?? `https://${request.businessName.toLowerCase().replace(/\s+/g, '-')}.example`,
-      industry: request.businessType
-    });
+    const existingCustomer = input.customerId
+      ? this.missionControl.customerRegistry.getCustomerById(input.customerId)
+      : null;
+    const customerCreation = existingCustomer
+      ? { customer: existingCustomer, duplicateDetected: true }
+      : this.missionControl.customerRegistry.createCustomer({
+        companyName: request.businessName,
+        contactName: request.contactName,
+        email: request.email,
+        phone: request.phone,
+        website: request.websiteUrl ?? `https://${request.businessName.toLowerCase().replace(/\s+/g, '-')}.example`,
+        industry: request.businessType
+      });
 
     const customer = customerCreation.customer;
     const account = this.ensureCustomerAccount({ customer, accountId: request.accountId });
@@ -575,6 +589,11 @@ export class CustomerPortalManager {
     const workforceDashboard = this.workforceDirector?.buildDashboard?.() ?? {};
     const productionReviews = this.websiteProductionManager?.listReviews?.() ?? [];
     const paymentHistory = this.paymentManager.listPaymentsForCustomer(customer.customerId);
+    const downloadsByMissionId = missions.reduce((acc, mission) => {
+      const downloads = this.artifactDeliveryManager.listDownloads({ customerId: customer.customerId, projectId: mission.missionId });
+      acc[mission.missionId] = downloads.found ? downloads.data.downloads : [];
+      return acc;
+    }, {});
 
     const projects = missions.map((mission) => mapMissionToProject(
       mission,
@@ -585,7 +604,8 @@ export class CustomerPortalManager {
       this.getRequestByMissionId(mission.missionId),
       toArray(this.revisionHistory.get(mission.missionId)),
       productionReviews.find((review) => review.missionId === mission.missionId) ?? null,
-      paymentHistory.filter((payment) => payment.missionId === mission.missionId)
+      paymentHistory.filter((payment) => payment.missionId === mission.missionId),
+      downloadsByMissionId[mission.missionId] ?? []
     ));
 
     return {
@@ -718,73 +738,24 @@ export class CustomerPortalManager {
   }
 
   getDownloads({ customerId, projectId } = {}) {
-    const mission = this.missionControl.missionRegistry.getMissionById(projectId);
-    if (!mission) {
-      return {
-        found: false,
-        status: 404,
-        code: 'NOT_FOUND',
-        reason: 'Mission not found.',
-        data: null
-      };
-    }
+    return this.artifactDeliveryManager.listDownloads({ customerId, projectId });
+  }
 
-    if (customerId && mission.customerId !== customerId) {
-      return {
-        found: false,
-        status: 403,
-        code: 'FORBIDDEN',
-        reason: 'Mission does not belong to customer.',
-        data: null
-      };
-    }
+  issueDownloadAuthorization({ customerId, projectId, artifactId, requestedBy, expiresInMs } = {}) {
+    return this.artifactDeliveryManager.issueAuthorization({
+      customerId,
+      projectId,
+      artifactId,
+      requestedBy,
+      expiresInMs
+    });
+  }
 
-    const eligible = [
-      MissionExecutiveStatuses.COMPLETED,
-      MissionExecutiveStatuses.AWAITING_EXECUTIVE_REVIEW,
-      MissionExecutiveStatuses.ACTIVE
-    ].includes(mission.executiveStatus);
-
-    if (!eligible) {
-      return {
-        found: false,
-        status: 409,
-        code: 'INVALID_STATE',
-        reason: 'Downloads unavailable for current mission state.',
-        data: null
-      };
-    }
-
-    const productionReview = (this.websiteProductionManager?.listReviews?.() ?? []).find((review) => review.missionId === mission.missionId) ?? null;
-
-    const downloads = [
-      { key: 'WEBSITE_PACKAGE', label: 'Website Package', path: `review/${mission.missionId}-website-package.zip`, available: false },
-      { key: 'BRAND_GUIDE', label: 'Brand Guide', path: 'review/website-builder-mission-v1-report.md', available: true },
-      {
-        key: 'QA_REPORT',
-        label: 'QA Report',
-        path: productionReview ? 'review/website-production-execution-pipeline-v1-report.md' : 'review/website-production-manager-v1-report.md',
-        available: true
-      },
-      { key: 'EXECUTIVE_REVIEW_PACKAGE', label: 'Executive Review Package', path: 'review/website-executive-review-package-v1-report.md', available: true },
-      {
-        key: 'DELIVERY_SUMMARY',
-        label: 'Delivery Summary',
-        path: productionReview ? 'review/website-production-execution-pipeline-v1-report.json' : 'review/website-production-manager-v1-report.json',
-        available: true
-      }
-    ];
-
-    return {
-      found: true,
-      status: 200,
-      code: 'OK',
-      reason: null,
-      data: {
-        missionId: mission.missionId,
-        downloads
-      }
-    };
+  redeemDownloadAuthorization({ customerId, authorizationToken } = {}) {
+    return this.artifactDeliveryManager.redeemAuthorization({
+      customerId,
+      authorizationToken
+    });
   }
 
   approveCompletion({ customerId, missionId, requestedBy, notes = null, timestamp = nowIso(this.now) } = {}) {
@@ -866,7 +837,8 @@ export class CustomerPortalManager {
       totalRevisionRoots: this.revisionHistory.size,
       totalRevisionRequests: allRevisions.length,
       auth: authHealth,
-      payments: paymentHealth
+      payments: paymentHealth,
+      artifacts: this.artifactDeliveryManager.getDashboardProjection()
     };
   }
 }

@@ -175,6 +175,23 @@ export class CustomerPortalApi {
     return this.manager.getDownloads({ customerId, projectId });
   }
 
+  issueDownloadAuthorization({ customerId, projectId, requestedBy, body = {} } = {}) {
+    return this.manager.issueDownloadAuthorization({
+      customerId,
+      projectId,
+      artifactId: body.artifactId,
+      requestedBy: requestedBy ?? body.requestedBy ?? 'CUSTOMER_PORTAL',
+      expiresInMs: body.expiresInMs
+    });
+  }
+
+  redeemDownloadAuthorization({ customerId, body = {} } = {}) {
+    return this.manager.redeemDownloadAuthorization({
+      customerId,
+      authorizationToken: body.authorizationToken ?? body.deliveryToken
+    });
+  }
+
   approveCompletion({ customerId, requestedBy, body = {} } = {}) {
     return this.manager.approveCompletion({
       customerId,
