@@ -1,5 +1,8 @@
 import {
+  CommercialAcceptanceStates,
+  CommercialPackageTypes,
   createExecutiveDecision,
+  listCanonicalCommercialPackages,
   ExecutiveDecisions,
   PlanningRecommendedDecisions,
   ProposalStatuses,
@@ -280,6 +283,133 @@ export class MissionPortfolioManager {
       duplicateDetected: false,
       proposal: this.portfolioRegistry.getProposal(record.proposal.proposalId)?.proposal ?? null
     };
+  }
+
+  listCommercialPackages() {
+    return listCanonicalCommercialPackages();
+  }
+
+  generateCommercialProposalArtifact({
+    proposalId,
+    lineItems = [],
+    notes = null,
+    createdBy = 'SYSTEM',
+    termsVersion = 'ATLAS_WEBSITE_TERMS_V1'
+  } = {}) {
+    const record = this.portfolioRegistry.getProposal(proposalId);
+    if (!record) {
+      return { accepted: false, reason: 'Proposal not found.', proposal: null };
+    }
+
+    const lock = record.proposal?.commercial?.priceLock ?? {};
+    if (lock.locked === true) {
+      return { accepted: false, reason: 'Quote is locked and cannot be versioned.', proposal: record.proposal };
+    }
+
+    let result;
+    try {
+      result = this.portfolioRegistry.addCommercialVersion({
+        proposalId,
+        lineItems,
+        notes,
+        createdBy,
+        termsVersion
+      });
+    } catch (error) {
+      return {
+        accepted: false,
+        reason: error instanceof Error ? error.message : String(error),
+        proposal: record.proposal
+      };
+    }
+
+    if (result.accepted) {
+      this.logger.log({
+        event: 'commercial_proposal_artifact_generated',
+        proposalId,
+        versionNumber: result.version.versionNumber,
+        createdBy
+      });
+    }
+
+    return result;
+  }
+
+  applyCommercialPriceOverride({ proposalId, actor, reason, totalMoney } = {}) {
+    const record = this.portfolioRegistry.getProposal(proposalId);
+    if (!record) {
+      return { accepted: false, reason: 'Proposal not found.', proposal: null };
+    }
+
+    const lock = record.proposal?.commercial?.priceLock ?? {};
+    if (lock.locked === true) {
+      return { accepted: false, reason: 'Quote is locked and cannot be overridden.', proposal: record.proposal };
+    }
+
+    let result;
+    try {
+      result = this.portfolioRegistry.overrideCommercialPrice({
+        proposalId,
+        actor,
+        reason,
+        totalMoney
+      });
+    } catch (error) {
+      return {
+        accepted: false,
+        reason: error instanceof Error ? error.message : String(error),
+        proposal: record.proposal
+      };
+    }
+
+    if (result.accepted) {
+      this.logger.log({
+        event: 'commercial_price_override_applied',
+        proposalId,
+        actor,
+        overrideId: result.override.overrideId,
+        newAmountMinor: result.override.newMoney.amountMinor,
+        currency: result.override.newMoney.currency
+      });
+    }
+
+    return result;
+  }
+
+  acceptCommercialProposal({ proposalId, customerId, projectId, acceptedBy, termsVersion } = {}) {
+    const result = this.portfolioRegistry.acceptCommercialTerms({
+      proposalId,
+      customerId,
+      projectId,
+      acceptedBy,
+      termsVersion
+    });
+
+    if (result.accepted) {
+      this.logger.log({
+        event: 'commercial_proposal_accepted',
+        proposalId,
+        acceptanceRecordId: result.acceptanceRecord.acceptanceRecordId,
+        customerId: result.acceptanceRecord.customerId,
+        projectId: result.acceptanceRecord.projectId
+      });
+    }
+
+    return result;
+  }
+
+  expireCommercialProposal(proposalId, { nowMs = Date.now() } = {}) {
+    const result = this.portfolioRegistry.expireProposalIfNeeded(proposalId, { nowMs });
+
+    if (result.expired) {
+      this.logger.log({
+        event: 'commercial_proposal_expired',
+        proposalId,
+        expiredAt: result.proposal?.commercial?.expiresAt ?? null
+      });
+    }
+
+    return result;
   }
 
   evaluateProposal(proposalId) {
@@ -647,6 +777,22 @@ export class MissionPortfolioManager {
           type: 'CONVERT_TO_MISSION',
           proposalId: proposal.proposalId,
           reason: 'Approved proposal is ready for Mission Control conversion.'
+        });
+      }
+
+      const acceptanceState = String(proposal?.commercial?.acceptance?.state ?? '').toUpperCase();
+      const lock = proposal?.commercial?.priceLock ?? {};
+      const activeVersion = (proposal?.commercial?.versions ?? [])
+        .find((item) => Number(item.versionNumber) === Number(proposal?.commercial?.activeVersionNumber ?? 0)) ?? null;
+      const hasLaunchPackage = Boolean(
+        activeVersion?.lineItems?.some((item) => String(item.packageType).toUpperCase() === CommercialPackageTypes.LAUNCH_PACKAGE)
+      );
+
+      if (hasLaunchPackage && acceptanceState === CommercialAcceptanceStates.PENDING && lock.locked !== true) {
+        actions.push({
+          type: 'REQUEST_COMMERCIAL_ACCEPTANCE',
+          proposalId: proposal.proposalId,
+          reason: 'Commercial proposal is pending customer terms acceptance and quote lock.'
         });
       }
     });

@@ -1,4 +1,8 @@
 import {
+  CommercialAcceptanceStates,
+  createCommercialLineItemIntegrityHash,
+  createCommercialProposalVersion,
+  moneyMinorToMajorUnits,
   createMissionProposal,
   createPortfolioRecord,
   ProposalStatuses,
@@ -12,6 +16,52 @@ function isoNow(nowFn) {
 
 function normalize(value) {
   return String(value ?? '').trim().toLowerCase();
+}
+
+const SupportedCurrencies = new Set(['USD']);
+
+function parseAmountMinor(value, { fieldName = 'amountMinor', allowZero = true } = {}) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    throw new Error(`${fieldName} must be numeric.`);
+  }
+
+  if (!Number.isInteger(numeric)) {
+    throw new Error(`${fieldName} must be an integer minor-unit value (cents).`);
+  }
+
+  if (numeric < 0 || (!allowZero && numeric === 0)) {
+    throw new Error(`${fieldName} must be ${allowZero ? 'non-negative' : 'positive'}.`);
+  }
+
+  return numeric;
+}
+
+function normalizeCurrency(value) {
+  const normalized = String(value ?? '').trim().toUpperCase();
+  return SupportedCurrencies.has(normalized) ? normalized : null;
+}
+
+function ensureMoney(money, { fieldName, allowZero = true } = {}) {
+  if (!money || typeof money !== 'object' || Array.isArray(money)) {
+    throw new Error(`${fieldName} must be an object with amountMinor and currency.`);
+  }
+
+  const amountMinor = parseAmountMinor(money.amountMinor, {
+    fieldName: `${fieldName}.amountMinor`,
+    allowZero
+  });
+  const currency = normalizeCurrency(money.currency);
+  if (!currency) {
+    throw new Error(`${fieldName}.currency is unsupported.`);
+  }
+
+  return { amountMinor, currency };
+}
+
+function hasLegacyAmbiguousPriceFields(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return ['totalPrice', 'price', 'amount', 'unitPrice'].some((key) => Object.prototype.hasOwnProperty.call(value, key));
 }
 
 export class MissionPortfolioRegistry {
@@ -219,6 +269,375 @@ export class MissionPortfolioRegistry {
     record.proposal.updatedAt = isoNow(this.now);
     this.persistRecord(record);
     return record;
+  }
+
+  addCommercialVersion({
+    proposalId,
+    lineItems = [],
+    notes = null,
+    createdBy = 'SYSTEM',
+    termsVersion = 'ATLAS_WEBSITE_TERMS_V1',
+    totalMoneyOverride = null
+  } = {}) {
+    const record = this.getProposal(proposalId);
+    if (!record) {
+      return { accepted: false, reason: 'Proposal not found.', proposal: null };
+    }
+
+    const commercial = record.proposal.commercial ?? {};
+    const activeVersionNumber = Number(commercial.activeVersionNumber ?? 0);
+    const nextVersionNumber = Number.isInteger(activeVersionNumber) && activeVersionNumber > 0
+      ? activeVersionNumber + 1
+      : 1;
+
+    const version = createCommercialProposalVersion({
+      proposalId,
+      versionNumber: nextVersionNumber,
+      lineItems,
+      notes,
+      createdBy,
+      termsVersion,
+      totalMoneyOverride
+    }, { now: this.now });
+
+    const updatedCommercial = {
+      ...commercial,
+      activeVersionNumber: version.versionNumber,
+      versions: [...(Array.isArray(commercial.versions) ? commercial.versions : []), version],
+      acceptance: {
+        ...(commercial.acceptance ?? {}),
+        state: CommercialAcceptanceStates.PENDING,
+        acceptedAt: null,
+        acceptedBy: null,
+        acceptanceRecordId: null,
+        termsVersion: version.termsVersion,
+        termsAccepted: false
+      },
+      priceLock: {
+        ...(commercial.priceLock ?? {}),
+        locked: false,
+        lockRecord: null
+      }
+    };
+
+    record.proposal.commercial = updatedCommercial;
+    record.proposal.updatedAt = isoNow(this.now);
+    record.proposal.auditTrail.push({
+      type: 'COMMERCIAL_VERSION_ADDED',
+      versionNumber: version.versionNumber,
+      createdBy,
+      timestamp: isoNow(this.now)
+    });
+
+    this.persistRecord(record);
+
+    return {
+      accepted: true,
+      reason: null,
+      proposal: record.proposal,
+      version
+    };
+  }
+
+  overrideCommercialPrice({
+    proposalId,
+    actor,
+    reason,
+    totalMoney,
+    currency = 'USD'
+  } = {}) {
+    const record = this.getProposal(proposalId);
+    if (!record) {
+      return { accepted: false, reason: 'Proposal not found.', proposal: null };
+    }
+
+    const normalizedActor = String(actor ?? '').trim();
+    const normalizedReason = String(reason ?? '').trim();
+    if (!normalizedActor) {
+      return { accepted: false, reason: 'actor is required for controlled price override.', proposal: null };
+    }
+
+    if (!normalizedReason) {
+      return { accepted: false, reason: 'reason is required for controlled price override.', proposal: null };
+    }
+
+    const commercial = record.proposal.commercial ?? {};
+    const versions = Array.isArray(commercial.versions) ? commercial.versions : [];
+    const activeVersionNumber = Number(commercial.activeVersionNumber ?? 0);
+    const activeVersion = versions.find((item) => Number(item.versionNumber) === activeVersionNumber) ?? null;
+
+    if (!activeVersion) {
+      return { accepted: false, reason: 'Active commercial version not found.', proposal: null };
+    }
+
+    if (!totalMoney || typeof totalMoney !== 'object' || Array.isArray(totalMoney)) {
+      return {
+        accepted: false,
+        reason: 'totalMoney with amountMinor/currency is required for controlled price override.',
+        proposal: null
+      };
+    }
+
+    if (hasLegacyAmbiguousPriceFields(totalMoney)) {
+      return {
+        accepted: false,
+        reason: 'Ambiguous legacy price fields are not allowed. Use totalMoney.amountMinor and totalMoney.currency.',
+        proposal: null
+      };
+    }
+
+    let normalizedTotalMoney;
+    try {
+      normalizedTotalMoney = ensureMoney(totalMoney, { fieldName: 'totalMoney', allowZero: false });
+    } catch (error) {
+      return {
+        accepted: false,
+        reason: error instanceof Error ? error.message : String(error),
+        proposal: null
+      };
+    }
+
+    const activeTotalMoney = ensureMoney(activeVersion.pricing.totalMoney, {
+      fieldName: 'activeVersion.pricing.totalMoney',
+      allowZero: false
+    });
+    if (normalizedTotalMoney.currency !== activeTotalMoney.currency) {
+      return {
+        accepted: false,
+        reason: 'totalMoney.currency must match active version currency.',
+        proposal: null
+      };
+    }
+
+    const versionResult = this.addCommercialVersion({
+      proposalId,
+      lineItems: activeVersion.lineItems,
+      notes: `Price override applied from v${activeVersion.versionNumber}. ${normalizedReason}`,
+      createdBy: normalizedActor,
+      termsVersion: activeVersion.termsVersion,
+      totalMoneyOverride: normalizedTotalMoney
+    });
+
+    if (!versionResult.accepted) {
+      return versionResult;
+    }
+
+    const refreshed = this.getProposal(proposalId);
+    const overrideEntry = {
+      overrideId: `price_override_${Date.now()}`,
+      actor: normalizedActor,
+      reason: normalizedReason,
+      previousVersionNumber: activeVersion.versionNumber,
+      newVersionNumber: versionResult.version.versionNumber,
+      previousMoney: {
+        ...activeTotalMoney,
+        majorUnits: moneyMinorToMajorUnits(activeTotalMoney.amountMinor)
+      },
+      newMoney: {
+        ...versionResult.version.pricing.totalMoney,
+        majorUnits: moneyMinorToMajorUnits(versionResult.version.pricing.totalMoney.amountMinor)
+      },
+      timestamp: isoNow(this.now)
+    };
+
+    refreshed.proposal.commercial.overrideHistory = [
+      ...(Array.isArray(refreshed.proposal.commercial.overrideHistory)
+        ? refreshed.proposal.commercial.overrideHistory
+        : []),
+      overrideEntry
+    ];
+
+    refreshed.proposal.auditTrail.push({
+      type: 'COMMERCIAL_PRICE_OVERRIDE',
+      overrideId: overrideEntry.overrideId,
+      actor: normalizedActor,
+      reason: normalizedReason,
+      timestamp: isoNow(this.now)
+    });
+
+    this.persistRecord(refreshed);
+
+    return {
+      accepted: true,
+      reason: null,
+      proposal: refreshed.proposal,
+      override: overrideEntry
+    };
+  }
+
+  acceptCommercialTerms({
+    proposalId,
+    customerId,
+    projectId,
+    acceptedBy,
+    termsVersion,
+    acceptedAt = isoNow(this.now)
+  } = {}) {
+    const record = this.getProposal(proposalId);
+    if (!record) {
+      return { accepted: false, reason: 'Proposal not found.', proposal: null };
+    }
+
+    const commercial = record.proposal.commercial ?? {};
+    const versions = Array.isArray(commercial.versions) ? commercial.versions : [];
+    const activeVersionNumber = Number(commercial.activeVersionNumber ?? 0);
+    const activeVersion = versions.find((item) => Number(item.versionNumber) === activeVersionNumber) ?? null;
+
+    if (!activeVersion) {
+      return { accepted: false, reason: 'Active commercial version not found.', proposal: null };
+    }
+
+    if (!Number.isFinite(Date.parse(String(commercial.expiresAt ?? '')))) {
+      return { accepted: false, reason: 'Proposal expiration is invalid.', proposal: null };
+    }
+
+    if (Date.parse(String(commercial.expiresAt)) <= Date.now()) {
+      record.proposal.commercial.acceptance = {
+        ...(record.proposal.commercial.acceptance ?? {}),
+        state: CommercialAcceptanceStates.EXPIRED
+      };
+      record.proposal.auditTrail.push({
+        type: 'COMMERCIAL_ACCEPTANCE_REJECTED_EXPIRED',
+        timestamp: isoNow(this.now)
+      });
+      this.persistRecord(record);
+
+      return { accepted: false, reason: 'Proposal has expired.', proposal: record.proposal };
+    }
+
+    const normalizedTermsVersion = String(termsVersion ?? activeVersion.termsVersion ?? '').trim();
+    if (!normalizedTermsVersion) {
+      return { accepted: false, reason: 'termsVersion is required.', proposal: null };
+    }
+
+    if (normalizedTermsVersion !== String(activeVersion.termsVersion ?? '').trim()) {
+      return { accepted: false, reason: 'Commercial terms version mismatch for active proposal version.', proposal: null };
+    }
+
+    const normalizedAcceptedBy = String(acceptedBy ?? '').trim();
+    if (!normalizedAcceptedBy) {
+      return { accepted: false, reason: 'acceptedBy is required.', proposal: null };
+    }
+
+    const acceptanceRecord = {
+      acceptanceRecordId: `accept_${Date.now()}`,
+      proposalId,
+      versionNumber: activeVersion.versionNumber,
+      customerId: String(customerId ?? '').trim() || (record.proposal.customerId ?? null),
+      projectId: String(projectId ?? '').trim() || (record.proposal.linkedMissionId ?? null),
+      acceptedBy: normalizedAcceptedBy,
+      acceptedAt: new Date(Date.parse(String(acceptedAt))).toISOString(),
+      termsVersion: normalizedTermsVersion,
+      lockedQuote: {
+        amountMinor: Number(activeVersion.pricing.totalMoney.amountMinor ?? 0),
+        currency: String(activeVersion.pricing.totalMoney.currency ?? 'USD').toUpperCase(),
+        sourceVersionNumber: activeVersion.versionNumber,
+        packageVersionIdentity: (activeVersion.lineItems ?? []).map((item) => ({
+          packageType: item.packageType,
+          packageCode: item.packageCode,
+          packageVersion: item.packageVersion,
+          quantity: item.quantity
+        })),
+        lineItemIntegrityHash: String(activeVersion.lineItemIntegrityHash ?? createCommercialLineItemIntegrityHash(activeVersion))
+      }
+    };
+
+    const lockedQuoteMoney = ensureMoney({
+      amountMinor: acceptanceRecord.lockedQuote.amountMinor,
+      currency: acceptanceRecord.lockedQuote.currency
+    }, {
+      fieldName: 'acceptanceRecord.lockedQuote',
+      allowZero: false
+    });
+
+    const lockRecord = {
+      amountMinor: lockedQuoteMoney.amountMinor,
+      currency: lockedQuoteMoney.currency,
+      proposalVersion: acceptanceRecord.lockedQuote.sourceVersionNumber,
+      packageVersionIdentity: acceptanceRecord.lockedQuote.packageVersionIdentity,
+      lineItemIntegrityHash: acceptanceRecord.lockedQuote.lineItemIntegrityHash,
+      actor: acceptanceRecord.acceptedBy,
+      timestamp: acceptanceRecord.acceptedAt,
+      reason: 'CUSTOMER_ACCEPTANCE',
+      amountMajor: moneyMinorToMajorUnits(lockedQuoteMoney.amountMinor)
+    };
+
+    record.proposal.commercial.acceptance = {
+      state: CommercialAcceptanceStates.ACCEPTED,
+      acceptedAt: acceptanceRecord.acceptedAt,
+      acceptedBy: acceptanceRecord.acceptedBy,
+      acceptanceRecordId: acceptanceRecord.acceptanceRecordId,
+      customerId: acceptanceRecord.customerId,
+      projectId: acceptanceRecord.projectId,
+      termsVersion: acceptanceRecord.termsVersion,
+      termsAccepted: true
+    };
+
+    record.proposal.commercial.acceptanceRecords = [
+      ...(Array.isArray(record.proposal.commercial.acceptanceRecords)
+        ? record.proposal.commercial.acceptanceRecords
+        : []),
+      acceptanceRecord
+    ];
+
+    record.proposal.commercial.priceLock = {
+      locked: true,
+      lockRecord
+    };
+
+    record.proposal.auditTrail.push({
+      type: 'COMMERCIAL_ACCEPTED',
+      acceptanceRecordId: acceptanceRecord.acceptanceRecordId,
+      customerId: acceptanceRecord.customerId,
+      projectId: acceptanceRecord.projectId,
+      timestamp: isoNow(this.now)
+    });
+
+    record.proposal.updatedAt = isoNow(this.now);
+    this.persistRecord(record);
+
+    return {
+      accepted: true,
+      reason: null,
+      proposal: record.proposal,
+      acceptanceRecord
+    };
+  }
+
+  expireProposalIfNeeded(proposalId, { nowMs = Date.now() } = {}) {
+    const record = this.getProposal(proposalId);
+    if (!record) {
+      return { expired: false, reason: 'Proposal not found.', proposal: null };
+    }
+
+    const commercial = record.proposal.commercial ?? {};
+    const acceptanceState = String(commercial?.acceptance?.state ?? '').toUpperCase();
+    if (acceptanceState === CommercialAcceptanceStates.ACCEPTED) {
+      return { expired: false, reason: null, proposal: record.proposal };
+    }
+
+    const expiryMs = Date.parse(String(commercial.expiresAt ?? ''));
+    if (!Number.isFinite(expiryMs)) {
+      return { expired: false, reason: 'Proposal expiration is invalid.', proposal: record.proposal };
+    }
+
+    if (expiryMs > nowMs) {
+      return { expired: false, reason: null, proposal: record.proposal };
+    }
+
+    record.proposal.commercial.acceptance = {
+      ...(record.proposal.commercial.acceptance ?? {}),
+      state: CommercialAcceptanceStates.EXPIRED,
+      termsAccepted: false
+    };
+    record.proposal.updatedAt = isoNow(this.now);
+    record.proposal.auditTrail.push({
+      type: 'COMMERCIAL_EXPIRED',
+      timestamp: isoNow(this.now)
+    });
+    this.persistRecord(record);
+
+    return { expired: true, reason: null, proposal: record.proposal };
   }
 
   getPortfolioSummaryMetrics() {

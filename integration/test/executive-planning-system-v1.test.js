@@ -8,6 +8,9 @@ import { MissionConversionBridge } from '../src/executive/mission-conversion-bri
 import { MissionRegistry } from '../src/executive/mission-registry.js';
 import { WorkforceDirector } from '../src/executive/workforce-director.js';
 import {
+  CommercialAcceptanceStates,
+  CommercialPackageTypes,
+  moneyMinorToMajorUnits,
   ExecutiveDecisions,
   PlanningRecommendedDecisions,
   ProposalStatuses
@@ -475,4 +478,245 @@ test('engine exposes approved decision recommendation path', () => {
     ].includes(result.evaluation.recommendedDecision),
     true
   );
+});
+
+test('WS-1 canonical commercial packages include launch and website care', () => {
+  const { system } = createSystem();
+  const packages = system.listCommercialPackages();
+  const launch = packages.find((item) => item.packageType === CommercialPackageTypes.LAUNCH_PACKAGE);
+  const care = packages.find((item) => item.packageType === CommercialPackageTypes.WEBSITE_CARE);
+
+  assert.equal(Array.isArray(packages), true);
+  assert.equal(Boolean(launch), true);
+  assert.equal(Boolean(care), true);
+  assert.equal(launch.defaultPriceMoney.amountMinor, 250000);
+  assert.equal(launch.defaultPriceMoney.currency, 'USD');
+  assert.equal(care.defaultPriceMoney.amountMinor, 39500);
+  assert.equal(care.defaultPriceMoney.currency, 'USD');
+  assert.equal(moneyMinorToMajorUnits(launch.defaultPriceMoney.amountMinor), 2500);
+  assert.equal(moneyMinorToMajorUnits(care.defaultPriceMoney.amountMinor), 395);
+});
+
+test('WS-1 submission generates initial commercial proposal artifact with expiration', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  assert.equal(submit.accepted, true);
+  const commercial = submit.proposal.commercial;
+  assert.equal(typeof commercial.expiresAt, 'string');
+  assert.equal(Array.isArray(commercial.versions), true);
+  assert.equal(commercial.versions.length, 1);
+  assert.equal(commercial.activeVersionNumber, 1);
+
+  const launchItem = commercial.versions[0].lineItems.find((item) => item.packageType === CommercialPackageTypes.LAUNCH_PACKAGE);
+  assert.equal(Boolean(launchItem), true);
+  assert.equal(launchItem.unitPriceMoney.amountMinor, 250000);
+  assert.equal(launchItem.unitPriceMoney.currency, 'USD');
+  assert.equal(launchItem.totalPriceMoney.amountMinor, 250000);
+  assert.equal(commercial.versions[0].pricing.totalMoney.amountMinor, 250000);
+  assert.equal(commercial.versions[0].pricing.totalMoney.currency, 'USD');
+});
+
+test('WS-1 supports commercial proposal versioning', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  const result = system.generateCommercialProposalArtifact({
+    proposalId: submit.proposal.proposalId,
+    createdBy: 'commercial_director',
+    lineItems: [
+      { packageType: CommercialPackageTypes.LAUNCH_PACKAGE, quantity: 1 },
+      { packageType: CommercialPackageTypes.WEBSITE_CARE, quantity: 1 }
+    ],
+    notes: 'v2 artifact'
+  });
+
+  assert.equal(result.accepted, true);
+  assert.equal(result.version.versionNumber, 2);
+  assert.equal(result.proposal.commercial.activeVersionNumber, 2);
+  assert.equal(result.proposal.commercial.versions.length, 2);
+  assert.equal(result.version.pricing.totalMoney.amountMinor, 289500);
+  assert.equal(result.version.pricing.totalMoney.currency, 'USD');
+});
+
+test('WS-1 controlled price override creates audited version', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  const override = system.applyCommercialPriceOverride({
+    proposalId: submit.proposal.proposalId,
+    actor: 'commercial_director',
+    reason: 'Pilot customer launch discount',
+    totalMoney: {
+      amountMinor: 240000,
+      currency: 'USD'
+    }
+  });
+
+  assert.equal(override.accepted, true);
+  assert.equal(override.override.newMoney.amountMinor, 240000);
+  assert.equal(override.override.newMoney.currency, 'USD');
+  assert.equal(override.proposal.commercial.overrideHistory.length, 1);
+  assert.equal(override.proposal.commercial.activeVersionNumber, 2);
+  assert.equal(override.proposal.commercial.versions[1].pricing.totalMoney.amountMinor, 240000);
+  assert.equal(
+    override.proposal.auditTrail.some((entry) => entry.type === 'COMMERCIAL_PRICE_OVERRIDE'),
+    true
+  );
+});
+
+test('WS-1 rejects ambiguous and unsafe override money values', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  const fractional = system.applyCommercialPriceOverride({
+    proposalId: submit.proposal.proposalId,
+    actor: 'commercial_director',
+    reason: 'invalid fractional',
+    totalMoney: {
+      amountMinor: 12.5,
+      currency: 'USD'
+    }
+  });
+  const negative = system.applyCommercialPriceOverride({
+    proposalId: submit.proposal.proposalId,
+    actor: 'commercial_director',
+    reason: 'invalid negative',
+    totalMoney: {
+      amountMinor: -1,
+      currency: 'USD'
+    }
+  });
+  const unsupportedCurrency = system.applyCommercialPriceOverride({
+    proposalId: submit.proposal.proposalId,
+    actor: 'commercial_director',
+    reason: 'invalid currency',
+    totalMoney: {
+      amountMinor: 200000,
+      currency: 'EUR'
+    }
+  });
+
+  assert.equal(fractional.accepted, false);
+  assert.equal(fractional.reason.includes('integer minor-unit'), true);
+  assert.equal(negative.accepted, false);
+  assert.equal(negative.reason.includes('positive'), true);
+  assert.equal(unsupportedCurrency.accepted, false);
+  assert.equal(unsupportedCurrency.reason.includes('unsupported'), true);
+});
+
+test('WS-1 commercial acceptance creates customer-project linked acceptance record and quote lock', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  const accepted = system.acceptCommercialProposal({
+    proposalId: submit.proposal.proposalId,
+    customerId: 'cus-001',
+    projectId: 'mission-001',
+    acceptedBy: 'Morgan Lee',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+
+  assert.equal(accepted.accepted, true);
+  assert.equal(accepted.proposal.commercial.acceptance.state, CommercialAcceptanceStates.ACCEPTED);
+  assert.equal(accepted.acceptanceRecord.customerId, 'cus-001');
+  assert.equal(accepted.acceptanceRecord.projectId, 'mission-001');
+  assert.equal(accepted.proposal.commercial.priceLock.locked, true);
+  assert.equal(accepted.acceptanceRecord.lockedQuote.amountMinor, 250000);
+  assert.equal(accepted.acceptanceRecord.lockedQuote.currency, 'USD');
+  assert.equal(typeof accepted.acceptanceRecord.lockedQuote.lineItemIntegrityHash, 'string');
+  assert.equal(accepted.proposal.commercial.priceLock.lockRecord.amountMinor, 250000);
+  assert.equal(accepted.proposal.commercial.priceLock.lockRecord.currency, 'USD');
+  assert.equal(accepted.proposal.commercial.priceLock.lockRecord.proposalVersion, 1);
+  assert.equal(accepted.proposal.commercial.priceLock.lockRecord.actor, 'Morgan Lee');
+  assert.equal(accepted.proposal.commercial.priceLock.lockRecord.reason, 'CUSTOMER_ACCEPTANCE');
+});
+
+test('WS-1 blocks price override and artifact versioning after quote lock', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  const accepted = system.acceptCommercialProposal({
+    proposalId: submit.proposal.proposalId,
+    customerId: 'cus-001',
+    projectId: 'mission-001',
+    acceptedBy: 'Morgan Lee',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(accepted.accepted, true);
+
+  const blockedOverride = system.applyCommercialPriceOverride({
+    proposalId: submit.proposal.proposalId,
+    actor: 'commercial_director',
+    reason: 'Attempt post-lock change',
+    totalMoney: {
+      amountMinor: 200000,
+      currency: 'USD'
+    }
+  });
+  const blockedVersion = system.generateCommercialProposalArtifact({
+    proposalId: submit.proposal.proposalId,
+    createdBy: 'commercial_director',
+    lineItems: [{ packageType: CommercialPackageTypes.LAUNCH_PACKAGE, quantity: 1 }]
+  });
+
+  assert.equal(blockedOverride.accepted, false);
+  assert.equal(blockedOverride.reason.includes('locked'), true);
+  assert.equal(blockedVersion.accepted, false);
+  assert.equal(blockedVersion.reason.includes('locked'), true);
+});
+
+test('WS-1 rejects mismatched currency on artifact generation', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal());
+
+  const result = system.generateCommercialProposalArtifact({
+    proposalId: submit.proposal.proposalId,
+    createdBy: 'commercial_director',
+    lineItems: [
+      {
+        packageType: CommercialPackageTypes.LAUNCH_PACKAGE,
+        quantity: 1,
+        unitPriceMoney: {
+          amountMinor: 250000,
+          currency: 'EUR'
+        }
+      }
+    ]
+  });
+
+  assert.equal(result.accepted, false);
+  assert.equal(result.reason.includes('currency'), true);
+});
+
+test('WS-1 proposal expiration prevents acceptance and marks commercial state expired', () => {
+  const { system } = createSystem();
+  const submit = system.submitProposal(buildProposal({
+    commercial: {
+      expiresAt: '2000-01-01T00:00:00.000Z'
+    }
+  }));
+
+  const expired = system.expireCommercialProposal(submit.proposal.proposalId, {
+    nowMs: Date.parse('2001-01-01T00:00:00.000Z')
+  });
+  assert.equal(expired.expired, true);
+
+  const acceptance = system.acceptCommercialProposal({
+    proposalId: submit.proposal.proposalId,
+    customerId: 'cus-001',
+    projectId: 'mission-001',
+    acceptedBy: 'Morgan Lee',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+
+  assert.equal(acceptance.accepted, false);
+  assert.equal(acceptance.reason.includes('expired'), true);
+  assert.equal(acceptance.proposal.commercial.acceptance.state, CommercialAcceptanceStates.EXPIRED);
+});
+
+test('WS-1 dollar display conversion remains correct from minor units', () => {
+  assert.equal(moneyMinorToMajorUnits(250000), 2500);
+  assert.equal(moneyMinorToMajorUnits(39500), 395);
+  assert.equal(moneyMinorToMajorUnits(240000), 2400);
 });

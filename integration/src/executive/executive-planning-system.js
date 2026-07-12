@@ -30,6 +30,26 @@ export class ExecutivePlanningSystem {
     return this.portfolioManager.submitProposal(payload);
   }
 
+  listCommercialPackages() {
+    return this.portfolioManager.listCommercialPackages();
+  }
+
+  generateCommercialProposalArtifact(input) {
+    return this.portfolioManager.generateCommercialProposalArtifact(input);
+  }
+
+  applyCommercialPriceOverride(input) {
+    return this.portfolioManager.applyCommercialPriceOverride(input);
+  }
+
+  acceptCommercialProposal(input) {
+    return this.portfolioManager.acceptCommercialProposal(input);
+  }
+
+  expireCommercialProposal(proposalId, options) {
+    return this.portfolioManager.expireCommercialProposal(proposalId, options);
+  }
+
   evaluateAll() {
     return this.portfolioManager.evaluateAllUnderReview();
   }

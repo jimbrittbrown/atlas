@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 export const ProposalSourceTypes = Object.freeze({
   CEO: 'CEO',
@@ -43,6 +43,49 @@ export const ExecutiveDecisions = Object.freeze({
   DEFER: 'DEFER',
   REJECT: 'REJECT',
   CANCEL: 'CANCEL'
+});
+
+export const CommercialPackageTypes = Object.freeze({
+  LAUNCH_PACKAGE: 'LAUNCH_PACKAGE',
+  WEBSITE_CARE: 'WEBSITE_CARE'
+});
+
+export const CommercialAcceptanceStates = Object.freeze({
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  EXPIRED: 'EXPIRED'
+});
+
+export const SupportedCommercialCurrencies = Object.freeze(['USD']);
+
+export const CanonicalCommercialPackages = Object.freeze({
+  [CommercialPackageTypes.LAUNCH_PACKAGE]: Object.freeze({
+    packageType: CommercialPackageTypes.LAUNCH_PACKAGE,
+    packageCode: 'ATLAS_LAUNCH_PACKAGE_V1',
+    name: 'Atlas Launch Package',
+    description: 'Website strategy, design/build, QA, and executive handoff package.',
+    billingModel: 'ONE_TIME',
+    defaultPriceMoney: Object.freeze({ amountMinor: 250000, currency: 'USD' }),
+    deliverables: Object.freeze([
+      'Discovery and positioning alignment',
+      'Website build and production-ready artifact package',
+      'Quality assurance review and revision loop'
+    ])
+  }),
+  [CommercialPackageTypes.WEBSITE_CARE]: Object.freeze({
+    packageType: CommercialPackageTypes.WEBSITE_CARE,
+    packageCode: 'ATLAS_WEBSITE_CARE_V1',
+    name: 'Atlas Website Care',
+    description: 'Ongoing updates, monitoring, and monthly optimization/reporting support.',
+    billingModel: 'MONTHLY_RECURRING',
+    defaultPriceMoney: Object.freeze({ amountMinor: 39500, currency: 'USD' }),
+    deliverables: Object.freeze([
+      'Monthly maintenance and operational checks',
+      'Priority content and asset updates',
+      'Monthly performance and business health review'
+    ])
+  })
 });
 
 export const SupportedMissionTypes = Object.freeze([
@@ -141,10 +184,299 @@ function normalizeObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }
 
+function safeIsoTimestamp(value, fallback) {
+  const parsed = Date.parse(String(value ?? ''));
+  if (Number.isFinite(parsed)) {
+    return new Date(parsed).toISOString();
+  }
+
+  return fallback;
+}
+
+function getDefaultCommercialExpiration(timestamp) {
+  return new Date(Date.parse(timestamp) + (14 * 24 * 60 * 60 * 1000)).toISOString();
+}
+
+function clonePackageDefinition(packageType) {
+  const definition = CanonicalCommercialPackages[packageType];
+  if (!definition) return null;
+  return {
+    ...definition,
+    defaultPriceMoney: { ...definition.defaultPriceMoney },
+    deliverables: [...definition.deliverables]
+  };
+}
+
+function normalizeCommercialCurrency(value) {
+  const normalized = String(value ?? '').trim().toUpperCase();
+  if (!normalized || !SupportedCommercialCurrencies.includes(normalized)) {
+    return null;
+  }
+  return normalized;
+}
+
+function parseAmountMinor(value, { fieldName, allowZero = true } = {}) {
+  const numeric = Number(value);
+  const label = fieldName ?? 'amountMinor';
+
+  if (!Number.isFinite(numeric)) {
+    throw new Error(`${label} must be numeric.`);
+  }
+
+  if (!Number.isInteger(numeric)) {
+    throw new Error(`${label} must be an integer minor-unit value (cents).`);
+  }
+
+  if (numeric < 0 || (!allowZero && numeric === 0)) {
+    throw new Error(`${label} must be ${allowZero ? 'non-negative' : 'positive'}.`);
+  }
+
+  return numeric;
+}
+
+function normalizeMoneyShape(value, {
+  fallbackCurrency = 'USD',
+  fieldName = 'money',
+  allowZero = true
+} = {}) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error(`${fieldName} must be an object containing amountMinor and currency.`);
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(value, 'amountMinor')) {
+    throw new Error(`${fieldName}.amountMinor is required and must be minor units (cents).`);
+  }
+
+  const amountMinor = parseAmountMinor(value.amountMinor, {
+    fieldName: `${fieldName}.amountMinor`,
+    allowZero
+  });
+
+  const currency = normalizeCommercialCurrency(value.currency ?? fallbackCurrency);
+  if (!currency) {
+    throw new Error(`${fieldName}.currency is unsupported. Supported currencies: ${SupportedCommercialCurrencies.join(', ')}.`);
+  }
+
+  return {
+    amountMinor,
+    currency
+  };
+}
+
+function rejectAmbiguousLegacyMoneyFields(record = {}, { fieldName = 'record' } = {}) {
+  const legacyKeys = ['unitPrice', 'totalPrice', 'price', 'amount'];
+  const found = legacyKeys.find((key) => Object.prototype.hasOwnProperty.call(record, key));
+  if (found) {
+    throw new Error(`${fieldName}.${found} is ambiguous legacy money representation. Use amountMinor/currency money objects.`);
+  }
+}
+
+export function moneyMinorToMajorUnits(amountMinor) {
+  return Number((Number(amountMinor) / 100).toFixed(2));
+}
+
+export function createCommercialLineItemIntegrityHash(version = {}) {
+  const digestPayload = JSON.stringify({
+    proposalId: version.proposalId,
+    versionNumber: version.versionNumber,
+    termsVersion: version.termsVersion,
+    lineItems: version.lineItems,
+    totalMoney: version.pricing?.totalMoney ?? null
+  });
+
+  return createHash('sha256').update(digestPayload, 'utf8').digest('hex');
+}
+
+function normalizeCommercialLineItem(lineItem = {}) {
+  const normalizedInput = (lineItem && typeof lineItem === 'object' && !Array.isArray(lineItem))
+    ? { ...lineItem }
+    : {};
+  if (Object.prototype.hasOwnProperty.call(normalizedInput, 'totalPriceMoney')) {
+    delete normalizedInput.totalPriceMoney;
+  }
+
+  rejectAmbiguousLegacyMoneyFields(normalizedInput, { fieldName: 'lineItem' });
+
+  const normalizedType = String(normalizedInput.packageType ?? '').toUpperCase().trim();
+  const canonical = clonePackageDefinition(normalizedType);
+
+  if (!canonical) {
+    throw new Error(`Unsupported commercial package type: ${normalizedType || 'UNKNOWN'}.`);
+  }
+
+  const quantity = Number.parseInt(String(normalizedInput.quantity ?? 1), 10);
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    throw new Error('lineItem.quantity must be a positive integer.');
+  }
+
+  const unitPriceMoney = normalizedInput.unitPriceMoney
+    ? normalizeMoneyShape(lineItem.unitPriceMoney, {
+      fallbackCurrency: canonical.defaultPriceMoney.currency,
+      fieldName: 'lineItem.unitPriceMoney',
+      allowZero: false
+    })
+    : { ...canonical.defaultPriceMoney };
+
+  if (unitPriceMoney.currency !== canonical.defaultPriceMoney.currency) {
+    throw new Error('lineItem.unitPriceMoney.currency must match canonical package currency.');
+  }
+
+  const totalMinor = parseAmountMinor(unitPriceMoney.amountMinor * quantity, {
+    fieldName: 'lineItem.totalPriceMoney.amountMinor',
+    allowZero: false
+  });
+
+  return {
+    packageType: canonical.packageType,
+    packageCode: canonical.packageCode,
+    name: canonical.name,
+    billingModel: canonical.billingModel,
+    packageVersion: canonical.packageCode,
+    quantity,
+    unitPriceMoney,
+    totalPriceMoney: {
+      amountMinor: totalMinor,
+      currency: unitPriceMoney.currency
+    }
+  };
+}
+
+export function listCanonicalCommercialPackages() {
+  return Object.values(CanonicalCommercialPackages).map((entry) => ({
+    ...entry,
+    defaultPriceMoney: { ...entry.defaultPriceMoney },
+    deliverables: [...entry.deliverables]
+  }));
+}
+
+export function createCommercialProposalVersion({
+  proposalId,
+  versionNumber,
+  lineItems = [],
+  notes = null,
+  createdBy = 'SYSTEM',
+  termsVersion = 'ATLAS_WEBSITE_TERMS_V1',
+  totalMoneyOverride = null
+} = {}, { now } = {}) {
+  const createdAt = isoNow(now);
+  rejectAmbiguousLegacyMoneyFields(totalMoneyOverride ?? {}, { fieldName: 'totalMoneyOverride' });
+
+  const normalizedItems = (Array.isArray(lineItems) ? lineItems : [])
+    .map((item) => normalizeCommercialLineItem(item))
+    .filter(Boolean);
+
+  if (normalizedItems.length === 0) {
+    throw new Error('Commercial proposal version must include at least one valid line item.');
+  }
+
+  const currencies = new Set(normalizedItems.map((item) => item.unitPriceMoney.currency));
+  if (currencies.size !== 1) {
+    throw new Error('All commercial line items must share the same currency.');
+  }
+
+  const currency = Array.from(currencies)[0];
+
+  const subtotalMinor = normalizedItems.reduce((sum, item) => {
+    return sum + Number(item.totalPriceMoney.amountMinor ?? 0);
+  }, 0);
+
+  const subtotalMoney = {
+    amountMinor: parseAmountMinor(subtotalMinor, {
+      fieldName: 'pricing.subtotalMoney.amountMinor',
+      allowZero: false
+    }),
+    currency
+  };
+
+  const overrideMoney = totalMoneyOverride
+    ? normalizeMoneyShape(totalMoneyOverride, {
+      fallbackCurrency: currency,
+      fieldName: 'totalMoneyOverride',
+      allowZero: false
+    })
+    : null;
+
+  if (overrideMoney && overrideMoney.currency !== currency) {
+    throw new Error('totalMoneyOverride.currency must match line item currency.');
+  }
+
+  const totalMoney = overrideMoney ?? subtotalMoney;
+
+  const version = {
+    artifactId: `prop_art_${randomUUID()}`,
+    proposalId,
+    versionNumber,
+    createdAt,
+    createdBy,
+    notes,
+    termsVersion,
+    lineItems: normalizedItems,
+    pricing: {
+      subtotalMoney,
+      totalMoney,
+      overridden: overrideMoney != null
+    }
+  };
+
+  return {
+    ...version,
+    lineItemIntegrityHash: createCommercialLineItemIntegrityHash(version)
+  };
+}
+
+function normalizeCommercialDetails(payload = {}, { proposalId, timestamp } = {}) {
+  const commercialPayload = normalizeObject(payload.commercial);
+  const metadataCommercialContext = normalizeObject(payload?.metadata?.commercialContext);
+  const includeWebsiteCare = Boolean(
+    commercialPayload.includeWebsiteCare
+    ?? metadataCommercialContext.includeWebsiteCare
+    ?? false
+  );
+
+  const baseLineItems = [
+    { packageType: CommercialPackageTypes.LAUNCH_PACKAGE, quantity: 1 }
+  ];
+  if (includeWebsiteCare) {
+    baseLineItems.push({ packageType: CommercialPackageTypes.WEBSITE_CARE, quantity: 1 });
+  }
+
+  const version1 = createCommercialProposalVersion({
+    proposalId,
+    versionNumber: 1,
+    lineItems: commercialPayload.lineItems ?? baseLineItems,
+    notes: commercialPayload.notes ?? 'Initial commercial proposal artifact generated on submission.',
+    createdBy: commercialPayload.createdBy ?? 'SYSTEM',
+    termsVersion: commercialPayload?.terms?.version ?? 'ATLAS_WEBSITE_TERMS_V1'
+  });
+
+  return {
+    expiresAt: safeIsoTimestamp(commercialPayload.expiresAt, getDefaultCommercialExpiration(timestamp)),
+    activeVersionNumber: 1,
+    versions: [version1],
+    acceptance: {
+      state: CommercialAcceptanceStates.PENDING,
+      acceptedAt: null,
+      acceptedBy: null,
+      acceptanceRecordId: null,
+      customerId: null,
+      projectId: null,
+      termsVersion: version1.termsVersion,
+      termsAccepted: false
+    },
+    acceptanceRecords: [],
+    priceLock: {
+      locked: false,
+      lockRecord: null
+    },
+    overrideHistory: []
+  };
+}
+
 export function createMissionProposal(payload = {}, { now } = {}) {
   const timestamp = isoNow(now);
+  const proposalId = payload.proposalId ?? `prop_${randomUUID()}`;
   return {
-    proposalId: payload.proposalId ?? `prop_${randomUUID()}`,
+    proposalId,
     sourceType: normalizeString(payload.sourceType).toUpperCase() || ProposalSourceTypes.SYSTEM,
     sourceId: normalizeString(payload.sourceId) || null,
     customerId: normalizeString(payload.customerId) || null,
@@ -168,6 +500,7 @@ export function createMissionProposal(payload = {}, { now } = {}) {
       createsNewBusinessDivision: Boolean(payload?.governance?.createsNewBusinessDivision)
     },
     metadata: normalizeObject(payload.metadata),
+    commercial: normalizeCommercialDetails(payload, { proposalId, timestamp }),
     createdAt: payload.createdAt ?? timestamp,
     updatedAt: payload.updatedAt ?? timestamp,
     status: normalizeString(payload.status).toUpperCase() || ProposalStatuses.DRAFT,
@@ -237,6 +570,66 @@ export function validateMissionProposal(proposal = {}) {
 
   if (!Object.values(ProposalStatuses).includes(String(proposal.status ?? '').toUpperCase())) {
     issues.push(`status must be one of: ${Object.values(ProposalStatuses).join(', ')}.`);
+  }
+
+  const commercial = normalizeObject(proposal.commercial);
+  const versions = normalizeArray(commercial.versions);
+  if (versions.length === 0) {
+    issues.push('commercial.versions must contain at least one proposal artifact version.');
+  }
+
+  const activeVersionNumber = Number(commercial.activeVersionNumber ?? 0);
+  if (!Number.isInteger(activeVersionNumber) || activeVersionNumber <= 0) {
+    issues.push('commercial.activeVersionNumber must be a positive integer.');
+  }
+
+  const acceptanceState = String(commercial?.acceptance?.state ?? '').toUpperCase();
+  if (!Object.values(CommercialAcceptanceStates).includes(acceptanceState)) {
+    issues.push(`commercial.acceptance.state must be one of: ${Object.values(CommercialAcceptanceStates).join(', ')}.`);
+  }
+
+  versions.forEach((version, index) => {
+    const versionPrefix = `commercial.versions[${index}]`;
+    try {
+      const subtotalMoney = normalizeMoneyShape(version?.pricing?.subtotalMoney, {
+        fieldName: `${versionPrefix}.pricing.subtotalMoney`,
+        allowZero: false
+      });
+      const totalMoney = normalizeMoneyShape(version?.pricing?.totalMoney, {
+        fieldName: `${versionPrefix}.pricing.totalMoney`,
+        allowZero: false
+      });
+
+      if (subtotalMoney.currency !== totalMoney.currency) {
+        issues.push(`${versionPrefix}.pricing currencies must match.`);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(version?.pricing ?? {}, 'totalPrice')) {
+        issues.push(`${versionPrefix}.pricing.totalPrice is ambiguous legacy representation.`);
+      }
+
+      (normalizeArray(version?.lineItems)).forEach((item, lineItemIndex) => {
+        const itemPrefix = `${versionPrefix}.lineItems[${lineItemIndex}]`;
+        rejectAmbiguousLegacyMoneyFields(item, { fieldName: itemPrefix });
+        const unitMoney = normalizeMoneyShape(item?.unitPriceMoney, {
+          fieldName: `${itemPrefix}.unitPriceMoney`,
+          allowZero: false
+        });
+        const totalItemMoney = normalizeMoneyShape(item?.totalPriceMoney, {
+          fieldName: `${itemPrefix}.totalPriceMoney`,
+          allowZero: false
+        });
+        if (unitMoney.currency !== totalItemMoney.currency || unitMoney.currency !== totalMoney.currency) {
+          issues.push(`${itemPrefix} currencies must match proposal total currency.`);
+        }
+      });
+    } catch (error) {
+      issues.push(error instanceof Error ? error.message : String(error));
+    }
+  });
+
+  if (!proposal.commercial?.expiresAt || !Number.isFinite(Date.parse(String(proposal.commercial.expiresAt)))) {
+    issues.push('commercial.expiresAt must be a valid timestamp.');
   }
 
   return {
