@@ -640,7 +640,10 @@ class DuplicateSuppressionLedger {
     customerId = null
   } = {}) {
     const key = this.makeKey({ sourceEventId, notificationType, recipient, channel });
-    const existing = this.records.get(key) ?? null;
+    const existing = this.records.get(key)
+      ?? this.storageProvider?.getStateRecord?.({ namespace: `${this.namespace}.suppression-ledger`, key })?.value
+      ?? null;
+    if (existing) this.records.set(key, existing);
     const nowValue = nowMs(this.now);
 
     if (existing) {
@@ -690,6 +693,36 @@ class DuplicateSuppressionLedger {
         retentionExpiresAt: new Date(nowValue + Number(suppressionWindowMs) + 86400000).toISOString()
       }
     });
+
+    if (typeof this.storageProvider?.initializeSync === 'function') {
+      this.storageProvider.initializeSync();
+      const inserted = this.storageProvider.database.prepare(
+        `INSERT INTO storage_records (namespace, record_id, payload, updated_at)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(namespace, record_id) DO NOTHING`
+      ).run(`${this.namespace}.suppression-ledger`, key, JSON.stringify(next), nowIso(this.now));
+
+      if (Number(inserted?.changes ?? 0) === 1) {
+        this.records.set(key, next);
+        return { suppressed: false, overridden: false, key };
+      }
+
+      const winner = this.storageProvider.getStateRecord?.({ namespace: `${this.namespace}.suppression-ledger`, key })?.value ?? existing;
+      if (winner) {
+        this.records.set(key, winner);
+        this.owner?.recordAudit?.('duplicate_suppressed', {
+          intentId,
+          businessId,
+          customerId,
+          sourceEventId,
+          notificationType,
+          channel,
+          suppressionWindowMs
+        });
+        this.owner?.incrementTelemetry?.('governance.duplicate.suppressed.count', 1);
+      }
+      return { suppressed: true, overridden: false, key };
+    }
 
     this.records.set(key, next);
     upsertRecord({ provider: this.storageProvider, namespace: `${this.namespace}.suppression-ledger`, key, value: next });

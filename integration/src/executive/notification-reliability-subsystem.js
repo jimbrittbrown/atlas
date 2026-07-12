@@ -286,7 +286,9 @@ export class NotificationReliabilitySubsystem {
     const job = this.findJob(jobId);
     if (!job) return { accepted: false, code: 'UNKNOWN_JOB', reason: 'Job not found.' };
 
-    const existingId = this.deadLetterByJob.get(job.jobId) ?? null;
+    const existingId = this.deadLetterByJob.get(job.jobId)
+      ?? this.storageProvider?.getMetaSync?.(`${this.namespace}.dead-letter-by-job`, job.jobId)
+      ?? null;
     if (existingId) {
       const existing = this.deadLetters.get(existingId);
       if (existing) {
@@ -299,12 +301,56 @@ export class NotificationReliabilitySubsystem {
       }
     }
 
+    const deadLetterId = deterministicId('ndlq', `${job.jobId}:${job.attemptCount}:${terminalReason}`);
+    if (typeof this.storageProvider?.initializeSync === 'function') {
+      this.storageProvider.initializeSync();
+      const claimed = this.storageProvider.database.prepare(
+        `INSERT INTO storage_meta (namespace, meta_key, payload, updated_at)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(namespace, meta_key) DO NOTHING`
+      ).run(
+        `${this.namespace}.dead-letter-by-job`,
+        job.jobId,
+        JSON.stringify(deadLetterId),
+        nowIso(this.now)
+      );
+
+      if (Number(claimed?.changes ?? 0) !== 1) {
+        const winnerId = this.storageProvider.getMetaSync?.(`${this.namespace}.dead-letter-by-job`, job.jobId)
+          ?? this.deadLetterByJob.get(job.jobId)
+          ?? null;
+        if (winnerId) {
+          const existingWinner = this.deadLetters.get(winnerId)
+            ?? this.storageProvider.getStateRecord?.({ namespace: `${this.namespace}.dead-letters`, key: winnerId })?.value
+            ?? null;
+          if (existingWinner) {
+            this.deadLetters.set(winnerId, existingWinner);
+            this.deadLetterByJob.set(job.jobId, winnerId);
+            return {
+              accepted: true,
+              code: 'DEAD_LETTER_ALREADY_EXISTS',
+              deadLetter: existingWinner,
+              duplicate: true
+            };
+          }
+
+          this.deadLetterByJob.set(job.jobId, winnerId);
+          return {
+            accepted: true,
+            code: 'DEAD_LETTER_ALREADY_EXISTS',
+            deadLetter: null,
+            duplicate: true
+          };
+        }
+      }
+    }
+
     const attempts = this.orchestrationCore.getAttemptsForJob(job.jobId);
     const results = this.orchestrationCore.getResultsForJob(job.jobId);
     const latestAttempt = findLatestAttempt(this.orchestrationCore, job.jobId);
 
     const baseRecord = createDeadLetterRecord({
-      deadLetterId: deterministicId('ndlq', `${job.jobId}:${job.attemptCount}:${terminalReason}`),
+      deadLetterId,
       jobId: job.jobId,
       terminalReason: String(terminalReason ?? 'terminal_failure').trim(),
       finalAttemptAt: latestAttempt?.finishedAt ?? nowIso(this.now),

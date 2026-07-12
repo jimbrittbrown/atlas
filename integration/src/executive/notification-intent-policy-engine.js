@@ -40,6 +40,10 @@ function stableHash(value) {
   return createHash('sha256').update(String(value ?? ''), 'utf8').digest('hex');
 }
 
+function deterministicId(prefix, seed) {
+  return `${prefix}_${stableHash(seed).slice(0, 24)}`;
+}
+
 function normalizeEventType(value) {
   return String(value ?? '').trim().toUpperCase();
 }
@@ -481,8 +485,19 @@ export class NotificationIntentPolicyEngine {
         }
       }
 
+      const candidateIntentId = deterministicId('nint', intent.dedupeKey);
+      const claim = this.claimIntentDedupe({ dedupeKey: intent.dedupeKey, intentId: candidateIntentId });
+      if (!claim.accepted) {
+        const duplicateIntent = this.resolveIntentById(claim.intentId);
+        if (duplicateIntent) {
+          duplicates.push(duplicateIntent);
+        }
+        return;
+      }
+
       const record = {
         ...intent,
+        intentId: candidateIntentId,
         sourceEventId,
         version: 1,
         createdAt: isoNow(this.now),
@@ -523,6 +538,59 @@ export class NotificationIntentPolicyEngine {
       created,
       duplicates
     };
+  }
+
+  claimIntentDedupe({ dedupeKey, intentId } = {}) {
+    const namespace = `${this.namespace}.intent-by-dedupe`;
+    const key = String(dedupeKey ?? '').trim();
+    const value = String(intentId ?? '').trim();
+    if (!key || !value) return { accepted: false, intentId: null };
+
+    if (typeof this.storageProvider?.initializeSync === 'function') {
+      this.storageProvider.initializeSync();
+      const inserted = this.storageProvider.database.prepare(
+        `INSERT INTO storage_meta (namespace, meta_key, payload, updated_at)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(namespace, meta_key) DO NOTHING`
+      ).run(namespace, key, JSON.stringify(value), isoNow(this.now));
+
+      if (Number(inserted?.changes ?? 0) === 1) {
+        this.intentByDedupe.set(key, value);
+        return { accepted: true, intentId: value };
+      }
+
+      const existing = this.storageProvider.getMetaSync?.(namespace, key)
+        ?? this.storageProvider.getMeta?.(namespace, key)
+        ?? this.intentByDedupe.get(key)
+        ?? null;
+      return { accepted: false, intentId: existing };
+    }
+
+    const existing = this.intentByDedupe.get(key) ?? null;
+    if (existing) return { accepted: false, intentId: existing };
+
+    this.intentByDedupe.set(key, value);
+    setMetaValue({ provider: this.storageProvider, namespace, key, value });
+    return { accepted: true, intentId: value };
+  }
+
+  resolveIntentById(intentId) {
+    const key = String(intentId ?? '').trim();
+    if (!key) return null;
+
+    const inMemory = this.intents.get(key) ?? null;
+    if (inMemory) return inMemory;
+
+    if (this.storageProvider && typeof this.storageProvider.getStateRecord === 'function') {
+      const record = this.storageProvider.getStateRecord({ namespace: `${this.namespace}.intents`, key });
+      if (record?.ok && record.value) {
+        const frozen = freezeRecord({ ...record.value });
+        this.intents.set(key, frozen);
+        return frozen;
+      }
+    }
+
+    return null;
   }
 
   evaluateIntentPolicy({ intentId } = {}) {
