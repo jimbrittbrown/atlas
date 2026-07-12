@@ -126,7 +126,10 @@ test('mission runner reuses existing applications and managers', async () => {
     playbookId: 'youtube-business',
     businessRequest: {
       id: 'BR-002',
-      objective: 'Launch horror shorts channel'
+      objective: 'Launch horror shorts channel',
+      runtimePolicy: {
+        publishingMode: 'PRIVATE'
+      }
     }
   });
 
@@ -321,7 +324,10 @@ test('mission runner orchestrates each major workflow step exactly once', async 
     playbookId: 'youtube-business',
     businessRequest: {
       id: 'BR-004',
-      objective: 'Launch horror shorts channel'
+      objective: 'Launch horror shorts channel',
+      runtimePolicy: {
+        publishingMode: 'PRIVATE'
+      }
     }
   });
 
@@ -333,4 +339,274 @@ test('mission runner orchestrates each major workflow step exactly once', async 
     qualityReview: 1,
     publishing: 1
   });
+});
+
+test('mission runner keeps publishing disabled by default through runtime orchestrator', async () => {
+  let publishingCalls = 0;
+
+  const runner = new MissionRunner({
+    enterpriseKnowledgeLibrary: {
+      getPlaybook() {
+        return {
+          playbookId: 'youtube-business',
+          title: 'YouTube Business Playbook v1.0',
+          objective: 'Launch YouTube business'
+        };
+      }
+    },
+    businessEvaluationApplication: {
+      async evaluateBusinessOpportunity() {
+        return {
+          recommendation: 'PROCEED',
+          businessName: 'Atlas Shorts'
+        };
+      }
+    },
+    workers: {
+      scriptWorker: { async execute() { return { scriptTitle: 'Title', script: 'Script body' }; } },
+      voiceWorker: { async execute() { return { audioFile: 'voice.wav' }; } },
+      imageWorker: { async execute() { return { imageFiles: ['image-01.png'] }; } },
+      videoWorker: { async execute() { return { videoFile: 'video.mp4' }; } }
+    },
+    qualityReviewEngine: {
+      review() {
+        return {
+          passed: true,
+          issues: [],
+          remediationTasks: [],
+          executiveRecommendation: 'APPROVE_FOR_RELEASE'
+        };
+      }
+    },
+    publishingWorker: {
+      async execute() {
+        publishingCalls += 1;
+        return {
+          publishStatus: 'SCHEDULED'
+        };
+      }
+    }
+  });
+
+  const report = await runner.runMission({
+    playbookId: 'youtube-business',
+    businessRequest: {
+      id: 'BR-005',
+      objective: 'Launch horror shorts channel'
+    }
+  });
+
+  assert.equal(report.status, 'MISSION_COMPLETED');
+  assert.equal(report.publishingResult.publishStatus, 'NOT_REQUESTED');
+  assert.equal(publishingCalls, 0);
+});
+
+test('mission runner forwards stopAfterReleaseCandidate and reports rc-only completion', async () => {
+  let capturedRuntimeRequest = null;
+
+  const runner = new MissionRunner({
+    enterpriseKnowledgeLibrary: {
+      getPlaybook() {
+        return {
+          playbookId: 'youtube-business',
+          title: 'YouTube Business Playbook v1.0',
+          objective: 'Launch YouTube business'
+        };
+      }
+    },
+    businessEvaluationApplication: {
+      async evaluateBusinessOpportunity() {
+        return {
+          recommendation: 'PROCEED',
+          businessName: 'Atlas Shorts'
+        };
+      }
+    },
+    missionRuntimeOrchestrator: {
+      async runMission(request) {
+        capturedRuntimeRequest = request;
+
+        return {
+          missionId: request.missionId,
+          state: 'RC_PACKAGING',
+          runtimeContext: {
+            terminalMissionOutcome: 'RELEASE_CANDIDATE_CREATED',
+            artifacts: {
+              releaseCandidatePackage: {
+                assetInventory: {
+                  voiceOutput: '/var/lib/atlas/assets/audio/voice-001.mp3',
+                  imageOutputs: ['/var/lib/atlas/assets/images/image-001.png'],
+                  videoOutput: '/var/lib/atlas/assets/video/video-001.mp4'
+                }
+              },
+              releaseCandidatePackagePath: '/var/lib/atlas/assets/reports/release-candidate-package-mission-youtube-business-br-008.json',
+              executiveReportPath: '/var/lib/atlas/assets/reports/executive-report-mission-youtube-business-br-008.json',
+              qualityReview: {
+                passed: true,
+                issues: [],
+                remediationTasks: [],
+                executiveRecommendation: 'APPROVE_FOR_RELEASE'
+              },
+              publishing: {
+                status: 'STOPPED_AFTER_RELEASE_CANDIDATE',
+                publishStatus: 'NOT_REQUESTED'
+              }
+            }
+          }
+        };
+      }
+    }
+  });
+
+  const report = await runner.runMission({
+    playbookId: 'youtube-business',
+    businessRequest: {
+      id: 'BR-008',
+      objective: 'Release candidate only validation',
+      runtimePolicy: {
+        stopAfterReleaseCandidate: true,
+        publishingMode: 'PRIVATE'
+      }
+    }
+  });
+
+  assert.equal(capturedRuntimeRequest.stopAfterReleaseCandidate, true);
+  assert.equal(capturedRuntimeRequest.publishingMode, 'PRIVATE');
+  assert.equal(report.status, 'RELEASE_CANDIDATE_CREATED');
+  assert.equal(report.publishingResult.status, 'STOPPED_AFTER_RELEASE_CANDIDATE');
+  assert.match(report.executiveSummary, /Artifact paths:/);
+  assert.match(report.executiveSummary, /mp4=\/var\/lib\/atlas\/assets\/video\/video-001\.mp4/);
+  assert.match(report.executiveSummary, /audio=\/var\/lib\/atlas\/assets\/audio\/voice-001\.mp3/);
+  assert.match(report.executiveSummary, /images=\/var\/lib\/atlas\/assets\/images\/image-001\.png/);
+  assert.match(report.executiveSummary, /executiveReport=\/var\/lib\/atlas\/assets\/reports\/executive-report-mission-youtube-business-br-008\.json/);
+  assert.match(report.executiveSummary, /releaseCandidatePackage=\/var\/lib\/atlas\/assets\/reports\/release-candidate-package-mission-youtube-business-br-008\.json/);
+});
+
+test('mission runner behaves as thin adapter and delegates execution to mission runtime orchestrator', async () => {
+  let runtimeInvocationCount = 0;
+  let capturedRuntimeRequest = null;
+
+  const runner = new MissionRunner({
+    enterpriseKnowledgeLibrary: {
+      getPlaybook() {
+        return {
+          playbookId: 'youtube-business',
+          title: 'YouTube Business Playbook v1.0',
+          objective: 'Launch YouTube business'
+        };
+      }
+    },
+    businessEvaluationApplication: {
+      async evaluateBusinessOpportunity() {
+        return {
+          recommendation: 'PROCEED',
+          businessName: 'Atlas Shorts'
+        };
+      }
+    },
+    missionRuntimeOrchestrator: {
+      async runMission(request) {
+        runtimeInvocationCount += 1;
+        capturedRuntimeRequest = request;
+
+        return {
+          missionId: request.missionId,
+          state: 'COMPLETED',
+          runtimeContext: {
+            artifacts: {
+              qualityReview: {
+                passed: true,
+                issues: [],
+                remediationTasks: []
+              },
+              publishing: {
+                publishStatus: 'NOT_REQUESTED'
+              }
+            }
+          }
+        };
+      }
+    },
+    workers: {
+      scriptWorker: { async execute() { throw new Error('MissionRunner should not execute workers directly.'); } },
+      voiceWorker: { async execute() { throw new Error('MissionRunner should not execute workers directly.'); } },
+      imageWorker: { async execute() { throw new Error('MissionRunner should not execute workers directly.'); } },
+      videoWorker: { async execute() { throw new Error('MissionRunner should not execute workers directly.'); } }
+    }
+  });
+
+  const report = await runner.runMission({
+    playbookId: 'youtube-business',
+    businessRequest: {
+      id: 'BR-006',
+      objective: 'Thin adapter verification'
+    }
+  });
+
+  assert.equal(runtimeInvocationCount, 1);
+  assert.equal(typeof capturedRuntimeRequest, 'object');
+  assert.equal(capturedRuntimeRequest.objective, 'Thin adapter verification');
+  assert.equal(capturedRuntimeRequest.plan.launchPlan !== undefined, true);
+  assert.equal(capturedRuntimeRequest.plan.executionPlan !== undefined, true);
+  assert.equal(report.status, 'MISSION_COMPLETED');
+});
+
+test('mission runner preserves backward-compatible report fields while adding runtime result', async () => {
+  const runner = new MissionRunner({
+    enterpriseKnowledgeLibrary: {
+      getPlaybook() {
+        return {
+          playbookId: 'youtube-business',
+          title: 'YouTube Business Playbook v1.0',
+          objective: 'Launch YouTube business'
+        };
+      }
+    },
+    businessEvaluationApplication: {
+      async evaluateBusinessOpportunity() {
+        return {
+          recommendation: 'PROCEED',
+          businessName: 'Atlas Shorts'
+        };
+      }
+    },
+    missionRuntimeOrchestrator: {
+      async runMission(request) {
+        return {
+          missionId: request.missionId,
+          state: 'COMPLETED',
+          runtimeContext: {
+            artifacts: {
+              qualityReview: {
+                passed: true,
+                issues: []
+              },
+              publishing: {
+                publishStatus: 'NOT_REQUESTED'
+              }
+            }
+          }
+        };
+      }
+    }
+  });
+
+  const report = await runner.runMission({
+    playbookId: 'youtube-business',
+    businessRequest: {
+      id: 'BR-007',
+      objective: 'Backward compatibility verification'
+    }
+  });
+
+  assert.equal(typeof report.missionId, 'string');
+  assert.equal(typeof report.status, 'string');
+  assert.equal(typeof report.decisionPackage, 'object');
+  assert.equal(typeof report.launchPlan, 'object');
+  assert.equal(typeof report.executionPlan, 'object');
+  assert.equal(typeof report.progressReport, 'object');
+  assert.equal(typeof report.qualityReview, 'object');
+  assert.equal(typeof report.publishingResult, 'object');
+  assert.equal(typeof report.executiveSummary, 'string');
+  assert.equal(typeof report.runtimeResult, 'object');
 });

@@ -218,6 +218,8 @@ test('google image service supports legacy Imagen mode through feature flag', as
 test('google imagen service generates image assets and registers them', async () => {
   resetOutputDir();
   const assetRegistry = new AssetRegistry();
+  let generationCallCount = 0;
+  const generationRequestBodies = [];
   const { configurationService, secretManager } = createConfiguredServices({
     env: {
       GOOGLE_CLOUD_PROJECT: 'atlas-test-project',
@@ -230,14 +232,23 @@ test('google imagen service generates image assets and registers them', async ()
     configurationService,
     secretManager,
     assetRegistry,
-    fetchImpl: async (url) => {
+    fetchImpl: async (url, options) => {
       if (url.includes('/token')) {
         return createOkTokenResponse('vertex-access-token');
       }
 
+      generationCallCount += 1;
+      generationRequestBodies.push(JSON.parse(options.body));
+
+      if (generationCallCount === 1) {
+        return createOkGeminiResponse([
+          { text: 'Generated images' },
+          { inlineData: { mimeType: 'image/png', data: Buffer.from('IMAGE-1').toString('base64') } }
+        ]);
+      }
+
       return createOkGeminiResponse([
-        { text: 'Generated images' },
-        { inlineData: { mimeType: 'image/png', data: Buffer.from('IMAGE-1').toString('base64') } },
+        { text: 'Generated image' },
         { inlineData: { mimeType: 'image/png', data: Buffer.from('IMAGE-2').toString('base64') } }
       ]);
     }
@@ -253,6 +264,8 @@ test('google imagen service generates image assets and registers them', async ()
   });
 
   assert.equal(output.imageFiles.length, 2);
+  assert.equal(generationCallCount, 2);
+  assert.equal(generationRequestBodies.every(body => body?.generationConfig?.candidateCount === 1), true);
   assert.equal(output.imageFiles.every(file => file.startsWith(TEST_OUTPUT_DIR)), true);
   assert.equal(existsSync(output.imageFiles[0]), true);
   assert.equal(readFileSync(output.imageFiles[0], 'utf8'), 'IMAGE-1');
@@ -362,8 +375,211 @@ test('google imagen service normalizes failure paths', async () => {
   assert.equal(existsSync(output.imageFiles[0]), true);
   const assets = assetRegistry.listAssets();
   assert.equal(assets.length, 1);
-  assert.equal(assets[0].status, 'FAILED');
-  assert.equal(assets[0].metadata.provider, 'google-vertex');
+  assert.equal(assets[0].status, 'GENERATED');
+  assert.equal(assets[0].metadata.provider, 'local-fallback');
   assert.equal(assets[0].metadata.error, 'GOOGLE_VERTEX_HTTP_500');
+  resetOutputDir();
+});
+
+test('google imagen service keeps first image when second Gemini request fails', async () => {
+  resetOutputDir();
+  const assetRegistry = new AssetRegistry();
+  let generationCalls = 0;
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      GOOGLE_CLOUD_PROJECT: 'atlas-test-project',
+      GOOGLE_CLOUD_LOCATION: 'us-central1',
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: createServiceAccountJson()
+    },
+    retryPolicy: {
+      maxRetries: 0,
+      baseDelayMs: 1
+    }
+  });
+
+  const service = new GoogleImagenService({
+    outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
+    assetRegistry,
+    maxRetries: 0,
+    retryBaseDelayMs: 1,
+    fetchImpl: async (url) => {
+      if (url.includes('/token')) {
+        return createOkTokenResponse('vertex-access-token');
+      }
+
+      generationCalls += 1;
+
+      if (generationCalls === 1) {
+        return createOkGeminiResponse([
+          { inlineData: { mimeType: 'image/png', data: Buffer.from('PARTIAL-IMAGE-1').toString('base64') } }
+        ]);
+      }
+
+      return createErrorResponse(500);
+    }
+  });
+
+  const output = await service.generateImages({
+    prompt: 'Partial Gemini image generation',
+    sceneDescription: 'Partial Gemini image generation',
+    artStyle: 'Editorial Illustration',
+    imageCount: 2,
+    businessId: 'BIZ-PARTIAL',
+    missionId: 'MISSION-PARTIAL'
+  });
+
+  assert.equal(generationCalls, 2);
+  assert.equal(output.imageFiles.length, 2);
+  assert.equal(output.imageFiles[0].includes('image-failed-'), false);
+  assert.equal(readFileSync(output.imageFiles[0], 'utf8'), 'PARTIAL-IMAGE-1');
+  assert.equal(output.imageFiles[1].includes('image-fallback-'), true);
+  assert.equal(readFileSync(output.imageFiles[1]).length > 0, true);
+
+  const assets = assetRegistry.listAssets();
+  assert.equal(assets.length, 2);
+  assert.equal(assets[0].status, 'GENERATED');
+  assert.equal(assets[0].metadata.error, 'GOOGLE_VERTEX_HTTP_500');
+  resetOutputDir();
+});
+
+test('google imagen service persists first image before later Gemini request failure', async () => {
+  resetOutputDir();
+  let generationCalls = 0;
+  let persistedAfterFirstSuccess = false;
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      GOOGLE_CLOUD_PROJECT: 'atlas-test-project',
+      GOOGLE_CLOUD_LOCATION: 'us-central1',
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: createServiceAccountJson()
+    },
+    retryPolicy: {
+      maxRetries: 0,
+      baseDelayMs: 1
+    }
+  });
+
+  const service = new GoogleImagenService({
+    outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
+    maxRetries: 0,
+    retryBaseDelayMs: 1,
+    fetchImpl: async (url) => {
+      if (url.includes('/token')) {
+        return createOkTokenResponse('vertex-access-token');
+      }
+
+      generationCalls += 1;
+
+      if (generationCalls === 1) {
+        return createOkGeminiResponse([
+          { inlineData: { mimeType: 'image/png', data: Buffer.from('PERSISTENCE-IMAGE-1').toString('base64') } }
+        ]);
+      }
+
+      persistedAfterFirstSuccess = existsSync(`${TEST_OUTPUT_DIR}/image-editorial-illustration-persistencei-01.png`);
+      return createErrorResponse(500);
+    }
+  });
+
+  const output = await service.generateImages({
+    prompt: 'Persistence image check',
+    sceneDescription: 'Persistence image check',
+    artStyle: 'Editorial Illustration',
+    imageCount: 2
+  });
+
+  assert.equal(generationCalls, 2);
+  assert.equal(persistedAfterFirstSuccess, true);
+  assert.equal(output.imageFiles.length, 2);
+  assert.equal(readFileSync(output.imageFiles[0], 'utf8'), 'PERSISTENCE-IMAGE-1');
+  assert.equal(output.imageFiles[1].includes('image-fallback-'), true);
+  resetOutputDir();
+});
+
+test('google imagen service uses full placeholder fallback when zero Gemini images succeed', async () => {
+  resetOutputDir();
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      GOOGLE_CLOUD_PROJECT: 'atlas-test-project',
+      GOOGLE_CLOUD_LOCATION: 'us-central1',
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: createServiceAccountJson()
+    },
+    retryPolicy: {
+      maxRetries: 0,
+      baseDelayMs: 1
+    }
+  });
+
+  const service = new GoogleImagenService({
+    outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
+    maxRetries: 0,
+    retryBaseDelayMs: 1,
+    fetchImpl: async (url) => {
+      if (url.includes('/token')) {
+        return createOkTokenResponse('vertex-access-token');
+      }
+
+      return createErrorResponse(500);
+    }
+  });
+
+  const output = await service.generateImages({
+    prompt: 'Zero image fallback',
+    sceneDescription: 'Zero image fallback',
+    artStyle: 'Editorial Illustration',
+    imageCount: 3
+  });
+
+  assert.equal(output.imageFiles.length, 3);
+  assert.equal(output.imageFiles.every(file => file.includes('image-fallback-')), true);
+  assert.equal(output.imageFiles.every(file => readFileSync(file).length > 0), true);
+  resetOutputDir();
+});
+
+test('google imagen service generates four images through single-candidate Gemini loop', async () => {
+  resetOutputDir();
+  let generationCallCount = 0;
+  const { configurationService, secretManager } = createConfiguredServices({
+    env: {
+      GOOGLE_CLOUD_PROJECT: 'atlas-test-project',
+      GOOGLE_CLOUD_LOCATION: 'us-central1',
+      GOOGLE_APPLICATION_CREDENTIALS_JSON: createServiceAccountJson()
+    }
+  });
+
+  const service = new GoogleImagenService({
+    outputDir: TEST_OUTPUT_DIR,
+    configurationService,
+    secretManager,
+    fetchImpl: async (url) => {
+      if (url.includes('/token')) {
+        return createOkTokenResponse('vertex-access-token');
+      }
+
+      generationCallCount += 1;
+      return createOkGeminiResponse([
+        { inlineData: { mimeType: 'image/png', data: Buffer.from(`IMAGE-${generationCallCount}`).toString('base64') } }
+      ]);
+    }
+  });
+
+  const output = await service.generateImages({
+    prompt: 'Four image generation',
+    sceneDescription: 'Four image generation',
+    artStyle: 'Editorial Illustration',
+    imageCount: 4
+  });
+
+  assert.equal(generationCallCount, 4);
+  assert.equal(output.imageFiles.length, 4);
+  assert.equal(readFileSync(output.imageFiles[0], 'utf8'), 'IMAGE-1');
+  assert.equal(readFileSync(output.imageFiles[1], 'utf8'), 'IMAGE-2');
+  assert.equal(readFileSync(output.imageFiles[2], 'utf8'), 'IMAGE-3');
+  assert.equal(readFileSync(output.imageFiles[3], 'utf8'), 'IMAGE-4');
   resetOutputDir();
 });

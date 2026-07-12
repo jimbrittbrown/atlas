@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { WorkerAssignment } from '../src/worker-assignment.js';
 import { PublishingWorker } from '../src/production/publishing-worker.js';
+import { PlaceholderPublishingService } from '../src/services/publishing-service.js';
 
 test('publishing worker accepts assignment and applies worker lifecycle', async () => {
   const assignment = new WorkerAssignment({
@@ -22,7 +23,9 @@ test('publishing worker accepts assignment and applies worker lifecycle', async 
       }
     }
   });
-  const worker = new PublishingWorker();
+  const worker = new PublishingWorker({
+    publishingService: new PlaceholderPublishingService()
+  });
 
   await worker.execute(assignment);
 
@@ -50,7 +53,9 @@ test('publishing worker validates required publishing assets', async () => {
       }
     }
   });
-  const worker = new PublishingWorker();
+  const worker = new PublishingWorker({
+    publishingService: new PlaceholderPublishingService()
+  });
 
   const output = await worker.execute(assignment);
 
@@ -78,7 +83,9 @@ test('publishing worker generates deterministic publish package output', async (
       }
     }
   });
-  const worker = new PublishingWorker();
+  const worker = new PublishingWorker({
+    publishingService: new PlaceholderPublishingService()
+  });
 
   const output = await worker.execute(assignment);
 
@@ -117,7 +124,10 @@ test('publishing worker reports completion through program manager', async () =>
       };
     }
   };
-  const worker = new PublishingWorker({ programManager });
+  const worker = new PublishingWorker({
+    programManager,
+    publishingService: new PlaceholderPublishingService()
+  });
 
   const output = await worker.execute(assignment);
 
@@ -131,4 +141,58 @@ test('publishing worker reports completion through program manager', async () =>
     status: 'COMPLETED'
   });
   assert.deepEqual(assignment.result, output);
+});
+
+test('publishing worker blocks assignment when provider publish fails', async () => {
+  const assignment = new WorkerAssignment({
+    assignmentId: 'ASG-PUBLISH-005',
+    workerId: 'PUBLISHING-WORKER-001',
+    taskId: 'TASK-PUBLISH-005',
+    result: {
+      task: {
+        metadata: {
+          videoAsset: 'video.mp4',
+          thumbnailAsset: 'thumb.png',
+          title: 'Publishing failure path',
+          description: 'Provider publish failure should block mission flow.',
+          tags: ['atlas'],
+          targetPlatform: 'youtube'
+        }
+      }
+    }
+  });
+  const worker = new PublishingWorker({
+    publishingService: {
+      validatePublishRequest() {
+        return {
+          isValid: true,
+          missingFields: [],
+          checkedFields: {
+            videoAsset: true,
+            title: true,
+            description: true,
+            targetPlatform: true
+          }
+        };
+      },
+      async preparePublishPackage() {
+        return {
+          publishId: 'PUBLISH-ASG-PUBLISH-005',
+          platform: 'youtube',
+          publishStatus: 'FAILED',
+          publishUrl: null,
+          error: 'YOUTUBE_HTTP_500'
+        };
+      },
+      buildPublishId(currentAssignment) {
+        return `PUBLISH-${currentAssignment.assignmentId}`;
+      }
+    }
+  });
+
+  const output = await worker.execute(assignment);
+
+  assert.equal(output.publishStatus, 'FAILED');
+  assert.equal(output.error, 'YOUTUBE_HTTP_500');
+  assert.equal(assignment.status, 'BLOCKED');
 });

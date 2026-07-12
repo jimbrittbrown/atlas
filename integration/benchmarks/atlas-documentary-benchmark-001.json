@@ -1,0 +1,597 @@
+{
+  "benchmarkId": "Atlas Documentary Benchmark #1",
+  "missionId": "MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+  "runtimeState": "COMPLETED",
+  "missionStatus": "PUBLISHING_BLOCKED",
+  "publicationNote": "Runtime completed and publishing was attempted; provider returned FAILED (invalidTitle). Artifact set is complete for executive review.",
+  "deliverables": {
+    "finalMp4": "/var/lib/atlas/assets/video/video-1920x1080-openinghookt.mp4",
+    "finalScript": {
+      "title": "Investigative Documentary Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary for Executive Review Council and Documentary Audience",
+      "script": "Opening Hook: Tonight, Executive Review Council and Documentary Audience enters Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary. Act I: Establish a Investigative Documentary atmosphere and isolate the protagonist. But what are we still missing? The stakes rise as new evidence challenges the obvious conclusion. Act II: Escalate dread with irreversible clues tied to Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary. Act III: Deliver a final twist that rewards attentive viewers and sets sequel potential. But what are we still missing? The stakes rise as new evidence challenges the obvious conclusion. Call to Action: Ask viewers to subscribe for the next episode. But what are we still missing? The stakes rise as new evidence challenges the obvious conclusion."
+    },
+    "researchPackage": {
+      "workflowVersion": "1.0.0",
+      "centralQuestion": "Produce Atlas Documentary Benchmark #1 using all upgraded specialist reasoning and collaboration loops.. Evidence highlights stakes, contrad",
+      "sourcesRejected": [],
+      "sourcesAccepted": [
+        {
+          "source": "INTERNAL_RESEARCH_BASELINE",
+          "type": "UNKNOWN",
+          "reason": "Source type is unclear and should not carry major evidentiary weight until classified."
+        },
+        {
+          "source": "ARCHIVAL_INDEX_BASELINE",
+          "type": "PRIMARY",
+          "reason": "Direct evidence or first-hand records anchor the claim path."
+        }
+      ],
+      "corroborationSummary": {
+        "score": 4,
+        "conclusion": "Corroboration depth is limited and should be expanded before high-confidence use.",
+        "corroboratedImportantClaimCount": 0
+      },
+      "topOpeningCandidates": [],
+      "highestStoryValueFacts": [],
+      "confidenceLevel": {
+        "level": "LOW",
+        "score": 5.8,
+        "rationale": "Evidence confidence is low; do not rely on this package for central claims."
+      },
+      "outstandingResearchGaps": [
+        "Finding coverage is thin for high-confidence narrative claims.",
+        "Important claims require stronger independent corroboration before scripting.",
+        "No strong opening candidate identified; collect a high-curiosity, high-conflict fact.",
+        "Insufficient high story-value facts for a robust narrative arc.",
+        "Gather facts with stronger relevance to the documentary central question.",
+        "Increase total finding coverage to reduce narrative fragility."
+      ],
+      "summary": {
+        "candidateSourceCount": 2,
+        "acceptedSourceCount": 2,
+        "rejectedSourceCount": 0,
+        "openingCandidateCount": 0,
+        "highestStoryValueFactCount": 0
+      }
+    },
+    "storytellingPlan": {
+      "openingHook": {
+        "fact": null,
+        "reason": "No opening candidate identified; requires additional research before scripting."
+      },
+      "delayedForCuriosity": [],
+      "majorReveals": [],
+      "supportingNarrativeFacts": [],
+      "researchGapsThatCouldWeakenStory": [
+        "Finding coverage is thin for high-confidence narrative claims.",
+        "Important claims require stronger independent corroboration before scripting.",
+        "No strong opening candidate identified; collect a high-curiosity, high-conflict fact.",
+        "Insufficient high story-value facts for a robust narrative arc.",
+        "Gather facts with stronger relevance to the documentary central question.",
+        "Increase total finding coverage to reduce narrative fragility."
+      ],
+      "sectionsRequiringAdditionalResearchBeforeScripting": [
+        {
+          "section": "Opening Hook",
+          "reason": "Opening fact confidence is weak or missing; additional research needed before scripting the first 15 seconds."
+        },
+        {
+          "section": "Act II Escalation",
+          "reason": "Corroboration gaps could weaken escalation credibility and must be resolved before scripting conflict progression."
+        },
+        {
+          "section": "Act III Reveal",
+          "reason": "Reveal payload lacks enough validated high story-value facts."
+        },
+        {
+          "section": "Narrative Throughline",
+          "reason": "Central-question relevance is under-supported; gather additional focused evidence first."
+        }
+      ],
+      "narrativeRiskAssessment": {
+        "overallRisk": "HIGH",
+        "confidenceRisk": "HIGH",
+        "corroborationRisk": "HIGH",
+        "evidenceGapRisk": "HIGH",
+        "contradictionRisk": "MEDIUM",
+        "handoffRisk": "HIGH",
+        "rationale": "Narrative risk is HIGH based on confidence (5.8/10), corroboration (4/10), 6 gap(s), contradiction signals (2), and handoff decision (REQUEST_RESEARCH_REVISION)."
+      },
+      "recommendedDocumentaryStructure": {
+        "format": "Three-Act Investigative Documentary",
+        "centralQuestion": "Produce Atlas Documentary Benchmark #1 using all upgraded specialist reasoning and collaboration loops.",
+        "sections": [
+          {
+            "section": "Opening Hook",
+            "purpose": "Establish immediate investigative tension with highest-value verified fact.",
+            "primaryFactId": null
+          },
+          {
+            "section": "Act I Context and Stakes",
+            "purpose": "Ground audience in verified context and explain why the investigation matters.",
+            "supportingFactIds": []
+          },
+          {
+            "section": "Act II Escalation and Delayed Facts",
+            "purpose": "Sustain curiosity by delaying key facts until causal pressure and questions are established.",
+            "delayedFactIds": []
+          },
+          {
+            "section": "Act III Major Reveals and Accountability",
+            "purpose": "Deliver strongest reveals with verification context and unresolved-risk disclosure.",
+            "revealFactIds": []
+          }
+        ],
+        "preScriptingResearchRequirements": [
+          {
+            "section": "Opening Hook",
+            "reason": "Opening fact confidence is weak or missing; additional research needed before scripting the first 15 seconds."
+          },
+          {
+            "section": "Act II Escalation",
+            "reason": "Corroboration gaps could weaken escalation credibility and must be resolved before scripting conflict progression."
+          },
+          {
+            "section": "Act III Reveal",
+            "reason": "Reveal payload lacks enough validated high story-value facts."
+          },
+          {
+            "section": "Narrative Throughline",
+            "reason": "Central-question relevance is under-supported; gather additional focused evidence first."
+          }
+        ]
+      },
+      "researchReasoningInfluence": {
+        "summary": "Storytelling decisions were explicitly derived from Research Specialist reasoning outputs, not just fact lists.",
+        "decisionInfluence": [
+          {
+            "storytellingDecision": "Opening hook selection",
+            "influencedBy": [
+              "topOpeningCandidates",
+              "findingJudgments",
+              "source confidence"
+            ],
+            "explanation": "No validated opening hook was selected due to unresolved research quality constraints."
+          },
+          {
+            "storytellingDecision": "Delayed facts for curiosity",
+            "influencedBy": [
+              "highestStoryValueFacts",
+              "story worthiness sequencing",
+              "curiosity preservation"
+            ],
+            "explanation": "Delayed 0 fact(s) to preserve tension and avoid early curiosity collapse."
+          },
+          {
+            "storytellingDecision": "Major reveal placement",
+            "influencedBy": [
+              "story-worthiness scores",
+              "corroboration posture",
+              "confidence level"
+            ],
+            "explanation": "Selected 0 major reveal fact(s) that can withstand evidentiary scrutiny at climax points."
+          },
+          {
+            "storytellingDecision": "Supporting-only fact assignment",
+            "influencedBy": [
+              "SUPPORTING_NOT_CENTRAL judgments",
+              "importance over novelty"
+            ],
+            "explanation": "0 fact(s) assigned as support to maintain narrative coherence without overloading key beats."
+          },
+          {
+            "storytellingDecision": "Research risk controls before scripting",
+            "influencedBy": [
+              "outstanding research gaps",
+              "handoff review",
+              "source quality contradiction/missing evidence reasoning"
+            ],
+            "explanation": "6 gap(s) and 4 section(s) flagged for additional verification with overall narrative risk HIGH."
+          }
+        ],
+        "sourceQualityInfluence": "Evidence confidence is low; do not rely on this package for central claims.",
+        "storyWorthinessInfluence": "Story-worthiness central question: Produce Atlas Documentary Benchmark #1 using all upgraded specialist reasoning and collaboration loops.. Evidence highlights stakes, contrad",
+        "handoffReviewInfluence": "REQUEST_RESEARCH_REVISION"
+      },
+      "planningSummary": {
+        "selectedOpeningCandidateCount": 0,
+        "delayedFactCount": 0,
+        "majorRevealCount": 0,
+        "supportingFactCount": 0,
+        "identifiedResearchGapCount": 6
+      }
+    },
+    "workerEvaluationSummaries": {
+      "researchEvaluation": {
+        "overallScore": 5.5,
+        "classification": "FAIL",
+        "keyScores": {
+          "sourceQuality": 5.8,
+          "evidenceStrength": 5,
+          "storyPotential": 4,
+          "novelty": 3,
+          "audienceInterest": 6,
+          "completeness": 9
+        },
+        "revisedWorkPlan": [
+          "Replace weak sources with higher-credibility sources before handoff.",
+          "Add stronger corroborated evidence for each core claim.",
+          "Extract more compelling facts that increase narrative stakes.",
+          "Expand research scope to surface non-obvious documentary angles.",
+          "Reframe findings to emphasize why the audience should care now."
+        ],
+        "sourceQualityRationale": "Source hierarchy: Hierarchy quality is strong with 1 primary, 0 secondary, and 0 tertiary sources. Independent corroboration: Corroboration depth is limited and should be expanded before high-confidence use. Authority and expertise: Authority signal is mixed and requires higher-credibility domain sourcing. Bias detection: No material bias indicators detected in current evidence set. Conflicts of interest: No significant conflict-of-interest flags detected. Currency: Information currency cannot be verified from available source metadata. Missing evidence: Material evidence gaps remain and should be closed before escalation. Contradictory evidence: Contradictory evidence is present and should be explicitly reconciled in narrative framing. Rejection threshold: No sources meet full-rejection criteria. Assigned evidence confidence: LOW (5.8/10). Professional reasoning shifts: Require additional independent corroboration before elevating central narrative claims. Track missing evidence explicitly and avoid promoting unresolved claims to headline status. Retain contradictory evidence in the package and assign follow-up verification tasks. Use explicit caveats and hold high-confidence labels until confidence gates are satisfied.",
+        "storyWorthinessRationale": "Story worthiness evaluated against central question \"Produce Atlas Documentary Benchmark #1 using all upgraded specialist reasoning and collaboration loops.. Evidence highlights stakes, contrad\" with aggregate score 4/10; 0 opening candidate(s), 0 include decision(s), and 2 exclusion(s)."
+      },
+      "storytellingEvaluation": {
+        "overallScore": 8,
+        "classification": "PASS",
+        "keyScores": {
+          "openingStrength": 8,
+          "curiosity": 4,
+          "narrativeFlow": 10,
+          "informationDensity": 8,
+          "audienceCommitment": 10
+        },
+        "revisedWorkPlan": [
+          "Delay major reveal and increase unresolved curiosity cues.",
+          "Rewrite SCENE-002 first to prevent curiosity collapse."
+        ],
+        "curiosityEngineeringRationale": "Curiosity engineering score is 4/10. Increasing factors: Curiosity growth signals are limited. Decreasing factors: Curiosity collapses in specific sections due to weak loop maintenance. Insufficient question generation causes flat audience engagement. 3 collapse-risk section(s) identified. Highest audience-loss risk is SCENE-002.",
+        "iterativeRewrite": {
+          "targetScore": 8,
+          "minimumImprovementThreshold": 0.2,
+          "maxIterations": 3,
+          "completedIterations": 2,
+          "selectedIteration": 2,
+          "highestOverallScore": 8,
+          "iterationHistory": [
+            {
+              "iteration": 1,
+              "overallScore": 6.6,
+              "categoryScores": {
+                "openingStrength": 8,
+                "curiosity": 4,
+                "narrativeFlow": 9,
+                "informationDensity": 4,
+                "audienceCommitment": 8
+              },
+              "rewrittenSections": [],
+              "coachingRecommendationsApplied": []
+            },
+            {
+              "iteration": 2,
+              "overallScore": 8,
+              "categoryScores": {
+                "openingStrength": 8,
+                "curiosity": 4,
+                "narrativeFlow": 10,
+                "informationDensity": 8,
+                "audienceCommitment": 10
+              },
+              "rewrittenSections": [
+                "SCENE-002",
+                "SCENE-004",
+                "SCENE-005"
+              ],
+              "coachingRecommendationsApplied": [
+                "Rewrite SCENE-002: Low curiosity retention risk; add stronger open loops and tension.",
+                "Rewrite SCENE-004: Low curiosity retention risk; add stronger open loops and tension.",
+                "Rewrite SCENE-005: Low curiosity retention risk; add stronger open loops and tension.",
+                "Add guiding question in SCENE-002: Introduce a guiding question to open a curiosity loop.",
+                "Add guiding question in SCENE-004: Introduce a guiding question to open a curiosity loop.",
+                "Add guiding question in SCENE-005: Introduce a guiding question to open a curiosity loop."
+              ]
+            }
+          ]
+        },
+        "selectedHighestScoringIteration": {
+          "iteration": 2,
+          "overallScore": 8,
+          "categoryScores": {
+            "openingStrength": 8,
+            "curiosity": 4,
+            "narrativeFlow": 10,
+            "informationDensity": 8,
+            "audienceCommitment": 10
+          },
+          "rewrittenSections": [
+            "SCENE-002",
+            "SCENE-004",
+            "SCENE-005"
+          ],
+          "coachingRecommendationsApplied": [
+            "Rewrite SCENE-002: Low curiosity retention risk; add stronger open loops and tension.",
+            "Rewrite SCENE-004: Low curiosity retention risk; add stronger open loops and tension.",
+            "Rewrite SCENE-005: Low curiosity retention risk; add stronger open loops and tension.",
+            "Add guiding question in SCENE-002: Introduce a guiding question to open a curiosity loop.",
+            "Add guiding question in SCENE-004: Introduce a guiding question to open a curiosity loop.",
+            "Add guiding question in SCENE-005: Introduce a guiding question to open a curiosity loop."
+          ]
+        }
+      },
+      "visualEvaluation": {
+        "overallScore": 6.3,
+        "classification": "FAIL",
+        "keyScores": {
+          "storyRelevance": 10,
+          "historicalAccuracy": 3,
+          "emotionalImpact": 7,
+          "visualContinuity": 3,
+          "cinematicComposition": 5,
+          "sceneQuality": 10
+        },
+        "revisedWorkPlan": [
+          "Add stricter historical constraints and documented context anchors.",
+          "Improve continuity notes to keep visual language stable across scenes.",
+          "Strengthen composition directives (focus hierarchy, framing, depth)."
+        ]
+      },
+      "imageGenerationEvaluation": {
+        "overallScore": 7.8,
+        "classification": "PASS",
+        "keyScores": null,
+        "revisedWorkPlan": [
+          "Improve historical realism by enforcing era-accurate scene constraints."
+        ]
+      },
+      "narrationEvaluation": {
+        "overallScore": 7,
+        "classification": "PASS",
+        "keyScores": {
+          "naturalFlow": 7,
+          "emotionalDelivery": 6,
+          "pacing": 9,
+          "clarity": 7,
+          "listenerEngagement": 6,
+          "overallNarrationQuality": 7
+        },
+        "revisedWorkPlan": [
+          "Increase emphasis on high-stakes phrases and reduce flat delivery segments.",
+          "Increase listener continuation cues and narrative momentum language."
+        ]
+      },
+      "qualityReview": {
+        "passed": true,
+        "issues": [],
+        "remediationTasks": [],
+        "executiveRecommendation": "APPROVE_FOR_RELEASE"
+      },
+      "handoffReviews": {
+        "researchToStorytelling": {
+          "handoff": "RESEARCH_TO_STORYTELLING",
+          "decision": "REQUEST_RESEARCH_REVISION",
+          "missingInformation": [],
+          "weaknesses": [
+            "Source Quality: 5.8",
+            "Evidence Strength: 5",
+            "Story Potential: 4",
+            "Novelty: 3",
+            "Audience Interest: 6"
+          ],
+          "questions": [
+            "What non-obvious finding should anchor the documentary narrative?",
+            "Which claims require stronger corroboration before scripting?"
+          ],
+          "recommendedImprovements": [
+            "Increase source diversity and source credibility before handoff.",
+            "Strengthen claim-to-evidence linkage and corroboration.",
+            "Extract higher-stakes findings with clearer narrative consequence.",
+            "Expand investigation scope to surface non-obvious findings.",
+            "Improve audience relevance and curiosity framing in summary findings."
+          ],
+          "peerReview": {
+            "factsLackingStoryValue": [
+              {
+                "findingId": "FINDING-001",
+                "findingText": "Evidence-backed narrative tension point for Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary.",
+                "reason": "Technically correct but low story value."
+              },
+              {
+                "findingId": "FINDING-002",
+                "findingText": "Audience-relevant conflict around Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary with unresolved implications.",
+                "reason": "Exclude from core narrative because story worthiness is below threshold."
+              }
+            ],
+            "factsShouldBecomeOpeningCandidates": [],
+            "factsCreateCuriosity": [],
+            "factsShouldBeRemoved": [
+              {
+                "findingId": "FINDING-001",
+                "findingText": "Evidence-backed narrative tension point for Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary.",
+                "reason": "Technically correct but low story value."
+              },
+              {
+                "findingId": "FINDING-002",
+                "findingText": "Audience-relevant conflict around Atlas Documentary Benchmark #1: How Elite Investigative Reasoning Builds a Documentary with unresolved implications.",
+                "reason": "Exclude from core narrative because story worthiness is below threshold."
+              }
+            ],
+            "additionalInformationNeeded": [
+              "Expand fact set with additional high-curiosity and high-conflict findings."
+            ]
+          },
+          "structuredFeedback": {
+            "coachingMode": true,
+            "revisionRequested": true,
+            "priority": "HIGH",
+            "summary": "Storytelling requests research revision as coaching: 0 missing information item(s), 5 weakness(es), and fact-level story-worthiness adjustments.",
+            "actionItems": [
+              "Address weakness: Source Quality: 5.8",
+              "Address weakness: Evidence Strength: 5",
+              "Address weakness: Story Potential: 4",
+              "Address weakness: Novelty: 3",
+              "Address weakness: Audience Interest: 6",
+              "Increase source diversity and source credibility before handoff.",
+              "Strengthen claim-to-evidence linkage and corroboration.",
+              "Extract higher-stakes findings with clearer narrative consequence.",
+              "Expand investigation scope to surface non-obvious findings.",
+              "Improve audience relevance and curiosity framing in summary findings."
+            ]
+          }
+        },
+        "storytellingToVisualDirector": {
+          "handoff": "STORYTELLING_TO_VISUAL_DIRECTOR",
+          "decision": "REQUEST_REVISIONS",
+          "missingInformation": [],
+          "weaknesses": [
+            "Curiosity: 4"
+          ],
+          "questions": [],
+          "recommendedImprovements": [
+            "Increase unresolved but meaningful questions that motivate continuation.",
+            "Rewrite SCENE-002: Low curiosity retention risk; add stronger open loops and tension.",
+            "Rewrite SCENE-006: Low curiosity retention risk; add stronger open loops and tension.",
+            "Rewrite SCENE-009: Low curiosity retention risk; add stronger open loops and tension.",
+            "Add guiding question in SCENE-002: Introduce a guiding question to open a curiosity loop.",
+            "Add guiding question in SCENE-004: Introduce a guiding question to open a curiosity loop.",
+            "Add guiding question in SCENE-006: Introduce a guiding question to open a curiosity loop."
+          ],
+          "peerReview": null,
+          "structuredFeedback": {
+            "coachingMode": false,
+            "revisionRequested": true,
+            "priority": "HIGH",
+            "summary": "Handoff requires revisions due to 0 missing information item(s) and 1 weakness(es).",
+            "actionItems": [
+              "Address weakness: Curiosity: 4",
+              "Increase unresolved but meaningful questions that motivate continuation.",
+              "Rewrite SCENE-002: Low curiosity retention risk; add stronger open loops and tension.",
+              "Rewrite SCENE-006: Low curiosity retention risk; add stronger open loops and tension.",
+              "Rewrite SCENE-009: Low curiosity retention risk; add stronger open loops and tension.",
+              "Add guiding question in SCENE-002: Introduce a guiding question to open a curiosity loop.",
+              "Add guiding question in SCENE-004: Introduce a guiding question to open a curiosity loop.",
+              "Add guiding question in SCENE-006: Introduce a guiding question to open a curiosity loop."
+            ]
+          }
+        },
+        "visualDirectorToImageGeneration": {
+          "handoff": "VISUAL_DIRECTOR_TO_IMAGE_GENERATION",
+          "decision": "REQUEST_REVISIONS",
+          "missingInformation": [],
+          "weaknesses": [
+            "Historical Accuracy: 3",
+            "Visual Continuity: 3",
+            "Cinematic Composition: 5"
+          ],
+          "questions": [
+            "Which historical constraints must be enforced in generation prompts?",
+            "What continuity anchors should persist across all generated scenes?"
+          ],
+          "recommendedImprovements": [
+            "Add explicit historical context notes and period-specific constraints.",
+            "Add continuity notes for timeline, location, and visual language consistency.",
+            "Specify stronger framing and composition directives for viewer focus."
+          ],
+          "peerReview": null,
+          "structuredFeedback": {
+            "coachingMode": false,
+            "revisionRequested": true,
+            "priority": "HIGH",
+            "summary": "Handoff requires revisions due to 0 missing information item(s) and 3 weakness(es).",
+            "actionItems": [
+              "Address weakness: Historical Accuracy: 3",
+              "Address weakness: Visual Continuity: 3",
+              "Address weakness: Cinematic Composition: 5",
+              "Add explicit historical context notes and period-specific constraints.",
+              "Add continuity notes for timeline, location, and visual language consistency.",
+              "Specify stronger framing and composition directives for viewer focus."
+            ]
+          }
+        }
+      }
+    },
+    "executiveCouncilRecommendation": {
+      "overallRecommendation": "UNANIMOUS_APPROVE",
+      "recommendedCEOAction": "APPROVE",
+      "confidence": 83,
+      "highestRisks": [],
+      "recommendationContracts": [
+        {
+          "role": "COO",
+          "decision": "APPROVE",
+          "confidence": 85,
+          "rationale": "Operational readiness evaluated from runtime execution outputs.",
+          "evidenceReferences": [
+            "MISSION:MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+            "QUALITY_PASSED:true",
+            "STORYTELLING_OVERALL_SCORE:8"
+          ]
+        },
+        {
+          "role": "CMO",
+          "decision": "APPROVE",
+          "confidence": 80,
+          "rationale": "Market readiness placeholder recommendation for runtime compatibility.",
+          "evidenceReferences": [
+            "MISSION:MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+            "QUALITY_PASSED:true",
+            "STORYTELLING_OVERALL_SCORE:8"
+          ]
+        },
+        {
+          "role": "CFO",
+          "decision": "APPROVE",
+          "confidence": 78,
+          "rationale": "Financial readiness placeholder recommendation for runtime compatibility.",
+          "evidenceReferences": [
+            "MISSION:MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+            "QUALITY_PASSED:true",
+            "STORYTELLING_OVERALL_SCORE:8"
+          ]
+        },
+        {
+          "role": "CCO",
+          "decision": "APPROVE",
+          "confidence": 80,
+          "rationale": "Creative readiness informed by storytelling evaluation with overall score 8.",
+          "evidenceReferences": [
+            "MISSION:MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+            "QUALITY_PASSED:true",
+            "STORYTELLING_OVERALL_SCORE:8"
+          ]
+        },
+        {
+          "role": "CTO",
+          "decision": "APPROVE",
+          "confidence": 86,
+          "rationale": "Technical readiness evaluated from runtime and quality outputs.",
+          "evidenceReferences": [
+            "MISSION:MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+            "QUALITY_PASSED:true",
+            "STORYTELLING_OVERALL_SCORE:8"
+          ]
+        },
+        {
+          "role": "CQO",
+          "decision": "APPROVE",
+          "confidence": 90,
+          "rationale": "Quality authority recommendation mapped from quality review result.",
+          "evidenceReferences": [
+            "MISSION:MISSION-YOUTUBE-BUSINESS-BENCHMARK-001",
+            "QUALITY_PASSED:true",
+            "STORYTELLING_OVERALL_SCORE:8"
+          ]
+        }
+      ],
+      "executiveReportPath": "/var/lib/atlas/assets/reports/executive-report-mission-youtube-business-benchmark-001.json",
+      "releaseCandidatePackagePath": "/var/lib/atlas/assets/reports/release-candidate-package-mission-youtube-business-benchmark-001.json"
+    }
+  },
+  "artifactPaths": {
+    "executiveReport": "/var/lib/atlas/assets/reports/executive-report-mission-youtube-business-benchmark-001.json",
+    "releaseCandidatePackage": "/var/lib/atlas/assets/reports/release-candidate-package-mission-youtube-business-benchmark-001.json",
+    "voice": "/var/lib/atlas/assets/audio/voice-exavitqu4vr4xnsdxmal-en-us-openinghookt.mp3",
+    "images": [
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-01.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-02.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-03.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-01.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-04.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-02.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-03.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-01.png",
+      "/var/lib/atlas/assets/images/image-cinematic-investigative-realism-evidencewall-04.png"
+    ]
+  }
+}

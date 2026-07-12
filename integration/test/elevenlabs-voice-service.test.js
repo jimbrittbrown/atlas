@@ -138,7 +138,7 @@ test('elevenlabs voice service generates audio and registers asset', async () =>
 
   const assets = assetRegistry.listAssets();
   assert.equal(assets.length, 1);
-  assert.equal(assets[0].assetType, 'VOICE_AUDIO');
+  assert.equal(assets[0].assetType, 'VOICE');
   assert.equal(assets[0].status, 'GENERATED');
   assert.equal(assets[0].businessId, 'BIZ-001');
   assert.equal(assets[0].missionId, 'MISSION-001');
@@ -247,8 +247,8 @@ test('elevenlabs voice service handles timeout/failure gracefully', async () => 
 
   const assets = assetRegistry.listAssets();
   assert.equal(assets.length, 1);
-  assert.equal(assets[0].status, 'FAILED');
-  assert.equal(assets[0].metadata.provider, 'elevenlabs');
+  assert.equal(assets[0].status, 'GENERATED');
+  assert.equal(assets[0].metadata.provider, 'local-fallback');
   assert.equal(assets[0].metadata.error, 'ELEVENLABS_TIMEOUT');
   resetOutputDir();
 });

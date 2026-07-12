@@ -1,0 +1,33 @@
+{
+  "missionId": "ATLAS-PRODUCTION-003",
+  "state": "COMPLETED",
+  "terminalMissionOutcome": "CEO_APPROVED",
+  "selectedNarrationProvider": "google-tts",
+  "narrationAttempts": [
+    {
+      "provider": "elevenlabs",
+      "success": false,
+      "audioFile": "/var/lib/atlas/assets/audio/voice-fallback-en-us-openinghookt.wav",
+      "speech": {
+        "speechLikely": false
+      }
+    },
+    {
+      "provider": "google-tts",
+      "success": true,
+      "audioFile": "/var/lib/atlas/assets/audio/voice-google-en-us-atlas-production-003.mp3",
+      "speech": {
+        "meanVolumeDb": -19.2,
+        "maxVolumeDb": -1.8,
+        "speechLikely": true
+      }
+    }
+  ],
+  "narrationAudioFile": "/var/lib/atlas/assets/audio/voice-google-en-us-atlas-production-003.mp3",
+  "finalMp4": "/root/atlas/review/atlas-production-003.mp4",
+  "mp4Speech": {
+    "meanVolumeDb": -91,
+    "maxVolumeDb": -91,
+    "speechLikely": false
+  }
+}
