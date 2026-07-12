@@ -122,11 +122,11 @@ export class CustomerPortalApi {
     });
   }
 
-  logout({ sessionToken } = {}) {
+  async logout({ sessionToken } = {}) {
     return this.manager.logout({ sessionToken });
   }
 
-  refreshSession({ sessionToken } = {}) {
+  async refreshSession({ sessionToken } = {}) {
     return this.manager.refreshSession({ sessionToken });
   }
 

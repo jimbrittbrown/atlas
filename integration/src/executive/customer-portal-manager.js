@@ -283,11 +283,11 @@ export class CustomerPortalManager {
     });
   }
 
-  logout({ sessionToken } = {}) {
+  async logout({ sessionToken } = {}) {
     return this.authManager.logout({ sessionToken });
   }
 
-  refreshSession({ sessionToken } = {}) {
+  async refreshSession({ sessionToken } = {}) {
     return this.authManager.refreshSession({ sessionToken });
   }
 

@@ -89,6 +89,7 @@ export class CustomerAuthManager {
     this.identityLinks = getMetaMap({ provider: this.storageProvider, namespace: `${namespace}.identity-links` });
     this.loginFailures = getMetaMap({ provider: this.storageProvider, namespace: `${namespace}.login-failures` });
     this.authMetrics = getMetaMap({ provider: this.storageProvider, namespace: `${namespace}.metrics` });
+    this.providerSessions = getMetaMap({ provider: this.storageProvider, namespace: `${namespace}.provider-sessions` });
     this.exposeDevelopmentResetTokens = String(process.env.ATLAS_LOCAL_IDENTITY_EXPOSE_RESET_TOKEN ?? 'false').toLowerCase() === 'true';
 
     this.providerSelection = createCustomerIdentityProvider({
@@ -201,6 +202,32 @@ export class CustomerAuthManager {
     const metric = String(eventName ?? '').trim();
     if (!metric) return;
     this.incrementMetric(metric, 1);
+  }
+
+  recordAuditEvent(event, details = {}) {
+    try {
+      this.sessionManager.createAudit?.(event, details);
+    } catch {
+      // Audit should never block auth flow.
+    }
+  }
+
+  getProviderCapabilities() {
+    return this.identityProvider.getCapabilities?.() ?? {
+      refresh: { supported: false, providerManaged: false },
+      logout: { supported: true, federatedSupported: false }
+    };
+  }
+
+  getProviderSession(customerId) {
+    return this.providerSessions.get(String(customerId ?? '')) ?? null;
+  }
+
+  persistProviderSession(customerId, value) {
+    const key = String(customerId ?? '').trim();
+    if (!key) return;
+    this.providerSessions.set(key, value);
+    setMetaValue({ provider: this.storageProvider, namespace: `${this.namespace}.provider-sessions`, key, value });
   }
 
   resolveOrCreateCustomer({ email, companyName = null, contactName = null } = {}) {
@@ -891,6 +918,13 @@ export class CustomerAuthManager {
     }
 
     this.incrementMetric('loginSuccessful', 1);
+    this.persistProviderSession(effectiveCustomer.customerId, {
+      providerType: this.providerSelection.type,
+      providerUserId,
+      refreshToken: providerResult.data?.refreshToken ?? null,
+      latestIdToken: providerResult.data?.idToken ?? null,
+      updatedAt: nowIso(this.now)
+    });
     return {
       accepted: true,
       status: 200,
@@ -992,7 +1026,7 @@ export class CustomerAuthManager {
     };
   }
 
-  logout({ sessionToken } = {}) {
+  async logout({ sessionToken } = {}) {
     const validation = this.sessionManager.validateSessionToken(sessionToken, { rotateIdle: false });
     if (!validation.valid || !validation.session) {
       return {
@@ -1004,20 +1038,219 @@ export class CustomerAuthManager {
       };
     }
 
+    this.recordAuditEvent('logout_started', {
+      customerId: validation.session.customerId,
+      sessionId: validation.session.sessionId,
+      providerType: this.providerSelection.type
+    });
+
+    const providerSession = this.getProviderSession(validation.session.customerId);
+    const capabilities = this.getProviderCapabilities();
+
     this.sessionManager.revokeSession({ sessionId: validation.session.sessionId, reason: 'LOGOUT' });
     this.incrementMetric('logoutSuccessful', 1);
+
+    if (!capabilities.logout?.federatedSupported) {
+      this.recordAuditEvent('logout_completed', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        federated: false
+      });
+      return {
+        accepted: true,
+        status: 200,
+        code: 'OK',
+        reason: null,
+        data: { loggedOut: true, federatedLogout: 'NOT_SUPPORTED' }
+      };
+    }
+
+    const federated = await this.identityProvider.federatedLogout?.({
+      idTokenHint: providerSession?.latestIdToken ?? null,
+      postLogoutRedirectUri: null
+    });
+
+    if (!federated || !federated.ok) {
+      this.recordAuditEvent('federated_logout_failed', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        code: federated?.error?.code ?? IdentityErrorCodes.PROVIDER_UNAVAILABLE
+      });
+      this.recordAuditEvent('logout_completed', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        federated: false
+      });
+      return {
+        accepted: true,
+        status: 200,
+        code: 'OK',
+        reason: null,
+        data: { loggedOut: true, federatedLogout: 'FAILED' }
+      };
+    }
+
+    this.recordAuditEvent('federated_logout_completed', {
+      customerId: validation.session.customerId,
+      sessionId: validation.session.sessionId
+    });
+    this.recordAuditEvent('logout_completed', {
+      customerId: validation.session.customerId,
+      sessionId: validation.session.sessionId,
+      federated: true
+    });
     return {
       accepted: true,
       status: 200,
       code: 'OK',
       reason: null,
-      data: { loggedOut: true }
+      data: { loggedOut: true, federatedLogout: 'COMPLETED' }
     };
   }
 
-  refreshSession({ sessionToken } = {}) {
+  async refreshSession({ sessionToken } = {}) {
+    const validation = this.sessionManager.validateSessionToken(sessionToken, { rotateIdle: false });
+    if (!validation.valid || !validation.session) {
+      this.incrementMetric('sessionRefreshFailed', 1);
+      return {
+        accepted: false,
+        status: 401,
+        code: 'UNAUTHORIZED',
+        reason: 'Session refresh rejected.',
+        data: null
+      };
+    }
+
+    const capabilities = this.getProviderCapabilities();
+    if (!capabilities.refresh?.supported) {
+      this.incrementMetric('sessionRefreshFailed', 1);
+      return {
+        accepted: false,
+        status: 400,
+        code: 'UNSUPPORTED_CAPABILITY',
+        reason: 'Provider does not support refresh lifecycle.',
+        data: null
+      };
+    }
+
+    if (capabilities.refresh?.providerManaged === false) {
+      const refreshedLocal = this.sessionManager.refreshSessionToken(sessionToken);
+      if (!refreshedLocal.refreshed) {
+        this.incrementMetric('sessionRefreshFailed', 1);
+        return {
+          accepted: false,
+          status: 401,
+          code: 'UNAUTHORIZED',
+          reason: 'Session refresh rejected.',
+          data: null
+        };
+      }
+
+      this.recordAuditEvent('refresh_attempted', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        providerType: this.providerSelection.type
+      });
+      this.recordAuditEvent('refresh_succeeded', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        rotatedRefreshToken: false
+      });
+      this.incrementMetric('sessionRefreshSuccessful', 1);
+
+      return {
+        accepted: true,
+        status: 200,
+        code: 'OK',
+        reason: null,
+        data: {
+          sessionToken: refreshedLocal.sessionToken,
+          csrfToken: refreshedLocal.csrfToken,
+          sessionId: refreshedLocal.session.sessionId,
+          expiresAt: refreshedLocal.session.expiresAt,
+          idleExpiresAt: refreshedLocal.session.idleExpiresAt,
+          absoluteExpiresAt: refreshedLocal.session.absoluteExpiresAt,
+          rotationCounter: refreshedLocal.session.rotationCounter
+        }
+      };
+    }
+
+    const providerState = this.getProviderSession(validation.session.customerId);
+    if (!providerState?.refreshToken) {
+      this.incrementMetric('sessionRefreshFailed', 1);
+      return {
+        accepted: false,
+        status: 401,
+        code: 'UNAUTHORIZED',
+        reason: 'Provider refresh token is unavailable for this session.',
+        data: null
+      };
+    }
+
+    this.recordAuditEvent('refresh_attempted', {
+      customerId: validation.session.customerId,
+      sessionId: validation.session.sessionId,
+      providerType: this.providerSelection.type
+    });
+
+    const refreshedProvider = await this.identityProvider.refreshProviderSession?.({
+      refreshToken: providerState.refreshToken,
+      expectedSubject: providerState.providerUserId ?? null
+    });
+
+    if (!refreshedProvider || !refreshedProvider.ok) {
+      const code = refreshedProvider?.error?.code ?? 'PROVIDER_UNAVAILABLE';
+      this.recordAuditEvent('refresh_failed', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        providerType: this.providerSelection.type,
+        code
+      });
+
+      const revokeCodes = new Set([
+        IdentityErrorCodes.TOKEN_EXPIRED,
+        IdentityErrorCodes.ACCOUNT_REVOKED,
+        IdentityErrorCodes.ACCOUNT_DISABLED,
+        IdentityErrorCodes.TOKEN_INVALID
+      ]);
+
+      if (revokeCodes.has(code)) {
+        this.sessionManager.revokeSession({
+          sessionId: validation.session.sessionId,
+          reason: 'PROVIDER_REVOCATION_DETECTED'
+        });
+        this.recordAuditEvent('provider_revocation_detected', {
+          customerId: validation.session.customerId,
+          sessionId: validation.session.sessionId,
+          code
+        });
+      }
+
+      this.incrementMetric('sessionRefreshFailed', 1);
+      return {
+        accepted: false,
+        status: code === IdentityErrorCodes.PROVIDER_UNAVAILABLE ? 503 : 401,
+        code,
+        reason: refreshedProvider?.error?.message ?? 'Provider refresh failed.',
+        data: null
+      };
+    }
+
+    this.persistProviderSession(validation.session.customerId, {
+      ...providerState,
+      refreshToken: refreshedProvider.data.refreshToken,
+      latestIdToken: refreshedProvider.data.idToken ?? providerState.latestIdToken ?? null,
+      providerUserId: refreshedProvider.data.providerUserId ?? providerState.providerUserId ?? null,
+      updatedAt: nowIso(this.now)
+    });
+
     const refreshed = this.sessionManager.refreshSessionToken(sessionToken);
     if (!refreshed.refreshed) {
+      this.recordAuditEvent('refresh_failed', {
+        customerId: validation.session.customerId,
+        sessionId: validation.session.sessionId,
+        code: 'SESSION_REFRESH_FAILED'
+      });
       this.incrementMetric('sessionRefreshFailed', 1);
       return {
         accepted: false,
@@ -1029,6 +1262,11 @@ export class CustomerAuthManager {
     }
 
     this.incrementMetric('sessionRefreshSuccessful', 1);
+    this.recordAuditEvent('refresh_succeeded', {
+      customerId: validation.session.customerId,
+      sessionId: validation.session.sessionId,
+      rotatedRefreshToken: Boolean(refreshedProvider.data.refreshTokenRotated)
+    });
 
     return {
       accepted: true,

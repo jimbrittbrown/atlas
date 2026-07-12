@@ -70,6 +70,46 @@ function hasText(value) {
   return String(value ?? '').trim().length > 0;
 }
 
+function classifyTokenEndpointFailure(payload = {}) {
+  const providerError = String(payload?.error ?? '').trim().toLowerCase();
+  const providerDescription = String(payload?.error_description ?? '').trim().toLowerCase();
+
+  if (providerError === 'invalid_grant' || providerDescription.includes('invalid_grant')) {
+    return {
+      code: IdentityErrorCodes.TOKEN_EXPIRED,
+      reason: 'INVALID_GRANT'
+    };
+  }
+
+  if (providerError === 'revoked_token' || providerDescription.includes('revoked')) {
+    return {
+      code: IdentityErrorCodes.ACCOUNT_REVOKED,
+      reason: 'REFRESH_TOKEN_REVOKED'
+    };
+  }
+
+  if (providerError === 'account_disabled' || providerDescription.includes('disabled')) {
+    return {
+      code: IdentityErrorCodes.ACCOUNT_DISABLED,
+      reason: 'ACCOUNT_DISABLED'
+    };
+  }
+
+  return {
+    code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+    reason: 'TOKEN_ENDPOINT_FAILURE'
+  };
+}
+
+function classifyProviderException(error) {
+  const text = String(error instanceof Error ? error.message : error).toLowerCase();
+  const timeout = text.includes('timeout') || text.includes('timed out') || text.includes('abort');
+  return {
+    code: timeout ? IdentityErrorCodes.PROVIDER_TIMEOUT : IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+    reason: timeout ? 'PROVIDER_TIMEOUT' : 'PROVIDER_NETWORK_FAILURE'
+  };
+}
+
 function toScopeText(value) {
   if (Array.isArray(value)) {
     return value.map((item) => String(item ?? '').trim()).filter(Boolean).join(' ');
@@ -138,6 +178,19 @@ export class OidcIdentityProviderAdapter {
         'OIDC adapter is partial and not production-complete.',
         'Cryptographic validation is available; callback exchange, refresh, and logout federation are not implemented yet.'
       ]
+    };
+  }
+
+  getCapabilities() {
+    return {
+      refresh: {
+        supported: true,
+        providerManaged: true
+      },
+      logout: {
+        supported: true,
+        federatedSupported: true
+      }
     };
   }
 
@@ -259,24 +312,27 @@ export class OidcIdentityProviderAdapter {
       });
       payload = await response.json();
     } catch (error) {
+      const failure = classifyProviderException(error);
       return this.failure({
-        code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+        code: failure.code,
         message: 'OIDC authorization code exchange failed.',
         details: {
-          reason: error instanceof Error ? error.message : String(error)
+          reason: failure.reason,
+          providerMessage: error instanceof Error ? error.message : String(error)
         }
       });
     }
 
     if (!response?.ok) {
-      const invalidGrant = String(payload?.error ?? '').toLowerCase() === 'invalid_grant';
+      const failure = classifyTokenEndpointFailure(payload);
       return this.failure({
-        code: invalidGrant ? IdentityErrorCodes.TOKEN_EXPIRED : IdentityErrorCodes.PROVIDER_UNAVAILABLE,
-        message: invalidGrant
+        code: failure.code,
+        message: failure.code === IdentityErrorCodes.TOKEN_EXPIRED
           ? 'OIDC authorization code is invalid or expired.'
           : 'OIDC authorization code exchange failed.',
         details: {
           status: response?.status ?? null,
+          reason: failure.reason,
           providerError: payload?.error ?? null,
           providerErrorDescription: payload?.error_description ?? null
         }
@@ -305,11 +361,213 @@ export class OidcIdentityProviderAdapter {
     const claims = verifyResult.data.claims ?? {};
     return this.success({
       claims,
+      idToken,
       providerUserId: claims.sub ?? null,
       email: normalizeEmail(claims.email ?? ''),
       emailVerified: Boolean(claims.email_verified ?? false),
+      refreshToken: hasText(payload?.refresh_token) ? String(payload.refresh_token) : null,
       keyId: verifyResult.data.keyId,
       algorithm: verifyResult.data.algorithm
+    });
+  }
+
+  async refreshProviderSession({
+    refreshToken,
+    expectedNonce = null,
+    expectedSubject = null
+  } = {}) {
+    if (!this.isConfigured()) return this.notConfiguredResult();
+
+    if (!this.getCapabilities().refresh.supported) {
+      return this.failure({
+        code: IdentityErrorCodes.UNSUPPORTED_CAPABILITY,
+        message: 'OIDC refresh capability is not supported by this provider.',
+        details: { reason: 'REFRESH_UNSUPPORTED' }
+      });
+    }
+
+    if (!hasText(refreshToken)) {
+      return this.failure({
+        code: IdentityErrorCodes.INVALID_REQUEST,
+        message: 'Refresh token is required for OIDC refresh.',
+        details: { reason: 'REFRESH_TOKEN_MISSING' }
+      });
+    }
+
+    const discovery = await this.discoverProviderMetadata();
+    if (!discovery.ok) return discovery;
+
+    const tokenEndpoint = String(discovery.data?.metadata?.token_endpoint ?? '').trim();
+    if (!tokenEndpoint) {
+      return this.failure({
+        code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+        message: 'OIDC discovery metadata is missing token endpoint.',
+        details: { reason: 'TOKEN_ENDPOINT_MISSING' }
+      });
+    }
+
+    let payload;
+    let response;
+    try {
+      const requestBody = new URLSearchParams({
+        grant_type: 'refresh_token',
+        refresh_token: String(refreshToken),
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret
+      });
+
+      response = await this.fetchImpl(tokenEndpoint, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+          accept: 'application/json'
+        },
+        body: requestBody.toString()
+      });
+      payload = await response.json();
+    } catch (error) {
+      const failure = classifyProviderException(error);
+      return this.failure({
+        code: failure.code,
+        message: 'OIDC refresh token exchange failed.',
+        details: {
+          reason: failure.reason,
+          providerMessage: error instanceof Error ? error.message : String(error)
+        }
+      });
+    }
+
+    if (!response?.ok) {
+      const failure = classifyTokenEndpointFailure(payload);
+      return this.failure({
+        code: failure.code,
+        message: 'OIDC refresh token exchange failed.',
+        details: {
+          reason: failure.reason,
+          status: response?.status ?? null,
+          providerError: payload?.error ?? null,
+          providerErrorDescription: payload?.error_description ?? null
+        }
+      });
+    }
+
+    if (payload?.refresh_token_rotated === true && !hasText(payload?.refresh_token)) {
+      return this.failure({
+        code: IdentityErrorCodes.TOKEN_INVALID,
+        message: 'OIDC refresh response signaled rotation but no refresh token was returned.',
+        details: { reason: 'TOKEN_ROTATION_MISMATCH' }
+      });
+    }
+
+    const idToken = String(payload?.id_token ?? '').trim();
+    if (!idToken) {
+      return this.failure({
+        code: IdentityErrorCodes.TOKEN_INVALID,
+        message: 'OIDC refresh response is missing id_token.',
+        details: { reason: 'ID_TOKEN_MISSING' }
+      });
+    }
+
+    const verifyResult = await this.verifyIdToken({
+      idToken,
+      expectedIssuer: this.config.issuerUrl,
+      expectedAudience: this.config.clientId,
+      expectedNonce
+    });
+    if (!verifyResult.ok) return verifyResult;
+
+    const claims = verifyResult.data?.claims ?? {};
+    const subject = String(claims.sub ?? '').trim();
+    if (hasText(expectedSubject) && subject !== String(expectedSubject)) {
+      return this.failure({
+        code: IdentityErrorCodes.TOKEN_INVALID,
+        message: 'OIDC refreshed token subject does not match expected identity.',
+        details: {
+          reason: 'SUBJECT_MISMATCH',
+          expectedSubject: String(expectedSubject),
+          actualSubject: subject
+        }
+      });
+    }
+
+    const nextRefreshToken = hasText(payload?.refresh_token)
+      ? String(payload.refresh_token)
+      : String(refreshToken);
+
+    return this.success({
+      claims,
+      idToken,
+      accessToken: hasText(payload?.access_token) ? String(payload.access_token) : null,
+      refreshToken: nextRefreshToken,
+      refreshTokenRotated: hasText(payload?.refresh_token),
+      expiresInSec: Number.isFinite(Number(payload?.expires_in)) ? Number(payload.expires_in) : null,
+      providerUserId: claims.sub ?? null,
+      email: normalizeEmail(claims.email ?? ''),
+      emailVerified: Boolean(claims.email_verified ?? false)
+    });
+  }
+
+  async federatedLogout({ idTokenHint = null, postLogoutRedirectUri = null } = {}) {
+    if (!this.isConfigured()) return this.notConfiguredResult();
+
+    if (!this.getCapabilities().logout.federatedSupported) {
+      return this.failure({
+        code: IdentityErrorCodes.UNSUPPORTED_CAPABILITY,
+        message: 'Federated logout is not supported by this provider.',
+        details: { reason: 'FEDERATED_LOGOUT_UNSUPPORTED' }
+      });
+    }
+
+    const discovery = await this.discoverProviderMetadata();
+    if (!discovery.ok) return discovery;
+    const logoutEndpoint = String(discovery.data?.metadata?.end_session_endpoint ?? '').trim();
+    if (!logoutEndpoint) {
+      return this.failure({
+        code: IdentityErrorCodes.UNSUPPORTED_CAPABILITY,
+        message: 'Provider does not expose RP-Initiated Logout endpoint.',
+        details: { reason: 'END_SESSION_ENDPOINT_MISSING' }
+      });
+    }
+
+    const query = new URLSearchParams();
+    if (hasText(idTokenHint)) query.set('id_token_hint', String(idTokenHint));
+    if (hasText(postLogoutRedirectUri)) query.set('post_logout_redirect_uri', String(postLogoutRedirectUri));
+
+    const requestUrl = query.toString() ? `${logoutEndpoint}?${query.toString()}` : logoutEndpoint;
+    try {
+      const response = await this.fetchImpl(requestUrl, {
+        method: 'GET',
+        headers: {
+          accept: 'application/json,text/plain,*/*'
+        }
+      });
+
+      if (!response?.ok) {
+        return this.failure({
+          code: IdentityErrorCodes.PROVIDER_UNAVAILABLE,
+          message: 'Federated logout endpoint rejected the request.',
+          details: {
+            reason: 'LOGOUT_ENDPOINT_FAILURE',
+            status: response?.status ?? null
+          }
+        });
+      }
+    } catch (error) {
+      const failure = classifyProviderException(error);
+      return this.failure({
+        code: failure.code,
+        message: 'Federated logout request failed.',
+        details: {
+          reason: failure.reason,
+          providerMessage: error instanceof Error ? error.message : String(error)
+        }
+      });
+    }
+
+    return this.success({
+      loggedOut: true,
+      federated: true,
+      logoutEndpoint
     });
   }
 
@@ -818,8 +1076,11 @@ export class OidcIdentityProviderAdapter {
   }
 
   refreshSession() {
-    if (!this.isConfigured()) return this.notConfiguredResult();
-    return createIdentityResult({ ok: true, data: { refreshed: true }, providerStatus: this.getStatus() });
+    return this.failure({
+      code: IdentityErrorCodes.UNSUPPORTED_CAPABILITY,
+      message: 'Use refreshProviderSession for OIDC refresh lifecycle.',
+      details: { reason: 'REFRESH_METHOD_MISMATCH' }
+    });
   }
 
   requestPasswordReset({ email } = {}) {

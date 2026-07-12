@@ -1523,7 +1523,7 @@ export class ExecutiveDashboardApiService {
       }
 
       if (routePath === '/api/v1/customer/logout' && method === 'POST') {
-        const logout = this.customerPortalApi.logout({
+        const logout = await this.customerPortalApi.logout({
           sessionToken: gate.auth.customerSessionToken ?? extractCustomerSessionToken({ headers, transport: this.customerAuthTransport })
         });
         if (!logout.accepted) {
@@ -1544,7 +1544,7 @@ export class ExecutiveDashboardApiService {
       }
 
       if (routePath === '/api/v1/customer/session/refresh' && method === 'POST') {
-        const refreshed = this.customerPortalApi.refreshSession({
+        const refreshed = await this.customerPortalApi.refreshSession({
           sessionToken: gate.auth.customerSessionToken ?? extractCustomerSessionToken({ headers, transport: this.customerAuthTransport })
         });
         if (!refreshed.accepted) {
