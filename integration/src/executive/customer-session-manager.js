@@ -22,6 +22,43 @@ function isValidCsrfTokenFormat(token) {
   return typeof token === 'string' && /^[A-Za-z0-9_-]{43}$/.test(token);
 }
 
+const RedactedAuditKeys = [
+  /password/i,
+  /secret/i,
+  /token/i,
+  /verifier/i,
+  /authorization/i,
+  /idToken/i,
+  /refreshToken/i,
+  /clientSecret/i
+];
+
+function shouldRedactAuditKey(key) {
+  const text = String(key ?? '').trim();
+  if (!text) return false;
+  return RedactedAuditKeys.some((rule) => rule.test(text));
+}
+
+function sanitizeAuditValue(value, key = '') {
+  if (shouldRedactAuditKey(key)) {
+    return '[REDACTED]';
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeAuditValue(item, key));
+  }
+
+  if (value && typeof value === 'object') {
+    const output = {};
+    for (const [childKey, childValue] of Object.entries(value)) {
+      output[childKey] = sanitizeAuditValue(childValue, childKey);
+    }
+    return output;
+  }
+
+  return value;
+}
+
 function parseToken(token) {
   const text = String(token ?? '').trim();
   const match = /^((?:csn_)[a-z0-9-]+)\.([a-f0-9]{64})$/i.exec(text);
@@ -109,7 +146,7 @@ export class CustomerSessionManager {
       auditId: `auth_audit_${randomUUID()}`,
       timestamp: nowIso(this.now),
       event,
-      details
+      details: sanitizeAuditValue(details)
     };
     this.audit.set(record.auditId, record);
     setMetaValue({ provider: this.storageProvider, namespace: `${this.namespace}.audit`, key: record.auditId, value: record });

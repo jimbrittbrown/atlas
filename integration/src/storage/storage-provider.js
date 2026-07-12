@@ -79,6 +79,14 @@ export class StorageProvider {
     throw new Error('StorageProvider.listMetaSync() must be implemented by sync-capable providers.');
   }
 
+  getStateRecord() {
+    return { ok: false, code: 'UNSUPPORTED', reason: 'Storage provider does not support state record reads.' };
+  }
+
+  conditionalSetStateRecord() {
+    return { ok: false, code: 'UNSUPPORTED', reason: 'Storage provider does not support conditional state record writes.' };
+  }
+
   async close() {
     return undefined;
   }

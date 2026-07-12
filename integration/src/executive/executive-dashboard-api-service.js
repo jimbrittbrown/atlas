@@ -411,6 +411,42 @@ function isCsrfTokenFormatValid(value) {
   return typeof value === 'string' && /^[A-Za-z0-9_-]{43}$/.test(value);
 }
 
+const CustomerRouteSecurityClasses = Object.freeze({
+  PUBLIC_AUTH_START: 'public_auth_start',
+  PUBLIC_AUTH_CALLBACK: 'public_auth_callback',
+  PUBLIC_AUTH_ACTION: 'public_auth_action',
+  PROTECTED_CUSTOMER_READ: 'protected_customer_read',
+  PROTECTED_CUSTOMER_ACTION: 'protected_customer_action'
+});
+
+const CustomerRouteSecurityConfig = Object.freeze({
+  'POST:/api/v1/customer/register': CustomerRouteSecurityClasses.PUBLIC_AUTH_START,
+  'POST:/api/v1/customer/login': CustomerRouteSecurityClasses.PUBLIC_AUTH_START,
+  'POST:/api/v1/customer/auth/oidc/start': CustomerRouteSecurityClasses.PUBLIC_AUTH_START,
+  'GET:/api/v1/customer/auth/oidc/callback': CustomerRouteSecurityClasses.PUBLIC_AUTH_CALLBACK,
+  'POST:/api/v1/customer/password-reset/request': CustomerRouteSecurityClasses.PUBLIC_AUTH_ACTION,
+  'POST:/api/v1/customer/password-reset/complete': CustomerRouteSecurityClasses.PUBLIC_AUTH_ACTION
+});
+
+function resolveCustomerRouteSecurityClass({ routePath, method }) {
+  const upperMethod = String(method ?? '').toUpperCase();
+  const key = `${upperMethod}:${routePath}`;
+  if (Object.prototype.hasOwnProperty.call(CustomerRouteSecurityConfig, key)) {
+    return CustomerRouteSecurityConfig[key];
+  }
+
+  const isSafeRead = ['GET', 'HEAD', 'OPTIONS'].includes(upperMethod);
+  return isSafeRead
+    ? CustomerRouteSecurityClasses.PROTECTED_CUSTOMER_READ
+    : CustomerRouteSecurityClasses.PROTECTED_CUSTOMER_ACTION;
+}
+
+function isPublicCustomerSecurityClass(securityClass) {
+  return securityClass === CustomerRouteSecurityClasses.PUBLIC_AUTH_START
+    || securityClass === CustomerRouteSecurityClasses.PUBLIC_AUTH_CALLBACK
+    || securityClass === CustomerRouteSecurityClasses.PUBLIC_AUTH_ACTION;
+}
+
 function customerRouteSecurityPolicy({ routePath, method }) {
   const upperMethod = String(method ?? '').toUpperCase();
   const isCustomerRoute = String(routePath ?? '').startsWith('/api/v1/customer');
@@ -427,22 +463,16 @@ function customerRouteSecurityPolicy({ routePath, method }) {
       exemptCategory: String(routePath ?? '').startsWith('/api/v1/payments/webhook') ? 'WEBHOOK' : null
     };
   }
-
-  const publicMutationRoutes = new Set([
-    'POST:/api/v1/customer/register',
-    'POST:/api/v1/customer/login',
-    'POST:/api/v1/customer/password-reset/request',
-    'POST:/api/v1/customer/password-reset/complete'
-  ]);
-  const key = `${upperMethod}:${routePath}`;
-  const isPublicMutation = publicMutationRoutes.has(key);
+  const securityClass = resolveCustomerRouteSecurityClass({ routePath, method });
+  const isPublicRoute = isPublicCustomerSecurityClass(securityClass);
 
   return {
     isCustomerRoute,
+    securityClass,
     isMutating,
-    requiresCustomerAuthentication: isCustomerRoute && (!isSafeRead && !isPublicMutation || isSafeRead),
+    requiresCustomerAuthentication: isCustomerRoute && !isPublicRoute,
     requiresOriginValidation: isCustomerRoute && isMutating,
-    requiresCsrfValidation: isCustomerRoute && isMutating && !isPublicMutation,
+    requiresCsrfValidation: isCustomerRoute && isMutating && !isPublicRoute,
     exemptCategory: null
   };
 }
@@ -494,6 +524,178 @@ function appendSetCookieHeaders(existingHeaders = null, ...cookieValues) {
   return base;
 }
 
+function appendUrlParams(urlText, params = {}) {
+  const [base, fragment = ''] = String(urlText ?? '').split('#', 2);
+  const queryIndex = base.indexOf('?');
+  const rawBase = queryIndex >= 0 ? base.slice(0, queryIndex) : base;
+  const search = new URLSearchParams(queryIndex >= 0 ? base.slice(queryIndex + 1) : '');
+
+  Object.entries(params ?? {}).forEach(([key, value]) => {
+    if (value == null || String(value).trim().length === 0) return;
+    search.set(String(key), String(value));
+  });
+
+  const query = search.toString();
+  const withQuery = query ? `${rawBase}?${query}` : rawBase;
+  return fragment ? `${withQuery}#${fragment}` : withQuery;
+}
+
+function parsePortalRedirectAllowlist(value) {
+  const routes = String(value ?? '/customer/portal,/customer/portal/')
+    .split(',')
+    .map((item) => String(item ?? '').trim())
+    .filter(Boolean)
+    .filter((item) => item.startsWith('/'));
+  return routes.length > 0 ? routes : ['/customer/portal', '/customer/portal/'];
+}
+
+function hasPathTraversal(pathname) {
+  const text = String(pathname ?? '');
+  return text.includes('..') || text.includes('\\') || text.includes('/./') || text.endsWith('/.') || text.endsWith('/..');
+}
+
+function decodeRedirectInput(value) {
+  const raw = String(value ?? '').trim().normalize('NFKC');
+  if (!raw) return { ok: false, value: null };
+  if (/\s/.test(raw[0] ?? '')) return { ok: false, value: null };
+  if (/%25/i.test(raw)) {
+    return { ok: false, value: null };
+  }
+
+  let decoded = raw;
+  if (raw.includes('%')) {
+    try {
+      decoded = decodeURIComponent(raw);
+    } catch {
+      return { ok: false, value: null };
+    }
+    if (decoded.includes('%')) {
+      return { ok: false, value: null };
+    }
+  }
+
+  return { ok: true, value: decoded };
+}
+
+function isDisallowedScheme(value) {
+  const text = String(value ?? '').trim().toLowerCase();
+  return text.startsWith('javascript:')
+    || text.startsWith('data:')
+    || text.startsWith('file:')
+    || text.startsWith('vbscript:');
+}
+
+function containsNestedRedirect(urlObj) {
+  const suspiciousKeys = new Set(['redirect', 'redirect_url', 'return', 'return_to', 'next', 'url', 'target', 'destination', 'continue']);
+  for (const [key, value] of urlObj.searchParams.entries()) {
+    const normalizedKey = String(key ?? '').trim().toLowerCase();
+    if (!suspiciousKeys.has(normalizedKey)) continue;
+    const decoded = decodeRedirectInput(value);
+    if (!decoded.ok) return true;
+    const nested = String(decoded.value ?? '').trim();
+    if (!nested) continue;
+    if (nested.startsWith('//') || isDisallowedScheme(nested)) return true;
+    try {
+      const parsed = new URL(nested);
+      if (['http:', 'https:', 'javascript:', 'data:', 'file:'].includes(parsed.protocol)) {
+        return true;
+      }
+    } catch {
+      // Relative nested paths are tolerated only if non-traversal.
+      if (hasPathTraversal(nested)) return true;
+    }
+  }
+  return false;
+}
+
+function pathAllowed(pathname, allowlist = []) {
+  const normalized = String(pathname ?? '').trim();
+  return allowlist.some((prefix) => {
+    const candidate = String(prefix ?? '').trim();
+    if (!candidate) return false;
+    if (normalized === candidate) return true;
+    return normalized.startsWith(candidate.endsWith('/') ? candidate : `${candidate}/`);
+  });
+}
+
+function sanitizePortalRedirectTarget({
+  env = process.env,
+  candidate,
+  fallback,
+  success,
+  errorCode,
+  requestId
+} = {}) {
+  const defaultBase = success
+    ? (env.ATLAS_CUSTOMER_PORTAL_AUTH_SUCCESS_URL ?? '/customer/portal')
+    : (env.ATLAS_CUSTOMER_PORTAL_AUTH_ERROR_URL ?? '/customer/portal/login');
+  const fallbackTarget = String(fallback ?? defaultBase).trim() || defaultBase;
+  const allowlist = parsePortalRedirectAllowlist(env.ATLAS_CUSTOMER_PORTAL_REDIRECT_RELATIVE_ALLOWLIST);
+  const trusted = normalizeTrustedOrigins(env.ATLAS_CUSTOMER_TRUSTED_ORIGINS ?? '').origins;
+  const portalOrigins = normalizeTrustedOrigins(env.ATLAS_CUSTOMER_PORTAL_REDIRECT_ORIGINS ?? '').origins;
+  const allowedOrigins = new Set([...trusted, ...portalOrigins]);
+
+  const append = (value) => appendUrlParams(value, success
+    ? { auth: 'ok', requestId }
+    : { auth: 'error', code: errorCode ?? 'AUTH_FAILED', requestId });
+
+  const normalized = decodeRedirectInput(candidate);
+  if (!normalized.ok || !normalized.value) {
+    return append(fallbackTarget);
+  }
+
+  const target = String(normalized.value).trim();
+  if (!target || isDisallowedScheme(target) || target.startsWith('//')) {
+    return append(fallbackTarget);
+  }
+
+  try {
+    const parsed = new URL(target);
+    if (!['https:', 'http:'].includes(parsed.protocol)) {
+      return append(fallbackTarget);
+    }
+    if (!allowedOrigins.has(parsed.origin)) {
+      return append(fallbackTarget);
+    }
+    if (hasPathTraversal(parsed.pathname) || !pathAllowed(parsed.pathname, allowlist) || containsNestedRedirect(parsed)) {
+      return append(fallbackTarget);
+    }
+    return append(parsed.toString());
+  } catch {
+    if (!target.startsWith('/')) {
+      return append(fallbackTarget);
+    }
+
+    try {
+      const parsedRelative = new URL(target, 'https://atlas.local');
+      if (hasPathTraversal(parsedRelative.pathname) || !pathAllowed(parsedRelative.pathname, allowlist) || containsNestedRedirect(parsedRelative)) {
+        return append(fallbackTarget);
+      }
+      return append(`${parsedRelative.pathname}${parsedRelative.search}${parsedRelative.hash}`);
+    } catch {
+      return append(fallbackTarget);
+    }
+  }
+}
+
+function resolvePortalRedirectTarget({
+  env = process.env,
+  fallback,
+  preferred,
+  success,
+  errorCode,
+  requestId
+} = {}) {
+  return sanitizePortalRedirectTarget({
+    env,
+    candidate: preferred,
+    fallback,
+    success,
+    errorCode,
+    requestId
+  });
+}
+
 function resolveCustomerContext({ headers = {}, auth = {} } = {}) {
   const customerId = auth?.customerId
     ?? headers['x-customer-id']
@@ -516,14 +718,7 @@ function resolveCustomerContext({ headers = {}, auth = {} } = {}) {
 }
 
 function isPublicCustomerRoute(routePath, method) {
-  const upperMethod = String(method ?? '').toUpperCase();
-  if (upperMethod !== 'POST') return false;
-  return [
-    '/api/v1/customer/register',
-    '/api/v1/customer/login',
-    '/api/v1/customer/password-reset/request',
-    '/api/v1/customer/password-reset/complete'
-  ].includes(routePath);
+  return isPublicCustomerSecurityClass(resolveCustomerRouteSecurityClass({ routePath, method }));
 }
 
 export class ExecutiveDashboardApiService {
@@ -1263,6 +1458,28 @@ export class ExecutiveDashboardApiService {
         };
       };
 
+      const buildRedirect = ({ location, responseHeaders = null }) => {
+        const headers = {
+          ...(responseHeaders ?? {}),
+          location
+        };
+
+        return {
+          httpStatus: 302,
+          responseHeaders: headers,
+          envelope: createEnvelope({
+            success: true,
+            status: 302,
+            requestId,
+            data: { redirected: true, location },
+            pagination: null,
+            dataFreshness: null,
+            warnings: [],
+            limitations: []
+          })
+        };
+      };
+
       if (routePath === '/api/v1/dashboard') {
         return buildSuccess({ data: snapshot, limitations: snapshot.limitations ?? [] });
       }
@@ -1385,8 +1602,66 @@ export class ExecutiveDashboardApiService {
         });
       }
 
+      if (routePath === '/api/v1/customer/auth/oidc/start' && method === 'POST') {
+        const started = await this.customerPortalApi.startOidcAuthorization({ body });
+        if (!started.accepted) {
+          const codeByStartCode = {
+            PROVIDER_NOT_CONFIGURED: ApiErrorCodes.DATA_UNAVAILABLE,
+            PROVIDER_UNAVAILABLE: ApiErrorCodes.DATA_UNAVAILABLE,
+            PROVIDER_MISMATCH: ApiErrorCodes.FORBIDDEN,
+            CONFLICT: ApiErrorCodes.CONFLICT
+          };
+          return this.normalizeError({
+            requestId,
+            code: codeByStartCode[started.code] ?? ApiErrorCodes.INVALID_REQUEST,
+            message: started.reason,
+            status: started.status
+          });
+        }
+
+        return buildSuccess({ data: started.data });
+      }
+
+      if (routePath === '/api/v1/customer/auth/oidc/callback' && method === 'GET') {
+        const callback = await this.customerPortalApi.completeOidcAuthorizationCallback({ query });
+        if (!callback.accepted) {
+          const failureLocation = resolvePortalRedirectTarget({
+            env: this.env,
+            preferred: callback.data?.portalRedirectUri ?? query.return_to ?? null,
+            fallback: this.env.ATLAS_CUSTOMER_PORTAL_AUTH_ERROR_URL ?? '/customer/portal/login',
+            success: false,
+            errorCode: callback.code,
+            requestId
+          });
+          return buildRedirect({ location: failureLocation });
+        }
+
+        const setCookie = buildSessionCookieHeader({
+          transport: this.customerAuthTransport,
+          sessionToken: callback.data?.sessionToken,
+          expiresAt: callback.data?.expiresAt
+        });
+        const csrfCookie = buildCsrfCookieHeader({
+          csrfPolicy: this.customerCsrfPolicy,
+          csrfToken: callback.data?.csrfToken,
+          expiresAt: callback.data?.expiresAt
+        });
+        const successLocation = resolvePortalRedirectTarget({
+          env: this.env,
+          preferred: callback.data?.portalRedirectUri ?? query.return_to ?? null,
+          fallback: this.env.ATLAS_CUSTOMER_PORTAL_AUTH_SUCCESS_URL ?? '/customer/portal',
+          success: true,
+          requestId
+        });
+
+        return buildRedirect({
+          location: successLocation,
+          responseHeaders: appendSetCookieHeaders(null, setCookie, csrfCookie)
+        });
+      }
+
       if (routePath === '/api/v1/customer/logout' && method === 'POST') {
-        const logout = this.customerPortalApi.logout({
+        const logout = await this.customerPortalApi.logout({
           sessionToken: gate.auth.customerSessionToken ?? extractCustomerSessionToken({ headers, transport: this.customerAuthTransport })
         });
         if (!logout.accepted) {
@@ -1407,7 +1682,7 @@ export class ExecutiveDashboardApiService {
       }
 
       if (routePath === '/api/v1/customer/session/refresh' && method === 'POST') {
-        const refreshed = this.customerPortalApi.refreshSession({
+        const refreshed = await this.customerPortalApi.refreshSession({
           sessionToken: gate.auth.customerSessionToken ?? extractCustomerSessionToken({ headers, transport: this.customerAuthTransport })
         });
         if (!refreshed.accepted) {
@@ -1677,6 +1952,52 @@ export class ExecutiveDashboardApiService {
         }
 
         return buildSuccess({ data: downloads.data });
+      }
+
+      if (routePath === '/api/v1/customer/downloads/:id/authorize' && method === 'POST') {
+        const customerContext = resolveCustomerContext({ headers, auth: gate.auth });
+        const authorization = this.customerPortalApi.issueDownloadAuthorization({
+          customerId: customerContext.customerId,
+          projectId: resolved.params.id,
+          requestedBy: customerContext.requestedBy,
+          body
+        });
+
+        if (!authorization.found) {
+          const code = authorization.code === 'FORBIDDEN'
+            ? ApiErrorCodes.FORBIDDEN
+            : (authorization.code === 'NOT_FOUND' ? ApiErrorCodes.NOT_FOUND : ApiErrorCodes.INVALID_REQUEST);
+          return this.normalizeError({
+            requestId,
+            code,
+            message: authorization.reason,
+            status: authorization.status
+          });
+        }
+
+        return buildSuccess({ data: authorization.data });
+      }
+
+      if (routePath === '/api/v1/customer/downloads/redeem' && method === 'POST') {
+        const customerContext = resolveCustomerContext({ headers, auth: gate.auth });
+        const redemption = this.customerPortalApi.redeemDownloadAuthorization({
+          customerId: customerContext.customerId,
+          body
+        });
+
+        if (!redemption.found) {
+          const code = redemption.code === 'FORBIDDEN'
+            ? ApiErrorCodes.FORBIDDEN
+            : (redemption.code === 'NOT_FOUND' ? ApiErrorCodes.NOT_FOUND : (redemption.code === 'UNAUTHORIZED' ? ApiErrorCodes.UNAUTHORIZED : ApiErrorCodes.INVALID_REQUEST));
+          return this.normalizeError({
+            requestId,
+            code,
+            message: redemption.reason,
+            status: redemption.status
+          });
+        }
+
+        return buildSuccess({ data: redemption.data });
       }
 
       if (routePath === '/api/v1/mission-control/:missionId' && method === 'GET') {

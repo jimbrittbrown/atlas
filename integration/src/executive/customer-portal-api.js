@@ -122,16 +122,39 @@ export class CustomerPortalApi {
     });
   }
 
-  logout({ sessionToken } = {}) {
+  async logout({ sessionToken } = {}) {
     return this.manager.logout({ sessionToken });
   }
 
-  refreshSession({ sessionToken } = {}) {
+  async refreshSession({ sessionToken } = {}) {
     return this.manager.refreshSession({ sessionToken });
   }
 
   getCurrentSession({ sessionToken } = {}) {
     return this.manager.getCurrentSession({ sessionToken });
+  }
+
+  async startOidcAuthorization({ body = {} } = {}) {
+    return this.manager.startOidcAuthorization({
+      redirectUri: body.redirectUri,
+      scope: body.scope,
+      prompt: body.prompt ?? null,
+      loginHint: body.loginHint ?? null,
+      expiresInMs: body.expiresInMs,
+      provider: body.provider ?? 'oidc',
+      portalRedirectUri: body.portalRedirectUri ?? null,
+      state: body.state ?? null,
+      nonce: body.nonce ?? null
+    });
+  }
+
+  async completeOidcAuthorizationCallback({ query = {} } = {}) {
+    return this.manager.completeOidcAuthorizationCallback({
+      state: query.state,
+      code: query.code,
+      redirectUri: query.redirect_uri,
+      provider: query.provider ?? 'oidc'
+    });
   }
 
   requestPasswordReset({ body = {} } = {}) {
@@ -173,6 +196,23 @@ export class CustomerPortalApi {
 
   getDownloads({ customerId, projectId } = {}) {
     return this.manager.getDownloads({ customerId, projectId });
+  }
+
+  issueDownloadAuthorization({ customerId, projectId, requestedBy, body = {} } = {}) {
+    return this.manager.issueDownloadAuthorization({
+      customerId,
+      projectId,
+      artifactId: body.artifactId,
+      requestedBy: requestedBy ?? body.requestedBy ?? 'CUSTOMER_PORTAL',
+      expiresInMs: body.expiresInMs
+    });
+  }
+
+  redeemDownloadAuthorization({ customerId, body = {} } = {}) {
+    return this.manager.redeemDownloadAuthorization({
+      customerId,
+      authorizationToken: body.authorizationToken ?? body.deliveryToken
+    });
   }
 
   approveCompletion({ customerId, requestedBy, body = {} } = {}) {

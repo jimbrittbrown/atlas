@@ -59,6 +59,19 @@ export class LocalDevelopmentIdentityProviderAdapter {
     };
   }
 
+  getCapabilities() {
+    return {
+      refresh: {
+        supported: true,
+        providerManaged: false
+      },
+      logout: {
+        supported: true,
+        federatedSupported: false
+      }
+    };
+  }
+
   register({ email, password, metadata = {} } = {}) {
     const normalizedEmail = normalizeEmail(email);
     if (!normalizedEmail || String(password ?? '').length < 8) {
@@ -154,12 +167,32 @@ export class LocalDevelopmentIdentityProviderAdapter {
     return createIdentityResult({ ok: true, data: { loggedOut: true }, providerStatus: this.getStatus() });
   }
 
+  federatedLogout() {
+    return createIdentityResult({
+      ok: false,
+      error: createIdentityError({
+        code: IdentityErrorCodes.UNSUPPORTED_CAPABILITY,
+        message: 'Federated logout is not supported by local development provider.',
+        details: { reason: 'FEDERATED_LOGOUT_UNSUPPORTED' }
+      }),
+      providerStatus: this.getStatus()
+    });
+  }
+
   validateSession() {
     return createIdentityResult({ ok: true, data: { valid: true }, providerStatus: this.getStatus() });
   }
 
   refreshSession() {
-    return createIdentityResult({ ok: true, data: { refreshed: true }, providerStatus: this.getStatus() });
+    return createIdentityResult({
+      ok: false,
+      error: createIdentityError({
+        code: IdentityErrorCodes.UNSUPPORTED_CAPABILITY,
+        message: 'Refresh token lifecycle is not supported by local development provider.',
+        details: { reason: 'REFRESH_UNSUPPORTED' }
+      }),
+      providerStatus: this.getStatus()
+    });
   }
 
   requestPasswordReset({ email } = {}) {

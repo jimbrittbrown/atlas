@@ -170,6 +170,49 @@ export class SQLiteStorageProvider extends StorageProvider {
     return this.listMetaSync(namespace);
   }
 
+  getStateRecord({ namespace, key } = {}) {
+    this.initializeSync();
+    const row = this.database.prepare(
+      'SELECT payload FROM storage_records WHERE namespace = ? AND record_id = ?'
+    ).get(namespace, key);
+
+    if (!row) {
+      return { ok: false, code: 'NOT_FOUND', reason: 'State record not found.', value: null };
+    }
+
+    return { ok: true, code: 'OK', reason: null, value: JSON.parse(row.payload) };
+  }
+
+  conditionalSetStateRecord({ namespace, key, expectedVersion, value } = {}) {
+    this.initializeSync();
+    const version = Number(expectedVersion);
+    if (!Number.isFinite(version) || version < 0) {
+      return { ok: false, code: 'INVALID_REQUEST', reason: 'expectedVersion must be a non-negative number.' };
+    }
+
+    const result = this.database.prepare(
+      `UPDATE storage_records
+         SET payload = ?, updated_at = ?
+       WHERE namespace = ?
+         AND record_id = ?
+         AND CAST(json_extract(payload, '$.version') AS INTEGER) = ?`
+    ).run(JSON.stringify(value), isoNow(this.now), namespace, key, version);
+
+    if (Number(result?.changes ?? 0) === 1) {
+      return { ok: true, code: 'OK', reason: null };
+    }
+
+    const exists = this.database.prepare(
+      'SELECT 1 AS present FROM storage_records WHERE namespace = ? AND record_id = ?'
+    ).get(namespace, key);
+
+    if (!exists) {
+      return { ok: false, code: 'NOT_FOUND', reason: 'State record not found.' };
+    }
+
+    return { ok: false, code: 'VERSION_MISMATCH', reason: 'State record version mismatch.' };
+  }
+
   closeSync() {
     if (!this.database) return;
     this.database.close();
