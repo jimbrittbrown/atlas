@@ -942,6 +942,18 @@ export class NotificationTemplateDomain {
     return Array.from(this.compositions.values());
   }
 
+  getComposition(compositionId) {
+    const key = String(compositionId ?? '').trim();
+    if (!key) return null;
+    return this.compositions.get(key) ?? null;
+  }
+
+  getRenderedContent(contentRef) {
+    const key = String(contentRef ?? '').trim();
+    if (!key) return null;
+    return this.renderedContent.get(key) ?? null;
+  }
+
   listTemplateAudit() {
     return Array.from(this.audit.values())
       .sort((a, b) => String(a.at ?? '').localeCompare(String(b.at ?? '')));
