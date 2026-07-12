@@ -623,13 +623,54 @@ test('payment checkout and customer payment history remain customer-scoped', asy
   });
   const missionIdA = missionA.missionId;
 
+  const proposalA = manager.executivePlanningSystem.submitProposal({
+    sourceType: 'CUSTOMER',
+    sourceId: `auth-security-payment-${missionIdA}`,
+    customerId: loginA.envelope.data.customerId,
+    title: 'WS-2 Checkout Gate Proposal A',
+    description: 'Proposal required for checkout gate validation.',
+    missionType: 'WEBSITE_BUILD',
+    requestedOutcome: 'Enable checkout for mission A',
+    strategicObjective: 'Customer website delivery',
+    expectedBusinessValue: 70,
+    urgency: 60,
+    estimatedEffort: 20,
+    estimatedCost: 2500,
+    estimatedDuration: 15,
+    dependencies: [],
+    requiredCapabilities: ['COMPANY_RESEARCH'],
+    risks: [{ id: 'risk-a', severity: 0.1 }],
+    confidence: 0.8
+  });
+  manager.customerPortalManager.persistRequest({
+    requestId: `req_${missionIdA}`,
+    missionId: missionIdA,
+    customerId: loginA.envelope.data.customerId,
+    accountId: null,
+    sessionId: null,
+    proposalId: proposalA.proposal.proposalId,
+    requestedBy: 'AUTH_SECURITY_TEST',
+    submittedDate: new Date().toISOString(),
+    payload: {},
+    messages: [],
+    downloadDeliverables: []
+  });
+  const acceptanceA = manager.executivePlanningSystem.acceptCommercialProposal({
+    proposalId: proposalA.proposal.proposalId,
+    customerId: loginA.envelope.data.customerId,
+    projectId: missionIdA,
+    acceptedBy: 'Auth Security Customer A',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(acceptanceA.accepted, true);
+
   const checkoutA = await callApi(api, {
     path: '/api/v1/customer/payments/checkout',
     method: 'POST',
     sessionToken: loginA.envelope.data.sessionToken,
     body: {
       missionId: missionIdA,
-      amount: 2499.99,
+      amount: acceptanceA.acceptanceRecord.lockedQuote.amountMinor / 100,
       currency: 'USD',
       description: 'Initial strategy payment'
     }
@@ -662,7 +703,7 @@ test('payment checkout and customer payment history remain customer-scoped', asy
   assert.equal(historyA.httpStatus, 200);
   assert.equal(historyA.envelope.data.payments.length, 1);
   assert.equal(historyA.envelope.data.payments[0].missionId, missionIdA);
-  assert.equal(historyA.envelope.data.payments[0].status, 'CHECKOUT_PENDING');
+  assert.equal(historyA.envelope.data.payments[0].status, 'PENDING');
   assert.equal(historyB.httpStatus, 200);
   assert.equal(historyB.envelope.data.payments.length, 0);
   assert.equal(forbiddenCheckoutByB.httpStatus, 403);
@@ -693,13 +734,54 @@ test('stripe webhook processing is idempotent and activates mission lifecycle on
   });
   const missionId = mission.missionId;
 
+  const proposal = manager.executivePlanningSystem.submitProposal({
+    sourceType: 'CUSTOMER',
+    sourceId: `auth-security-webhook-${missionId}`,
+    customerId: login.envelope.data.customerId,
+    title: 'WS-2 Checkout Gate Proposal Webhook',
+    description: 'Webhook idempotency requires paid gate setup.',
+    missionType: 'WEBSITE_BUILD',
+    requestedOutcome: 'Enable webhook-driven activation',
+    strategicObjective: 'Customer website delivery',
+    expectedBusinessValue: 72,
+    urgency: 60,
+    estimatedEffort: 20,
+    estimatedCost: 1250,
+    estimatedDuration: 12,
+    dependencies: [],
+    requiredCapabilities: ['COMPANY_RESEARCH'],
+    risks: [{ id: 'risk-webhook', severity: 0.1 }],
+    confidence: 0.8
+  });
+  manager.customerPortalManager.persistRequest({
+    requestId: `req_${missionId}`,
+    missionId,
+    customerId: login.envelope.data.customerId,
+    accountId: null,
+    sessionId: null,
+    proposalId: proposal.proposal.proposalId,
+    requestedBy: 'AUTH_SECURITY_TEST',
+    submittedDate: new Date().toISOString(),
+    payload: {},
+    messages: [],
+    downloadDeliverables: []
+  });
+  const acceptance = manager.executivePlanningSystem.acceptCommercialProposal({
+    proposalId: proposal.proposal.proposalId,
+    customerId: login.envelope.data.customerId,
+    projectId: missionId,
+    acceptedBy: 'Auth Security Customer',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(acceptance.accepted, true);
+
   const checkout = await callApi(api, {
     path: '/api/v1/customer/payments/checkout',
     method: 'POST',
     sessionToken: login.envelope.data.sessionToken,
     body: {
       missionId,
-      amount: 1250,
+      amount: acceptance.acceptanceRecord.lockedQuote.amountMinor / 100,
       currency: 'USD'
     }
   });
@@ -737,11 +819,11 @@ test('stripe webhook processing is idempotent and activates mission lifecycle on
   const updatedMission = manager.missionControl.missionRegistry.getMissionById(missionId);
 
   assert.equal(webhookFirst.httpStatus, 200);
-  assert.equal(webhookFirst.envelope.data.payment.status, 'SUCCEEDED');
+  assert.equal(webhookFirst.envelope.data.payment.status, 'PAID');
   assert.equal(webhookDuplicate.httpStatus, 200);
   assert.equal(webhookDuplicate.envelope.data.duplicate, true);
-  assert.equal(updatedMission.paymentStatus, 'SUCCEEDED');
-  assert.equal(updatedMission.currentStage, 'PAYMENT_CONFIRMED_MISSION_ACTIVE');
+  assert.equal(updatedMission.paymentStatus, 'PAID');
+  assert.equal(updatedMission.currentStage, 'PRODUCTION_STARTED');
 });
 
 test('stripe webhook signature verification rejects unsigned payloads when secret is configured', async () => {
@@ -789,13 +871,54 @@ test('payment telemetry is projected through dashboard architecture', async () =
     progress: 2
   });
 
+  const proposal = manager.executivePlanningSystem.submitProposal({
+    sourceType: 'CUSTOMER',
+    sourceId: `auth-security-telemetry-${mission.missionId}`,
+    customerId: login.envelope.data.customerId,
+    title: 'WS-2 Checkout Gate Proposal Telemetry',
+    description: 'Telemetry payment gate setup.',
+    missionType: 'WEBSITE_BUILD',
+    requestedOutcome: 'Enable payment telemetry',
+    strategicObjective: 'Customer website delivery',
+    expectedBusinessValue: 68,
+    urgency: 58,
+    estimatedEffort: 18,
+    estimatedCost: 999,
+    estimatedDuration: 10,
+    dependencies: [],
+    requiredCapabilities: ['COMPANY_RESEARCH'],
+    risks: [{ id: 'risk-telemetry', severity: 0.1 }],
+    confidence: 0.8
+  });
+  manager.customerPortalManager.persistRequest({
+    requestId: `req_${mission.missionId}`,
+    missionId: mission.missionId,
+    customerId: login.envelope.data.customerId,
+    accountId: null,
+    sessionId: null,
+    proposalId: proposal.proposal.proposalId,
+    requestedBy: 'AUTH_SECURITY_TEST',
+    submittedDate: new Date().toISOString(),
+    payload: {},
+    messages: [],
+    downloadDeliverables: []
+  });
+  const acceptance = manager.executivePlanningSystem.acceptCommercialProposal({
+    proposalId: proposal.proposal.proposalId,
+    customerId: login.envelope.data.customerId,
+    projectId: mission.missionId,
+    acceptedBy: 'Auth Security Customer',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(acceptance.accepted, true);
+
   await callApi(api, {
     path: '/api/v1/customer/payments/checkout',
     method: 'POST',
     sessionToken: login.envelope.data.sessionToken,
     body: {
       missionId: mission.missionId,
-      amount: 999,
+      amount: acceptance.acceptanceRecord.lockedQuote.amountMinor / 100,
       currency: 'USD'
     }
   });
@@ -1205,6 +1328,47 @@ test('revision and checkout mutations are protected while read-only customer rou
     progress: 2
   });
 
+  const proposal = manager.executivePlanningSystem.submitProposal({
+    sourceType: 'CUSTOMER',
+    sourceId: `auth-security-cookie-pay-${mission.missionId}`,
+    customerId: session.login.envelope.data.customerId,
+    title: 'WS-2 Cookie Checkout Proposal',
+    description: 'Cookie auth checkout gate setup.',
+    missionType: 'WEBSITE_BUILD',
+    requestedOutcome: 'Enable cookie checkout',
+    strategicObjective: 'Customer website delivery',
+    expectedBusinessValue: 65,
+    urgency: 55,
+    estimatedEffort: 15,
+    estimatedCost: 199,
+    estimatedDuration: 8,
+    dependencies: [],
+    requiredCapabilities: ['COMPANY_RESEARCH'],
+    risks: [{ id: 'risk-cookie', severity: 0.1 }],
+    confidence: 0.8
+  });
+  manager.customerPortalManager.persistRequest({
+    requestId: `req_${mission.missionId}`,
+    missionId: mission.missionId,
+    customerId: session.login.envelope.data.customerId,
+    accountId: null,
+    sessionId: null,
+    proposalId: proposal.proposal.proposalId,
+    requestedBy: 'AUTH_SECURITY_TEST',
+    submittedDate: new Date().toISOString(),
+    payload: {},
+    messages: [],
+    downloadDeliverables: []
+  });
+  const acceptance = manager.executivePlanningSystem.acceptCommercialProposal({
+    proposalId: proposal.proposal.proposalId,
+    customerId: session.login.envelope.data.customerId,
+    projectId: mission.missionId,
+    acceptedBy: 'Cookie Payment Customer',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(acceptance.accepted, true);
+
   const checkoutDenied = await callApi(api, {
     path: '/api/v1/customer/payments/checkout',
     method: 'POST',
@@ -1369,6 +1533,47 @@ test('secure cookie cannot authorize executive routes and payment checkout works
     progress: 2
   });
 
+  const proposal = manager.executivePlanningSystem.submitProposal({
+    sourceType: 'CUSTOMER',
+    sourceId: `auth-security-cookie-pay-${mission.missionId}`,
+    customerId: login.envelope.data.customerId,
+    title: 'WS-2 Cookie Checkout Proposal',
+    description: 'Cookie auth checkout gate setup.',
+    missionType: 'WEBSITE_BUILD',
+    requestedOutcome: 'Enable cookie checkout',
+    strategicObjective: 'Customer website delivery',
+    expectedBusinessValue: 65,
+    urgency: 55,
+    estimatedEffort: 15,
+    estimatedCost: 199,
+    estimatedDuration: 8,
+    dependencies: [],
+    requiredCapabilities: ['COMPANY_RESEARCH'],
+    risks: [{ id: 'risk-cookie', severity: 0.1 }],
+    confidence: 0.8
+  });
+  manager.customerPortalManager.persistRequest({
+    requestId: `req_${mission.missionId}`,
+    missionId: mission.missionId,
+    customerId: login.envelope.data.customerId,
+    accountId: null,
+    sessionId: null,
+    proposalId: proposal.proposal.proposalId,
+    requestedBy: 'AUTH_SECURITY_TEST',
+    submittedDate: new Date().toISOString(),
+    payload: {},
+    messages: [],
+    downloadDeliverables: []
+  });
+  const acceptance = manager.executivePlanningSystem.acceptCommercialProposal({
+    proposalId: proposal.proposal.proposalId,
+    customerId: login.envelope.data.customerId,
+    projectId: mission.missionId,
+    acceptedBy: 'Cookie Payment Customer',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(acceptance.accepted, true);
+
   const checkout = await callApi(api, {
     path: '/api/v1/customer/payments/checkout',
     method: 'POST',
@@ -1377,7 +1582,7 @@ test('secure cookie cannot authorize executive routes and payment checkout works
     origin,
     body: {
       missionId: mission.missionId,
-      amount: 199,
+      amount: acceptance.acceptanceRecord.lockedQuote.amountMinor / 100,
       currency: 'USD'
     }
   });
@@ -1495,6 +1700,47 @@ test('stripe webhook authentication remains independent of browser cookies', asy
     progress: 2
   });
 
+  const proposal = manager.executivePlanningSystem.submitProposal({
+    sourceType: 'CUSTOMER',
+    sourceId: `auth-security-cookie-webhook-${mission.missionId}`,
+    customerId: login.envelope.data.customerId,
+    title: 'WS-2 Cookie Webhook Proposal',
+    description: 'Cookie webhook checkout gate setup.',
+    missionType: 'WEBSITE_BUILD',
+    requestedOutcome: 'Enable webhook for cookie flow',
+    strategicObjective: 'Customer website delivery',
+    expectedBusinessValue: 66,
+    urgency: 56,
+    estimatedEffort: 15,
+    estimatedCost: 500,
+    estimatedDuration: 8,
+    dependencies: [],
+    requiredCapabilities: ['COMPANY_RESEARCH'],
+    risks: [{ id: 'risk-cookie-webhook', severity: 0.1 }],
+    confidence: 0.8
+  });
+  manager.customerPortalManager.persistRequest({
+    requestId: `req_${mission.missionId}`,
+    missionId: mission.missionId,
+    customerId: login.envelope.data.customerId,
+    accountId: null,
+    sessionId: null,
+    proposalId: proposal.proposal.proposalId,
+    requestedBy: 'AUTH_SECURITY_TEST',
+    submittedDate: new Date().toISOString(),
+    payload: {},
+    messages: [],
+    downloadDeliverables: []
+  });
+  const acceptance = manager.executivePlanningSystem.acceptCommercialProposal({
+    proposalId: proposal.proposal.proposalId,
+    customerId: login.envelope.data.customerId,
+    projectId: mission.missionId,
+    acceptedBy: 'Cookie Webhook Customer',
+    termsVersion: 'ATLAS_WEBSITE_TERMS_V1'
+  });
+  assert.equal(acceptance.accepted, true);
+
   const checkout = await callApi(api, {
     path: '/api/v1/customer/payments/checkout',
     method: 'POST',
@@ -1503,7 +1749,7 @@ test('stripe webhook authentication remains independent of browser cookies', asy
     origin,
     body: {
       missionId: mission.missionId,
-      amount: 500,
+      amount: acceptance.acceptanceRecord.lockedQuote.amountMinor / 100,
       currency: 'USD'
     }
   });
@@ -1533,5 +1779,5 @@ test('stripe webhook authentication remains independent of browser cookies', asy
   });
 
   assert.equal(webhook.httpStatus, 200);
-  assert.equal(webhook.envelope.data.payment.status, 'SUCCEEDED');
+  assert.equal(webhook.envelope.data.payment.status, 'PAID');
 });

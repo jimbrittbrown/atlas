@@ -79,6 +79,23 @@ function mapMissionToProject(
     blockedIssues: toArray(mission.blockedIssues),
     timeline: [
       {
+        event: 'PROPOSAL_ACCEPTED',
+        at: mission?.paymentActivationRecord?.timestamp ?? requestRecord?.submittedDate ?? mission.startedDate,
+        details: 'Commercial proposal accepted and quote locked.'
+      },
+      {
+        event: 'PAYMENT_RECEIVED',
+        at: paymentHistory.find((payment) => String(payment.status ?? '').toUpperCase() === 'PAID')?.completedAt ?? null,
+        details: 'Authoritative payment received.'
+      },
+      {
+        event: 'PRODUCTION_STARTED',
+        at: String(mission.currentStage ?? '').toUpperCase() === 'PRODUCTION_STARTED'
+          ? mission?.paymentActivationRecord?.timestamp ?? mission.updatedAt ?? mission.startedDate
+          : null,
+        details: 'Production started after authoritative payment gate.'
+      },
+      {
         event: 'REQUEST_SUBMITTED',
         at: requestRecord?.submittedDate ?? mission.startedDate,
         details: 'Website request routed through Mission Control.'
@@ -120,8 +137,15 @@ function mapMissionToProject(
     paymentSummary: {
       latestPayment: paymentHistory.length > 0 ? paymentHistory[paymentHistory.length - 1] : null,
       totalPayments: paymentHistory.length,
-      successfulPayments: paymentHistory.filter((payment) => String(payment.status ?? '').toUpperCase() === 'SUCCEEDED').length,
-      pendingPayments: paymentHistory.filter((payment) => String(payment.status ?? '').toUpperCase() === 'CHECKOUT_PENDING').length
+      successfulPayments: paymentHistory.filter((payment) => String(payment.status ?? '').toUpperCase() === 'PAID').length,
+      pendingPayments: paymentHistory.filter((payment) => String(payment.status ?? '').toUpperCase() === 'PENDING').length,
+      milestones: {
+        proposalAccepted: String(mission?.paymentActivationRecord?.proposalVersion ?? '').length > 0
+          || String(mission.currentStage ?? '').toUpperCase() === 'PAYMENT_PENDING'
+          || String(mission.currentStage ?? '').toUpperCase() === 'PRODUCTION_STARTED',
+        paymentReceived: paymentHistory.some((payment) => String(payment.status ?? '').toUpperCase() === 'PAID'),
+        productionStarted: String(mission.currentStage ?? '').toUpperCase() === 'PRODUCTION_STARTED'
+      }
     },
     downloadDeliverables: toArray(downloads.length > 0 ? downloads : requestRecord?.downloadDeliverables)
   };
@@ -157,6 +181,8 @@ export class CustomerPortalManager {
     });
     this.paymentManager = paymentManager ?? new PaymentManager({
       missionControl: this.missionControl,
+      executivePlanningSystem: this.executivePlanningSystem,
+      customerPortalManager: this,
       storageProvider: this.storageProvider,
       now: this.now,
       logger: this.logger

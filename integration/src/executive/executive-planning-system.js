@@ -50,6 +50,10 @@ export class ExecutivePlanningSystem {
     return this.portfolioManager.expireCommercialProposal(proposalId, options);
   }
 
+  getProposal(proposalId) {
+    return this.portfolioManager?.portfolioRegistry?.getProposal?.(proposalId)?.proposal ?? null;
+  }
+
   evaluateAll() {
     return this.portfolioManager.evaluateAllUnderReview();
   }

@@ -10,11 +10,13 @@ export const PaymentProviderStatuses = Object.freeze({
 });
 
 export const PaymentLifecycleStates = Object.freeze({
-  CHECKOUT_PENDING: 'CHECKOUT_PENDING',
-  SUCCEEDED: 'SUCCEEDED',
+  PENDING: 'PENDING',
+  AUTHORIZED: 'AUTHORIZED',
+  PAID: 'PAID',
   FAILED: 'FAILED',
-  CANCELED: 'CANCELED',
-  REFUNDED: 'REFUNDED'
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+  PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED'
 });
 
 export const PaymentErrorCodes = Object.freeze({
@@ -64,7 +66,7 @@ export function createPaymentRecord({
   providerCheckoutSessionId = null,
   amountMinor,
   currency = 'USD',
-  status = PaymentLifecycleStates.CHECKOUT_PENDING,
+  status = PaymentLifecycleStates.PENDING,
   checkoutUrl = null,
   metadata = {},
   createdAt,
