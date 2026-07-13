@@ -43,7 +43,9 @@ function mapMissionToProject(
   revisionRecords = [],
   productionReview = null,
   paymentHistory = [],
-  downloads = []
+  downloads = [],
+  publishRelease = null,
+  publishChecklist = []
 ) {
   const workers = toArray(workforceDashboard?.currentWorkload)
     .filter((item) => item.missionId === mission.missionId)
@@ -95,6 +97,28 @@ function mapMissionToProject(
           : null,
         details: 'Production started after authoritative payment gate.'
       },
+      publishRelease?.customerApprovalReference ? {
+        event: 'CUSTOMER_GO_LIVE_APPROVED',
+        at: publishRelease.history?.find((item) => item.event === 'RELEASE_STATUS_UPDATED' && item.reason === 'customer_go_live_approved')?.timestamp
+          ?? publishRelease.createdAt,
+        details: 'Customer go-live approval recorded for controlled publishing.'
+      } : null,
+      publishRelease?.ceoApprovalReference ? {
+        event: 'CEO_PUBLISH_APPROVED',
+        at: publishRelease.history?.find((item) => item.event === 'RELEASE_STATUS_UPDATED' && item.reason === 'ceo_publish_approved')?.timestamp
+          ?? publishRelease.createdAt,
+        details: 'CEO publish approval recorded for controlled publishing.'
+      } : null,
+      String(publishRelease?.status ?? '').toUpperCase() === 'PUBLISHED' ? {
+        event: 'WEBSITE_PUBLISHED',
+        at: publishRelease.publishedAt,
+        details: 'Website publish completed through guarded release flow.'
+      } : null,
+      String(publishRelease?.status ?? '').toUpperCase() === 'ROLLED_BACK' ? {
+        event: 'WEBSITE_ROLLED_BACK',
+        at: publishRelease.history?.find((item) => item.toStatus === 'ROLLED_BACK')?.timestamp ?? publishRelease.publishedAt,
+        details: 'Website publish rollback executed through guarded release flow.'
+      } : null,
       {
         event: 'REQUEST_SUBMITTED',
         at: requestRecord?.submittedDate ?? mission.startedDate,
@@ -144,9 +168,25 @@ function mapMissionToProject(
           || String(mission.currentStage ?? '').toUpperCase() === 'PAYMENT_PENDING'
           || String(mission.currentStage ?? '').toUpperCase() === 'PRODUCTION_STARTED',
         paymentReceived: paymentHistory.some((payment) => String(payment.status ?? '').toUpperCase() === 'PAID'),
-        productionStarted: String(mission.currentStage ?? '').toUpperCase() === 'PRODUCTION_STARTED'
+        productionStarted: String(mission.currentStage ?? '').toUpperCase() === 'PRODUCTION_STARTED',
+        customerGoLiveApproved: Boolean(publishRelease?.customerApprovalReference),
+        ceoPublishApproved: Boolean(publishRelease?.ceoApprovalReference),
+        websitePublished: String(publishRelease?.status ?? '').toUpperCase() === 'PUBLISHED',
+        websiteRolledBack: String(publishRelease?.status ?? '').toUpperCase() === 'ROLLED_BACK'
       }
     },
+    publishing: publishRelease ? {
+      releaseId: publishRelease.releaseId,
+      status: publishRelease.status,
+      deploymentTarget: publishRelease.deploymentTarget,
+      targetProvider: publishRelease.targetProvider,
+      liveUrl: publishRelease.liveUrl,
+      publishedAt: publishRelease.publishedAt,
+      checklistProgress: {
+        completed: publishChecklist.filter((item) => item.status === 'COMPLETED').length,
+        total: publishChecklist.length
+      }
+    } : null,
     downloadDeliverables: toArray(downloads.length > 0 ? downloads : requestRecord?.downloadDeliverables)
   };
 }
@@ -158,6 +198,7 @@ export class CustomerPortalManager {
     workforceDirector,
     missionOrchestratorManager,
     websiteProductionManager,
+    websitePublishReleaseManager = null,
     authManager,
     paymentManager,
     storageProvider,
@@ -170,6 +211,7 @@ export class CustomerPortalManager {
     this.workforceDirector = workforceDirector ?? missionControl?.workforceDirector ?? null;
     this.missionOrchestratorManager = missionOrchestratorManager ?? null;
     this.websiteProductionManager = websiteProductionManager ?? null;
+    this.websitePublishReleaseManager = websitePublishReleaseManager ?? null;
     this.storageProvider = storageProvider ?? null;
     this.now = now;
     this.logger = logger ?? { log: () => {} };
@@ -654,7 +696,11 @@ export class CustomerPortalManager {
       toArray(this.revisionHistory.get(mission.missionId)),
       productionReviews.find((review) => review.missionId === mission.missionId) ?? null,
       paymentHistory.filter((payment) => payment.missionId === mission.missionId),
-      downloadsByMissionId[mission.missionId] ?? []
+      downloadsByMissionId[mission.missionId] ?? [],
+      this.websitePublishReleaseManager?.findReleaseByMissionId?.(mission.missionId) ?? null,
+      this.websitePublishReleaseManager?.getChecklist?.(
+        this.websitePublishReleaseManager?.findReleaseByMissionId?.(mission.missionId)?.releaseId
+      ) ?? []
     ));
 
     return {

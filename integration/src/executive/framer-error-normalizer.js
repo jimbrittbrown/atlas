@@ -36,7 +36,15 @@ export function normalizeFramerError(error, context = {}) {
     || lower.includes('econnreset');
 
   let code = 'FRAMER_PROVIDER_ERROR';
-  if (lower.includes('unauthorized') || lower.includes('forbidden') || lower.includes('api key')) {
+  if (lower.includes('api key does not have access to this project') || lower.includes('does not have access to this project')) {
+    code = 'FRAMER_PROJECT_ACCESS_DENIED';
+  } else if (lower.includes('invalid api key') || lower.includes('api key invalid') || lower.includes('bad api key')) {
+    code = 'FRAMER_INVALID_API_KEY';
+  } else if (lower.includes('project not found') || lower.includes('unknown project') || lower.includes('project url')) {
+    code = 'FRAMER_PROJECT_URL_MISMATCH';
+  } else if ((lower.includes('publish') || lower.includes('deploy')) && (lower.includes('permission') || lower.includes('not allowed') || lower.includes('forbidden'))) {
+    code = 'FRAMER_PUBLISH_PERMISSION_DENIED';
+  } else if (lower.includes('unauthorized') || lower.includes('forbidden') || lower.includes('api key')) {
     code = 'FRAMER_AUTH_ERROR';
   } else if (lower.includes('not supported') || lower.includes('missing method')) {
     code = 'FRAMER_UNSUPPORTED_OPERATION';

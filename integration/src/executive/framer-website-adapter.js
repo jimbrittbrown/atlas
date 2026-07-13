@@ -646,6 +646,70 @@ export class AtlasFramerWebsiteAdapter {
     }
   }
 
+  async restoreWebsite({ rollbackReference, release = {}, requestedBy = 'SYSTEM' } = {}) {
+    try {
+      this.enforceNoWrite('restoreWebsite');
+
+      const reference = String(rollbackReference ?? '').trim();
+      if (!reference) {
+        throw new FramerAdapterError({
+          message: 'Rollback reference is required before restore.',
+          code: 'FRAMER_VALIDATION_ERROR',
+          retryable: false,
+          stage: 'ROLLBACK',
+          operation: 'restoreWebsite'
+        });
+      }
+
+      if (!this.config.allowProductionDeploy) {
+        throw new FramerAdapterError({
+          message: 'Production deploy blocked by FRAMER_ALLOW_PRODUCTION_DEPLOY policy.',
+          code: 'FRAMER_POLICY_BLOCK',
+          retryable: false,
+          stage: 'ROLLBACK',
+          operation: 'restoreWebsite'
+        });
+      }
+
+      return this.withIdempotency({
+        stage: 'ROLLBACK',
+        payload: {
+          rollbackReference: reference,
+          releaseId: release?.releaseId ?? null,
+          requestedBy
+        },
+        executor: async () => {
+          if (this.config.dryRun) {
+            return {
+              status: 'RESTORED_DRY_RUN',
+              restored: true,
+              restoredReference: reference,
+              liveUrl: release?.liveUrl ?? null,
+              dryRun: true
+            };
+          }
+
+          const auth = this.authClient.authenticate();
+          await this.serverApiClient.deployToProduction({
+            projectUrl: auth.projectUrl,
+            apiKey: auth.apiKey,
+            deploymentId: reference
+          });
+
+          return {
+            status: 'RESTORED',
+            restored: true,
+            restoredReference: reference,
+            liveUrl: release?.liveUrl ?? null,
+            dryRun: false
+          };
+        }
+      });
+    } catch (error) {
+      this.normalizeAndThrow(error, { stage: 'ROLLBACK', operation: 'restoreWebsite' });
+    }
+  }
+
   async buildDeliveryPackage({ mission = {}, artifacts = {} } = {}) {
     try {
       return this.withIdempotency({

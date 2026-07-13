@@ -5,6 +5,7 @@ import { ExecutiveOperationsDashboardManager } from './executive-operations-dash
 import { ExecutiveOperationsDashboard } from './executive-operations-dashboard.js';
 import { CustomerPortalManager } from './customer-portal-manager.js';
 import { WebsiteProductionManager } from './website-production-manager.js';
+import { WebsitePublishReleaseManager } from './website-publish-release-manager.js';
 import { createExecutiveProjectionProviderRegistry } from './executive-projection-provider-bootstrap.js';
 
 export class AtlasPersistentOperationsRuntime {
@@ -35,25 +36,41 @@ export class AtlasPersistentOperationsRuntime {
       storageProvider: this.storageProvider
     });
 
+    const websiteProductionManager = new WebsiteProductionManager({
+      missionControl: this.missionControl,
+      executivePlanningSystem: this.executivePlanningSystem,
+      workforceDirector: this.missionControl?.workforceDirector ?? null,
+      storageProvider: this.storageProvider,
+      logger: this.logger,
+      now: this.now
+    });
+
+    const websitePublishReleaseManager = new WebsitePublishReleaseManager({
+      missionControl: this.missionControl,
+      executivePlanningSystem: this.executivePlanningSystem,
+      websiteProductionManager,
+      providerAdapterRegistry: this.missionControl?.websiteBuilderMissionManager?.adapterRegistry ?? null,
+      storageProvider: this.storageProvider,
+      logger: this.logger,
+      now: this.now
+    });
+
+    const customerPortalManager = new CustomerPortalManager({
+      missionControl: this.missionControl,
+      executivePlanningSystem: this.executivePlanningSystem,
+      workforceDirector: this.missionControl?.workforceDirector ?? null,
+      websiteProductionManager,
+      websitePublishReleaseManager,
+      storageProvider: this.storageProvider,
+      logger: this.logger,
+      now: this.now
+    });
+
     this.dashboardManager = new ExecutiveOperationsDashboardManager({
       missionControl: this.missionControl,
       executivePlanningSystem: this.executivePlanningSystem,
-      customerPortalManager: new CustomerPortalManager({
-        missionControl: this.missionControl,
-        executivePlanningSystem: this.executivePlanningSystem,
-        workforceDirector: this.missionControl?.workforceDirector ?? null,
-        storageProvider: this.storageProvider,
-        logger: this.logger,
-        now: this.now
-      }),
-      websiteProductionManager: new WebsiteProductionManager({
-        missionControl: this.missionControl,
-        executivePlanningSystem: this.executivePlanningSystem,
-        workforceDirector: this.missionControl?.workforceDirector ?? null,
-        storageProvider: this.storageProvider,
-        logger: this.logger,
-        now: this.now
-      }),
+      customerPortalManager,
+      websiteProductionManager,
       logger: this.logger,
       now: this.now,
       storageProvider: this.storageProvider

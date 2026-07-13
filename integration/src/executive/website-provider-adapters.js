@@ -6,7 +6,8 @@ const REQUIRED_ADAPTER_METHODS = Object.freeze([
   'selectTemplate',
   'generateWebsite',
   'publishWebsite',
-  'buildDeliveryPackage'
+  'buildDeliveryPackage',
+  'restoreWebsite'
 ]);
 
 export class SpecialistWebsiteProviderAdapter {
@@ -75,6 +76,15 @@ export class SpecialistWebsiteProviderAdapter {
     };
   }
 
+  async restoreWebsite({ rollbackReference }) {
+    return {
+      status: 'RESTORED',
+      restored: true,
+      restoredReference: rollbackReference ?? null,
+      liveUrl: 'https://published.atlas.local'
+    };
+  }
+
   async applySandboxBuildInstructions({ buildInstructions, customizationPackage, productionCustomization }) {
     return {
       status: 'SANDBOX_UPSERT_PREPARED',
@@ -122,6 +132,10 @@ export class FramerWebsiteAdapter extends SpecialistWebsiteProviderAdapter {
 
   async buildDeliveryPackage(payload = {}) {
     return this.framerAdapter.buildDeliveryPackage(payload);
+  }
+
+  async restoreWebsite(payload = {}) {
+    return this.framerAdapter.restoreWebsite(payload);
   }
 
   async readAllProjectDetails(payload = {}) {
